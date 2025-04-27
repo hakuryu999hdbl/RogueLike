@@ -11,19 +11,19 @@ public class Player : MonoBehaviour
     public Animator anim;//接入Spine动画机
     private float inputX, inputY;
     private float StopX, StopY;
-    private bool isRunning = false;
-    int moveSpeed = 0;
+    public bool isRunning = false;
+    int moveSpeed = 0;//改动画器用的
 
     public Rigidbody2D rbody;//声明刚体
-    float speed = 2; // 基础移动速度
+    float speed = 2; // 基础移动速度 （站0 走2 跑4）
 
-    [Header("InputSystem和手柄")]
+    [Header("InputSystem")]
     [SerializeField] private InputActionReference moveAction;
     [SerializeField] private InputActionAsset inputActions;
 
     private InputAction runAction;
 
-    public Joystick Joystick;
+   
 
     private void Start()
     {
@@ -43,6 +43,9 @@ public class Player : MonoBehaviour
         isRunning = false;
     }
 
+    [Header("手机端触发")]
+    public Joystick Joystick;
+    //手机端触发
     public void ButtonSetRun()
     {
         isRunning = true;
@@ -52,7 +55,7 @@ public class Player : MonoBehaviour
         isRunning = false;
     }
 
-    Vector2 input;
+    public Vector2 moveInput;//这个是给敌人或者队友你在不在移动，她们需不需要巡逻用的
     private void FixedUpdate()
     {
         //这个是拉杆控制，最优先，如果手柄没有输入，再检测手柄键盘等
@@ -71,6 +74,8 @@ public class Player : MonoBehaviour
             inputY = input.y;
 
         }
+
+        moveInput = input;//给敌人或者队友你在不在移动
 
         if (inputX > 0.5f) { inputX = 1; inputY = 0; }
         else if (inputX < -0.5f) { inputX = -1; inputY = 0; }

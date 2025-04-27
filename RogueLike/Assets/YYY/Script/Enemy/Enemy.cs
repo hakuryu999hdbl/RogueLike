@@ -9,21 +9,23 @@ public class Enemy : MonoBehaviour
     public Animator anim;//接入Spine动画机
     private float inputX, inputY;
     private float StopX, StopY;
-
-    int moveSpeed = 0;
+    int moveSpeed = 0;//改动画器用的
 
     public Rigidbody2D rbody;//声明刚体
-    float speed = 2; // 基础移动速度
 
     public AIPath aiPath;// A* 路径控制器
 
+    [Header("寻找玩家")]
+    GameObject _Player;//玩家
+    public Player player;
 
-    //距离自己的目标远跑近停
-    float runThreshold = 1.12f;    // 距离大于这个值就跑
-    float stopThreshold = 1f; // 距离小于这个值就停
+    private void Start()
+    {
+        //找玩家
+        _Player = GameObject.FindGameObjectWithTag("Player");
+        player = _Player.GetComponent<Player>();
+    }
 
-
-    // Update is called once per frame
     void FixedUpdate()
     {
         if (aiPath == null || !aiPath.hasPath) return;
@@ -33,34 +35,70 @@ public class Enemy : MonoBehaviour
         Vector2 dir = (target - current).normalized;
 
         float dist = Vector2.Distance(current, target);
-        Debug.Log("Distance to target: " + dist);
 
+        // ========================================
+        // 检查玩家是否静止
+        // ========================================
+        bool playerIdle = !player.isRunning && player.moveInput.magnitude < 0.01f;
 
-        // 设置速度与动画状态
-        if (dist > runThreshold)
+        if (playerIdle)
         {
-            moveSpeed = 2;
-            aiPath.maxSpeed = 4f;
-            speed = 4;
-        }
-        else if (dist < stopThreshold)
-        {
-            moveSpeed = 0;
-            aiPath.maxSpeed = 0f;
-            speed = 0;
+            playerIdleTimer += Time.fixedDeltaTime;
+
+            if (!isWandering && playerIdleTimer >= Random.Range(1f, 2f))
+            {
+                isWandering = true;
+                aiPath.canMove = false; // 停止A星寻路
+                nextWanderActionTime = 0f;
+            }
         }
         else
         {
-            moveSpeed = 1;
-            aiPath.maxSpeed = 0.6f;
-            speed = 0.6f;
+            if (isWandering)
+            {
+                isWandering = false;
+                aiPath.canMove = true; // 恢复A星寻路
+                rbody.velocity = Vector2.zero; // 重置自己给的速度
+            }
+            playerIdleTimer = 0f;
         }
 
-        // 八方向判断
-        if (dir.x > 0.5f) { inputX = 1; inputY = 0; }
-        else if (dir.x < -0.5f) { inputX = -1; inputY = 0; }
-        else if (dir.y > 0.5f) { inputX = 0; inputY = 1; }
-        else if (dir.y < -0.5f) { inputX = 0; inputY = -1; }
+        Vector2 moveDir;
+
+        if (isWandering)
+        {
+            // 巡逻模式下
+            nextWanderActionTime -= Time.fixedDeltaTime;
+            if (nextWanderActionTime <= 0f)
+            {
+                nextWanderActionTime = Random.Range(0.5f, 3f);
+
+                int rand = Random.Range(0, 5); // 0停 1上 2下 3左 4右
+                switch (rand)
+                {
+                    case 0: wanderDirection = Vector2.zero; break;
+                    case 1: wanderDirection = Vector2.up; break;
+                    case 2: wanderDirection = Vector2.down; break;
+                    case 3: wanderDirection = Vector2.left; break;
+                    case 4: wanderDirection = Vector2.right; break;
+                }
+            }
+
+            moveDir = wanderDirection;
+        }
+        else
+        {
+            // 正常寻路模式
+            moveDir = dir;
+        }
+
+        // ========================================
+        // 方向处理（每帧更新）
+        // ========================================
+        if (moveDir.x > 0.5f) { inputX = 1; inputY = 0; }
+        else if (moveDir.x < -0.5f) { inputX = -1; inputY = 0; }
+        else if (moveDir.y > 0.5f) { inputX = 0; inputY = 1; }
+        else if (moveDir.y < -0.5f) { inputX = 0; inputY = -1; }
         else { inputX = 0; inputY = 0; }
 
         if (inputX != 0 || inputY != 0)
@@ -69,17 +107,78 @@ public class Enemy : MonoBehaviour
             StopY = inputY;
         }
 
-        // 动画传参
         anim.SetFloat("InputX", StopX);
         anim.SetFloat("InputY", StopY);
-        anim.SetInteger("Speed", moveSpeed);
 
-        // 如果你不想用 aiPath 自带移动，而是自己控制刚体：
-        if (rbody != null)
+        // ========================================
+        // 速度状态（加反应时差）
+        // ========================================
+        reactTimer += Time.fixedDeltaTime;
+        if (reactTimer >= reactDelay)
         {
-            Vector2 moveVec = new Vector2(inputX, inputY).normalized * speed;
-            rbody.velocity = moveVec;
+            reactTimer = 0f;
+            ResetReactionDelay();
+
+            if (isWandering)
+            {
+                if (wanderDirection == Vector2.zero)
+                {
+                    moveSpeed = 0;
+                }
+                else
+                {
+                    moveSpeed = 1;
+                }
+                aiPath.maxSpeed = 0f; // 巡逻时A星不管速度
+            }
+            else
+            {
+                if (dist > 1f)
+                {
+                    if (player.isRunning)
+                    {
+                        moveSpeed = 2;
+                        aiPath.maxSpeed = 4f;
+                    }
+                    else
+                    {
+                        moveSpeed = 1;
+                        aiPath.maxSpeed = 2f;
+                    }
+                }
+                else
+                {
+                    moveSpeed = 0;
+                    aiPath.maxSpeed = 0f;
+                }
+            }
+
+            anim.SetInteger("Speed", moveSpeed);
+        }
+
+        // ========================================
+        // 最后: 自己给速度（只有巡逻时）
+        // ========================================
+        if (isWandering)
+        {
+            float patrolSpeed = 1f;
+            rbody.velocity = new Vector2(inputX, inputY).normalized * patrolSpeed;
         }
     }
+
+    [Header("随机0~1秒的触发时差")]
+    private float reactTimer = 0f;
+    private float reactDelay = 0f;
+    void ResetReactionDelay()
+    {
+        reactDelay = Random.Range(0f, 1f); // 0到1秒之间
+    } // 重置下一次反应需要的随机时间
+
+    [Header("玩家站着不动1~2秒，四处走动")]
+    private bool isWandering = false;
+    private float playerIdleTimer = 0f;
+    private float nextWanderActionTime = 0f;
+
+    private Vector2 wanderDirection = Vector2.zero;
 }
 
