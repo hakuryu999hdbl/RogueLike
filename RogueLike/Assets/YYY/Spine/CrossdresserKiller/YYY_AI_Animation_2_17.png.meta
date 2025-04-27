@@ -1,0 +1,852 @@
+fileFormatVersion: 2
+guid: 0353d2c28488efc43b5457dc77ec8d46
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6899860107034123228
+    second: YYY_AI_Animation_2_17_0
+  - first:
+      213: -8549967875905879166
+    second: YYY_AI_Animation_2_17_1
+  - first:
+      213: 5738231362737761508
+    second: YYY_AI_Animation_2_17_2
+  - first:
+      213: -1990951740149218553
+    second: YYY_AI_Animation_2_17_3
+  - first:
+      213: -3699373492492019488
+    second: YYY_AI_Animation_2_17_4
+  - first:
+      213: -3629129875267145835
+    second: YYY_AI_Animation_2_17_5
+  - first:
+      213: -8516584286735787765
+    second: YYY_AI_Animation_2_17_6
+  - first:
+      213: 1676583209346011008
+    second: YYY_AI_Animation_2_17_7
+  - first:
+      213: 5011360091731252739
+    second: YYY_AI_Animation_2_17_8
+  - first:
+      213: 2704843349424635851
+    second: YYY_AI_Animation_2_17_9
+  - first:
+      213: -6182752126434652604
+    second: YYY_AI_Animation_2_17_10
+  - first:
+      213: -6015641809148269749
+    second: YYY_AI_Animation_2_17_11
+  - first:
+      213: -5537543878627945042
+    second: YYY_AI_Animation_2_17_12
+  - first:
+      213: 1563808802721923235
+    second: YYY_AI_Animation_2_17_13
+  - first:
+      213: 6609315223226661187
+    second: YYY_AI_Animation_2_17_14
+  - first:
+      213: -474460219771195215
+    second: YYY_AI_Animation_2_17_15
+  - first:
+      213: -7885057939534494058
+    second: YYY_AI_Animation_2_17_16
+  - first:
+      213: 4005799676775476628
+    second: YYY_AI_Animation_2_17_17
+  - first:
+      213: 2914793889849450250
+    second: YYY_AI_Animation_2_17_18
+  - first:
+      213: -5991623393191310681
+    second: YYY_AI_Animation_2_17_19
+  - first:
+      213: -233245448021873295
+    second: YYY_AI_Animation_2_17_20
+  - first:
+      213: 966848395885594316
+    second: YYY_AI_Animation_2_17_21
+  - first:
+      213: -3773866729155849551
+    second: YYY_AI_Animation_2_17_22
+  - first:
+      213: 2067679220638722865
+    second: YYY_AI_Animation_2_17_23
+  - first:
+      213: -7167774719589139964
+    second: YYY_AI_Animation_2_17_24
+  - first:
+      213: 6467967486831649760
+    second: YYY_AI_Animation_2_17_25
+  - first:
+      213: -4508779928433513619
+    second: YYY_AI_Animation_2_17_26
+  - first:
+      213: -5352781973306734316
+    second: YYY_AI_Animation_2_17_27
+  - first:
+      213: -1009393349779389481
+    second: YYY_AI_Animation_2_17_28
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 0
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 0
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 3657
+        width: 1676
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 424a7582ac5ce30a0800000000000000
+      internalID: -6899860107034123228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_1
+      rect:
+        serializedVersion: 2
+        x: 1684
+        y: 3431
+        width: 1579
+        height: 348
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28301ab3489685980800000000000000
+      internalID: -8549967875905879166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_2
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 3307
+        width: 1579
+        height: 348
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ec6dfe950b42af40800000000000000
+      internalID: 5738231362737761508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_3
+      rect:
+        serializedVersion: 2
+        x: 1586
+        y: 3141
+        width: 1676
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 703c57bd0f7be54e0800000000000000
+      internalID: -1990951740149218553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_4
+      rect:
+        serializedVersion: 2
+        x: 3333
+        y: 3228
+        width: 449
+        height: 362
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e85480a86f29acc0800000000000000
+      internalID: -3699373492492019488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_5
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 2957
+        width: 1579
+        height: 349
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59fa1fc3b9db2adc0800000000000000
+      internalID: -3629129875267145835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_6
+      rect:
+        serializedVersion: 2
+        x: 1630
+        y: 2851
+        width: 1676
+        height: 287
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b099079c6b30fc980800000000000000
+      internalID: -8516584286735787765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_7
+      rect:
+        serializedVersion: 2
+        x: 3307
+        y: 1684
+        width: 478
+        height: 1415
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08f0475cb8b644710800000000000000
+      internalID: 1676583209346011008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_8
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 2382
+        width: 313
+        height: 537
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 306d53db37deb8540800000000000000
+      internalID: 5011360091731252739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_9
+      rect:
+        serializedVersion: 2
+        x: 694
+        y: 2380
+        width: 359
+        height: 551
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcf788702b8898520800000000000000
+      internalID: 2704843349424635851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_10
+      rect:
+        serializedVersion: 2
+        x: 1245
+        y: 2461
+        width: 313
+        height: 454
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44e4299d2b3723aa0800000000000000
+      internalID: -6182752126434652604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_11
+      rect:
+        serializedVersion: 2
+        x: 1630
+        y: 2559
+        width: 1676
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4baab595a5248ca0800000000000000
+      internalID: -6015641809148269749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_12
+      rect:
+        serializedVersion: 2
+        x: 1630
+        y: 2268
+        width: 1654
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea51e3a7e21b623b0800000000000000
+      internalID: -5537543878627945042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_13
+      rect:
+        serializedVersion: 2
+        x: 1624
+        y: 1976
+        width: 1683
+        height: 290
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a08ed612d3c3b510800000000000000
+      internalID: 1563808802721923235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_14
+      rect:
+        serializedVersion: 2
+        x: 1630
+        y: 1686
+        width: 1654
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 349b1098d2109bb50800000000000000
+      internalID: 6609315223226661187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_15
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 48
+        width: 389
+        height: 1392
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b0fb74a1f06a69f0800000000000000
+      internalID: -474460219771195215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_16
+      rect:
+        serializedVersion: 2
+        x: 589
+        y: 46
+        width: 393
+        height: 1395
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6964ca0b495a29290800000000000000
+      internalID: -7885057939534494058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_17
+      rect:
+        serializedVersion: 2
+        x: 1175
+        y: 1439
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49da3971595779730800000000000000
+      internalID: 4005799676775476628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_18
+      rect:
+        serializedVersion: 2
+        x: 1227
+        y: 891
+        width: 309
+        height: 549
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0f94fd799d637820800000000000000
+      internalID: 2914793889849450250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_19
+      rect:
+        serializedVersion: 2
+        x: 1626
+        y: 13
+        width: 286
+        height: 1665
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7aa49e4d44a79dca0800000000000000
+      internalID: -5991623393191310681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_20
+      rect:
+        serializedVersion: 2
+        x: 1917
+        y: 13
+        width: 286
+        height: 1665
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17ded25308853ccf0800000000000000
+      internalID: -233245448021873295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_21
+      rect:
+        serializedVersion: 2
+        x: 2208
+        y: 13
+        width: 286
+        height: 1665
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc6ca645e7fea6d00800000000000000
+      internalID: 966848395885594316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_22
+      rect:
+        serializedVersion: 2
+        x: 2499
+        y: 24
+        width: 286
+        height: 1654
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b21003643880abc0800000000000000
+      internalID: -3773866729155849551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_23
+      rect:
+        serializedVersion: 2
+        x: 2790
+        y: 24
+        width: 286
+        height: 1654
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13ba0afcb4fd1bc10800000000000000
+      internalID: 2067679220638722865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_24
+      rect:
+        serializedVersion: 2
+        x: 3079
+        y: 1
+        width: 291
+        height: 1683
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40a3dd87ed2f68c90800000000000000
+      internalID: -7167774719589139964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_25
+      rect:
+        serializedVersion: 2
+        x: 3372
+        y: 24
+        width: 286
+        height: 1654
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e360671926d2c950800000000000000
+      internalID: 6467967486831649760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_26
+      rect:
+        serializedVersion: 2
+        x: 3663
+        y: 24
+        width: 286
+        height: 1654
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6b2f4b2b889d61c0800000000000000
+      internalID: -4508779928433513619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_27
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 769
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41900f0d72917b5b0800000000000000
+      internalID: -5352781973306734316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: YYY_AI_Animation_2_17_28
+      rect:
+        serializedVersion: 2
+        x: 998
+        y: 767
+        width: 11
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d302cba81aedf1f0800000000000000
+      internalID: -1009393349779389481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      YYY_AI_Animation_2_17_0: -6899860107034123228
+      YYY_AI_Animation_2_17_1: -8549967875905879166
+      YYY_AI_Animation_2_17_10: -6182752126434652604
+      YYY_AI_Animation_2_17_11: -6015641809148269749
+      YYY_AI_Animation_2_17_12: -5537543878627945042
+      YYY_AI_Animation_2_17_13: 1563808802721923235
+      YYY_AI_Animation_2_17_14: 6609315223226661187
+      YYY_AI_Animation_2_17_15: -474460219771195215
+      YYY_AI_Animation_2_17_16: -7885057939534494058
+      YYY_AI_Animation_2_17_17: 4005799676775476628
+      YYY_AI_Animation_2_17_18: 2914793889849450250
+      YYY_AI_Animation_2_17_19: -5991623393191310681
+      YYY_AI_Animation_2_17_2: 5738231362737761508
+      YYY_AI_Animation_2_17_20: -233245448021873295
+      YYY_AI_Animation_2_17_21: 966848395885594316
+      YYY_AI_Animation_2_17_22: -3773866729155849551
+      YYY_AI_Animation_2_17_23: 2067679220638722865
+      YYY_AI_Animation_2_17_24: -7167774719589139964
+      YYY_AI_Animation_2_17_25: 6467967486831649760
+      YYY_AI_Animation_2_17_26: -4508779928433513619
+      YYY_AI_Animation_2_17_27: -5352781973306734316
+      YYY_AI_Animation_2_17_28: -1009393349779389481
+      YYY_AI_Animation_2_17_3: -1990951740149218553
+      YYY_AI_Animation_2_17_4: -3699373492492019488
+      YYY_AI_Animation_2_17_5: -3629129875267145835
+      YYY_AI_Animation_2_17_6: -8516584286735787765
+      YYY_AI_Animation_2_17_7: 1676583209346011008
+      YYY_AI_Animation_2_17_8: 5011360091731252739
+      YYY_AI_Animation_2_17_9: 2704843349424635851
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
