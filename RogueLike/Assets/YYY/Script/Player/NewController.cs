@@ -301,7 +301,18 @@ public partial class @NewController: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""fb931f52-bf26-452b-96ce-93e1c9bff3ab"",
-                    ""path"": """",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9425a8ca-5f2c-444d-a99b-fa60d00590fc"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

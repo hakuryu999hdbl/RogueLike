@@ -23,16 +23,22 @@ public class Player : MonoBehaviour
 
     private InputAction runAction;
 
-   
+    private InputAction AttackAction;
+
 
     private void Start()
     {
         // 获取Run动作（根据你的Action Map结构可能需要调整路径）
         runAction = inputActions.FindAction("Run");
+        AttackAction = inputActions.FindAction("Attack");
 
         // 订阅输入事件
         runAction.started += OnRunStarted;
         runAction.canceled += OnRunCanceled;
+
+        // 订阅输入事件
+        AttackAction.started += OnAttackStarted;
+        AttackAction.canceled += OnAttackCanceled;
     }
     private void OnRunStarted(InputAction.CallbackContext context)
     {
@@ -41,6 +47,15 @@ public class Player : MonoBehaviour
     private void OnRunCanceled(InputAction.CallbackContext context)
     {
         isRunning = false;
+    }
+
+    private void OnAttackStarted(InputAction.CallbackContext context)
+    {
+        isAttacking = true;
+    }
+    private void OnAttackCanceled(InputAction.CallbackContext context)
+    {
+        isAttacking = false;
     }
 
     [Header("手机端触发")]
@@ -55,7 +70,17 @@ public class Player : MonoBehaviour
         isRunning = false;
     }
 
-    public Vector2 moveInput;//这个是给敌人或者队友你在不在移动，她们需不需要巡逻用的
+    public bool isAttacking = false;
+
+    public void ButtonSetAttack()
+    {
+        isAttacking = true;
+    }
+    public void ButtonSetAttackOver()
+    {
+        isAttacking = false;
+    }
+
     private void FixedUpdate()
     {
         //这个是拉杆控制，最优先，如果手柄没有输入，再检测手柄键盘等
@@ -75,7 +100,6 @@ public class Player : MonoBehaviour
 
         }
 
-        moveInput = input;//给敌人或者队友你在不在移动
 
         if (inputX > 0.5f) { inputX = 1; inputY = 0; }
         else if (inputX < -0.5f) { inputX = -1; inputY = 0; }
@@ -94,6 +118,13 @@ public class Player : MonoBehaviour
         {
             moveSpeed = 0;
         }
+
+
+
+        if (isAttacking) { moveSpeed = 3; }//暂时设置
+
+
+
 
         if (inputY > -0.5f && inputY < 0.5f && inputX > -0.5f && inputX < 0.5f) { speed = 0; }//防止微微拉动拉杆也移动
 
