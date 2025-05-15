@@ -39,4 +39,27 @@ public class CharacterSkin : MonoBehaviour
 
         Debug.Log("设置皮肤");
     }
+
+
+
+    [Header("帧事件触发")]
+    public Player player;
+
+    public void AttackWarn()
+    {
+        //攻击开始无法移动
+        player.canMove = false;
+        Invoke("StartAttack", 0.5f);
+    }
+    public void AttackOver() 
+    {
+        //攻击结束可以移动
+        player.canMove = true;
+        player.attackRange.SetActive(false);
+    }
+
+    void StartAttack() 
+    {
+        player.attackRange.SetActive(true);
+    }
 }
