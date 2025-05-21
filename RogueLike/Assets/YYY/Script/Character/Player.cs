@@ -62,10 +62,10 @@ public class Player : MonoBehaviour
         }
 
 
-        if (inputX > 0.5f) { inputX = 1; inputY = 0; attackRange.transform.rotation = Quaternion.Euler(0, 0, -90); }//右
-        else if (inputX < -0.5f) { inputX = -1; inputY = 0; attackRange.transform.rotation = Quaternion.Euler(0, 0, 90); }//左
-        else if (inputY > 0.5f && inputX > -0.5f && inputX < 0.5f) { inputX = 0; inputY = 1; attackRange.transform.rotation = Quaternion.Euler(0, 0, 0); }//上
-        else if (inputY < -0.5f && inputX > -0.5f && inputX < 0.5f) { inputX = 0; inputY = -1; attackRange.transform.rotation = Quaternion.Euler(0, 0, 180); }//下
+        if (inputX > 0.5f) { inputX = 1; inputY = 0; attack.transform.rotation = Quaternion.Euler(0, 0, -90); }//右
+        else if (inputX < -0.5f) { inputX = -1; inputY = 0; attack.transform.rotation = Quaternion.Euler(0, 0, 90); }//左
+        else if (inputY > 0.5f && inputX > -0.5f && inputX < 0.5f) { inputX = 0; inputY = 1; attack.transform.rotation = Quaternion.Euler(0, 0, 0); }//上
+        else if (inputY < -0.5f && inputX > -0.5f && inputX < 0.5f) { inputX = 0; inputY = -1; attack.transform.rotation = Quaternion.Euler(0, 0, 180); }//下
         else { inputX = 0; inputY = 0; } // 静止时也归零
 
         // 保存上一次方向（用于静止状态播放对应Idle动画）
@@ -126,7 +126,9 @@ public class Player : MonoBehaviour
 
     public bool canMove = true;
 
-    public GameObject attackRange;//伤害碰撞体
+    public GameObject attack;//伤害朝向
+    public GameObject attack_Collider;//伤害碰撞体
+    public GameObject attack_Range;//技能范围
 
     void Attack_Start()
     {
@@ -155,6 +157,8 @@ public class Player : MonoBehaviour
 
             attackTriggered = true;
         }
+
+        attack_Range.SetActive(false);//关闭技能范围
     }
 
     void CheckAttack()
@@ -167,7 +171,7 @@ public class Player : MonoBehaviour
             {
                 // 进入蓄力待机动画
                 moveSpeed = 3;
-
+                attack_Range.SetActive(true);//技能范围
             }
         }
     }
@@ -297,24 +301,28 @@ public class Player : MonoBehaviour
 
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 0无  1剑击特效  2闪电特效  3冻结
     {
+        if (!isScreaming) 
+        {
+            currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+            UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
 
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
+            //显示伤害
+            HudText.HUD(amount);
 
-        //显示伤害
-        HudText.HUD(amount);
+            //有1秒左右的伤害冷却
+            Invoke("HurtOver", 0.5f);
+            RedScreen.SetActive(true);
+            isScreaming = true;
 
-        //玩家有1秒左右的伤害冷却
-        Invoke("HurtOver", 1f);
-        RedScreen.SetActive(true);
-        isScreaming = true;
+        }
+        
     }
 
     void HurtOver()
     {
         isScreaming = false;
         RedScreen.SetActive(false);
-    }//玩家有1秒左右的伤害冷却
+    }//有1秒左右的伤害冷却
     public void ChangeStrength(int amount)
     {
 

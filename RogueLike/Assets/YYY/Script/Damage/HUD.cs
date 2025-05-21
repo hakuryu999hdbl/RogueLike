@@ -21,7 +21,7 @@ public class HUD : MonoBehaviour
     /// <summary>
     /// 销毁时间
     /// </summary>
-    private float time = 1.8f;
+    private float time = 1f;
 
     /// <summary>
     /// 玩家红 敌人白 回复绿
