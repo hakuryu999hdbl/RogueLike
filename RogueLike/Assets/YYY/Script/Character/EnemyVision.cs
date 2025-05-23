@@ -61,7 +61,7 @@ public class EnemyVision : MonoBehaviour
             if (collision.gameObject.tag == "Friend")
             {
 
-                Enemy.isAttack = true;
+                Enemy.isAttack = false;
 
             }//敌人停止攻击队友
 
@@ -70,7 +70,7 @@ public class EnemyVision : MonoBehaviour
         {
             if (collision.gameObject.tag == "Enemy")
             {
-                Enemy.isAttack = true;
+                Enemy.isAttack = false;
 
             }//队友停止攻击敌人
 

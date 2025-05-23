@@ -8,12 +8,17 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
 
+    [Header("主动触发声音")]
+    public FrameEvents frameEvents;
 
     private void Start()
     {
         RegisterHandle();//登录手柄控制
 
         UpdateAllBar();//更新UI
+
+        anim.SetTrigger("None");
+        anim.SetInteger("AttackMode",1);
     }
 
 
@@ -96,11 +101,11 @@ public class Player : MonoBehaviour
 
         CheckAttack();
 
-        if (!canMove || attackPressTime >= 0.2f)
+        if (!canMove)
         {
             //rbody.velocity = Vector2.zero;
             input = Vector2.zero;
-        }//玩家只有在不攻击不蓄力的时候才能移动
+        }//玩家只有在不攻击的时候才能移动
 
         rbody.velocity = input * speed;
 
@@ -169,8 +174,7 @@ public class Player : MonoBehaviour
 
             if (attackPressTime >= 0.2f)
             {
-                // 进入蓄力待机动画
-                moveSpeed = 3;
+
                 attack_Range.SetActive(true);//技能范围
             }
         }
@@ -181,12 +185,29 @@ public class Player : MonoBehaviour
         attackTriggered = true;
 
         anim.SetTrigger("Attack");
+        //if (Random.Range(0, 2) == 0)
+        //{
+        //    anim.SetTrigger("Attack");
+        //}
+        //else
+        //{
+        //    anim.SetTrigger("Kick");
+        //}
     }//普通攻击
 
     private void PlayChargeAttack()
     {
         attackTriggered = true;
+
         anim.SetTrigger("Attack");
+        //if (Random.Range(0, 2) == 0)
+        //{
+        //    anim.SetTrigger("Attack");
+        //}
+        //else
+        //{
+        //    anim.SetTrigger("Kick");
+        //}
     }//蓄力攻击
 
 
@@ -299,10 +320,43 @@ public class Player : MonoBehaviour
     public int currentStrength;
     public int maxStrength;
 
+    public GameObject BloodEffect;//受伤特效
+
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 0无  1剑击特效  2闪电特效  3冻结
     {
         if (!isScreaming) 
         {
+
+            if (amount < 0)
+            {
+
+                if (Random.Range(0, 2) == 0)
+                {
+                    anim.SetTrigger("Block");
+                   
+
+                    switch (Random.Range(0, 3))
+                    {
+                        case 0:
+                            frameEvents._Attack_sword_clash2();
+                            break;
+                        case 1:
+                            frameEvents._Attack_sword_clash3();
+                            break;
+                        case 2:
+                            frameEvents._Attack_sword_clash4();
+                            break;
+                    }
+
+
+                    //显示伤害
+                    HudText.HUD(0);//0会显示Miss
+
+                    return;
+                }
+
+            }
+
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
             UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
 
@@ -314,6 +368,26 @@ public class Player : MonoBehaviour
             RedScreen.SetActive(true);
             isScreaming = true;
 
+
+
+            switch (Random.Range(0, 3))
+            {
+                case 0:
+                    frameEvents._Attack_blood1();
+                    break;
+                case 1:
+                    frameEvents._Attack_blood2();
+                    break;
+                case 2:
+                    frameEvents._Attack_blood3();
+                    break;
+            }
+
+            //血特效
+            Vector3 offset = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+            Vector3 spawnPosition = transform.position + offset;
+            GameObject effectPrefabs = Instantiate(BloodEffect, spawnPosition, transform.rotation);
+            Destroy(effectPrefabs, 2f);
         }
         
     }

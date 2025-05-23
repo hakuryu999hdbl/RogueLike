@@ -307,6 +307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 892562769b2aad947992967309a8f771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frameEvents: {fileID: 1547413901}
   anim: {fileID: 1547413895}
   rbody: {fileID: 65564745}
   canMove: 1
@@ -327,6 +328,8 @@ MonoBehaviour:
   HudText: {fileID: 1489750648}
   currentStrength: 1000
   maxStrength: 1000
+  BloodEffect: {fileID: 1622069723160390679, guid: 3cbb102f876966040a9c79278e3e6a63,
+    type: 3}
 --- !u!4 &65564742
 Transform:
   m_ObjectHideFlags: 0
@@ -1867,12 +1870,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7622d00a58b39c541afca93adff0d00b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frameEvents: {fileID: 0}
   _Player: {fileID: 0}
   player: {fileID: 0}
   isAttack: 0
   anim: {fileID: 835590508}
   rbody: {fileID: 744069989}
   aiPath: {fileID: 744069988}
+  canMove: 1
   attack: {fileID: 878442193}
   attack_Collider: {fileID: 1151942321}
   attack_Range: {fileID: 47606527}
@@ -1882,6 +1887,8 @@ MonoBehaviour:
   maxHealth: 1000
   isScreaming: 0
   HudText: {fileID: 870943321}
+  BloodEffect: {fileID: 1622069723160390679, guid: 3cbb102f876966040a9c79278e3e6a63,
+    type: 3}
   HealthBar: {fileID: 611094064}
 --- !u!114 &744069988
 MonoBehaviour:
@@ -2887,7 +2894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hudText: {fileID: 4407327141790781514, guid: 646ea7a5b78e36746b73073e2ac8a8d0, type: 3}
-  isFriend: 0
+  isFriend: 1
 --- !u!1 &878442193
 GameObject:
   m_ObjectHideFlags: 0
@@ -4665,8 +4672,7 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: f4ee64981635fd842b441d28cd5e859c, type: 2}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5136,12 +5142,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7622d00a58b39c541afca93adff0d00b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frameEvents: {fileID: 1921321658}
   _Player: {fileID: 0}
   player: {fileID: 0}
   isAttack: 0
   anim: {fileID: 1921321661}
   rbody: {fileID: 1626890628}
   aiPath: {fileID: 1626890631}
+  canMove: 1
   attack: {fileID: 2011291004}
   attack_Collider: {fileID: 1979239804}
   attack_Range: {fileID: 2144022826}
@@ -5151,6 +5159,8 @@ MonoBehaviour:
   maxHealth: 1000
   isScreaming: 0
   HudText: {fileID: 665850963}
+  BloodEffect: {fileID: 1622069723160390679, guid: 3cbb102f876966040a9c79278e3e6a63,
+    type: 3}
   HealthBar: {fileID: 1761059565}
 --- !u!114 &1626890630
 MonoBehaviour:
@@ -5789,7 +5799,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1867770408
 Transform:
   m_ObjectHideFlags: 0
@@ -6070,8 +6080,7 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: f4ee64981635fd842b441d28cd5e859c, type: 2}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

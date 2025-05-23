@@ -44,7 +44,7 @@ public class CharacterSkin : MonoBehaviour
 
     [Header("帧事件触发")]
     public Player player;
-
+   // public Enemy enemy;
     public void AttackWarn()
     {
         if (player != null)
@@ -53,7 +53,12 @@ public class CharacterSkin : MonoBehaviour
             player.canMove = false;
             Invoke("StartAttack", 0.5f);
         }
-
+        //if (enemy != null)
+        //{
+        //    //攻击开始无法移动
+        //    enemy.canMove = false;
+        //    //Invoke("StartAttack", 0.5f);
+        //}
 
     }
     public void AttackOver()
@@ -64,10 +69,21 @@ public class CharacterSkin : MonoBehaviour
             player.canMove = true;
             player.attack_Collider.SetActive(false);
         }
+        //if (enemy != null)
+        //{
+        //    enemy.canMove = true;
+        //}
     }
 
     void StartAttack()
     {
-        player.attack_Collider.SetActive(true);
+        if (player != null)
+        {
+            player.attack_Collider.SetActive(true);
+        }
+        //if (enemy != null)
+        //{
+        //    enemy.attack_Collider.SetActive(true);
+        //}
     }
 }

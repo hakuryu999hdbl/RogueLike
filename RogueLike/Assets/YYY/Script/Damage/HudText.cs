@@ -20,7 +20,7 @@ public class HudText : MonoBehaviour
     {
         GameObject hud = Instantiate(hudText, transform) as GameObject;
         hud.GetComponent<Text>().text = damage.ToString();
-        if (damage <= 0)
+        if (damage < 0)
         {
             if (!isFriend)
             {
@@ -35,6 +35,12 @@ public class HudText : MonoBehaviour
         else
         {
             hud.GetComponent<HUD>().color = 2;//双方回血都是绿
+        }
+
+        if(damage == 0)
+        {
+            hud.GetComponent<Text>().text = "Miss!".ToString();
+            hud.GetComponent<HUD>().color = 3;//双方闪避都是黄
         }
 
     }

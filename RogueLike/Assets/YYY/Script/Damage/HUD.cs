@@ -56,6 +56,9 @@ public class HUD : MonoBehaviour
             case 2:
                 this.GetComponent<Text>().color = new Color(0, 1, 0, 1 - timer);//绿
                 break;
+            case 3:
+                this.GetComponent<Text>().color = new Color(1, 1, 0, 1 - timer);//黄
+                break;
         }
 
 

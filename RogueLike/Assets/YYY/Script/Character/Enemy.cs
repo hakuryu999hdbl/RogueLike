@@ -6,7 +6,8 @@ using Pathfinding;
 
 public class Enemy : MonoBehaviour
 {
-
+    [Header("主动触发声音")]
+    public FrameEvents frameEvents;
 
     [Header("寻找玩家")]
     public GameObject _Player;//玩家
@@ -23,6 +24,9 @@ public class Enemy : MonoBehaviour
 
 
         UpdateAllBar();//更新UI
+
+        anim.SetTrigger("None");
+        anim.SetInteger("AttackMode", 1);
     }
 
     void FixedUpdate()
@@ -54,6 +58,10 @@ public class Enemy : MonoBehaviour
     public Rigidbody2D rbody;//声明刚体
 
     public AIPath aiPath;// A* 路径控制器
+
+
+
+    //public bool canMove = true;
 
 
     private void BaseMove()
@@ -95,20 +103,26 @@ public class Enemy : MonoBehaviour
                 aiPath.maxSpeed = 0.2f;
             }
 
-            attack_Range.SetActive(false);//关闭技能范围
+            //attack_Range.SetActive(false);//关闭技能范围
         }
         else
         {
             BaseAttack();//攻击
 
             moveSpeed = 0;
-            aiPath.maxSpeed = 0.2f;
+            aiPath.maxSpeed = 0f;
         }
 
 
 
-
-
+        //if (!canMove)
+        //{
+        //    aiPath.canMove = false;
+        //}
+        //else
+        //{
+        //    aiPath.canMove = true;
+        //}
 
 
 
@@ -171,9 +185,9 @@ public class Enemy : MonoBehaviour
 
     void BaseAttack()
     {
-        anim.SetInteger("Speed", 3);
+        //anim.SetInteger("Speed", 3);
 
-        attack_Range.SetActive(true);//技能范围
+        //attack_Range.SetActive(true);//技能范围
 
         //隔一会触发一下攻击
         if (!OneTimeAttak)
@@ -190,6 +204,15 @@ public class Enemy : MonoBehaviour
     void Attack_Start()
     {
         anim.SetTrigger("Attack");
+        // if (Random.Range(0, 2) == 0)
+        // {
+        //     anim.SetTrigger("Attack");
+        // }
+        // else
+        // {
+        //     anim.SetTrigger("Kick");
+        // }
+
         Invoke("StartAttack", 0.5f);
     }
     void StartAttack()
@@ -243,13 +266,43 @@ public class Enemy : MonoBehaviour
     public bool isScreaming;
     public HudText HudText;
 
-
+    public GameObject BloodEffect;//受伤特效
 
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 0无  1剑击特效  2闪电特效  3冻结
     {
 
         if (!isScreaming)
         {
+
+            if (amount < 0)
+            {
+
+                if (Random.Range(0,2)==0) 
+                {
+                    anim.SetTrigger("Block");
+
+                    switch (Random.Range(0, 3))
+                    {
+                        case 0:
+                            frameEvents._Attack_sword_clash2();
+                            break;
+                        case 1:
+                            frameEvents._Attack_sword_clash3();
+                            break;
+                        case 2:
+                            frameEvents._Attack_sword_clash4();
+                            break;
+                    }
+
+                    //显示伤害
+                    HudText.HUD(0);//0会显示Miss
+
+                    return;
+                }              
+
+            }
+          
+
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
             UpdateHealthBar(currentHealth, maxHealth);
 
@@ -260,6 +313,25 @@ public class Enemy : MonoBehaviour
             Invoke("HurtOver", 0.5f);
 
             isScreaming = true;
+
+            switch (Random.Range(0, 3))
+            {
+                case 0:
+                    frameEvents._Attack_blood1();
+                    break;
+                case 1:
+                    frameEvents._Attack_blood2();
+                    break;
+                case 2:
+                    frameEvents._Attack_blood3();
+                    break;
+            }
+
+            //血特效
+            Vector3 offset = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+            Vector3 spawnPosition = transform.position + offset;
+            GameObject effectPrefabs = Instantiate(BloodEffect, spawnPosition, transform.rotation);
+            Destroy(effectPrefabs, 2f);
         }
     }
 
