@@ -6,6 +6,10 @@ using Spine;
 
 public class CharacterSkin : MonoBehaviour
 {
+    /// <summary>
+    /// 皮肤
+    /// </summary>
+    #region
     [Header("皮肤")]
     SkeletonMecanim skeletonAnimation;
     Skin blendSkin = new Skin("BlendedSkin");// 创建一个新的混合皮肤
@@ -39,51 +43,79 @@ public class CharacterSkin : MonoBehaviour
 
         Debug.Log("设置皮肤");
     }
+    #endregion
 
-
-
+    /// <summary>
+    /// 帧事件触发
+    /// </summary>
+    #region
     [Header("帧事件触发")]
     public Player player;
-   // public Enemy enemy;
+    public Enemy enemy;
     public void AttackWarn()
     {
         if (player != null)
         {
-            //攻击开始无法移动
-            player.canMove = false;
-            Invoke("StartAttack", 0.5f);
-        }
-        //if (enemy != null)
-        //{
-        //    //攻击开始无法移动
-        //    enemy.canMove = false;
-        //    //Invoke("StartAttack", 0.5f);
-        //}
 
-    }
+            player.canMove = false;
+
+            player.AttackVoice();
+        }
+        if (enemy != null)
+        {
+            //enemy.canMove = false;
+
+            enemy.AttackVoice();
+        }
+
+
+
+    } //攻击开始无法移动
     public void AttackOver()
     {
         if (player != null)
         {
-            //攻击结束可以移动
-            player.canMove = true;
-            player.attack_Collider.SetActive(false);
-        }
-        //if (enemy != null)
-        //{
-        //    enemy.canMove = true;
-        //}
-    }
 
-    void StartAttack()
+            player.canMove = true;
+
+        }
+        if (enemy != null)
+        {
+            //enemy.canMove = true;
+
+            //enemy.Attack_Cancel();
+        }
+    } //攻击结束可以移动
+
+
+
+    void Attack()
     {
         if (player != null)
         {
             player.attack_Collider.SetActive(true);
         }
-        //if (enemy != null)
-        //{
-        //    enemy.attack_Collider.SetActive(true);
-        //}
-    }
+        if (enemy != null)
+        {
+            enemy.attack_Collider.SetActive(true);
+        }
+
+        Invoke("HideAttack", 0.2f);
+    }//攻击碰撞体闪出来一下就消失
+
+    void HideAttack()
+    {
+
+        if (player != null)
+        {
+            player.attack_Collider.SetActive(false);
+        }
+        if (enemy != null)
+        {
+            enemy.attack_Collider.SetActive(false);
+        }
+
+    }//攻击碰撞体消失
+    #endregion
+
 }

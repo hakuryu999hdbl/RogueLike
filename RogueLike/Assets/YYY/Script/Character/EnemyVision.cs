@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyVision : MonoBehaviour
 {
     public Enemy Enemy;
+    public bool isShortRange = false;
     public bool isFriend;
 
     private void OnTriggerStay2D(Collider2D collision)//检测到玩家显示
@@ -14,8 +15,11 @@ public class EnemyVision : MonoBehaviour
         {
             if (collision.gameObject.tag == "Player")
             {
-
-                Enemy.isAttack = true;
+                if (isShortRange) 
+                {
+                    Enemy.isAttack = true;
+                }
+               
 
                 Enemy.CurrentTarget = Enemy._Player.gameObject;
             }//敌人攻击玩家
@@ -23,7 +27,10 @@ public class EnemyVision : MonoBehaviour
             if (collision.gameObject.tag == "Friend")
             {
 
-                Enemy.isAttack = true;
+                if (isShortRange)
+                {
+                    Enemy.isAttack = true;
+                }
 
                 Enemy.CurrentTarget = collision.gameObject;
 
@@ -36,7 +43,10 @@ public class EnemyVision : MonoBehaviour
         {
             if (collision.gameObject.tag == "Enemy")
             {
-                Enemy.isAttack = true;
+                if (isShortRange)
+                {
+                    Enemy.isAttack = true;
+                }
 
                 Enemy.CurrentTarget = collision.gameObject;
 
@@ -55,13 +65,19 @@ public class EnemyVision : MonoBehaviour
         {
             if (collision.gameObject.tag == "Player" )
             {
-                Enemy.isAttack = false;
+                if (isShortRange)
+                {
+                    Enemy.isAttack = false;
+                }
             }//敌人停止攻击玩家
 
             if (collision.gameObject.tag == "Friend")
             {
 
-                Enemy.isAttack = false;
+                if (isShortRange)
+                {
+                    Enemy.isAttack = false;
+                }
 
             }//敌人停止攻击队友
 
@@ -70,7 +86,10 @@ public class EnemyVision : MonoBehaviour
         {
             if (collision.gameObject.tag == "Enemy")
             {
-                Enemy.isAttack = false;
+                if (isShortRange)
+                {
+                    Enemy.isAttack = false;
+                }
 
             }//队友停止攻击敌人
 

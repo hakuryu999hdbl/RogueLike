@@ -85,7 +85,7 @@ public class RoomGenerator : MonoBehaviour
         FindEndRoom();
         endRoom.GetComponent<Room>().SetEndRoom();
 
-        
+
         Scan();
 
 
@@ -94,11 +94,11 @@ public class RoomGenerator : MonoBehaviour
 
 
 
+        Invoke("SetEnemy", 1f);
 
+        Invoke("SetEnemy", 2f);
 
-
-
-
+        Invoke("SetEnemy", 3f);
 
 
     }
@@ -111,7 +111,7 @@ public class RoomGenerator : MonoBehaviour
     }
 
 
- 
+
 
     /// <summary>
     /// 设置寻路，离开场景进入地图标准与寻路
@@ -124,7 +124,7 @@ public class RoomGenerator : MonoBehaviour
         AstarPath.Scan();
     }
 
-   
+
 
     #endregion
 
@@ -308,15 +308,152 @@ public class RoomGenerator : MonoBehaviour
     }
     #endregion
 
-   
-
-   
 
 
 
 
+    /// <summary>
+    ///  任何物体的随机端口,传送到随机房间/距离玩家最远的房间
+    /// </summary>
+    #region
+    [Header("设置随机端口终点")]
+    public GameObject _Player;//玩家
+    // 定义偏移量范围
+    public float offsetRange = 2.0f;
+
+
+    public void ChangeTargetPlace(GameObject MoveTarget, bool isEnd)
+    {
 
 
 
+        //敌人死亡后再次选择最近的
+        //Invoke("CheckNearestEnemy", 0.1f);//要让敌人重刷之后，过一会再触发
+
+        // 生成随机偏移量
+        float offsetX = Random.Range(-offsetRange, offsetRange);
+        float offsetY = Random.Range(-offsetRange, offsetRange);
+
+
+
+
+        if (!isEnd)
+        {
+            //随机找一个房间
+            //int randomIndex = Random.Range(0, roomPositions.Count);
+            //MoveTargrt.transform.position = roomPositions[randomIndex] += new Vector3(offsetX, offsetY, 0f);
+
+
+            // 随机找一个非玩家所在的房间
+            MoveTarget.transform.position = FindRandomRoomExceptPlayerRoom() + new Vector3(offsetX, offsetY, 0f);
+
+        }
+        else
+        {
+            // 找到距离玩家最远的房间
+            Vector3 farthestRoomPosition = FindFarthestRoomFromPlayer();
+
+            MoveTarget.transform.position = farthestRoomPosition += new Vector3(offsetX, offsetY, 0f); ;
+        }
+
+
+
+
+    }
+
+    //将玩家拉到房间中央
+    public void SetPlayerToRoomCenter()
+    {
+        _Player.transform.position = playerRoom.transform.position;
+    }
+
+
+    Vector3 FindFarthestRoomFromPlayer()
+    {
+
+        if (roomPositions == null || roomPositions.Count == 0)
+        {
+            Debug.LogError("房间列表未初始化或为空，无法找到随机房间！");
+            return Vector3.zero; // 返回一个默认值，防止报错
+        }//如果没有一个房间的话就没有办法确认玩家不在的房间
+
+
+        Vector3 playerPosition = _Player.transform.position;
+        Vector3 farthestRoomPosition = Vector3.zero;
+        float maxDistance = float.MinValue;
+
+        // 遍历所有房间，找到距离玩家最远的房间
+        foreach (var room in rooms)
+        {
+            float distanceToPlayer = Vector3.Distance(room.transform.position, playerPosition);
+
+            if (distanceToPlayer > maxDistance)
+            {
+                maxDistance = distanceToPlayer;
+                farthestRoomPosition = room.transform.position;
+            }
+        }
+
+        return farthestRoomPosition;
+    }//获取距离玩家最远的房间
+
+    // 随机找一个不是玩家所在的房间
+    public List<Vector3> roomPositions = new List<Vector3>();
+    Vector3 FindRandomRoomExceptPlayerRoom()
+    {
+        List<Vector3> availableRooms = new List<Vector3>(roomPositions);
+
+        // 移除玩家所在的房间
+        availableRooms.Remove(playerRoom.transform.position);
+
+        // 在剩下的房间中随机选择
+        int randomIndex = Random.Range(0, availableRooms.Count);
+        return availableRooms[randomIndex];
+    }
+
+    //各个房间的WallMap传送自己坐标给RoomGenerator告诉玩家所处房间
+    public Room playerRoom; // 玩家当前所在的房间            
+    public void SetPlayerRoom(Vector3 roomPosition)
+    {
+        foreach (var room in rooms)
+        {
+            if (room.transform.position == roomPosition)
+            {
+                playerRoom = room;
+                break;
+            }
+        }
+    }  // 设置玩家所在的房间 
+    #endregion
+
+
+
+
+    /// <summary>
+    /// 设置敌人
+    /// </summary>
+    #region
+    [Header("设置敌人")]
+    public GameObject Enemy;
+    //敌人列表
+    public List<GameObject> enemyList = new List<GameObject>();
+
+    void SetEnemy()
+    {
+
+
+
+        GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
+        enemyList.Add(NewEnemy);
+
+
+        Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
+        enemy.ConvertToFriend();
+
+        //ChangeTargetPlace(NewEnemy, false);//随机刷到玩家不在的位置
+    }
+
+
+    #endregion
 }
 

@@ -20,19 +20,30 @@ public class Enemy : MonoBehaviour
         player = _Player.GetComponent<Player>();
 
         //初始都前往玩家附近
-        CurrentTarget = _Player;
+        //CurrentTarget = _Player;
 
 
         UpdateAllBar();//更新UI
 
-        anim.SetTrigger("None");
-        anim.SetInteger("AttackMode", 1);
+        //ConvertToFriend();
     }
 
     void FixedUpdate()
     {
-        BaseMove();//站走跑攻
+        if (!isDie)
+        {
+            BaseMove();//站走跑攻
 
+
+            if (isKeepWeapon)
+            {
+                WeaponDrawn();//持械切换
+            }
+
+ 
+        }
+
+      
 
         //始终跟随目标
         if (CurrentTarget != null)
@@ -41,9 +52,19 @@ public class Enemy : MonoBehaviour
 
         }
 
+        //一旦target没有了就自动玩家
+        if (CurrentTarget == null)
+        {
+            CurrentTarget = _Player;
+
+        }
+
+        // 每帧更新剑物体的旋转
+        Strike_Effect.transform.Rotate(0, 0, 100 * Time.deltaTime);
     }
 
     public bool isAttack = false;
+    public bool isDie = false;
 
     /// <summary>
     /// 基础数值
@@ -172,6 +193,44 @@ public class Enemy : MonoBehaviour
     #endregion
 
 
+
+    /// <summary>
+    /// 持械状态
+    /// </summary>
+    #region
+    [Header("持械状态")]
+    bool isKeepWeapon = false;
+    float weaponIdleTimer = 0f;
+    float sheathDelay = 1.5f;
+
+    void WeaponDrawn()
+    {
+
+        if (moveSpeed == 0&&!isAttack)
+        {
+            weaponIdleTimer += Time.deltaTime;
+
+            // 如果2秒内完全没动/没攻击，则自动收刀
+            if (weaponIdleTimer >= sheathDelay)
+            {
+                weaponIdleTimer = 0f;
+
+                anim.SetTrigger("DrawWeapon");
+
+                frameEvents._Attack_katana_in();
+
+                isKeepWeapon = false;
+            }
+        }
+        else
+        {
+            weaponIdleTimer = 0f;
+        }
+    }
+
+
+    #endregion
+
     /// <summary>
     /// 攻击系统
     /// </summary>
@@ -185,7 +244,7 @@ public class Enemy : MonoBehaviour
 
     void BaseAttack()
     {
-        //anim.SetInteger("Speed", 3);
+
 
         //attack_Range.SetActive(true);//技能范围
 
@@ -193,6 +252,8 @@ public class Enemy : MonoBehaviour
         if (!OneTimeAttak)
         {
             Invoke("Attack_Start", 1f);
+
+            isKeepWeapon = true;
 
             OneTimeAttak = true;
         }
@@ -203,31 +264,54 @@ public class Enemy : MonoBehaviour
 
     void Attack_Start()
     {
-        anim.SetTrigger("Attack");
-        // if (Random.Range(0, 2) == 0)
-        // {
-        //     anim.SetTrigger("Attack");
-        // }
-        // else
-        // {
-        //     anim.SetTrigger("Kick");
-        // }
 
-        Invoke("StartAttack", 0.5f);
-    }
-    void StartAttack()
-    {
-        attack_Collider.SetActive(true);
-        Invoke("Attack_Cancel", 0.5f);
+        if (Random.Range(0, 3) == 2)
+        {
+            anim.SetTrigger("Attack");
+        }
+        else
+        {
+            anim.SetTrigger("Kick");
+        }
+ 
+
+        switch (Random.Range(0, 3))
+        {
+            case 0:
+                frameEvents._Attack_sword_chop1();
+                break;
+            case 1:
+                frameEvents._Attack_sword_chop2();
+                break;
+            case 2:
+                frameEvents._Attack_sword_chop3();
+                break;
+        }
+
+        Invoke("Attack_Cancel", 1f);//一旦动画帧事件被跳过就会站着不动不攻击，所以这个还是Invoke触发
     }
 
-    void Attack_Cancel()
+
+    public void Attack_Cancel()
     {
-        attack_Collider.SetActive(false);
         OneTimeAttak = false;
     }
 
-
+    public void AttackVoice()
+    {
+        switch (Random.Range(0, 3))
+        {
+            case 0:
+                frameEvents._Attack_sword_chop1();
+                break;
+            case 1:
+                frameEvents._Attack_sword_chop2();
+                break;
+            case 2:
+                frameEvents._Attack_sword_chop3();
+                break;
+        }
+    }//攻击声音
 
     #endregion
 
@@ -247,6 +331,10 @@ public class Enemy : MonoBehaviour
     #endregion
 
 
+
+
+
+
     /// <summary>
     /// 生命值体力值等数值
     /// </summary>
@@ -257,6 +345,9 @@ public class Enemy : MonoBehaviour
         //更新UI
         UpdateHealthBar(currentHealth, maxHealth);
     }
+
+    [Header("特效")]
+    public GameObject Strike_Effect;//剑光特效
 
     [Header("生命值体力值等数值")]
     public int currentHealth;
@@ -277,7 +368,7 @@ public class Enemy : MonoBehaviour
             if (amount < 0)
             {
 
-                if (Random.Range(0,2)==0) 
+                if (Random.Range(0, 3) == 0 && !isDie) 
                 {
                     anim.SetTrigger("Block");
 
@@ -301,7 +392,34 @@ public class Enemy : MonoBehaviour
                 }              
 
             }
-          
+
+            //伤害类型
+            switch (TypeOfAttack)
+            {
+                case 1:
+                    Strike_Effect.SetActive(true);//剑伤害
+                    break;
+                case 2:
+                    //Palsy_Effect.SetActive(true);//雷电伤害
+                    break;
+            }
+
+
+
+            //击倒再站起
+            if (Random.Range(0, 2) == 0 && !isDie)
+            {
+                isDie = true;
+                anim.SetTrigger("Die");
+
+                //防止最后一下又击倒站起
+                if (currentHealth >= 0)
+                {
+                    Invoke("GetUp", 1f);
+                }
+               
+            }
+
 
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
             UpdateHealthBar(currentHealth, maxHealth);
@@ -333,6 +451,16 @@ public class Enemy : MonoBehaviour
             GameObject effectPrefabs = Instantiate(BloodEffect, spawnPosition, transform.rotation);
             Destroy(effectPrefabs, 2f);
         }
+
+
+        if (currentHealth <= 0)
+        {
+            isDie = true;
+            anim.SetTrigger("Die");
+
+            Invoke("Disappear", 1f);
+        }
+
     }
 
     void HurtOver()
@@ -340,11 +468,19 @@ public class Enemy : MonoBehaviour
         isScreaming = false;
     }//有1秒左右的伤害冷却
 
+    void GetUp() 
+    {
+        isDie = false;
+        anim.SetTrigger("GetUp");
+    }
+    [Header("全部自身存在")]
+    public GameObject AllOfThis;
+    void Disappear() 
+    {
+        Destroy(AllOfThis);
+    }
 
-
-
-
-    //生命值UI显示
+    [Header("生命值UI显示")]
     public Image HealthBar;
     public void UpdateHealthBar(int curAmount, int maxAmount)
     {
@@ -353,5 +489,82 @@ public class Enemy : MonoBehaviour
 
 
     #endregion
+
+
+
+
+    /// <summary>
+    /// 阵营转换
+    /// </summary>
+    #region
+    [Header("阵营转换")]
+    public EnemyVision vision;
+    public EnemyVision vision_2;
+    public Strike strike;
+    public Image HealthValueImage;
+    public SpriteRenderer AttackColliderImage;
+    public SpriteRenderer AttackRangeImage;
+
+
+    //切换为队友
+    public void ConvertToFriend()
+    {
+        //  修改标签
+        this.tag = "Friend";
+
+        //  视野脚本：变成队友
+        vision.isFriend = true;
+
+        //  视野脚本2：变成队友
+        vision_2.isFriend = true;
+
+        //  攻击脚本：攻击敌人，不再攻击队友
+        strike.DamageToPlayer = false;
+        strike.DamageToEnemy = true;
+        strike.DamageToFriend = false;  
+
+        //  改变血条颜色为绿色（友军色）
+        HealthValueImage.color = Color.green;
+
+        //  改变攻击实体面积显示颜色为绿色
+        AttackColliderImage.color = Color.green;
+
+        //  改变攻击范围显示颜色为绿色
+        AttackRangeImage.color = Color.green;
+
+        Debug.Log($"{gameObject.name} has switched to Friend.");
+    }
+
+    // 切换为敌人
+    public void ConvertToEnemy()
+    {
+        // 1. 修改标签
+        this.tag = "Enemy";
+
+        // 2. 视野脚本：不是队友
+        vision.isFriend = false;
+
+        // 3. 攻击脚本：攻击玩家和友军，不攻击敌人
+        strike.DamageToPlayer = true;
+        strike.DamageToEnemy = false;
+        strike.DamageToFriend = true;
+
+        // 4. 改变血条颜色为红色（敌人色）
+        HealthValueImage.color = Color.red;
+
+        // 5. 改变攻击实体面积显示颜色为红色
+        AttackColliderImage.color = Color.red;
+
+        // 6. 改变攻击范围显示颜色为红色
+        AttackRangeImage.color = Color.red;
+
+        Debug.Log($"{gameObject.name} has switched to Enemy.");
+    }
+    #endregion
+
+
+
+   
+
 }
 

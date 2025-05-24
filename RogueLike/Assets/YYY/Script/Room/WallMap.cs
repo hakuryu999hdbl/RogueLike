@@ -23,5 +23,29 @@ public class WallMap : MonoBehaviour
     }
 
 
+    public void ShowMap()
+    {
+        mapSprite.SetActive(true);
 
+    }//玩家进入地图柜子等显示
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            ShowMap();
+
+
+
+            // 告知RoomGenerator玩家进入的房间位置
+            Invoke("PlayerInThisRoomToRoomGenerator", 0.1f);
+        }
+
+
+    }//玩家进入显示房间小地图
+    void PlayerInThisRoomToRoomGenerator()
+    {
+        // 获取房间的位置
+        Vector3 roomPosition = transform.position;
+        _RoomGenerator.SetPlayerRoom(roomPosition);
+    }//稍微晚一点
 }

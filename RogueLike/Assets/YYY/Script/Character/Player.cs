@@ -17,17 +17,33 @@ public class Player : MonoBehaviour
 
         UpdateAllBar();//更新UI
 
-        anim.SetTrigger("None");
-        anim.SetInteger("AttackMode",1);
+      
     }
 
 
     private void FixedUpdate()
     {
-        BaseMove();//站走跑攻
+
+        if (!isDie) 
+        {
+            BaseMove();//站走跑攻
+
+            if (isKeepWeapon)
+            {
+                WeaponDrawn();//持械切换
+            }
+            
+        }
+        else
+        {
+            rbody.velocity = Vector2.zero; // 停止所有移动
+        }
+
+        // 每帧更新剑物体的旋转
+        Strike_Effect.transform.Rotate(0, 0, 100 * Time.deltaTime);
     }
 
-
+    public bool isDie = false;
 
     /// <summary>
     /// 基础数值
@@ -103,7 +119,6 @@ public class Player : MonoBehaviour
 
         if (!canMove)
         {
-            //rbody.velocity = Vector2.zero;
             input = Vector2.zero;
         }//玩家只有在不攻击的时候才能移动
 
@@ -116,6 +131,46 @@ public class Player : MonoBehaviour
         anim.SetInteger("Speed", moveSpeed);
 
 
+    }
+
+
+    #endregion
+
+
+
+    /// <summary>
+    /// 持械状态
+    /// </summary>
+    #region
+    [Header("持械状态")]
+
+    bool isKeepWeapon = false;
+    float weaponIdleTimer = 0f;
+    float sheathDelay = 1.5f;
+
+    void WeaponDrawn() 
+    {
+
+        if (moveSpeed == 0&&!isAttacking)
+        {
+            weaponIdleTimer += Time.deltaTime;
+
+            // 如果2秒内完全没动/没攻击，则自动收刀
+            if (weaponIdleTimer >= sheathDelay)
+            {
+                weaponIdleTimer = 0f;
+
+                anim.SetTrigger("DrawWeapon");
+
+                frameEvents._Attack_katana_in();
+
+                isKeepWeapon = false;
+            }
+        }
+        else 
+        {
+            weaponIdleTimer = 0f;
+        }
     }
 
 
@@ -164,6 +219,8 @@ public class Player : MonoBehaviour
         }
 
         attack_Range.SetActive(false);//关闭技能范围
+
+
     }
 
     void CheckAttack()
@@ -184,34 +241,42 @@ public class Player : MonoBehaviour
     {
         attackTriggered = true;
 
-        anim.SetTrigger("Attack");
-        //if (Random.Range(0, 2) == 0)
-        //{
-        //    anim.SetTrigger("Attack");
-        //}
-        //else
-        //{
-        //    anim.SetTrigger("Kick");
-        //}
+ 
+        if (Random.Range(0, 3) == 2)
+        {
+            anim.SetTrigger("Attack");
+        }
+        else
+        {
+            anim.SetTrigger("Kick");
+        }
+
+        isKeepWeapon = true;
+
     }//普通攻击
 
     private void PlayChargeAttack()
     {
-        attackTriggered = true;
+        PlayNormalAttack();
 
-        anim.SetTrigger("Attack");
-        //if (Random.Range(0, 2) == 0)
-        //{
-        //    anim.SetTrigger("Attack");
-        //}
-        //else
-        //{
-        //    anim.SetTrigger("Kick");
-        //}
     }//蓄力攻击
 
 
-
+    public void AttackVoice() 
+    {
+        switch (Random.Range(0, 3))
+        {
+            case 0:
+                frameEvents._Attack_sword_chop1();
+                break;
+            case 1:
+                frameEvents._Attack_sword_chop2();
+                break;
+            case 2:
+                frameEvents._Attack_sword_chop3();
+                break;
+        }
+    }//攻击声音
 
 
     #endregion
@@ -305,20 +370,21 @@ public class Player : MonoBehaviour
         UIManager.instance.UpdateStrengthBar(currentStrength, maxStrength);
         UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
     }
+    [Header("特效")]
+    public GameObject Strike_Effect;//剑光特效
 
 
 
     [Header("生命值体力值等数值")]
     public int currentHealth;
     public int maxHealth;
+    public int currentStrength;
+    public int maxStrength;
 
-    //伤害显示
+    [Header("伤害显示")]
     public GameObject RedScreen;
     public bool isScreaming;
     public HudText HudText;
-
-    public int currentStrength;
-    public int maxStrength;
 
     public GameObject BloodEffect;//受伤特效
 
@@ -330,32 +396,75 @@ public class Player : MonoBehaviour
             if (amount < 0)
             {
 
-                if (Random.Range(0, 2) == 0)
+                if (!isDie)
                 {
-                    anim.SetTrigger("Block");
-                   
+                    // 计算体力百分比
+                    float strengthPercent = (float)currentStrength / maxStrength;
 
-                    switch (Random.Range(0, 3))
+                    // 根据体力百分比决定防御几率（体力越高越容易防御）
+                    // 比如体力满时为 80% 几率，体力最低时为 10%
+                    float blockChance = Mathf.Lerp(0.1f, 0.8f, strengthPercent);
+
+                    if (Random.value < blockChance)
                     {
-                        case 0:
-                            frameEvents._Attack_sword_clash2();
-                            break;
-                        case 1:
-                            frameEvents._Attack_sword_clash3();
-                            break;
-                        case 2:
-                            frameEvents._Attack_sword_clash4();
-                            break;
+                        anim.SetTrigger("Block");
+
+                        // 防御成功扣除体力
+                        ChangeStrength(-50);
+
+
+                        switch (Random.Range(0, 3))
+                        {
+                            case 0:
+                                frameEvents._Attack_sword_clash2();
+                                break;
+                            case 1:
+                                frameEvents._Attack_sword_clash3();
+                                break;
+                            case 2:
+                                frameEvents._Attack_sword_clash4();
+                                break;
+                        }
+
+
+                        //显示伤害
+                        HudText.HUD(0);//0会显示Miss
+
+                        return;
                     }
-
-
-                    //显示伤害
-                    HudText.HUD(0);//0会显示Miss
-
-                    return;
+                    
                 }
 
             }
+
+            //伤害类型
+            switch (TypeOfAttack)
+            {
+                case 1:
+                    Strike_Effect.SetActive(true);//剑伤害
+                    break;
+                case 2:
+                    //Palsy_Effect.SetActive(true);//雷电伤害
+                    break;
+            }
+
+            //击倒再站起
+            if (Random.Range(0, 2) == 0 && !isDie)
+            {
+                isDie = true;
+                anim.SetTrigger("Die");
+
+                //防止最后一下又击倒站起
+                if (currentHealth >= 0)
+                {
+                    Invoke("GetUp", 1f);
+                }
+
+    
+            }
+
+
+
 
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
             UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
@@ -388,6 +497,16 @@ public class Player : MonoBehaviour
             Vector3 spawnPosition = transform.position + offset;
             GameObject effectPrefabs = Instantiate(BloodEffect, spawnPosition, transform.rotation);
             Destroy(effectPrefabs, 2f);
+
+
+
+
+            if (currentHealth <= 0)
+            {
+                isDie = true;
+
+                anim.SetTrigger("Die");
+            }
         }
         
     }
@@ -397,6 +516,22 @@ public class Player : MonoBehaviour
         isScreaming = false;
         RedScreen.SetActive(false);
     }//有1秒左右的伤害冷却
+
+
+
+    void GetUp()
+    {
+        isDie = false;
+        anim.SetTrigger("GetUp");
+    }
+
+
+
+
+
+
+
+
     public void ChangeStrength(int amount)
     {
 

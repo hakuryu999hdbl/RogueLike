@@ -11,6 +11,13 @@ public class Strike : MonoBehaviour
 
     public int TypeOfAttack;
 
+
+    private void Start()
+    {
+        TypeOfAttack = 1;
+    }
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //敌人
@@ -20,7 +27,7 @@ public class Strike : MonoBehaviour
             {
 
 
-                collision.gameObject.GetComponent<Player>().ChangeHealth(Damage, 1);//普通伤害
+                collision.gameObject.GetComponent<Player>().ChangeHealth(Damage, TypeOfAttack);//普通伤害
 
                 //Debug.LogWarning("玩家受到近战伤害" + Damage );
 
