@@ -4,19 +4,34 @@ using UnityEngine;
 
 public class Strike : MonoBehaviour
 {
+    [Header("伤害对象")]
     public int Damage;
     public bool DamageToPlayer = true;
     public bool DamageToEnemy = true;
     public bool DamageToFriend = true;
 
+    [Header("伤害类型")]
     public int TypeOfAttack;
 
+    private int appliedDamage; // 当前生效的随机伤害
+    private int baseDamage; // 原始设定伤害
 
-    private void Start()
+    [Header("暴击")]
+    public bool isCritial=false;
+
+    private void OnEnable()
     {
-        TypeOfAttack = 1;
-    }
+        TypeOfAttack = 1;//剑伤
 
+        baseDamage = Damage; // 保存原始值
+        appliedDamage = baseDamage + Random.Range(-50, 50); // 例如±10范围
+        if (isCritial) { appliedDamage *= 3; }//暴击三倍伤害
+    }//初始化随机伤害
+    private void OnDisable()
+    {
+        appliedDamage = baseDamage; // 恢复初始值
+        isCritial = false;
+    }//隐藏时清除
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -27,12 +42,21 @@ public class Strike : MonoBehaviour
             {
 
 
-                collision.gameObject.GetComponent<Player>().ChangeHealth(Damage, TypeOfAttack);//普通伤害
+                collision.gameObject.GetComponent<Player>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
-                //Debug.LogWarning("玩家受到近战伤害" + Damage );
 
             }
         }
+        if (collision.gameObject.tag == "Attack")
+        {
+            if (collision.gameObject.GetComponent<Dodge_Range>() != null && DamageToPlayer)
+            {
+
+                collision.gameObject.GetComponent<Dodge_Range>().Dodge();//直接触发闪避
+
+            }
+        }
+
 
 
         //玩家和队友伤害
@@ -42,18 +66,19 @@ public class Strike : MonoBehaviour
             if (collision.gameObject.GetComponent<Enemy>() != null && DamageToEnemy)
             {
 
+                if (isCritial) { collision.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
+
+                collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
                
-
-                collision.gameObject.GetComponent<Enemy>().ChangeHealth(Damage,TypeOfAttack);//普通伤害
-
-                //Debug.LogWarning("玩家对敌人造成的伤害" + Damage);//（暴击的三倍伤害是在敌人内部计算的）
-
-                //Damage = 0;//一定要清零
 
             }
 
             
         }
+
+
+
 
         if (collision.gameObject.tag == "Friend")
         {
@@ -63,11 +88,9 @@ public class Strike : MonoBehaviour
 
 
 
-                collision.gameObject.GetComponent<Enemy>().ChangeHealth(Damage, TypeOfAttack);//普通伤害
+                collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
-                //Debug.LogWarning("玩家对敌人造成的伤害" + Damage);//（暴击的三倍伤害是在敌人内部计算的）
 
-                //Damage = 0;//一定要清零
 
             }
 

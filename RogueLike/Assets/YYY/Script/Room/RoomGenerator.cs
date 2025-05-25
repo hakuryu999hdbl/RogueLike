@@ -96,9 +96,9 @@ public class RoomGenerator : MonoBehaviour
 
         Invoke("SetEnemy", 1f);
 
-        Invoke("SetEnemy", 2f);
-
-        Invoke("SetEnemy", 3f);
+        //Invoke("SetFriend", 2f);
+        //
+        //Invoke("SetEnemy", 3f);
 
 
     }
@@ -438,7 +438,17 @@ public class RoomGenerator : MonoBehaviour
     //敌人列表
     public List<GameObject> enemyList = new List<GameObject>();
 
-    void SetEnemy()
+    public void SetEnemy()
+    {
+
+
+
+        GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
+        enemyList.Add(NewEnemy);
+
+        //ChangeTargetPlace(NewEnemy, false);//随机刷到玩家不在的位置
+    }
+    public void SetFriend()
     {
 
 
@@ -449,10 +459,7 @@ public class RoomGenerator : MonoBehaviour
 
         Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
         enemy.ConvertToFriend();
-
-        //ChangeTargetPlace(NewEnemy, false);//随机刷到玩家不在的位置
     }
-
 
     #endregion
 }

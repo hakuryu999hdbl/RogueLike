@@ -22,8 +22,12 @@ public class Enemy : MonoBehaviour
         //初始都前往玩家附近
         //CurrentTarget = _Player;
 
-
         UpdateAllBar();//更新UI
+
+        //速度岔开
+        RunSpeed = Random.Range(3, 5);
+        WalkSpeed = Random.Range(1, 3);
+
 
         //ConvertToFriend();
     }
@@ -40,7 +44,14 @@ public class Enemy : MonoBehaviour
                 WeaponDrawn();//持械切换
             }
 
- 
+            //aiPath.canMove = true;
+        }
+        else
+        {
+            //倒下后不能移动
+            moveSpeed = 0;
+            aiPath.maxSpeed = 0f;
+            //aiPath.canMove = false;
         }
 
       
@@ -80,9 +91,12 @@ public class Enemy : MonoBehaviour
 
     public AIPath aiPath;// A* 路径控制器
 
-
-
+    [Header("速度岔开")]
+    float RunSpeed=4f;
+    float WalkSpeed = 2f;
     //public bool canMove = true;
+
+
 
 
     private void BaseMove()
@@ -121,29 +135,19 @@ public class Enemy : MonoBehaviour
             else
             {
                 moveSpeed = 0;
-                aiPath.maxSpeed = 0.2f;
+                aiPath.maxSpeed = 0.01f;
             }
 
-            //attack_Range.SetActive(false);//关闭技能范围
+            attack_Range.SetActive(false);//关闭技能范围
         }
         else
         {
             BaseAttack();//攻击
 
             moveSpeed = 0;
-            aiPath.maxSpeed = 0f;
+            aiPath.maxSpeed = 0.01f;
         }
 
-
-
-        //if (!canMove)
-        //{
-        //    aiPath.canMove = false;
-        //}
-        //else
-        //{
-        //    aiPath.canMove = true;
-        //}
 
 
 
@@ -215,7 +219,9 @@ public class Enemy : MonoBehaviour
             {
                 weaponIdleTimer = 0f;
 
-                anim.SetTrigger("DrawWeapon");
+
+                anim.ResetTrigger("DrawWeapon");    // 重置拔刀状态，避免残留
+                anim.SetTrigger("SheatheWeapon");
 
                 frameEvents._Attack_katana_in();
 
@@ -230,6 +236,9 @@ public class Enemy : MonoBehaviour
 
 
     #endregion
+
+
+
 
     /// <summary>
     /// 攻击系统
@@ -256,7 +265,15 @@ public class Enemy : MonoBehaviour
             isKeepWeapon = true;
 
             OneTimeAttak = true;
+
+            Invoke("ShowAttackRange", 0.7f);
         }
+    }
+
+
+    void ShowAttackRange() 
+    {
+        attack_Range.SetActive(true);//技能范围(作为攻击警告看看)
     }
 
 
@@ -264,6 +281,8 @@ public class Enemy : MonoBehaviour
 
     void Attack_Start()
     {
+
+       
 
         if (Random.Range(0, 3) == 2)
         {
@@ -295,6 +314,8 @@ public class Enemy : MonoBehaviour
     public void Attack_Cancel()
     {
         OneTimeAttak = false;
+
+        attack_Range.SetActive(false);//关闭技能范围(作为攻击警告看看)
     }
 
     public void AttackVoice()
@@ -314,6 +335,8 @@ public class Enemy : MonoBehaviour
     }//攻击声音
 
     #endregion
+
+
 
 
     /// <summary>
@@ -348,6 +371,8 @@ public class Enemy : MonoBehaviour
 
     [Header("特效")]
     public GameObject Strike_Effect;//剑光特效
+    public GameObject BloodEffect;//受伤特效
+    public GameObject SparkEffect;//火星特效
 
     [Header("生命值体力值等数值")]
     public int currentHealth;
@@ -357,18 +382,21 @@ public class Enemy : MonoBehaviour
     public bool isScreaming;
     public HudText HudText;
 
-    public GameObject BloodEffect;//受伤特效
+  
 
-    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 0无  1剑击特效  2闪电特效  3冻结
+    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式  0无  1剑击特效  2闪电特效  3冻结
     {
 
         if (!isScreaming)
         {
 
+
+
+
             if (amount < 0)
             {
 
-                if (Random.Range(0, 3) == 0 && !isDie) 
+                if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0) 
                 {
                     anim.SetTrigger("Block");
 
@@ -388,6 +416,12 @@ public class Enemy : MonoBehaviour
                     //显示伤害
                     HudText.HUD(0);//0会显示Miss
 
+                    //火花特效
+                    Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+                    Vector3 spawnPosition_2 = transform.position + offset_2;
+                    GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
+                    Destroy(effectPrefabs_2, 2f);
+
                     return;
                 }              
 
@@ -406,20 +440,7 @@ public class Enemy : MonoBehaviour
 
 
 
-            //击倒再站起
-            if (Random.Range(0, 2) == 0 && !isDie)
-            {
-                isDie = true;
-                anim.SetTrigger("Die");
-
-                //防止最后一下又击倒站起
-                if (currentHealth >= 0)
-                {
-                    Invoke("GetUp", 1f);
-                }
-               
-            }
-
+          
 
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
             UpdateHealthBar(currentHealth, maxHealth);
@@ -456,9 +477,19 @@ public class Enemy : MonoBehaviour
         if (currentHealth <= 0)
         {
             isDie = true;
-            anim.SetTrigger("Die");
+            anim.SetTrigger("Die_2");//防止倒下又起来,搞了第二死亡
+            //anim.ResetTrigger("GetUp");
 
             Invoke("Disappear", 1f);
+
+            return;
+        }
+
+
+        //击倒再站起(和暴击结合)
+        if (Random.Range(0, 2) == 0 && !isDie && currentHealth > 0)
+        {
+            Knockdown();
         }
 
     }
@@ -468,17 +499,65 @@ public class Enemy : MonoBehaviour
         isScreaming = false;
     }//有1秒左右的伤害冷却
 
-    void GetUp() 
+    void GetUp()
     {
-        isDie = false;
-        anim.SetTrigger("GetUp");
-    }
+        if (currentHealth > 0)
+        {
+            isDie = false;
+            anim.SetTrigger("GetUp");
+        }  //防止最后一下又击倒站起
+
+    }//起身
+
+
+
+
+
+    [Header("暴击")]
+    public GameObject Critial;
+    public void CritialAttack()
+    {
+
+        Knockdown();
+
+
+
+        Time.timeScale = 0;
+
+        //显示暴击
+        Critial.SetActive(true);
+        
+
+
+    }//暴击
+
+    public void Knockdown() 
+    {
+
+        isDie = true;
+        anim.SetTrigger("Die");
+
+        if (currentHealth >= 0)
+        {
+            Invoke("GetUp", 1f);
+        }  //防止最后一下又击倒站起
+
+    }//击倒
+
+
+
+
     [Header("全部自身存在")]
     public GameObject AllOfThis;
     void Disappear() 
     {
         Destroy(AllOfThis);
+
+        Time.timeScale = 1;//防止 Critial消失之前次物体已经被毁坏，然后卡住不动了
     }
+
+
+
 
     [Header("生命值UI显示")]
     public Image HealthBar;
@@ -504,7 +583,7 @@ public class Enemy : MonoBehaviour
     public Image HealthValueImage;
     public SpriteRenderer AttackColliderImage;
     public SpriteRenderer AttackRangeImage;
-
+    public SpriteRenderer UI_ICON;
 
     //切换为队友
     public void ConvertToFriend()
@@ -532,31 +611,38 @@ public class Enemy : MonoBehaviour
         //  改变攻击范围显示颜色为绿色
         AttackRangeImage.color = Color.green;
 
+        //  改变小地图显示颜色为绿色
+        UI_ICON.color = Color.green;
+
         Debug.Log($"{gameObject.name} has switched to Friend.");
     }
 
     // 切换为敌人
     public void ConvertToEnemy()
     {
-        // 1. 修改标签
+        // 修改标签
         this.tag = "Enemy";
 
-        // 2. 视野脚本：不是队友
+        // 视野脚本：不是队友
         vision.isFriend = false;
 
-        // 3. 攻击脚本：攻击玩家和友军，不攻击敌人
+        // 攻击脚本：攻击玩家和友军，不攻击敌人
         strike.DamageToPlayer = true;
         strike.DamageToEnemy = false;
         strike.DamageToFriend = true;
 
-        // 4. 改变血条颜色为红色（敌人色）
+        // 改变血条颜色为红色（敌人色）
         HealthValueImage.color = Color.red;
 
-        // 5. 改变攻击实体面积显示颜色为红色
+        // 改变攻击实体面积显示颜色为红色
         AttackColliderImage.color = Color.red;
 
-        // 6. 改变攻击范围显示颜色为红色
+        // 改变攻击范围显示颜色为红色
         AttackRangeImage.color = Color.red;
+
+        //  改变小地图显示颜色为绿色
+        UI_ICON.color = Color.red;
+
 
         Debug.Log($"{gameObject.name} has switched to Enemy.");
     }

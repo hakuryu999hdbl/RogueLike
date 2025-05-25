@@ -17,14 +17,14 @@ public class Player : MonoBehaviour
 
         UpdateAllBar();//更新UI
 
-      
+
     }
 
 
     private void FixedUpdate()
     {
 
-        if (!isDie) 
+        if (!isDie)
         {
             BaseMove();//站走跑攻
 
@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
             {
                 WeaponDrawn();//持械切换
             }
-            
+
         }
         else
         {
@@ -87,7 +87,7 @@ public class Player : MonoBehaviour
         else if (inputX < -0.5f) { inputX = -1; inputY = 0; attack.transform.rotation = Quaternion.Euler(0, 0, 90); }//左
         else if (inputY > 0.5f && inputX > -0.5f && inputX < 0.5f) { inputX = 0; inputY = 1; attack.transform.rotation = Quaternion.Euler(0, 0, 0); }//上
         else if (inputY < -0.5f && inputX > -0.5f && inputX < 0.5f) { inputX = 0; inputY = -1; attack.transform.rotation = Quaternion.Euler(0, 0, 180); }//下
-        else { inputX = 0; inputY = 0; } // 静止时也归零
+        //else { inputX = 0; inputY = 0; } // 静止时也归零
 
         // 保存上一次方向（用于静止状态播放对应Idle动画）
         if (inputX != 0 || inputY != 0)
@@ -116,6 +116,7 @@ public class Player : MonoBehaviour
 
 
         CheckAttack();
+        CheckDodge();
 
         if (!canMove)
         {
@@ -148,10 +149,10 @@ public class Player : MonoBehaviour
     float weaponIdleTimer = 0f;
     float sheathDelay = 1.5f;
 
-    void WeaponDrawn() 
+    void WeaponDrawn()
     {
 
-        if (moveSpeed == 0&&!isAttacking)
+        if (moveSpeed == 0 && !isAttacking)
         {
             weaponIdleTimer += Time.deltaTime;
 
@@ -160,14 +161,14 @@ public class Player : MonoBehaviour
             {
                 weaponIdleTimer = 0f;
 
-                anim.SetTrigger("DrawWeapon");
+                anim.SetTrigger("SheatheWeapon");
 
                 frameEvents._Attack_katana_in();
 
                 isKeepWeapon = false;
             }
         }
-        else 
+        else
         {
             weaponIdleTimer = 0f;
         }
@@ -189,6 +190,8 @@ public class Player : MonoBehaviour
     public GameObject attack;//伤害朝向
     public GameObject attack_Collider;//伤害碰撞体
     public GameObject attack_Range;//技能范围
+
+  
 
     void Attack_Start()
     {
@@ -239,9 +242,12 @@ public class Player : MonoBehaviour
 
     private void PlayNormalAttack()
     {
+
+        if (isDodge) { ChargeAttack(); }//闪避中攻击冲刺
+
         attackTriggered = true;
 
- 
+
         if (Random.Range(0, 3) == 2)
         {
             anim.SetTrigger("Attack");
@@ -257,12 +263,14 @@ public class Player : MonoBehaviour
 
     private void PlayChargeAttack()
     {
+        strike.isCritial=true;//触发暴击
+
         PlayNormalAttack();
 
     }//蓄力攻击
 
 
-    public void AttackVoice() 
+    public void AttackVoice()
     {
         switch (Random.Range(0, 3))
         {
@@ -283,23 +291,198 @@ public class Player : MonoBehaviour
 
 
     /// <summary>
+    /// 闪避系统
+    /// </summary>
+    #region
+    [Header("闪避键按下")]
+    private float dodgePressTime = 0f;      // 持续按下时长计时器
+    private bool dodgeTriggered = false;    // 是否已经触发攻击动作（防止反复触发）
+
+    void Dodge_Start()
+    {
+        isDodging = true;
+        dodgePressTime = 0f;
+
+        dodgeTriggered = false;
+    }
+    void Dodge_Cancel()
+    {
+        isDodging = false;
+
+        if (!dodgeTriggered)
+        {
+            if (dodgePressTime < 0.2f)
+            {
+                PlayDodge(); // 闪避
+            }
+            else
+            {
+                //PlayChargeAttack(); // 蓄力攻击
+            }
+
+            dodgePressTime = 0;
+
+            dodgeTriggered = true;
+        }
+
+    }
+
+    void CheckDodge()
+    {
+        if (isDodging && !dodgeTriggered)
+        {
+            dodgePressTime += Time.deltaTime;
+
+        }
+    }
+
+
+    [Header("闪避触发")]
+
+
+    public float dodgeSpeed = 10f;
+    public float dodgeDistance = 0.5f;
+    public LayerMask obstacleLayer;
+
+    public bool isDodge = false;//闪避动画期间的Dodge
+
+
+    void PlayDodge()
+    {
+        if (currentStrength > 100) // 确保不在连续闪避状态
+        {
+            if (isDodge) return;//防止连续闪避
+
+            Vector2 dodgeDir = new Vector2(-StopX, -StopY).normalized;
+            if (dodgeDir == Vector2.zero) return;
+
+            StartCoroutine(Dodge(dodgeDir));
+        }
+        else
+        {
+            //显示体力不足
+            if (!isOutOfStrength)
+            {
+
+                frameEvents._SE_Glass();
+
+                isOutOfStrength = true;
+
+                //显示体力不足
+                HudText.SpecialText(0);
+
+                Invoke("OutOfStrengthCollDown", 2f);
+            }
+        }
+    }
+
+    [Header("冷却提示")]
+    bool isOutOfStrength = false;
+    void OutOfStrengthCollDown()
+    {
+        isOutOfStrength = false;
+    }
+
+
+    IEnumerator Dodge(Vector2 direction)
+    {
+        // 音效、体力扣除
+        frameEvents._SE_Clothes();
+        ChangeStrength(-100);
+
+
+
+        isDodge = true;
+        float movedDistance = 0f;
+
+
+        while (movedDistance < dodgeDistance)
+        {
+            float step = dodgeSpeed * Time.fixedDeltaTime;
+
+            Vector3 newPos = rbody.position + direction * step;
+
+            // 如果会撞墙就提前终止（额外做个BoxCast检测更好）
+            if (Physics.Raycast(rbody.position, direction, 0.5f, obstacleLayer)) break;
+
+            rbody.MovePosition(newPos);  // 物理安全移动
+            movedDistance += step;
+
+            yield return new WaitForFixedUpdate();
+        }
+
+
+
+
+        Invoke(nameof(DodgingOver), 0.6f);// 让子弹时间更容易触发
+    }
+
+    void DodgingOver()
+    {
+        isDodge = false;
+    }
+
+    [Header("闪避触发成功暴击")]
+    public Strike strike;//目前用于触发暴击效果
+
+    public void DodgeEnemyAttack()
+    {
+        // 音效
+        frameEvents._Attack_katana_draw();
+
+        //显示闪避成功
+        HudText.SpecialText(1);
+
+        Time.timeScale = 0.3f;
+
+        Invoke("DodgeEnemyAttackOver", 0.2f);
+
+
+    }
+
+
+    void DodgeEnemyAttackOver() 
+    {
+        Time.timeScale = 1f;//继续
+
+
+    }
+
+    void ChargeAttack() 
+    {
+
+ 
+        Vector2 dodgeDir = new Vector2(StopX, StopY).normalized;
+        if (dodgeDir == Vector2.zero) return;
+
+        StartCoroutine(Dodge(dodgeDir));
+    }//冲刺攻击
+
+
+
+
+    #endregion
+
+    /// <summary>
     /// 多端输入
     /// </summary>
     #region
     [Header("InputSystem")]
-    [SerializeField] private InputActionReference moveAction;
-    [SerializeField] private InputActionAsset inputActions;
+    [SerializeField] private InputActionReference moveAction;//方向键控制
+    [SerializeField] private InputActionAsset inputActions;//跑攻闪
 
     private InputAction runAction;
 
     private InputAction AttackAction;
 
+    private InputAction DodgeAction;
 
     private void RegisterHandle()
     {
-        // 获取Run动作（根据你的Action Map结构可能需要调整路径）
+        // 获取动作（根据你的Action Map结构可能需要调整路径）
         runAction = inputActions.FindAction("Run");
         AttackAction = inputActions.FindAction("Attack");
+        DodgeAction = inputActions.FindAction("Dodge");
 
         // 订阅输入事件
         runAction.started += OnRunStarted;
@@ -308,6 +491,10 @@ public class Player : MonoBehaviour
         // 订阅输入事件
         AttackAction.started += OnAttackStarted;
         AttackAction.canceled += OnAttackCanceled;
+
+        // 订阅输入事件
+        DodgeAction.started += OnDodgeStarted;
+        DodgeAction.canceled += OnDodgeCanceled;
 
 
     }
@@ -329,12 +516,20 @@ public class Player : MonoBehaviour
         Attack_Cancel();
     }
 
+    private void OnDodgeStarted(InputAction.CallbackContext context)
+    {
+        Dodge_Start();
+    }
+    private void OnDodgeCanceled(InputAction.CallbackContext context)
+    {
+        Dodge_Cancel();
+    }
+
     [Header("手机端触发")]
     public Joystick Joystick;
 
-    public bool isRunning = false;
-
     //手机端触发
+    public bool isRunning = false;//持续按下跑步键
     public void ButtonSetRun()
     {
         isRunning = true;
@@ -344,8 +539,8 @@ public class Player : MonoBehaviour
         isRunning = false;
     }
 
-    public bool isAttacking = false;
-
+    //手机端触发
+    public bool isAttacking = false;//持续按下攻击键
     public void ButtonSetAttack()
     {
         Attack_Start();
@@ -354,6 +549,18 @@ public class Player : MonoBehaviour
     {
         Attack_Cancel();
     }
+
+    //手机端触发
+    public bool isDodging = false;//持续按下闪避键
+    public void ButtonSetDodge()
+    {
+        Dodge_Start();
+    }
+    public void ButtonSetDodgeOver()
+    {
+        Dodge_Cancel();
+    }
+
     #endregion
 
 
@@ -372,7 +579,8 @@ public class Player : MonoBehaviour
     }
     [Header("特效")]
     public GameObject Strike_Effect;//剑光特效
-
+    public GameObject BloodEffect;//受伤特效
+    public GameObject SparkEffect;//火星特效
 
 
     [Header("生命值体力值等数值")]
@@ -386,13 +594,22 @@ public class Player : MonoBehaviour
     public bool isScreaming;
     public HudText HudText;
 
-    public GameObject BloodEffect;//受伤特效
+    [Header("暴击")]
+    public GameObject Critial;
 
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 0无  1剑击特效  2闪电特效  3冻结
     {
-        if (!isScreaming) 
+        if (!isScreaming)
         {
 
+
+
+            if (isDodging)
+            {
+                
+                DodgeEnemyAttack();
+                return;
+            }//闪避伤害
             if (amount < 0)
             {
 
@@ -430,12 +647,18 @@ public class Player : MonoBehaviour
                         //显示伤害
                         HudText.HUD(0);//0会显示Miss
 
+                        //火花特效
+                        Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+                        Vector3 spawnPosition_2 = transform.position + offset_2;
+                        GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
+                        Destroy(effectPrefabs_2, 2f);
+
                         return;
                     }
-                    
+
                 }
 
-            }
+            }//格挡
 
             //伤害类型
             switch (TypeOfAttack)
@@ -448,20 +671,7 @@ public class Player : MonoBehaviour
                     break;
             }
 
-            //击倒再站起
-            if (Random.Range(0, 2) == 0 && !isDie)
-            {
-                isDie = true;
-                anim.SetTrigger("Die");
 
-                //防止最后一下又击倒站起
-                if (currentHealth >= 0)
-                {
-                    Invoke("GetUp", 1f);
-                }
-
-    
-            }
 
 
 
@@ -505,10 +715,28 @@ public class Player : MonoBehaviour
             {
                 isDie = true;
 
+                anim.SetTrigger("Die_2");//防止倒下又起来,搞了第二死亡
+
+
+                return;
+            }
+
+            //击倒再站起
+            if (Random.Range(0, 2) == 0 && !isDie && currentHealth > 0)
+            {
+                isDie = true;
                 anim.SetTrigger("Die");
+
+                //防止最后一下又击倒站起
+                if (currentHealth > 0)
+                {
+                    Invoke("GetUp", 0.5f);//比起敌人，玩家可以更快站起来
+                }
+
+                Critial.SetActive(true);
             }
         }
-        
+
     }
 
     void HurtOver()
@@ -523,6 +751,8 @@ public class Player : MonoBehaviour
     {
         isDie = false;
         anim.SetTrigger("GetUp");
+
+        canMove = true;//站起同时按攻击导致无法移动但是仍旧播放站起动画
     }
 
 

@@ -63,7 +63,6 @@ public class CharacterSkin : MonoBehaviour
         }
         if (enemy != null)
         {
-            //enemy.canMove = false;
 
             enemy.AttackVoice();
         }
@@ -81,8 +80,6 @@ public class CharacterSkin : MonoBehaviour
         }
         if (enemy != null)
         {
-            //enemy.canMove = true;
-
             //enemy.Attack_Cancel();
         }
     } //攻击结束可以移动
