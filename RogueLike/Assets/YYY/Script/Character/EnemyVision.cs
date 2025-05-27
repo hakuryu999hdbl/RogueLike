@@ -18,7 +18,7 @@ public class EnemyVision : MonoBehaviour
                 if (isShortRange) 
                 {
                     Enemy.isAttack = true;
-                    Enemy.anim.SetTrigger("DrawWeapon");//敌人第一次碰到目标需要拔刀
+                    if (!Enemy.isPatrol) { Enemy.anim.SetTrigger("DrawWeapon"); }  //敌人第一次碰到目标需要拔刀)
                 }
                
 
@@ -31,7 +31,7 @@ public class EnemyVision : MonoBehaviour
                 if (isShortRange)
                 {
                     Enemy.isAttack = true;
-                    Enemy.anim.SetTrigger("DrawWeapon");//敌人第一次碰到目标需要拔刀
+                    if (!Enemy.isPatrol) { Enemy.anim.SetTrigger("DrawWeapon"); }  //敌人第一次碰到目标需要拔刀
                 }
 
                 Enemy.CurrentTarget = collision.gameObject;
@@ -48,7 +48,7 @@ public class EnemyVision : MonoBehaviour
                 if (isShortRange)
                 {
                     Enemy.isAttack = true;
-                    Enemy.anim.SetTrigger("DrawWeapon");//队友第一次碰到目标需要拔刀
+                    if (!Enemy.isPatrol) { Enemy.anim.SetTrigger("DrawWeapon"); }  //敌人第一次碰到目标需要拔刀
                 }
 
                 Enemy.CurrentTarget = collision.gameObject;

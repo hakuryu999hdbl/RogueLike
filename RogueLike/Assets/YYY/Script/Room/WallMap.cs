@@ -47,5 +47,7 @@ public class WallMap : MonoBehaviour
         // 获取房间的位置
         Vector3 roomPosition = transform.position;
         _RoomGenerator.SetPlayerRoom(roomPosition);
+        //Debug.Log("玩家所在房间位置"+roomPosition);
+
     }//稍微晚一点
 }

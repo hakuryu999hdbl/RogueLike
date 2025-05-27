@@ -205,6 +205,9 @@ public class Player : MonoBehaviour
     {
         isAttacking = false;
 
+
+      
+
         if (!attackTriggered)
         {
             if (attackPressTime < 0.2f)
@@ -243,6 +246,8 @@ public class Player : MonoBehaviour
     private void PlayNormalAttack()
     {
 
+        if (!canMove) { return; }//玩家只有在可以移动的情况下，才能攻击（因为处于攻击中无法移动，防止快速按三下变成3下攻击）
+
         if (isDodge) { ChargeAttack(); }//闪避中攻击冲刺
 
         attackTriggered = true;
@@ -257,7 +262,7 @@ public class Player : MonoBehaviour
             anim.SetTrigger("Kick");
         }
 
-        isKeepWeapon = true;
+        isKeepWeapon = true;//进入武器状态
 
     }//普通攻击
 
@@ -340,8 +345,8 @@ public class Player : MonoBehaviour
     [Header("闪避触发")]
 
 
-    public float dodgeSpeed = 10f;
-    public float dodgeDistance = 0.5f;
+    //public float dodgeSpeed = 10f;
+    //public float dodgeDistance = 0.5f;
     public LayerMask obstacleLayer;
 
     public bool isDodge = false;//闪避动画期间的Dodge
@@ -356,7 +361,7 @@ public class Player : MonoBehaviour
             Vector2 dodgeDir = new Vector2(-StopX, -StopY).normalized;
             if (dodgeDir == Vector2.zero) return;
 
-            StartCoroutine(Dodge(dodgeDir));
+            StartCoroutine(Dodge(dodgeDir,15f,2f));
         }
         else
         {
@@ -384,7 +389,7 @@ public class Player : MonoBehaviour
     }
 
 
-    IEnumerator Dodge(Vector2 direction)
+    IEnumerator Dodge(Vector2 direction, float dodgeSpeed, float dodgeDistance)
     {
         // 音效、体力扣除
         frameEvents._SE_Clothes();
@@ -455,10 +460,8 @@ public class Player : MonoBehaviour
         Vector2 dodgeDir = new Vector2(StopX, StopY).normalized;
         if (dodgeDir == Vector2.zero) return;
 
-        StartCoroutine(Dodge(dodgeDir));
+        StartCoroutine(Dodge(dodgeDir, 13f, 1f));
     }//冲刺攻击
-
-
 
 
     #endregion
@@ -670,9 +673,6 @@ public class Player : MonoBehaviour
                     //Palsy_Effect.SetActive(true);//雷电伤害
                     break;
             }
-
-
-
 
 
 

@@ -9,9 +9,11 @@ public class Enemy : MonoBehaviour
     [Header("主动触发声音")]
     public FrameEvents frameEvents;
 
-    [Header("寻找玩家")]
+    [Header("寻找玩家/RoomGenerator")]
     public GameObject _Player;//玩家
     public Player player;
+
+    public RoomGenerator RoomGenerator;//寻找RoomGenerator
 
     private void Start()
     {
@@ -19,8 +21,9 @@ public class Enemy : MonoBehaviour
         _Player = GameObject.FindGameObjectWithTag("Player");
         player = _Player.GetComponent<Player>();
 
-        //初始都前往玩家附近
-        //CurrentTarget = _Player;
+        //寻找RoomGenerator
+        RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
+
 
         UpdateAllBar();//更新UI
 
@@ -29,7 +32,6 @@ public class Enemy : MonoBehaviour
         WalkSpeed = Random.Range(1, 3);
 
 
-        //ConvertToFriend();
     }
 
     void FixedUpdate()
@@ -63,17 +65,13 @@ public class Enemy : MonoBehaviour
 
         }
 
-        //一旦target没有了就自动玩家
-        if (CurrentTarget == null)
-        {
-            CurrentTarget = _Player;
-
-        }
+     
 
         // 每帧更新剑物体的旋转
         Strike_Effect.transform.Rotate(0, 0, 100 * Time.deltaTime);
     }
 
+    public bool isPatrol = false;
     public bool isAttack = false;
     public bool isDie = false;
 
@@ -94,7 +92,7 @@ public class Enemy : MonoBehaviour
     [Header("速度岔开")]
     float RunSpeed=4f;
     float WalkSpeed = 2f;
-    //public bool canMove = true;
+
 
 
 
@@ -113,42 +111,57 @@ public class Enemy : MonoBehaviour
 
         float dist = Vector2.Distance(current, target);
 
-        if (!isAttack)
+        if (!isPatrol)
         {
-            // 设置速度与动画状态
-            if (dist > 1)
+            if (!isAttack)
             {
-
-                if (player.isRunning)
+                // 设置速度与动画状态
+                if (dist > 1)
                 {
+
+                    //目前战斗下全员跑
                     moveSpeed = 2;
-                    aiPath.maxSpeed = 4f;
+                    aiPath.maxSpeed = RunSpeed;
                 }
                 else
                 {
-                    moveSpeed = 1;
-                    aiPath.maxSpeed = 2f;
-
+                    moveSpeed = 0;
+                    aiPath.maxSpeed = 0.01f;
                 }
 
+                attack_Range.SetActive(false);//关闭技能范围
             }
             else
             {
+                BaseAttack();//攻击
+
                 moveSpeed = 0;
                 aiPath.maxSpeed = 0.01f;
             }
 
-            attack_Range.SetActive(false);//关闭技能范围
+
+
+            //一旦target没有了就自动玩家
+            if (CurrentTarget == null)
+            {
+                CurrentTarget = _Player;
+
+            }
+
+            AntiOverlapping.SetActive(true);//这个玩意会让敌人队友不重叠，但是巡逻的时候会贴在一起，巡逻的时候去掉
         }
-        else
+        else 
         {
-            BaseAttack();//攻击
+            
 
-            moveSpeed = 0;
-            aiPath.maxSpeed = 0.01f;
+            //巡逻
+            Patrol();
+
+
+            CurrentTarget = Patrol_Target;//巡逻目标
+
+            AntiOverlapping.SetActive(false);//这个玩意会让敌人队友不重叠，但是巡逻的时候会贴在一起，巡逻的时候去掉
         }
-
-
 
 
 
@@ -340,17 +353,50 @@ public class Enemy : MonoBehaviour
 
 
     /// <summary>
-    /// 索敌系统
+    /// 巡逻系统
     /// </summary>
     #region
-    [Header(" 索敌系统")]
-    public GameObject _Target;//寻路目标
+    [Header("索敌系统")]
+    public GameObject _Target;//持续寻路对象
+    public GameObject Patrol_Target;//碰到就传送的巡逻目标
+
     public GameObject CurrentTarget;//当前的目标
 
-    void TargetIs()
-    {
 
-    }
+    [Header("巡逻系统")]
+    bool isWalking = true;
+    float patrolTimer = 0f;
+    float walkDuration = 2f;  // 每次走几秒
+    float idleDuration = 1f;  // 每次停几秒
+
+    public GameObject AntiOverlapping;//这个玩意会让敌人队友不重叠，但是巡逻的时候会贴在一起，巡逻的时候去掉
+    void Patrol()
+    {
+        patrolTimer += Time.deltaTime;
+
+        if (isWalking)
+        {
+            if (patrolTimer >= walkDuration)
+            {
+                isWalking = false;
+                patrolTimer = 0f;
+            }
+
+            moveSpeed = 1;
+            aiPath.maxSpeed = WalkSpeed;
+        }
+        else
+        {
+            if (patrolTimer >= idleDuration)
+            {
+                isWalking = true;
+                patrolTimer = 0f;
+            }
+
+            moveSpeed = 0;
+            aiPath.maxSpeed = 0.01f;  // 停止几乎不动
+        }
+    }//走走停停
     #endregion
 
 
@@ -395,6 +441,9 @@ public class Enemy : MonoBehaviour
 
             if (amount < 0)
             {
+
+                isPatrol = false;//受伤后立刻进入战斗
+
 
                 if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0) 
                 {

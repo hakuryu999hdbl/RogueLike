@@ -86,6 +86,27 @@ public class RoomGenerator : MonoBehaviour
         endRoom.GetComponent<Room>().SetEndRoom();
 
 
+
+
+
+
+
+
+        // 将玩家初始所在的房间设置为房间列表中的第一个房间
+        playerRoom = rooms[0].GetComponent<Room>();
+        // 游戏一开始RoomGenerator直接把当前所有房间的位置告诉Move_Target
+        foreach (var room in rooms)
+        {
+            roomPositions.Add(room.transform.position);
+        }
+
+
+
+
+
+
+
+
         Scan();
 
 
@@ -322,7 +343,7 @@ public class RoomGenerator : MonoBehaviour
     public float offsetRange = 2.0f;
 
 
-    public void ChangeTargetPlace(GameObject MoveTarget, bool isEnd)
+    public void ChangeTargetPlace(GameObject MoveTarget, int WhichRoom)//0 玩家当前房间  1距离玩家最远房间  2除了玩家之外的随机房间  3随机找一个房间
     {
 
 
@@ -336,24 +357,38 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-
-        if (!isEnd)
+        switch (WhichRoom) 
         {
-            //随机找一个房间
-            //int randomIndex = Random.Range(0, roomPositions.Count);
-            //MoveTargrt.transform.position = roomPositions[randomIndex] += new Vector3(offsetX, offsetY, 0f);
+            case -1:
 
+                //拉到玩家当前位置
+                MoveTarget.transform.position = _Player.transform.position + new Vector3(offsetX, offsetY, 0f);
+                break;
+            case 0:
 
-            // 随机找一个非玩家所在的房间
-            MoveTarget.transform.position = FindRandomRoomExceptPlayerRoom() + new Vector3(offsetX, offsetY, 0f);
+                //拉到玩家当前房间
+                MoveTarget.transform.position = playerRoom.transform.position + new Vector3(offsetX, offsetY, 0f);
+                break;
+            case 1:
 
-        }
-        else
-        {
-            // 找到距离玩家最远的房间
-            Vector3 farthestRoomPosition = FindFarthestRoomFromPlayer();
+                // 找到距离玩家最远的房间
+                Vector3 farthestRoomPosition = FindFarthestRoomFromPlayer();
 
-            MoveTarget.transform.position = farthestRoomPosition += new Vector3(offsetX, offsetY, 0f); ;
+                MoveTarget.transform.position = farthestRoomPosition += new Vector3(offsetX, offsetY, 0f);
+                break;
+            case 2:
+
+                // 随机找一个非玩家所在的房间
+                MoveTarget.transform.position = FindRandomRoomExceptPlayerRoom() + new Vector3(offsetX, offsetY, 0f);
+                break;
+            case 3:
+
+                //随机找一个房间
+                int randomIndex = Random.Range(0, roomPositions.Count);
+                MoveTarget.transform.position = roomPositions[randomIndex] += new Vector3(offsetX, offsetY, 0f);
+
+                break;
+
         }
 
 
@@ -366,6 +401,7 @@ public class RoomGenerator : MonoBehaviour
     {
         _Player.transform.position = playerRoom.transform.position;
     }
+
 
 
     Vector3 FindFarthestRoomFromPlayer()
@@ -397,7 +433,10 @@ public class RoomGenerator : MonoBehaviour
         return farthestRoomPosition;
     }//获取距离玩家最远的房间
 
-    // 随机找一个不是玩家所在的房间
+
+
+
+    //知晓所有房间的位置列表
     public List<Vector3> roomPositions = new List<Vector3>();
     Vector3 FindRandomRoomExceptPlayerRoom()
     {
@@ -409,7 +448,10 @@ public class RoomGenerator : MonoBehaviour
         // 在剩下的房间中随机选择
         int randomIndex = Random.Range(0, availableRooms.Count);
         return availableRooms[randomIndex];
-    }
+    }   // 随机找一个不是玩家所在的房间
+
+
+
 
     //各个房间的WallMap传送自己坐标给RoomGenerator告诉玩家所处房间
     public Room playerRoom; // 玩家当前所在的房间            
@@ -446,7 +488,7 @@ public class RoomGenerator : MonoBehaviour
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
         enemyList.Add(NewEnemy);
 
-        //ChangeTargetPlace(NewEnemy, false);//随机刷到玩家不在的位置
+        ChangeTargetPlace(NewEnemy,0);
     }
     public void SetFriend()
     {
@@ -459,8 +501,12 @@ public class RoomGenerator : MonoBehaviour
 
         Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
         enemy.ConvertToFriend();
+
+        ChangeTargetPlace(NewEnemy, -1);
     }
 
     #endregion
+
+
 }
 
