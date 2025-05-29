@@ -14,6 +14,7 @@ public class CharacterSkin : MonoBehaviour
     SkeletonMecanim skeletonAnimation;
     Skin blendSkin = new Skin("BlendedSkin");// 创建一个新的混合皮肤
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,7 +42,7 @@ public class CharacterSkin : MonoBehaviour
         skeletonAnimation.Skeleton.SetSkin(blendSkin);
         skeletonAnimation.Skeleton.SetSlotsToSetupPose();
 
-        Debug.Log("设置皮肤");
+        //Debug.Log("设置皮肤");
     }
     #endregion
 
@@ -114,5 +115,6 @@ public class CharacterSkin : MonoBehaviour
 
     }//攻击碰撞体消失
     #endregion
+
 
 }

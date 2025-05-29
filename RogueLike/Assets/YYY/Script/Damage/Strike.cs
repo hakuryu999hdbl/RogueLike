@@ -18,14 +18,25 @@ public class Strike : MonoBehaviour
 
     [Header("暴击")]
     public bool isCritial=false;
-
+    public float chargeTime = 0f; // 由 Player 传入的蓄力时间
     private void OnEnable()
     {
         TypeOfAttack = 1;//剑伤
 
         baseDamage = Damage; // 保存原始值
         appliedDamage = baseDamage + Random.Range(-50, 50); // 例如±10范围
-        if (isCritial) { appliedDamage *= 3; }//暴击三倍伤害
+
+        if (isCritial)
+        {
+            appliedDamage *= 3; //暴击三倍伤害
+        }
+        else 
+        {
+            // 非暴击时，根据蓄力时间提升伤害：最大 1.5 倍（>=1秒）
+            float chargeMultiplier = Mathf.Lerp(1f, 1.5f, Mathf.Clamp01(chargeTime));
+            appliedDamage = Mathf.RoundToInt(appliedDamage * chargeMultiplier);
+        }
+        
     }//初始化随机伤害
     private void OnDisable()
     {

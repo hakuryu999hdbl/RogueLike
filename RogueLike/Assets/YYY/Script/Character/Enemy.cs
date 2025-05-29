@@ -119,9 +119,38 @@ public class Enemy : MonoBehaviour
                 if (dist > 1)
                 {
 
-                    //目前战斗下全员跑
-                    moveSpeed = 2;
-                    aiPath.maxSpeed = RunSpeed;
+
+                    if (tag != "Friend")
+                    {
+                        //目前战斗下全员跑
+                        moveSpeed = 2;
+                        aiPath.maxSpeed = RunSpeed;
+                    }
+                    else if(!isPatrol)
+                    {
+                        //非巡逻队友跟，随情况下会你走/我也走/你跑/我也跑
+
+                        if (player.isRunning)
+                        {
+                            moveSpeed = 2;
+                            aiPath.maxSpeed = RunSpeed;
+                        }
+                        else 
+                        {
+
+                            moveSpeed = 1;
+                            aiPath.maxSpeed = WalkSpeed;
+
+                        }
+
+                    }
+
+
+
+
+
+
+
                 }
                 else
                 {
@@ -441,11 +470,22 @@ public class Enemy : MonoBehaviour
 
             if (amount < 0)
             {
+                if (isPatrol)
+                {                 
+                    Time.timeScale = 0;
+
+                    //显示暗杀
+                    Assassinate.SetActive(true);
+
+                    amount = -currentHealth;
+                    
+                }//暗杀
+
 
                 isPatrol = false;//受伤后立刻进入战斗
 
 
-                if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0) 
+                if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0&& amount!= -currentHealth) 
                 {
                     anim.SetTrigger("Block");
 
@@ -525,11 +565,7 @@ public class Enemy : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            isDie = true;
-            anim.SetTrigger("Die_2");//防止倒下又起来,搞了第二死亡
-            //anim.ResetTrigger("GetUp");
-
-            Invoke("Disappear", 1f);
+            Die();
 
             return;
         }
@@ -564,6 +600,7 @@ public class Enemy : MonoBehaviour
 
     [Header("暴击")]
     public GameObject Critial;
+    public GameObject Assassinate;//暗杀
     public void CritialAttack()
     {
 
@@ -593,7 +630,13 @@ public class Enemy : MonoBehaviour
 
     }//击倒
 
+    public void Die() 
+    {
+        isDie = true;
+        anim.SetTrigger("Die_2");//防止倒下又起来,搞了第二死亡
 
+        Invoke("Disappear", 1f);
+    }//死亡
 
 
     [Header("全部自身存在")]
@@ -602,7 +645,9 @@ public class Enemy : MonoBehaviour
     {
         Destroy(AllOfThis);
 
-        Time.timeScale = 1;//防止 Critial消失之前次物体已经被毁坏，然后卡住不动了
+        RoomGenerator.SetEnemy();
+
+       Time.timeScale = 1;//防止 Critial消失之前次物体已经被毁坏，然后卡住不动了
     }
 
 

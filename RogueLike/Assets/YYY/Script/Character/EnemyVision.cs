@@ -5,8 +5,19 @@ using UnityEngine;
 public class EnemyVision : MonoBehaviour
 {
     public Enemy Enemy;
-    public bool isShortRange = false;
     public bool isFriend;
+
+    public enum VisionType
+    {
+        PatrolVision,//负责从巡逻进入战斗
+        ShortRangeVision,//负责拔刀和进入战斗状态
+        LongRangeVision//负责选中目标敌人
+    }
+
+    [Header("敌人视觉类型")]
+    public VisionType visionType = VisionType.PatrolVision;
+
+
 
     private void OnTriggerStay2D(Collider2D collision)//检测到玩家显示
     {
@@ -15,7 +26,14 @@ public class EnemyVision : MonoBehaviour
         {
             if (collision.gameObject.tag == "Player")
             {
-                if (isShortRange) 
+
+                if (visionType == VisionType.PatrolVision)
+                {
+                    if (Enemy.isPatrol) { Enemy.isPatrol = false; }  //敌人从巡逻进入战斗
+                }
+
+
+                if (visionType == VisionType.ShortRangeVision) 
                 {
                     Enemy.isAttack = true;
                     if (!Enemy.isPatrol) { Enemy.anim.SetTrigger("DrawWeapon"); }  //敌人第一次碰到目标需要拔刀)
@@ -28,7 +46,12 @@ public class EnemyVision : MonoBehaviour
             if (collision.gameObject.tag == "Friend")
             {
 
-                if (isShortRange)
+                if (visionType == VisionType.PatrolVision)
+                {
+                    if (Enemy.isPatrol) { Enemy.isPatrol = false; }  //敌人从巡逻进入战斗
+                }
+
+                if (visionType == VisionType.ShortRangeVision)
                 {
                     Enemy.isAttack = true;
                     if (!Enemy.isPatrol) { Enemy.anim.SetTrigger("DrawWeapon"); }  //敌人第一次碰到目标需要拔刀
@@ -45,7 +68,12 @@ public class EnemyVision : MonoBehaviour
         {
             if (collision.gameObject.tag == "Enemy")
             {
-                if (isShortRange)
+                if (visionType == VisionType.PatrolVision)
+                {
+                    if (Enemy.isPatrol) { Enemy.isPatrol = false; }  //队友从巡逻进入战斗
+                }
+
+                if (visionType == VisionType.ShortRangeVision)
                 {
                     Enemy.isAttack = true;
                     if (!Enemy.isPatrol) { Enemy.anim.SetTrigger("DrawWeapon"); }  //敌人第一次碰到目标需要拔刀
@@ -68,7 +96,7 @@ public class EnemyVision : MonoBehaviour
         {
             if (collision.gameObject.tag == "Player" )
             {
-                if (isShortRange)
+                if (visionType == VisionType.ShortRangeVision)
                 {
                     Enemy.isAttack = false;
                 }
@@ -77,7 +105,7 @@ public class EnemyVision : MonoBehaviour
             if (collision.gameObject.tag == "Friend")
             {
 
-                if (isShortRange)
+                if (visionType == VisionType.ShortRangeVision)
                 {
                     Enemy.isAttack = false;
                 }
@@ -89,7 +117,7 @@ public class EnemyVision : MonoBehaviour
         {
             if (collision.gameObject.tag == "Enemy")
             {
-                if (isShortRange)
+                if (visionType == VisionType.ShortRangeVision)
                 {
                     Enemy.isAttack = false;
                 }

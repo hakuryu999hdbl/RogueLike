@@ -23,7 +23,9 @@ public class UIManager : MonoBehaviour
     [Header("体力值")]
     public Image StrengthBar;
     public Text StrengthText;
-    //public GameObject LackOfStrength;
+
+    [Header("暴击值")]
+    public Image CriticalBar;
 
     public void UpdateHealthBar(int curAmount, int maxAmount)
     {
@@ -50,12 +52,6 @@ public class UIManager : MonoBehaviour
         StrengthText.text = curAmount + "/" + maxAmount.ToString();
 
 
-        //if (curAmount <= 300)
-        //{ LackOfStrength.SetActive(true); }  // 体力不足提示
-        //else
-        //{
-        //    LackOfStrength.SetActive(false);
-        //}
 
         if (curAmount <= maxAmount / 3)
         { StrengthBar.color = new Color(0.8f, 0.6f, 1.0f, 1.0f); }  // 淡紫色
@@ -63,6 +59,10 @@ public class UIManager : MonoBehaviour
         { StrengthBar.color = new Color(0.0f, 1.0f, 0.0f, 1.0f); } // 纯绿色
         else
         { StrengthBar.color = new Color(0.0f, 0.68f, 0.93f, 1.0f); }//浅蓝色
+    }
+    public void UpdateCriticalBar(int curAmount, int maxAmount)
+    {
+        CriticalBar.fillAmount = (float)curAmount / (float)maxAmount;
     }
     #endregion
 }

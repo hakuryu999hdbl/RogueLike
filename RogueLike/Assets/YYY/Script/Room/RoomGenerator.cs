@@ -116,12 +116,11 @@ public class RoomGenerator : MonoBehaviour
 
 
         Invoke("SetEnemy", 1f);
-
-        //Invoke("SetFriend", 2f);
-        //
-        //Invoke("SetEnemy", 3f);
-
-
+        Invoke("SetEnemy", 1.5f);
+        Invoke("SetEnemy", 2f);
+        Invoke("SetEnemy", 2.5f);
+        Invoke("SetEnemy", 3f);
+        Invoke("SetEnemy", 3.5f);
     }
 
 
@@ -488,7 +487,7 @@ public class RoomGenerator : MonoBehaviour
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
         enemyList.Add(NewEnemy);
 
-        ChangeTargetPlace(NewEnemy,0);
+        ChangeTargetPlace(NewEnemy,2);
     }
     public void SetFriend()
     {

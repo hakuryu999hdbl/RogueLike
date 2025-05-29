@@ -97,18 +97,23 @@ public class Player : MonoBehaviour
             if (isRunning)
             {
                 moveSpeed = 2; speed = 4;
-                ChangeStrength(-3);
+                ChangeStrength(-2);
+
+
             }
             else
             {
                 moveSpeed = 1; speed = 2;
                 ChangeStrength(1);
+
             }
+
+          
         }
         else
         {
             moveSpeed = 0;
-            ChangeStrength(2);
+            ChangeStrength(3);
         }
 
         if (inputY > -0.5f && inputY < 0.5f && inputX > -0.5f && inputX < 0.5f) { speed = 0; }//防止微微拉动拉杆也移动
@@ -118,10 +123,17 @@ public class Player : MonoBehaviour
         CheckAttack();
         CheckDodge();
 
+
+
+
+
         if (!canMove)
         {
-            input = Vector2.zero;
+           // input = Vector2.zero;
+
         }//玩家只有在不攻击的时候才能移动
+
+
 
         rbody.velocity = input * speed;
 
@@ -240,6 +252,12 @@ public class Player : MonoBehaviour
 
                 attack_Range.SetActive(true);//技能范围
             }
+
+            ChangeCritical(10);//按下暴击率快速上升
+        }
+        else 
+        {
+            ChangeCritical(-5);//松开暴击率快速下降
         }
     }
 
@@ -248,7 +266,7 @@ public class Player : MonoBehaviour
 
         if (!canMove) { return; }//玩家只有在可以移动的情况下，才能攻击（因为处于攻击中无法移动，防止快速按三下变成3下攻击）
 
-        if (isDodge) { ChargeAttack(); }//闪避中攻击冲刺
+        if (isDodge) {  strike.isCritial = true; }//闪避中攻击冲刺
 
         attackTriggered = true;
 
@@ -268,8 +286,8 @@ public class Player : MonoBehaviour
 
     private void PlayChargeAttack()
     {
-        strike.isCritial=true;//触发暴击
-
+        TryCrit(); // 改用新方法触发暴击
+        strike.chargeTime = attackPressTime; // 把蓄力时间传过去（蓄力那段时间也能成攻击力 能加上去）
         PlayNormalAttack();
 
     }//蓄力攻击
@@ -292,6 +310,8 @@ public class Player : MonoBehaviour
     }//攻击声音
 
 
+
+
     #endregion
 
 
@@ -307,13 +327,13 @@ public class Player : MonoBehaviour
     {
         isDodging = true;
         dodgePressTime = 0f;
-
+        
         dodgeTriggered = false;
     }
     void Dodge_Cancel()
     {
         isDodging = false;
-
+        
         if (!dodgeTriggered)
         {
             if (dodgePressTime < 0.2f)
@@ -324,9 +344,9 @@ public class Player : MonoBehaviour
             {
                 //PlayChargeAttack(); // 蓄力攻击
             }
-
+        
             dodgePressTime = 0;
-
+        
             dodgeTriggered = true;
         }
 
@@ -354,14 +374,28 @@ public class Player : MonoBehaviour
 
     void PlayDodge()
     {
-        if (currentStrength > 100) // 确保不在连续闪避状态
+        if (currentStrength > 50) // 确保不在连续闪避状态
         {
             if (isDodge) return;//防止连续闪避
 
-            Vector2 dodgeDir = new Vector2(-StopX, -StopY).normalized;
-            if (dodgeDir == Vector2.zero) return;
 
-            StartCoroutine(Dodge(dodgeDir,15f,2f));
+            if(inputX==0&&inputY == 0)
+            {
+                Vector2 dodgeDir = new Vector2(-StopX, -StopY).normalized;//站立的时候向后闪避
+                if (dodgeDir == Vector2.zero) return;
+
+                StartCoroutine(Dodge(dodgeDir, 15f, 2f));
+            }
+            else
+            {
+                Vector2 dodgeDir = new Vector2(StopX, StopY).normalized;//移动的时候向后冲刺
+                if (dodgeDir == Vector2.zero) return;
+
+                StartCoroutine(Dodge(dodgeDir, 15f, 2f));
+            }
+           
+
+            anim.SetTrigger("Dodge");
         }
         else
         {
@@ -391,9 +425,12 @@ public class Player : MonoBehaviour
 
     IEnumerator Dodge(Vector2 direction, float dodgeSpeed, float dodgeDistance)
     {
+       
+
+
         // 音效、体力扣除
         frameEvents._SE_Clothes();
-        ChangeStrength(-100);
+        ChangeStrength(-50);
 
 
 
@@ -417,8 +454,7 @@ public class Player : MonoBehaviour
         }
 
 
-
-
+        
         Invoke(nameof(DodgingOver), 0.6f);// 让子弹时间更容易触发
     }
 
@@ -443,6 +479,8 @@ public class Player : MonoBehaviour
         Invoke("DodgeEnemyAttackOver", 0.2f);
 
 
+        ChangeCritical(maxCritical);//充满暴击率
+
     }
 
 
@@ -453,15 +491,6 @@ public class Player : MonoBehaviour
 
     }
 
-    void ChargeAttack() 
-    {
-
- 
-        Vector2 dodgeDir = new Vector2(StopX, StopY).normalized;
-        if (dodgeDir == Vector2.zero) return;
-
-        StartCoroutine(Dodge(dodgeDir, 13f, 1f));
-    }//冲刺攻击
 
 
     #endregion
@@ -561,6 +590,7 @@ public class Player : MonoBehaviour
     }
     public void ButtonSetDodgeOver()
     {
+
         Dodge_Cancel();
     }
 
@@ -586,11 +616,10 @@ public class Player : MonoBehaviour
     public GameObject SparkEffect;//火星特效
 
 
-    [Header("生命值体力值等数值")]
+    [Header("生命值")]
     public int currentHealth;
     public int maxHealth;
-    public int currentStrength;
-    public int maxStrength;
+
 
     [Header("伤害显示")]
     public GameObject RedScreen;
@@ -616,14 +645,14 @@ public class Player : MonoBehaviour
             if (amount < 0)
             {
 
-                if (!isDie)
+                if (!isDie&&canMove)//处于攻击状态下无法防御
                 {
                     // 计算体力百分比
                     float strengthPercent = (float)currentStrength / maxStrength;
 
                     // 根据体力百分比决定防御几率（体力越高越容易防御）
-                    // 比如体力满时为 80% 几率，体力最低时为 10%
-                    float blockChance = Mathf.Lerp(0.1f, 0.8f, strengthPercent);
+                    // 比如体力满时为 100% 几率，体力最低时为 10%
+                    float blockChance = Mathf.Lerp(0.1f, 1f, strengthPercent);
 
                     if (Random.value < blockChance)
                     {
@@ -717,7 +746,7 @@ public class Player : MonoBehaviour
 
                 anim.SetTrigger("Die_2");//防止倒下又起来,搞了第二死亡
 
-
+                Critical.SetActive(false);
                 return;
             }
 
@@ -735,6 +764,7 @@ public class Player : MonoBehaviour
 
                 Critial.SetActive(true);
             }
+
         }
 
     }
@@ -758,7 +788,9 @@ public class Player : MonoBehaviour
 
 
 
-
+    [Header("体力值")]
+    public int currentStrength;
+    public int maxStrength;
 
 
 
@@ -770,6 +802,54 @@ public class Player : MonoBehaviour
     }
 
 
+    [Header("UI条 暴击值")]
+    public GameObject Critical;
+
+    public int currentCritical;
+    public int maxCritical;
+
+
+    public void ChangeCritical(int amount)
+    {
+
+        //Debug.Log("充能");
+        if (!isDie)
+        {
+
+            if (currentCritical <= 0)
+            {
+                Critical.SetActive(false);
+            }
+            else
+            {
+                Critical.SetActive(true);
+            }
+
+
+        }//如果是已经Die了，那么这个淫乱槽不需要出现
+
+        currentCritical = Mathf.Clamp(currentCritical + amount, 0, maxCritical);
+        UIManager.instance.UpdateCriticalBar(currentCritical, maxCritical);
+    }
+
+    private void TryCrit()
+    {
+        // 计算当前暴击率
+        float critRate = (float)currentCritical / (float)maxCritical;
+
+        // 判定是否暴击
+        if (Random.value < critRate)
+        {
+            strike.isCritial = true;
+
+            // 扣除暴击值
+            ChangeCritical(-maxCritical); // 或者换成一部分
+        }
+        else
+        {
+            strike.isCritial = false;
+        }
+    }
     #endregion
 
 }
