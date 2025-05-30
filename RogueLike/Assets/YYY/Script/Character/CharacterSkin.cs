@@ -91,11 +91,13 @@ public class CharacterSkin : MonoBehaviour
     {
         if (player != null)
         {
-            player.attack_Collider.SetActive(true);
+            if (player.isDie==false) { player.attack_Collider.SetActive(true); }//我方和敌方被击倒期间无法发出攻击碰撞体
+
         }
         if (enemy != null)
         {
-            enemy.attack_Collider.SetActive(true);
+            if (enemy.isDie == false) { enemy.attack_Collider.SetActive(true); }//我方和敌方被击倒期间无法发出攻击碰撞体
+
         }
 
         Invoke("HideAttack", 0.2f);

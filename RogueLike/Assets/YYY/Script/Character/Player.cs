@@ -59,6 +59,7 @@ public class Player : MonoBehaviour
     public Rigidbody2D rbody;//声明刚体
     float speed = 2; // 基础移动速度 （站0 走2 跑4）
 
+    public GameObject Arrow;//小地图朝向
 
     private void BaseMove()
     {
@@ -83,10 +84,30 @@ public class Player : MonoBehaviour
         }
 
 
-        if (inputX > 0.5f) { inputX = 1; inputY = 0; attack.transform.rotation = Quaternion.Euler(0, 0, -90); }//右
-        else if (inputX < -0.5f) { inputX = -1; inputY = 0; attack.transform.rotation = Quaternion.Euler(0, 0, 90); }//左
-        else if (inputY > 0.5f && inputX > -0.5f && inputX < 0.5f) { inputX = 0; inputY = 1; attack.transform.rotation = Quaternion.Euler(0, 0, 0); }//上
-        else if (inputY < -0.5f && inputX > -0.5f && inputX < 0.5f) { inputX = 0; inputY = -1; attack.transform.rotation = Quaternion.Euler(0, 0, 180); }//下
+        if (inputX > 0.5f)
+        {
+            inputX = 1; inputY = 0;
+            attack.transform.rotation = Quaternion.Euler(0, 0, -90); // 右
+            Arrow.transform.rotation = Quaternion.Euler(0, 0, -90);  // 小地图朝向右
+        }
+        else if (inputX < -0.5f)
+        {
+            inputX = -1; inputY = 0;
+            attack.transform.rotation = Quaternion.Euler(0, 0, 90); // 左
+            Arrow.transform.rotation = Quaternion.Euler(0, 0, 90);
+        }
+        else if (inputY > 0.5f && inputX > -0.5f && inputX < 0.5f)
+        {
+            inputX = 0; inputY = 1;
+            attack.transform.rotation = Quaternion.Euler(0, 0, 0); // 上
+            Arrow.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (inputY < -0.5f && inputX > -0.5f && inputX < 0.5f)
+        {
+            inputX = 0; inputY = -1;
+            attack.transform.rotation = Quaternion.Euler(0, 0, 180); // 下
+            Arrow.transform.rotation = Quaternion.Euler(0, 0, 180);
+        }
         //else { inputX = 0; inputY = 0; } // 静止时也归零
 
         // 保存上一次方向（用于静止状态播放对应Idle动画）

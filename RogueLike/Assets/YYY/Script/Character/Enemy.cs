@@ -89,6 +89,8 @@ public class Enemy : MonoBehaviour
 
     public AIPath aiPath;// A* 路径控制器
 
+    public GameObject Arrow;//小地图朝向
+
     [Header("速度岔开")]
     float RunSpeed=4f;
     float WalkSpeed = 2f;
@@ -198,29 +200,29 @@ public class Enemy : MonoBehaviour
         if (dir.x > 0.5f)
         {
             inputX = 1; inputY = 0;
-            attack.transform.rotation = Quaternion.Euler(0, 0, -90);
+            attack.transform.rotation = Quaternion.Euler(0, 0, -90); Arrow.transform.rotation = Quaternion.Euler(0, 0, -90);
         }
         else if (dir.x < -0.5f)
         {
             inputX = -1; inputY = 0;
-            attack.transform.rotation = Quaternion.Euler(0, 0, 90);
+            attack.transform.rotation = Quaternion.Euler(0, 0, 90); Arrow.transform.rotation = Quaternion.Euler(0, 0, 90);
         }
         else if (dir.y > 0.5f)
         {
             inputX = 0; inputY = 1;
-            attack.transform.rotation = Quaternion.Euler(0, 0, 0);
+            attack.transform.rotation = Quaternion.Euler(0, 0, 0); Arrow.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (dir.y < -0.5f)
         {
             inputX = 0; inputY = -1;
-            attack.transform.rotation = Quaternion.Euler(0, 0, 180);
+            attack.transform.rotation = Quaternion.Euler(0, 0, 180); Arrow.transform.rotation = Quaternion.Euler(0, 0, 180);
         }
-        else
-        {
-            //inputX = 0; inputY = 0;
-
-            inputX = 0; inputY = -1;//朝正面
-        }
+        //else
+        //{
+        //    //inputX = 0; inputY = 0;
+        //
+        //    inputX = 0; inputY = -1;//朝正面
+        //}
 
         // 储存方向用于 idle 状态
         if (inputX != 0 || inputY != 0)
@@ -677,8 +679,6 @@ public class Enemy : MonoBehaviour
     public Image HealthValueImage;
     public SpriteRenderer AttackColliderImage;
     public SpriteRenderer AttackRangeImage;
-    public SpriteRenderer UI_ICON;
-
     //切换为队友
     public void ConvertToFriend()
     {
@@ -706,7 +706,7 @@ public class Enemy : MonoBehaviour
         AttackRangeImage.color = Color.green;
 
         //  改变小地图显示颜色为绿色
-        UI_ICON.color = Color.green;
+        Arrow.GetComponent<SpriteRenderer>().color = Color.green;
 
         Debug.Log($"{gameObject.name} has switched to Friend.");
     }
@@ -735,7 +735,8 @@ public class Enemy : MonoBehaviour
         AttackRangeImage.color = Color.red;
 
         //  改变小地图显示颜色为绿色
-        UI_ICON.color = Color.red;
+        Arrow.GetComponent<SpriteRenderer>().color = Color.red;
+
 
 
         Debug.Log($"{gameObject.name} has switched to Enemy.");
