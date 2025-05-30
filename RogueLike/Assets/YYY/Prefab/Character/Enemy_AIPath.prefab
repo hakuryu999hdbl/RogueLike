@@ -1495,7 +1495,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1.2
+  m_Radius: 1.5
 --- !u!114 &5015222095835522081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2135,6 +2135,7 @@ MonoBehaviour:
   DamageToFriend: 1
   TypeOfAttack: 0
   isCritial: 0
+  chargeTime: 0
 --- !u!1 &8023075011901219364
 GameObject:
   m_ObjectHideFlags: 0
