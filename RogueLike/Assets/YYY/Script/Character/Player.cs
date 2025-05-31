@@ -150,9 +150,9 @@ public class Player : MonoBehaviour
 
         if (!canMove)
         {
-           // input = Vector2.zero;
+            input = Vector2.zero;
 
-        }//玩家只有在不攻击的时候才能移动
+        }//玩家只有在不攻击的时候才能移动，闪避的时候也无法叠加
 
 
 
@@ -451,11 +451,12 @@ public class Player : MonoBehaviour
 
         // 音效、体力扣除
         frameEvents._SE_Clothes();
-        ChangeStrength(-50);
+        //ChangeStrength(-50);
 
 
 
         isDodge = true;
+        canMove = false; // 防止位移冲突
         float movedDistance = 0f;
 
 
@@ -465,8 +466,13 @@ public class Player : MonoBehaviour
 
             Vector3 newPos = rbody.position + direction * step;
 
-            // 如果会撞墙就提前终止（额外做个BoxCast检测更好）
-            if (Physics.Raycast(rbody.position, direction, 0.5f, obstacleLayer)) break;
+            // 检测闪避方向是否有障碍物（使用 BoxCast 替代 Raycast）
+            Vector2 boxSize = new Vector2(0.5f, 0.5f); // 角色体积大小，请根据实际角色尺寸设置
+            if (Physics2D.BoxCast(rbody.position, boxSize, 0f, direction, 0.1f, obstacleLayer))
+            {
+                Debug.Log("障碍物检测到，终止闪避");
+                break;
+            }
 
             rbody.MovePosition(newPos);  // 物理安全移动
             movedDistance += step;
@@ -477,6 +483,7 @@ public class Player : MonoBehaviour
 
         
         Invoke(nameof(DodgingOver), 0.6f);// 让子弹时间更容易触发
+        canMove = true;
     }
 
     void DodgingOver()

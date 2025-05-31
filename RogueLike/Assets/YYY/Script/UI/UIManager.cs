@@ -66,25 +66,30 @@ public class UIManager : MonoBehaviour
     public void UpdateCriticalBar(int curAmount, int maxAmount)
     {
         float fillPercent = (float)curAmount / (float)maxAmount;
-
         CriticalBar.fillAmount = fillPercent;
 
-        // 基础颜色渐变（黄色 → 红色）
-        // 黄色(1,1,0) 到 红色(1,0,0)
-        float red = 1.0f;
-        float green = Mathf.Lerp(1.0f, 0.0f, fillPercent); // 越高越绿越少
-        float blue = 0.0f;
+        // 多段颜色插值：蓝 → 绿 → 黄 → 红
+        Color baseColor;
 
-        Color baseColor = new Color(red, green, blue, 1.0f);
+        if (fillPercent < 0.33f) // 0%~33%：蓝到绿
+        {
+            baseColor = Color.Lerp(new Color(0f, 0.5f, 1f), Color.green, fillPercent / 0.33f);
+        }
+        else if (fillPercent < 0.66f) // 33%~66%：绿到黄
+        {
+            baseColor = Color.Lerp(Color.green, Color.yellow, (fillPercent - 0.33f) / 0.33f);
+        }
+        else // 66%~100%：黄到红
+        {
+            baseColor = Color.Lerp(Color.yellow, Color.red, (fillPercent - 0.66f) / 0.34f);
+        }
 
-        // 闪烁逻辑：暴击值超过 90% 时开始闪烁
+        // 高暴击值闪烁（红黄闪）
         if (fillPercent > 0.9f)
         {
-            flashTimer += Time.deltaTime * 4f; // 控制闪烁速度
-            float alpha = Mathf.Abs(Mathf.Sin(flashTimer)); // 0~1 间震荡
-
-            // 混合颜色：红色和白色之间闪烁
-            Color flashColor = Color.Lerp(baseColor, Color.white, alpha * 0.5f); // 可调
+            flashTimer += Time.deltaTime * 4f; // 闪烁速度
+            float alpha = Mathf.Abs(Mathf.Sin(flashTimer));
+            Color flashColor = Color.Lerp(baseColor, Color.yellow, alpha); // 红黄闪烁
             CriticalBar.color = flashColor;
         }
         else

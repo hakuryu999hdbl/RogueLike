@@ -57,8 +57,8 @@ public class CharacterSkin : MonoBehaviour
     {
         if (player != null)
         {
-
-            player.canMove = false;
+            
+            //player.canMove = false;
 
             player.AttackVoice();
         }
@@ -76,7 +76,7 @@ public class CharacterSkin : MonoBehaviour
         if (player != null)
         {
 
-            player.canMove = true;
+            //player.canMove = true;
 
         }
         if (enemy != null)

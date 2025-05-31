@@ -131,7 +131,6 @@ GameObject:
   - component: {fileID: 7665029257579693722}
   - component: {fileID: 4905035225130285095}
   - component: {fileID: 853450349650403365}
-  - component: {fileID: 7630019628404322678}
   m_Layer: 0
   m_Name: Attack_Range
   m_TagString: Untagged
@@ -197,7 +196,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 78291f855943e7246a09a24e7513eb87, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 470ebca19707e1a468c288f4650c7cb1, type: 3}
   m_Color: {r: 1, g: 0, b: 0.01960802, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -246,7 +245,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.12, y: 5.12}
+    oldSize: {x: 5.12, y: 3}
     newSize: {x: 5.12, y: 5.12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -254,28 +253,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 5.12, y: 2.9092658}
   m_EdgeRadius: 0
---- !u!95 &7630019628404322678
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1220442738186765911}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 37bdfa6111f332a419b5fcb9528f361b, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2149168335351240060
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,7 +816,7 @@ MonoBehaviour:
   _Player: {fileID: 0}
   player: {fileID: 0}
   RoomGenerator: {fileID: 0}
-  isPatrol: 1
+  isPatrol: 0
   isAttack: 0
   isDie: 0
   anim: {fileID: 2346273164619431147}
@@ -871,7 +848,7 @@ MonoBehaviour:
   strike: {fileID: 6929229118975334799}
   HealthValueImage: {fileID: 6686174159483745123}
   AttackColliderImage: {fileID: 1936215831724570534}
-  AttackRangeImage: {fileID: 6178712816679290124}
+  AttackRangeImage: {fileID: 4905035225130285095}
 --- !u!50 &2929557566085313533
 Rigidbody2D:
   serializedVersion: 4
@@ -1300,7 +1277,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 78291f855943e7246a09a24e7513eb87, type: 3}
-  m_Color: {r: 1, g: 0, b: 0.01960802, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

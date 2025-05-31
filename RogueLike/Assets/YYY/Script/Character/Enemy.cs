@@ -46,17 +46,24 @@ public class Enemy : MonoBehaviour
                 WeaponDrawn();//持械切换
             }
 
-            //aiPath.canMove = true;
         }
         else
         {
             //倒下后不能移动
             moveSpeed = 0;
             aiPath.maxSpeed = 0f;
-            //aiPath.canMove = false;
+
+            //只要倒地就不显示
+            attack_Collider.SetActive(false);
+            attack_Range.SetActive(false);
+
         }
 
-      
+
+
+
+
+
 
         //始终跟随目标
         if (CurrentTarget != null)
@@ -65,7 +72,7 @@ public class Enemy : MonoBehaviour
 
         }
 
-     
+
 
         // 每帧更新剑物体的旋转
         Strike_Effect.transform.Rotate(0, 0, 100 * Time.deltaTime);
@@ -92,7 +99,7 @@ public class Enemy : MonoBehaviour
     public GameObject Arrow;//小地图朝向
 
     [Header("速度岔开")]
-    float RunSpeed=4f;
+    float RunSpeed = 4f;
     float WalkSpeed = 2f;
 
 
@@ -128,7 +135,7 @@ public class Enemy : MonoBehaviour
                         moveSpeed = 2;
                         aiPath.maxSpeed = RunSpeed;
                     }
-                    else if(!isPatrol)
+                    else if (!isPatrol)
                     {
                         //非巡逻队友跟，随情况下会你走/我也走/你跑/我也跑
 
@@ -137,7 +144,7 @@ public class Enemy : MonoBehaviour
                             moveSpeed = 2;
                             aiPath.maxSpeed = RunSpeed;
                         }
-                        else 
+                        else
                         {
 
                             moveSpeed = 1;
@@ -168,6 +175,10 @@ public class Enemy : MonoBehaviour
 
                 moveSpeed = 0;
                 aiPath.maxSpeed = 0.01f;
+
+
+                attack_Range.SetActive(true);//显示技能范围
+
             }
 
 
@@ -181,9 +192,9 @@ public class Enemy : MonoBehaviour
 
             AntiOverlapping.SetActive(true);//这个玩意会让敌人队友不重叠，但是巡逻的时候会贴在一起，巡逻的时候去掉
         }
-        else 
+        else
         {
-            
+
 
             //巡逻
             Patrol();
@@ -254,7 +265,7 @@ public class Enemy : MonoBehaviour
     void WeaponDrawn()
     {
 
-        if (moveSpeed == 0&&!isAttack)
+        if (moveSpeed == 0 && !isAttack)
         {
             weaponIdleTimer += Time.deltaTime;
 
@@ -295,38 +306,58 @@ public class Enemy : MonoBehaviour
     public GameObject attack_Collider;//伤害碰撞体
     public GameObject attack_Range;//技能范围
 
+
+
+    private float attackTimer = 0f;
+    private float attackCooldown = 1f; // 原本 Invoke 的 1f
+    private bool isInAttackDelay = false;
+
     void BaseAttack()
     {
 
-
-        //attack_Range.SetActive(true);//技能范围
-
         //隔一会触发一下攻击
-        if (!OneTimeAttak)
+        if (!isInAttackDelay)
         {
-            Invoke("Attack_Start", 1f);
+            attackTimer += Time.deltaTime;
 
-            isKeepWeapon = true;
+            if (attackTimer >= attackCooldown) 
+            {
+                Attack_Start(); // 攻击警告开始闪
 
-            OneTimeAttak = true;
+                attackTimer = 0f;
 
-            Invoke("ShowAttackRange", 0.7f);
+
+                isInAttackDelay = true;
+            }
+
+
+            isKeepWeapon = true;//没有持械的话进入持械状态
         }
+
+
     }
 
 
-    void ShowAttackRange() 
+    void FlashWarning()
     {
-        attack_Range.SetActive(true);//技能范围(作为攻击警告看看)
-    }
+        if (AttackRangeImage.color == Color.white)
+        {
+            AttackRangeImage.color = Color.black;
+        }
+        else
+        {
+            AttackRangeImage.color = Color.white;
+        }
+    } //技能范围作为攻击警告黑白黑白一闪一闪
+
 
 
     bool OneTimeAttak = false;
 
     void Attack_Start()
     {
+        InvokeRepeating(nameof(FlashWarning), 0f, 0.1f);
 
-       
 
         if (Random.Range(0, 3) == 2)
         {
@@ -336,7 +367,7 @@ public class Enemy : MonoBehaviour
         {
             anim.SetTrigger("Kick");
         }
- 
+
 
         switch (Random.Range(0, 3))
         {
@@ -357,9 +388,18 @@ public class Enemy : MonoBehaviour
 
     public void Attack_Cancel()
     {
-        OneTimeAttak = false;
+        isInAttackDelay = false;
 
-        attack_Range.SetActive(false);//关闭技能范围(作为攻击警告看看)
+        CancelInvoke(nameof(FlashWarning));//关闭技能范围作为攻击警告关闭一闪一闪
+
+        if (tag == "Friend")
+        {
+            AttackRangeImage.color = Color.green;
+        }
+        else
+        {
+            AttackRangeImage.color = Color.red;
+        }
     }
 
     public void AttackVoice()
@@ -459,7 +499,7 @@ public class Enemy : MonoBehaviour
     public bool isScreaming;
     public HudText HudText;
 
-  
+
 
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式  0无  1剑击特效  2闪电特效  3冻结
     {
@@ -473,21 +513,21 @@ public class Enemy : MonoBehaviour
             if (amount < 0)
             {
                 if (isPatrol)
-                {                 
+                {
                     Time.timeScale = 0;
 
                     //显示暗杀
                     Assassinate.SetActive(true);
 
                     amount = -currentHealth;
-                    
+
                 }//暗杀
 
 
                 isPatrol = false;//受伤后立刻进入战斗
 
 
-                if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0&& amount!= -currentHealth) 
+                if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0 && amount != -currentHealth)
                 {
                     anim.SetTrigger("Block");
 
@@ -514,7 +554,7 @@ public class Enemy : MonoBehaviour
                     Destroy(effectPrefabs_2, 2f);
 
                     return;
-                }              
+                }
 
             }
 
@@ -531,7 +571,7 @@ public class Enemy : MonoBehaviour
 
 
 
-          
+
 
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
             UpdateHealthBar(currentHealth, maxHealth);
@@ -614,13 +654,14 @@ public class Enemy : MonoBehaviour
 
         //显示暴击
         Critial.SetActive(true);
-        
+
 
 
     }//暴击
 
-    public void Knockdown() 
+    public void Knockdown()
     {
+
 
         isDie = true;
         anim.SetTrigger("Die");
@@ -630,9 +671,13 @@ public class Enemy : MonoBehaviour
             Invoke("GetUp", 1f);
         }  //防止最后一下又击倒站起
 
+        //每次击倒后再站起来重新计算
+        isInAttackDelay = false;
+        attackTimer = 0f;
+
     }//击倒
 
-    public void Die() 
+    public void Die()
     {
         isDie = true;
         anim.SetTrigger("Die_2");//防止倒下又起来,搞了第二死亡
@@ -643,13 +688,13 @@ public class Enemy : MonoBehaviour
 
     [Header("全部自身存在")]
     public GameObject AllOfThis;
-    void Disappear() 
+    void Disappear()
     {
         Destroy(AllOfThis);
 
         RoomGenerator.SetEnemy();
 
-       Time.timeScale = 1;//防止 Critial消失之前次物体已经被毁坏，然后卡住不动了
+        Time.timeScale = 1;//防止 Critial消失之前次物体已经被毁坏，然后卡住不动了
     }
 
 
@@ -694,7 +739,7 @@ public class Enemy : MonoBehaviour
         //  攻击脚本：攻击敌人，不再攻击队友
         strike.DamageToPlayer = false;
         strike.DamageToEnemy = true;
-        strike.DamageToFriend = false;  
+        strike.DamageToFriend = false;
 
         //  改变血条颜色为绿色（友军色）
         HealthValueImage.color = Color.green;
@@ -745,7 +790,7 @@ public class Enemy : MonoBehaviour
 
 
 
-   
+
 
 }
 

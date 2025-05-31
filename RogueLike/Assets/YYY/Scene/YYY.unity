@@ -222,7 +222,7 @@ MonoBehaviour:
   attack_Range: {fileID: 450081045}
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 8192
   isDodge: 0
   strike: {fileID: 904417489}
   moveAction: {fileID: 389908679454232702, guid: deaf91781ed4539448d73a93eae4fb40,
