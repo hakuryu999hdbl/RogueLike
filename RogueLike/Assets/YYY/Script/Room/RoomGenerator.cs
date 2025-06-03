@@ -56,12 +56,13 @@ public class RoomGenerator : MonoBehaviour
 
 
         //随机房间大小
-        roomNumber = Random.Range(4, 8);
+        //roomNumber = Random.Range(4, 8);
+        roomNumber = 1;
 
         ChoosePlace();
 
         //只有一个房间的时候
-        if (roomNumber == 1) { Instantiate(L, new Vector3(0, 0, 0), Quaternion.identity); }
+        if (roomNumber == 1) { Instantiate(B, new Vector3(0, 0, 0), Quaternion.identity); }
 
         for (int i = 0; i < roomNumber; i++)
         {
@@ -489,7 +490,7 @@ public class RoomGenerator : MonoBehaviour
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
         enemyList.Add(NewEnemy);
 
-        ChangeTargetPlace(NewEnemy,0);
+        ChangeTargetPlace(NewEnemy,2);
     }
     public void SetFriend()
     {

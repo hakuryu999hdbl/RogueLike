@@ -369,18 +369,6 @@ public class Enemy : MonoBehaviour
         }
 
 
-        switch (Random.Range(0, 3))
-        {
-            case 0:
-                frameEvents._Attack_sword_chop1();
-                break;
-            case 1:
-                frameEvents._Attack_sword_chop2();
-                break;
-            case 2:
-                frameEvents._Attack_sword_chop3();
-                break;
-        }
 
         Invoke("Attack_Cancel", 1f);//一旦动画帧事件被跳过就会站着不动不攻击，所以这个还是Invoke触发
     }
