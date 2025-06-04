@@ -352,7 +352,7 @@ public class Enemy : MonoBehaviour
 
 
 
-    bool OneTimeAttak = false;
+
 
     void Attack_Start()
     {
@@ -678,14 +678,20 @@ public class Enemy : MonoBehaviour
     public GameObject AllOfThis;
     void Disappear()
     {
-        Destroy(AllOfThis);
+        if (!OneTimeRebirth) 
+        {
+            Destroy(AllOfThis);
 
-        RoomGenerator.SetEnemy();
+            RoomGenerator.SetEnemy();
 
-        Time.timeScale = 1;//防止 Critial消失之前次物体已经被毁坏，然后卡住不动了
+            Time.timeScale = 1;//防止 Critial消失之前次物体已经被毁坏，然后卡住不动了
+
+            OneTimeRebirth = true;
+        }
+      
     }
 
-
+    bool OneTimeRebirth = false;//只死一次
 
 
     [Header("生命值UI显示")]

@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 7665029257579693722}
   - component: {fileID: 4905035225130285095}
   - component: {fileID: 853450349650403365}
+  - component: {fileID: 8176852538413433499}
   m_Layer: 0
   m_Name: Attack_Range
   m_TagString: Untagged
@@ -253,6 +254,28 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 5.12, y: 2.9092658}
   m_EdgeRadius: 0
+--- !u!95 &8176852538413433499
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220442738186765911}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 37bdfa6111f332a419b5fcb9528f361b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2149168335351240060
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,8 +731,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 711218998469133370}
   - {fileID: 6770352579193455128}
+  - {fileID: 711218998469133370}
   - {fileID: 1522132436509636927}
   - {fileID: 2527081819149898590}
   - {fileID: 286244901274146826}
@@ -929,7 +952,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6770352579193455128
 Transform:
   m_ObjectHideFlags: 0
@@ -957,7 +980,7 @@ Light:
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
-  m_Range: 20
+  m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10

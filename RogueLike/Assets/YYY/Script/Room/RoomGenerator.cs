@@ -128,11 +128,6 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-    void DelayRestart()
-    {
-        PlayerPrefs.SetInt("Situation", 0); //等下一次刷新就是重新开始了
-    }
-
 
 
 
@@ -485,16 +480,16 @@ public class RoomGenerator : MonoBehaviour
     public void SetEnemy()
     {
 
-
+        //if (!Application.isMobilePlatform) return;
 
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
         enemyList.Add(NewEnemy);
 
-        ChangeTargetPlace(NewEnemy,2);
+        ChangeTargetPlace(NewEnemy,0);
     }
     public void SetFriend()
     {
-
+        //if (!Application.isMobilePlatform) return;
 
 
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);

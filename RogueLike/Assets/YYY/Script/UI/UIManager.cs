@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour
     public Image CriticalBar;
     // 用于闪烁控制
     private float flashTimer = 0f;
-    private bool flashOn = false;
+
 
     public void UpdateHealthBar(int curAmount, int maxAmount)
     {
