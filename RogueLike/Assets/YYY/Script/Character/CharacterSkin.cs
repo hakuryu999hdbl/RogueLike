@@ -58,14 +58,11 @@ public class CharacterSkin : MonoBehaviour
         if (player != null)
         {
             
-            //player.canMove = false;
-
-            player.AttackVoice();
         }
         if (enemy != null)
         {
 
-            enemy.AttackVoice();
+           
         }
 
 
@@ -75,13 +72,29 @@ public class CharacterSkin : MonoBehaviour
     {
         if (player != null)
         {
+            player.canCombo = false;
 
-            //player.canMove = true;
+
+            if (player.comboQueued && player.currentCombo < 4)
+            {
+                player.currentCombo++;
+                player.anim.Play("attack_" + player.currentCombo, 0, 0);
+                player.comboQueued = false;
+            }
+            else
+            {
+                player.ResetCombo();
+            }
+
+            // 攻击完毕扣除暴击值
+            player.ChangeCritical(-100);
+            //player.ChangeCritical(-player.maxCritical); // 或者换成一部分
 
         }
         if (enemy != null)
         {
-            //enemy.Attack_Cancel();
+            enemy.Attack_Cancel();
+
         }
     } //攻击结束可以移动
 
@@ -92,12 +105,13 @@ public class CharacterSkin : MonoBehaviour
         if (player != null)
         {
             if (player.isDie==false) { player.attack_Collider.SetActive(true); }//我方和敌方被击倒期间无法发出攻击碰撞体
-
+            player.canCombo = true;
+            player.AttackVoice();
         }
         if (enemy != null)
         {
             if (enemy.isDie == false) { enemy.attack_Collider.SetActive(true); }//我方和敌方被击倒期间无法发出攻击碰撞体
-
+            enemy.AttackVoice();
         }
 
         Invoke("HideAttack", 0.2f);

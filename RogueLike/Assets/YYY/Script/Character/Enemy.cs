@@ -76,6 +76,28 @@ public class Enemy : MonoBehaviour
 
         // 每帧更新剑物体的旋转
         Strike_Effect.transform.Rotate(0, 0, 100 * Time.deltaTime);
+
+
+        //当这些动画在播放的时候玩家不能移动
+        //AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+        //
+        //if (state.IsName("attack_1") ||
+        //    state.IsName("attack_2") ||
+        //    state.IsName("attack_3") ||
+        //    state.IsName("attack_4") ||
+        //    state.IsName("Girl_Strike_Block") ||
+        //    state.IsName("Girl_Strike_Idle") ||
+        //    state.IsName("hurt_1") ||
+        //    state.IsName("hurt_2"))
+        //{
+        //    aiPath.canMove = false;
+        //
+        //}
+        //else
+        //{
+        //    aiPath.canMove = true;
+        //}
+
     }
 
     public bool isPatrol = false;
@@ -361,16 +383,16 @@ public class Enemy : MonoBehaviour
 
         if (Random.Range(0, 3) == 2)
         {
-            anim.SetTrigger("Attack");
+            anim.Play("attack_1", 0, 0);
         }
         else
         {
-            anim.SetTrigger("Kick");
+            anim.Play("attack_2", 0, 0);
         }
 
 
 
-        Invoke("Attack_Cancel", 1f);//一旦动画帧事件被跳过就会站着不动不攻击，所以这个还是Invoke触发
+        //Invoke("Attack_Cancel", 1f);//一旦动画帧事件被跳过就会站着不动不攻击，所以这个还是Invoke触发
     }
 
 
@@ -388,6 +410,8 @@ public class Enemy : MonoBehaviour
         {
             AttackRangeImage.color = Color.red;
         }
+
+        anim.Play("Girl_Strike_Idle");
     }
 
     public void AttackVoice()
@@ -479,6 +503,8 @@ public class Enemy : MonoBehaviour
     public GameObject BloodEffect;//受伤特效
     public GameObject SparkEffect;//火星特效
 
+    public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
+
     [Header("生命值体力值等数值")]
     public int currentHealth;
     public int maxHealth;
@@ -517,7 +543,8 @@ public class Enemy : MonoBehaviour
 
                 if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0 && amount != -currentHealth)
                 {
-                    anim.SetTrigger("Block");
+                    //anim.SetTrigger("Block");
+                    anim.Play("block");
 
                     switch (Random.Range(0, 3))
                     {
@@ -531,16 +558,16 @@ public class Enemy : MonoBehaviour
                             frameEvents._Attack_sword_clash4();
                             break;
                     }
-
+                
                     //显示伤害
                     HudText.HUD(0);//0会显示Miss
-
+                
                     //火花特效
                     Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
                     Vector3 spawnPosition_2 = transform.position + offset_2;
                     GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
                     Destroy(effectPrefabs_2, 2f);
-
+                
                     return;
                 }
 
@@ -590,6 +617,18 @@ public class Enemy : MonoBehaviour
             Vector3 spawnPosition = transform.position + offset;
             GameObject effectPrefabs = Instantiate(BloodEffect, spawnPosition, transform.rotation);
             Destroy(effectPrefabs, 2f);
+
+
+            // 从预设中随机挑一个
+            GameObject[] bloodPrefabs = { Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3 };
+            int index = Random.Range(0, bloodPrefabs.Length);
+            GameObject blood = Instantiate(bloodPrefabs[index], transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+
+            // 可选：缩放或微调位置
+            //blood.transform.localScale *= Random.Range(0.8f, 1.2f);
+
+            // 销毁血迹
+            Destroy(blood, Random.Range(4f, 5f));
         }
 
 
@@ -643,7 +682,8 @@ public class Enemy : MonoBehaviour
         //显示暴击
         Critial.SetActive(true);
 
-
+        //暴击清零
+        player.ChangeCritical(-player.maxCritical);
 
     }//暴击
 

@@ -66,6 +66,7 @@ Material:
     - _DstBlend: 10
     - _EmissionPower: 2
     - _Fill: 0
+    - _FillPhase: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _Hue: 0
@@ -93,6 +94,7 @@ Material:
     - _Black: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _FillColor: {r: 1, g: 1, b: 1, a: 1}
     - _FixedNormal: {r: 0, g: 0, b: 1, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 0, a: 1}
     - _OverlayColor: {r: 0, g: 0, b: 0, a: 0}
