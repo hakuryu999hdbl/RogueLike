@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 268598054}
   - component: {fileID: 268598053}
   - component: {fileID: 268598052}
-  m_Layer: 12
+  m_Layer: 6
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13405,14 +13405,11 @@ Tilemap:
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 868
-    m_Data: {fileID: -3432667586321389228, guid: 77f87560a6b33ef4494bea515aa44a75,
-      type: 3}
+    m_Data: {fileID: -3432667586321389228, guid: 77f87560a6b33ef4494bea515aa44a75, type: 3}
   - m_RefCount: 36
-    m_Data: {fileID: 8062665933275500330, guid: 77f87560a6b33ef4494bea515aa44a75,
-      type: 3}
+    m_Data: {fileID: 8062665933275500330, guid: 77f87560a6b33ef4494bea515aa44a75, type: 3}
   - m_RefCount: 430
-    m_Data: {fileID: -2499782443411086787, guid: 77f87560a6b33ef4494bea515aa44a75,
-      type: 3}
+    m_Data: {fileID: -2499782443411086787, guid: 77f87560a6b33ef4494bea515aa44a75, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 1334
     m_Data:
@@ -13670,7 +13667,7 @@ GameObject:
   - component: {fileID: 983114346}
   - component: {fileID: 983114345}
   - component: {fileID: 983114344}
-  m_Layer: 13
+  m_Layer: 7
   m_Name: Tilemap_Floor
   m_TagString: obstacle
   m_Icon: {fileID: 0}
@@ -27618,6 +27615,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd22248d670ebdb43954bd4ef6eb6028, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ceiling: {fileID: 0}
-  Ceiling_Light: {fileID: 0}
-  OtherObjectList: []

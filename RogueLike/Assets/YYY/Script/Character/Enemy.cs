@@ -342,7 +342,7 @@ public class Enemy : MonoBehaviour
         {
             attackTimer += Time.deltaTime;
 
-            if (attackTimer >= attackCooldown) 
+            if (attackTimer >= attackCooldown)
             {
                 Attack_Start(); // 攻击警告开始闪
 
@@ -541,35 +541,35 @@ public class Enemy : MonoBehaviour
                 isPatrol = false;//受伤后立刻进入战斗
 
 
-                if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0 && amount != -currentHealth)
-                {
-                    //anim.SetTrigger("Block");
-                    anim.Play("block");
-
-                    switch (Random.Range(0, 3))
-                    {
-                        case 0:
-                            frameEvents._Attack_sword_clash2();
-                            break;
-                        case 1:
-                            frameEvents._Attack_sword_clash3();
-                            break;
-                        case 2:
-                            frameEvents._Attack_sword_clash4();
-                            break;
-                    }
-                
-                    //显示伤害
-                    HudText.HUD(0);//0会显示Miss
-                
-                    //火花特效
-                    Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
-                    Vector3 spawnPosition_2 = transform.position + offset_2;
-                    GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
-                    Destroy(effectPrefabs_2, 2f);
-                
-                    return;
-                }
+                //if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0 && amount != -currentHealth)
+                //{
+                //    //anim.SetTrigger("Block");
+                //    anim.Play("block");
+                //
+                //    switch (Random.Range(0, 3))
+                //    {
+                //        case 0:
+                //            frameEvents._Attack_sword_clash2();
+                //            break;
+                //        case 1:
+                //            frameEvents._Attack_sword_clash3();
+                //            break;
+                //        case 2:
+                //            frameEvents._Attack_sword_clash4();
+                //            break;
+                //    }
+                //
+                //    //显示伤害
+                //    HudText.HUD(0);//0会显示Miss
+                //
+                //    //火花特效
+                //    Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+                //    Vector3 spawnPosition_2 = transform.position + offset_2;
+                //    GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
+                //    Destroy(effectPrefabs_2, 2f);
+                //
+                //    return;
+                //}
 
             }
 
@@ -622,12 +622,21 @@ public class Enemy : MonoBehaviour
             // 从预设中随机挑一个
             GameObject[] bloodPrefabs = { Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3 };
             int index = Random.Range(0, bloodPrefabs.Length);
-            GameObject blood = Instantiate(bloodPrefabs[index], transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+            GameObject blood = Instantiate(
+                bloodPrefabs[index],
+                transform.position,
+                Quaternion.Euler(0, 0, Random.Range(0, 360))
+            );
+
+            // 向 Z 方向下沉一点，避免和角色重合
+            Vector3 pos = blood.transform.position;
+            pos.z -= 0.1f;
+            blood.transform.position = pos;
 
             // 可选：缩放或微调位置
-            //blood.transform.localScale *= Random.Range(0.8f, 1.2f);
+            // blood.transform.localScale *= Random.Range(0.8f, 1.2f);
 
-            // 销毁血迹
+            // 自动销毁血迹
             Destroy(blood, Random.Range(4f, 5f));
         }
 
@@ -718,7 +727,7 @@ public class Enemy : MonoBehaviour
     public GameObject AllOfThis;
     void Disappear()
     {
-        if (!OneTimeRebirth) 
+        if (!OneTimeRebirth)
         {
             Destroy(AllOfThis);
 
@@ -728,7 +737,7 @@ public class Enemy : MonoBehaviour
 
             OneTimeRebirth = true;
         }
-      
+
     }
 
     bool OneTimeRebirth = false;//只死一次

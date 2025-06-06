@@ -46,6 +46,7 @@ public class CharacterSkin : MonoBehaviour
     }
     #endregion
 
+
     /// <summary>
     /// 帧事件触发
     /// </summary>
@@ -57,12 +58,12 @@ public class CharacterSkin : MonoBehaviour
     {
         if (player != null)
         {
-            
+
         }
         if (enemy != null)
         {
 
-           
+
         }
 
 
@@ -104,7 +105,7 @@ public class CharacterSkin : MonoBehaviour
     {
         if (player != null)
         {
-            if (player.isDie==false) { player.attack_Collider.SetActive(true); }//我方和敌方被击倒期间无法发出攻击碰撞体
+            if (player.isDie == false) { player.attack_Collider.SetActive(true); }//我方和敌方被击倒期间无法发出攻击碰撞体
             player.canCombo = true;
             player.AttackVoice();
         }
@@ -131,6 +132,5 @@ public class CharacterSkin : MonoBehaviour
 
     }//攻击碰撞体消失
     #endregion
-
 
 }

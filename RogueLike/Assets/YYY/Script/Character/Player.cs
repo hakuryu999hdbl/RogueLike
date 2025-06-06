@@ -246,19 +246,19 @@ public class Player : MonoBehaviour
 
     void Attack_Start()
     {
-        if (!isDie) 
+        if (!isDie)
         {
             isAttacking = true;
             attackPressTime = 0f;
 
             attackTriggered = false;
         }
-       
+
     }
 
     void Attack_Cancel()
     {
-        if (!isDie) 
+        if (!isDie)
         {
             isAttacking = false;
 
@@ -341,7 +341,7 @@ public class Player : MonoBehaviour
 
             isKeepWeapon = true;//进入武器状态
         }
-        
+
 
     }//普通攻击
 
@@ -409,7 +409,7 @@ public class Player : MonoBehaviour
 
 
     public SpriteRenderer GhostPhantom;//幻影
-    public Sprite Phantom,None;
+    public Sprite Phantom, None;
 
     void Dodge_Start()
     {
@@ -420,7 +420,7 @@ public class Player : MonoBehaviour
 
             dodgeTriggered = false;
         }
-       
+
     }
     void Dodge_Cancel()
     {
@@ -448,7 +448,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        
+
 
     }
 
@@ -816,11 +816,11 @@ public class Player : MonoBehaviour
 
 
                 //受伤时连击取消
-                if (currentHealth > 0) 
+                if (currentHealth > 0)
                 {
                     Invoke("ResetCombo", 1f);//防止挂了又站起来
                 }
-           
+
 
             }//格挡
 
@@ -876,12 +876,21 @@ public class Player : MonoBehaviour
             // 从预设中随机挑一个
             GameObject[] bloodPrefabs = { Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3 };
             int index = Random.Range(0, bloodPrefabs.Length);
-            GameObject blood = Instantiate(bloodPrefabs[index], transform.position, Quaternion.Euler(90, 0, Random.Range(0, 360)));
+            GameObject blood = Instantiate(
+                bloodPrefabs[index],
+                transform.position,
+                Quaternion.Euler(0, 0, Random.Range(0, 360))
+            );
+
+            // 向 Z 方向下沉一点，避免和角色重合
+            Vector3 pos = blood.transform.position;
+            pos.z += 0.1f;
+            blood.transform.position = pos;
 
             // 可选：缩放或微调位置
-            //blood.transform.localScale *= Random.Range(0.8f, 1.2f);
+            // blood.transform.localScale *= Random.Range(0.8f, 1.2f);
 
-            // 销毁血迹
+            // 自动销毁血迹
             Destroy(blood, Random.Range(4f, 5f));
 
 

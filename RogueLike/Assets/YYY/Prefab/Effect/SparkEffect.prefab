@@ -60,9 +60,9 @@ Transform:
   m_GameObject: {fileID: 2420408180855998090}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.3120148, y: 3.8, z: -1.43}
+  m_LocalPosition: {x: 0, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5076652509855397326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4847,13 +4847,13 @@ ParticleSystemRenderer:
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
-  m_SortMode: 0
+  m_SortMode: 3
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2
-  m_SortingFudge: 1
+  m_SortingFudge: 100
   m_NormalDirection: 1
   m_ShadowBias: 0
   m_RenderAlignment: 0
@@ -4886,8 +4886,7 @@ AudioSource:
   m_GameObject: {fileID: 2420408180855998090}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: 726cef9543c29cc4eaeea675479e5b40,
-    type: 2}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 726cef9543c29cc4eaeea675479e5b40, type: 2}
   m_audioClip: {fileID: 8300000, guid: e100486a0abb99546bb6718ab083f7aa, type: 3}
   m_Resource: {fileID: 8300000, guid: e100486a0abb99546bb6718ab083f7aa, type: 3}
   m_PlayOnAwake: 1

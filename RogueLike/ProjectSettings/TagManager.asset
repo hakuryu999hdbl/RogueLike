@@ -4,32 +4,28 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
-  - AStar
   - obstacle
+  - Enemy
   - RoomGenerator
-  - Environment
-  - Mission
-  - Friend
-  - Plant
   - Attack
+  - Friend
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - player
   - Water
   - UI
-  - 
-  - 
-  - obstacle
-  - player
-  - bullet
-  - NPC
   - Room
   - Map
-  - 
   - Enemy
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -49,7 +45,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Door
-    uniqueID: 2398043401
     locked: 0

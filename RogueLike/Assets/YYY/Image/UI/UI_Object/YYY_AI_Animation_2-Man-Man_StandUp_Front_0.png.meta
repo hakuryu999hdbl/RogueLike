@@ -1,13 +1,7 @@
 fileFormatVersion: 2
-guid: 5e6919e4935bb7748813884308c82728
+guid: b1881702df3c07846aa9159b9ace5013
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -3057456538096104385
-    second: RBQ_03_0
-  - first:
-      213: -8597869795387950401
-    second: RBQ_03_1
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -71,7 +65,7 @@ TextureImporter:
   ignorePngGamma: 0
   applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -114,49 +108,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: RBQ_03_0
-      rect:
-        serializedVersion: 2
-        x: 368
-        y: 65
-        width: 310
-        height: 1135
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f3c069a4a7bb195d0800000000000000
-      internalID: -3057456538096104385
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: RBQ_03_1
-      rect:
-        serializedVersion: 2
-        x: 1051
-        y: 103
-        width: 21
-        height: 1097
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: fba37dc79fa3ea880800000000000000
-      internalID: -8597869795387950401
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -167,9 +119,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      RBQ_03_0: -3057456538096104385
-      RBQ_03_1: -8597869795387950401
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
