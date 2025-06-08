@@ -60,15 +60,34 @@ public class CharacterSkin : MonoBehaviour
         {
 
         }
+
+
         if (enemy != null)
         {
 
+            //enemy.ShootBullet();
 
         }
 
 
 
     } //攻击开始无法移动
+
+
+    public void ShootTransparentBullet() 
+    {
+        if (enemy != null)
+        {
+
+            //enemy.ShootTransparentBullet();
+
+            enemy.ShootBullet();
+        }
+    }
+
+
+
+
     public void AttackOver()
     {
         if (player != null)

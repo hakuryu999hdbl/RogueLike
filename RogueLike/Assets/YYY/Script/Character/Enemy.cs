@@ -32,13 +32,28 @@ public class Enemy : MonoBehaviour
         WalkSpeed = Random.Range(1, 3);
 
 
+        //不同敌人攻击间隔不一样
+
+        if (visionType == EnemyType.LongRangeEnemy)
+        {
+
+            attackCooldown = 2f;
+            AttackRange = 3;
+        }
+        else 
+        {
+            attackCooldown = 1f;
+            AttackRange = 1;
+
+        }
+
     }
 
     void FixedUpdate()
     {
         if (!isDie)
         {
-            BaseMove();//站走跑攻
+            BaseMove();//站走跑攻射
 
 
             if (isKeepWeapon)
@@ -46,6 +61,7 @@ public class Enemy : MonoBehaviour
                 WeaponDrawn();//持械切换
             }
 
+           
         }
         else
         {
@@ -101,7 +117,7 @@ public class Enemy : MonoBehaviour
     }
 
     public bool isPatrol = false;
-    public bool isAttack = false;
+    public bool isAttack = false;//用来作为处于攻击状态的……标准
     public bool isDie = false;
 
     /// <summary>
@@ -125,8 +141,16 @@ public class Enemy : MonoBehaviour
     float WalkSpeed = 2f;
 
 
+    [Header("类型敌人")]
+    EnemyType visionType = EnemyType.LongRangeEnemy;
+    public enum EnemyType
+    {
+        ShortRangeEnemy,//近战
+        LongRangeEnemy//远程
+    }
 
-
+    public int AttackRange = 1;//敌人接近多少才会开始攻击
+    
 
     private void BaseMove()
     {
@@ -144,62 +168,53 @@ public class Enemy : MonoBehaviour
 
         if (!isPatrol)
         {
-            if (!isAttack)
+            if (dist > AttackRange)
             {
-                // 设置速度与动画状态
-                if (dist > 1)
+                if (tag != "Friend")
                 {
+                    //目前战斗下全员跑
+                    moveSpeed = 2;
+                    aiPath.maxSpeed = RunSpeed;
+                }
+                else if (!isPatrol)
+                {
+                    //非巡逻队友跟，随情况下会你走/我也走/你跑/我也跑
 
-
-                    if (tag != "Friend")
+                    if (player.isRunning)
                     {
-                        //目前战斗下全员跑
                         moveSpeed = 2;
                         aiPath.maxSpeed = RunSpeed;
                     }
-                    else if (!isPatrol)
+                    else
                     {
-                        //非巡逻队友跟，随情况下会你走/我也走/你跑/我也跑
 
-                        if (player.isRunning)
-                        {
-                            moveSpeed = 2;
-                            aiPath.maxSpeed = RunSpeed;
-                        }
-                        else
-                        {
-
-                            moveSpeed = 1;
-                            aiPath.maxSpeed = WalkSpeed;
-
-                        }
+                        moveSpeed = 1;
+                        aiPath.maxSpeed = WalkSpeed;
 
                     }
 
-
-
-
-
-
-
-                }
-                else
-                {
-                    moveSpeed = 0;
-                    aiPath.maxSpeed = 0.01f;
                 }
 
                 attack_Range.SetActive(false);//关闭技能范围
+
+                //重置计数
+                attackTimer = 0f;//间隔归零
+                isInAttackDelay = false;
+
+                isAttack = false;
             }
             else
             {
-                BaseAttack();//攻击
 
+                BaseAttack();//攻击
+                
                 moveSpeed = 0;
                 aiPath.maxSpeed = 0.01f;
-
-
+                
+                
                 attack_Range.SetActive(true);//显示技能范围
+
+                isAttack = true;
 
             }
 
@@ -344,7 +359,20 @@ public class Enemy : MonoBehaviour
 
             if (attackTimer >= attackCooldown)
             {
-                Attack_Start(); // 攻击警告开始闪
+
+                //暂时放在这里，等到弓箭站走跑完成后修改
+                if (visionType == EnemyType.LongRangeEnemy)
+                {
+                    anim.Play("shoot_1", 0, 0);
+                }
+                else 
+                {
+                    Attack_Start(); // 攻击警告开始闪
+                }
+
+
+               
+
 
                 attackTimer = 0f;
 
@@ -355,7 +383,6 @@ public class Enemy : MonoBehaviour
 
             isKeepWeapon = true;//没有持械的话进入持械状态
         }
-
 
     }
 
@@ -381,7 +408,7 @@ public class Enemy : MonoBehaviour
         InvokeRepeating(nameof(FlashWarning), 0f, 0.1f);
 
 
-        if (Random.Range(0, 3) == 2)
+        if (Random.Range(0, 2) == 1)
         {
             anim.Play("attack_1", 0, 0);
         }
@@ -432,6 +459,35 @@ public class Enemy : MonoBehaviour
 
     #endregion
 
+
+    /// <summary>
+    /// 射击系统
+    /// </summary>
+    #region
+
+    [Header("射击攻击")]
+    public GameObject transparentBulletPrefab;
+    public Transform bulletSpawnPoint;
+
+
+    public void ShootBullet()
+    {
+        if (CurrentTarget == null) return;
+
+        Vector3 dir = (CurrentTarget.transform.position - bulletSpawnPoint.position).normalized;
+
+        GameObject bullet = Instantiate(transparentBulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        bullet.GetComponent<Shooting>().SetDirection(dir);
+
+    }
+
+
+
+
+
+
+
+    #endregion
 
 
 

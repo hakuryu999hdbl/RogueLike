@@ -494,8 +494,8 @@ public class Player : MonoBehaviour
                 StartCoroutine(Dodge(dodgeDir, 15f, 2f));
             }
 
-            anim.Play("dodge");
-            //anim.SetTrigger("Dodge");
+            //anim.Play("dodge");
+            anim.SetTrigger("Dodge");
         }
         else
         {
