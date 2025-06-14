@@ -45,10 +45,10 @@ public class Player : MonoBehaviour
         //当这些动画在播放的时候玩家不能移动
         AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
 
-        if (state.IsName("attack_1") ||
-            state.IsName("attack_2") ||
-            state.IsName("attack_3") ||
-            state.IsName("attack_4") ||
+        if (state.IsName("Attack_1") ||
+            state.IsName("Attack_2") ||
+            state.IsName("Attack_3") ||
+            state.IsName("Attack_4") ||
             state.IsName("Girl_Strike_Block") ||
             state.IsName("hurt_1") ||
             state.IsName("hurt_2"))
@@ -351,7 +351,7 @@ public class Player : MonoBehaviour
     {
         currentCombo = 1;
         isAttacking2 = true;
-        anim.Play("attack_1", 0, 0);
+        anim.Play("Attack_1", 0, 0);
 
 
     }
@@ -843,7 +843,7 @@ public class Player : MonoBehaviour
             //显示伤害
             HudText.HUD(amount);
 
-            //有1秒左右的伤害冷却
+            //伤害冷却
             Invoke("HurtOver", 0.5f);
             RedScreen.SetActive(true);
             isScreaming = true;

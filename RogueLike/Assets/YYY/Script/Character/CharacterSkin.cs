@@ -98,7 +98,7 @@ public class CharacterSkin : MonoBehaviour
             if (player.comboQueued && player.currentCombo < 4)
             {
                 player.currentCombo++;
-                player.anim.Play("attack_" + player.currentCombo, 0, 0);
+                player.anim.Play("Attack_" + player.currentCombo, 0, 0);
                 player.comboQueued = false;
             }
             else

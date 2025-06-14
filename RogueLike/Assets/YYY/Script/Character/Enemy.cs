@@ -61,7 +61,10 @@ public class Enemy : MonoBehaviour
                 WeaponDrawn();//持械切换
             }
 
-           
+
+
+            //AntiOverlapping.SetActive(true);//站起后无法被穿过
+            //rbody.simulated = true;
         }
         else
         {
@@ -73,6 +76,10 @@ public class Enemy : MonoBehaviour
             attack_Collider.SetActive(false);
             attack_Range.SetActive(false);
 
+
+
+            //AntiOverlapping.SetActive(false);//跪下后被穿过防止堵着敌人
+            //rbody.simulated = false ;
         }
 
 
@@ -142,7 +149,7 @@ public class Enemy : MonoBehaviour
 
 
     [Header("类型敌人")]
-    EnemyType visionType = EnemyType.LongRangeEnemy;
+    EnemyType visionType = EnemyType.ShortRangeEnemy;
     public enum EnemyType
     {
         ShortRangeEnemy,//近战
@@ -650,8 +657,8 @@ public class Enemy : MonoBehaviour
             //显示伤害
             HudText.HUD(amount);
 
-            //有1秒左右的伤害冷却
-            Invoke("HurtOver", 0.5f);
+            //伤害冷却
+            Invoke("HurtOver", 0.2f);
 
             isScreaming = true;
 
