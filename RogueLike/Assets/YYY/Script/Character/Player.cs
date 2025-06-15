@@ -18,6 +18,13 @@ public class Player : MonoBehaviour
         UpdateAllBar();//更新UI
 
 
+        // 随机从 Enum 中选择一个值
+        //visionType = (PlayerType)Random.Range(0, System.Enum.GetValues(typeof(PlayerType)).Length);
+
+        visionType = PlayerType.LongRangePlayer;
+        //visionType = PlayerType.ShortRangePlayer;
+
+        AnimSetWeapon();//设置好武器模式
     }
 
 
@@ -49,9 +56,8 @@ public class Player : MonoBehaviour
             state.IsName("Attack_2") ||
             state.IsName("Attack_3") ||
             state.IsName("Attack_4") ||
-            state.IsName("Girl_Strike_Block") ||
-            state.IsName("hurt_1") ||
-            state.IsName("hurt_2"))
+            state.IsName("Shoot_1") ||
+            state.IsName("Girl_Strike_Block"))
         {
             canMove = false;
         }
@@ -159,10 +165,8 @@ public class Player : MonoBehaviour
 
 
 
-        CheckAttack();
-        CheckDodge();
-
-
+        CheckAttack();//检测你按着攻击键或者没有
+        CheckDodge();//检测你按着闪避键或者没有
 
 
 
@@ -194,6 +198,14 @@ public class Player : MonoBehaviour
     /// 持械状态
     /// </summary>
     #region
+    [Header("类型玩家")]
+    public PlayerType visionType;
+    public enum PlayerType
+    {
+        ShortRangePlayer,//近战
+        LongRangePlayer//远程
+    }
+
     [Header("持械状态")]
 
     bool isKeepWeapon = false;
@@ -212,7 +224,7 @@ public class Player : MonoBehaviour
             {
                 weaponIdleTimer = 0f;
 
-                anim.SetTrigger("SheatheWeapon");
+                Sheathe();
 
                 frameEvents._Attack_katana_in();
 
@@ -226,10 +238,33 @@ public class Player : MonoBehaviour
     }
 
 
+    public void Sheathe()
+    {
+        //anim.SetInteger("Weapon", 0);
+
+        anim.ResetTrigger("DrawWeapon");    // 重置状态，避免残留
+        anim.SetTrigger("SheatheWeapon");
+    }
+
+    public void AnimSetWeapon() 
+    {
+        if (visionType == PlayerType.ShortRangePlayer)
+        {
+            anim.SetInteger("Weapon", 1);
+        }
+        else
+        {
+            anim.SetInteger("Weapon", 2);
+
+        }
+    }//在攻击和闪避的时候触发这个
+
+
+
     #endregion
 
     /// <summary>
-    /// 攻击系统
+    /// 近战系统
     /// </summary>
     #region
     [Header("蓄力攻击")]
@@ -327,15 +362,28 @@ public class Player : MonoBehaviour
             attackTriggered = true;
 
 
-            if (!isAttacking2)
+            if (visionType == PlayerType.ShortRangePlayer)
             {
-                StartCombo();
+                if (!isAttacking2)
+                {
+                    StartCombo();
+                }
+                else if (canCombo)
+                {
+                    comboQueued = true;
+                }
             }
-            else if (canCombo)
+            else
             {
-                comboQueued = true;
-            }
+                if (CanShoot)
+                {
+                    anim.Play("Shoot_1", 0, 0);
 
+                    CanShoot = false;
+                    Invoke("SetCanShoot", 0.3f);//似乎这是目前唯一
+                }
+              
+            }
 
 
 
@@ -362,9 +410,19 @@ public class Player : MonoBehaviour
         comboQueued = false;
         canCombo = false;
         isAttacking2 = false;
-        anim.Play("Girl_Strike_Idle");
+      
 
 
+        //这里不知道什么原因，必须分开
+        if (visionType == PlayerType.ShortRangePlayer)
+        {
+            anim.Play("Girl_Strike_Idle");
+        }
+        else
+        {
+            anim.Play("Girl_Shoot_Idle");
+
+        }
     }
 
 
@@ -398,6 +456,80 @@ public class Player : MonoBehaviour
 
     #endregion
 
+
+    /// <summary>
+    /// 射击系统
+    /// </summary>
+    #region
+    [Header("射击")]
+    public GameObject bulletPrefab;
+    public Transform bulletSpawnPoint;
+
+    public List<GameObject> nearbyEnemies = new List<GameObject>();
+
+
+    public void ShootBullet()
+    {
+
+
+        // 优先攻击最近的敌人
+        if (nearbyEnemies.Count > 0)
+        {
+            GameObject closestEnemy = GetClosestEnemy();
+            if (closestEnemy != null)
+            {
+                Vector3 dir = (closestEnemy.transform.position - bulletSpawnPoint.position).normalized;
+                FireBullet(dir);
+                return;
+            }
+        }
+
+        // 没有敌人 → 朝方向射击
+        Vector3 inputDir = new Vector3(StopX, StopY, 0).normalized;
+        if (inputDir.magnitude > 0.1f)
+        {
+            FireBullet(inputDir);
+        }
+
+    }
+
+    private GameObject GetClosestEnemy()
+    {
+        GameObject closest = null;
+        float minDist = float.MaxValue;
+
+        foreach (GameObject enemy in nearbyEnemies)
+        {
+            if (enemy == null) continue;
+            float dist = Vector3.Distance(transform.position, enemy.transform.position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = enemy;
+            }
+        }
+
+        return closest;
+    }
+
+    private void FireBullet(Vector3 direction)
+    {
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        bullet.GetComponent<Shooting>().SetDirection(direction, Shooting.BulletOwnerType.Friend); // 玩家属于Friend阵营
+    }
+
+
+
+
+    [Header("射击冷却")]
+    public bool CanShoot = true;
+
+    void SetCanShoot()
+    {
+        CanShoot = true;
+    }
+
+    #endregion
 
     /// <summary>
     /// 闪避系统
@@ -474,6 +606,7 @@ public class Player : MonoBehaviour
 
     void PlayDodge()
     {
+
         if (currentStrength > 50) // 确保不在连续闪避状态
         {
             if (isDodge) return;//防止连续闪避
@@ -494,8 +627,8 @@ public class Player : MonoBehaviour
                 StartCoroutine(Dodge(dodgeDir, 15f, 2f));
             }
 
-            //anim.Play("dodge");
-            anim.SetTrigger("Dodge");
+
+            //anim.SetTrigger("Dodge");
         }
         else
         {
@@ -576,6 +709,9 @@ public class Player : MonoBehaviour
 
 
         GhostPhantom.sprite = None;
+
+       
+
     }
 
     void DodgingOver()
@@ -771,21 +907,20 @@ public class Player : MonoBehaviour
                 {
                     // 计算体力百分比
                     float strengthPercent = (float)currentStrength / maxStrength;
-
+                
                     // 根据体力百分比决定防御几率（体力越高越容易防御）
                     // 比如体力满时为 100% 几率，体力最低时为 10%
                     float blockChance = Mathf.Lerp(0.1f, 1f, strengthPercent);
-
+                
                     if (Random.value < blockChance)
                     {
-                        //anim.SetTrigger("Block");
+                        anim.SetTrigger("Block");
 
-                        anim.Play("block");
-
+                
                         // 防御成功扣除体力
                         ChangeStrength(-50);
-
-
+                
+                
                         switch (Random.Range(0, 3))
                         {
                             case 0:
@@ -798,20 +933,20 @@ public class Player : MonoBehaviour
                                 frameEvents._Attack_sword_clash4();
                                 break;
                         }
-
-
+                
+                
                         //显示伤害
                         HudText.HUD(0);//0会显示Miss
-
+                
                         //火花特效
                         Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
                         Vector3 spawnPosition_2 = transform.position + offset_2;
                         GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
                         Destroy(effectPrefabs_2, 2f);
-
+                
                         return;
                     }
-
+                
                 }
 
 

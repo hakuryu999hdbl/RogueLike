@@ -74,12 +74,17 @@ public class CharacterSkin : MonoBehaviour
     } //攻击开始无法移动
 
 
-    public void ShootTransparentBullet() 
+    public void AttackShoot() 
     {
-        if (enemy != null)
+        if (player != null)
         {
 
-            //enemy.ShootTransparentBullet();
+            player.ShootBullet();
+
+           
+        }
+        if (enemy != null)
+        {
 
             enemy.ShootBullet();
         }
@@ -92,19 +97,32 @@ public class CharacterSkin : MonoBehaviour
     {
         if (player != null)
         {
-            player.canCombo = false;
 
-
-            if (player.comboQueued && player.currentCombo < 4)
+            if (player.visionType == Player.PlayerType.ShortRangePlayer) 
             {
-                player.currentCombo++;
-                player.anim.Play("Attack_" + player.currentCombo, 0, 0);
-                player.comboQueued = false;
+                player.canCombo = false;
+
+
+                if (player.comboQueued && player.currentCombo < 4)
+                {
+                    player.currentCombo++;
+                    player.anim.Play("Attack_" + player.currentCombo, 0, 0);
+                    player.comboQueued = false;
+                }
+                else
+                {
+                    player.ResetCombo();
+                }
             }
             else
             {
-                player.ResetCombo();
+                player.anim.Play("Girl_Shoot_Idle");
+
+                //player.CanShoot = true;//这里用Invoke替代了
             }
+
+
+           
 
             // 攻击完毕扣除暴击值
             player.ChangeCritical(-100);

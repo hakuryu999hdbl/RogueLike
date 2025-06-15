@@ -32,18 +32,25 @@ public class Enemy : MonoBehaviour
         WalkSpeed = Random.Range(1, 3);
 
 
+        // 随机从 Enum 中选择一个值
+        visionType = (EnemyType)Random.Range(0, System.Enum.GetValues(typeof(EnemyType)).Length);
+
+        //visionType = EnemyType.LongRangeEnemy;
+        //visionType = EnemyType.ShortRangeEnemy;
+
         //不同敌人攻击间隔不一样
-
-        if (visionType == EnemyType.LongRangeEnemy)
+        if (visionType == EnemyType.ShortRangeEnemy)
         {
-
-            attackCooldown = 2f;
-            AttackRange = 3;
+        
+            attackCooldown = 1f;
+            enemyVision.circleCollider2D.radius = 1.5f;
+            //AttackRange = 1.21f;
         }
         else 
         {
             attackCooldown = 1f;
-            AttackRange = 1;
+            enemyVision.circleCollider2D.radius = 4f;
+            //AttackRange = 0.9f;
 
         }
 
@@ -109,9 +116,7 @@ public class Enemy : MonoBehaviour
         //    state.IsName("attack_3") ||
         //    state.IsName("attack_4") ||
         //    state.IsName("Girl_Strike_Block") ||
-        //    state.IsName("Girl_Strike_Idle") ||
-        //    state.IsName("hurt_1") ||
-        //    state.IsName("hurt_2"))
+        //    state.IsName("Girl_Strike_Idle"))
         //{
         //    aiPath.canMove = false;
         //
@@ -148,15 +153,6 @@ public class Enemy : MonoBehaviour
     float WalkSpeed = 2f;
 
 
-    [Header("类型敌人")]
-    EnemyType visionType = EnemyType.ShortRangeEnemy;
-    public enum EnemyType
-    {
-        ShortRangeEnemy,//近战
-        LongRangeEnemy//远程
-    }
-
-    public int AttackRange = 1;//敌人接近多少才会开始攻击
     
 
     private void BaseMove()
@@ -175,53 +171,78 @@ public class Enemy : MonoBehaviour
 
         if (!isPatrol)
         {
-            if (dist > AttackRange)
+
+            if (!isAttack)
             {
                 if (tag != "Friend")
                 {
                     //目前战斗下全员跑
                     moveSpeed = 2;
                     aiPath.maxSpeed = RunSpeed;
+
+
                 }
                 else if (!isPatrol)
                 {
-                    //非巡逻队友跟，随情况下会你走/我也走/你跑/我也跑
-
-                    if (player.isRunning)
+                 
+                    if (dist > 1)
                     {
-                        moveSpeed = 2;
-                        aiPath.maxSpeed = RunSpeed;
+                        //非巡逻队友跟，随情况下会你走/我也走/你跑/我也跑
+                        if (player.isRunning)
+                        {
+                            moveSpeed = 2;
+                            aiPath.maxSpeed = RunSpeed;
+                        }
+                        else
+                        {
+
+                            moveSpeed = 1;
+                            aiPath.maxSpeed = WalkSpeed;
+
+                        }
                     }
-                    else
+                    else 
                     {
-
-                        moveSpeed = 1;
-                        aiPath.maxSpeed = WalkSpeed;
-
+                        //玩家在队友旁边，队友站着不动
+                        moveSpeed = 0;
+                        aiPath.maxSpeed = 0.01f;
                     }
+                 
 
                 }
 
-                attack_Range.SetActive(false);//关闭技能范围
+
 
                 //重置计数
                 attackTimer = 0f;//间隔归零
                 isInAttackDelay = false;
 
-                isAttack = false;
+
+
+                attack_Range.SetActive(false);//关闭技能范围    
+                //isAttack = false;
+
+
             }
             else
             {
+                if (tag == "Friend" && CurrentTarget == _Player)
+                {
+                    //队友在追随玩家的情况下必须在一定距离停下
+                }
+                else
+                {
+                    BaseAttack();//攻击
+                }
 
-                BaseAttack();//攻击
+              
                 
                 moveSpeed = 0;
                 aiPath.maxSpeed = 0.01f;
                 
                 
                 attack_Range.SetActive(true);//显示技能范围
-
-                isAttack = true;
+                //isAttack = true;
 
             }
 
@@ -301,6 +322,17 @@ public class Enemy : MonoBehaviour
     /// 持械状态
     /// </summary>
     #region
+    [Header("类型敌人")]
+    public EnemyType visionType;
+    public enum EnemyType
+    {
+        ShortRangeEnemy,//近战
+        LongRangeEnemy//远程
+    }
+
+    //public float AttackRange = 1;//敌人接近多少才会开始攻击
+
+
     [Header("持械状态")]
     bool isKeepWeapon = false;
     float weaponIdleTimer = 0f;
@@ -318,9 +350,9 @@ public class Enemy : MonoBehaviour
             {
                 weaponIdleTimer = 0f;
 
+                Sheathe();
 
-                anim.ResetTrigger("DrawWeapon");    // 重置拔刀状态，避免残留
-                anim.SetTrigger("SheatheWeapon");
+
 
                 frameEvents._Attack_katana_in();
 
@@ -334,23 +366,59 @@ public class Enemy : MonoBehaviour
     }
 
 
+
+    public void Draw() 
+    {
+        if (visionType == EnemyType.ShortRangeEnemy)
+        {
+            anim.SetInteger("Weapon", 1);
+        }
+        else
+        {
+
+            anim.SetInteger("Weapon",2);
+        }
+
+        anim.SetTrigger("DrawWeapon");
+    }
+    public void Sheathe()
+    {
+        //anim.SetInteger("Weapon", 0);
+
+        anim.ResetTrigger("DrawWeapon");    // 重置状态，避免残留
+        anim.SetTrigger("SheatheWeapon");
+    }
+
+    void ReSetAttack() 
+    {
+        if (visionType == EnemyType.ShortRangeEnemy)
+        {
+            anim.Play("Girl_Strike_Idle");
+        }
+        else
+        {
+
+            anim.Play("Girl_Shoot_Idle");
+        }
+    }
+
     #endregion
 
 
 
 
     /// <summary>
-    /// 攻击系统
+    /// 近战系统
     /// </summary>
     #region
-    [Header("蓄力攻击")]
+    [Header("攻击")]
 
 
     public GameObject attack;//伤害朝向
     public GameObject attack_Collider;//伤害碰撞体
     public GameObject attack_Range;//技能范围
 
-
+    public EnemyVision enemyVision;//视野范围
 
     private float attackTimer = 0f;
     private float attackCooldown = 1f; // 原本 Invoke 的 1f
@@ -367,14 +435,15 @@ public class Enemy : MonoBehaviour
             if (attackTimer >= attackCooldown)
             {
 
-                //暂时放在这里，等到弓箭站走跑完成后修改
-                if (visionType == EnemyType.LongRangeEnemy)
-                {
-                    anim.Play("shoot_1", 0, 0);
-                }
-                else 
+                //攻击
+                if (visionType == EnemyType.ShortRangeEnemy)
                 {
                     Attack_Start(); // 攻击警告开始闪
+                }
+                else 
+                {               
+
+                    anim.Play("shoot_1", 0, 0);
                 }
 
 
@@ -445,7 +514,7 @@ public class Enemy : MonoBehaviour
             AttackRangeImage.color = Color.red;
         }
 
-        anim.Play("Girl_Strike_Idle");
+        ReSetAttack();
     }
 
     public void AttackVoice()
@@ -484,7 +553,18 @@ public class Enemy : MonoBehaviour
         Vector3 dir = (CurrentTarget.transform.position - bulletSpawnPoint.position).normalized;
 
         GameObject bullet = Instantiate(transparentBulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
-        bullet.GetComponent<Shooting>().SetDirection(dir);
+
+
+        if(tag == "Friend")
+        {
+            bullet.GetComponent<Shooting>().SetDirection(dir, Shooting.BulletOwnerType.Friend);//队友发射子弹
+        }
+        else
+        {
+            bullet.GetComponent<Shooting>().SetDirection(dir,Shooting.BulletOwnerType.Enemy);//敌人发射子弹
+        }
+
+       
 
     }
 
@@ -825,7 +905,6 @@ public class Enemy : MonoBehaviour
     #region
     [Header("阵营转换")]
     public EnemyVision vision;
-    public EnemyVision vision_2;
     public Strike strike;
     public Image HealthValueImage;
     public SpriteRenderer AttackColliderImage;
@@ -839,8 +918,6 @@ public class Enemy : MonoBehaviour
         //  视野脚本：变成队友
         vision.isFriend = true;
 
-        //  视野脚本2：变成队友
-        vision_2.isFriend = true;
 
         //  攻击脚本：攻击敌人，不再攻击队友
         strike.DamageToPlayer = false;
