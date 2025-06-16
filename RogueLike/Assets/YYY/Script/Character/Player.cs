@@ -246,8 +246,23 @@ public class Player : MonoBehaviour
         anim.SetTrigger("SheatheWeapon");
     }
 
+
+    public void ToggleWeaponMode()
+    {
+        if (visionType == PlayerType.ShortRangePlayer)
+        {
+            visionType = PlayerType.LongRangePlayer;
+        }
+        else
+        {
+            visionType = PlayerType.ShortRangePlayer;
+        }
+
+        AnimSetWeapon();
+    }
     public void AnimSetWeapon() 
     {
+
         if (visionType == PlayerType.ShortRangePlayer)
         {
             anim.SetInteger("Weapon", 1);
@@ -257,7 +272,7 @@ public class Player : MonoBehaviour
             anim.SetInteger("Weapon", 2);
 
         }
-    }//在攻击和闪避的时候触发这个
+    }//近远切换
 
 
 

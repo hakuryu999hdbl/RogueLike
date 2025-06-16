@@ -1,10 +1,7 @@
 fileFormatVersion: 2
-guid: c8f0a8acddfbec24fa3a0656fc8dbbfd
+guid: c7df7f2a8122f1a4cbcd712b6c8afb27
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -775132225559241982
-    second: Circular_0
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -42,13 +39,13 @@ TextureImporter:
     mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -113,22 +110,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Circular_0
+      name: Fragement_Effect_0
       rect:
         serializedVersion: 2
-        x: 38
-        y: 38
-        width: 436
-        height: 436
+        x: 2
+        y: 0
+        width: 166
+        height: 145
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 20b5591095d2e35f0800000000000000
-      internalID: -775132225559241982
+      spriteID: 4a60bee1e83ac924398419a07d5dec72
+      internalID: -383240998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fragement_Effect_1
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 114
+        width: 158
+        height: 132
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f19110d695bf5834cabec552098d93de
+      internalID: -265369338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fragement_Effect_2
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 0
+        width: 97
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b44109f777935d34f964d072a473a589
+      internalID: -51038127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fragement_Effect_3
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 132
+        width: 81
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6263735a1e438974eab31337b05d1fc8
+      internalID: 1250017922
       vertices: []
       indices: 
       edges: []
@@ -136,7 +196,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: ec6eb718fd669d245a775c095501586f
     internalID: 0
     vertices: []
     indices: 
@@ -144,7 +204,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Circular_0: -775132225559241982
+      Fragement_Effect_0: -383240998
+      Fragement_Effect_1: -265369338
+      Fragement_Effect_2: -51038127
+      Fragement_Effect_3: 1250017922
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

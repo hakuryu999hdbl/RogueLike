@@ -66,6 +66,16 @@ public class Shooting : MonoBehaviour
                 Destroy(EffectPrefabs, 2f);          
 
             }//只要不是空包弹，就能有效果
+
+
+
+            if (other.gameObject.GetComponent<Plant>() != null)
+            {
+
+                other.gameObject.GetComponent<Plant>().ChangeHealth(Damage, 1);//普通伤害
+
+            }
+
             Destroy(gameObject);
         }//打到墙壁上产生火花
 

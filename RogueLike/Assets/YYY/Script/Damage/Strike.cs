@@ -89,8 +89,7 @@ public class Strike : MonoBehaviour
         }
 
 
-
-
+        //敌人
         if (collision.gameObject.tag == "Friend")
         {
 
@@ -107,6 +106,21 @@ public class Strike : MonoBehaviour
 
 
         }
+
+        //障碍物
+        if (collision.gameObject.tag == "obstacle")
+        {
+
+            if (collision.gameObject.GetComponent<Plant>() != null)
+            {
+
+                collision.gameObject.GetComponent<Plant>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
+            }
+
+
+        }
+
 
     }
 

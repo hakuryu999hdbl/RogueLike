@@ -324,6 +324,7 @@ MonoBehaviour:
   anim: {fileID: 1547413895}
   rbody: {fileID: 65564745}
   Arrow: {fileID: 1010146657}
+  visionType: 0
   canMove: 1
   attack: {fileID: 885366859}
   attack_Collider: {fileID: 904417485}
@@ -335,6 +336,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 3433707967955874124, guid: 3596adaabe648b745b5f6abca5e45d3c, type: 3}
   bulletSpawnPoint: {fileID: 65564742}
   nearbyEnemies: []
+  CanShoot: 1
   GhostPhantom: {fileID: 48428257}
   Phantom: {fileID: 21300000, guid: 57f20bac2968f244087faf2237514d2f, type: 3}
   None: {fileID: 21300000, guid: e7dbb2c157ef8fd4e9d86420c36a6ac7, type: 3}
@@ -1302,6 +1304,111 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1827786571}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &302722347
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 302722348}
+  - component: {fileID: 302722351}
+  - component: {fileID: 302722350}
+  - component: {fileID: 302722349}
+  m_Layer: 5
+  m_Name: SetWeapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &302722348
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302722347}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 947455370}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 199.57187, y: -48}
+  m_SizeDelta: {x: 70.4767, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &302722349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302722347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 65564741}
+          m_TargetAssemblyTypeName: Player, Assembly-CSharp
+          m_MethodName: ToggleWeaponMode
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &302722350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302722347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &302722351
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302722347}
+  m_CullTransparentMesh: 1
 --- !u!1001 &342805245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2465,6 +2572,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FireEffect (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8085956180755329075, guid: 90a92e097cc79514d896dce42d12675a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3014,6 +3125,7 @@ RectTransform:
   - {fileID: 137628386}
   - {fileID: 535366360}
   - {fileID: 1129329219}
+  - {fileID: 302722348}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
