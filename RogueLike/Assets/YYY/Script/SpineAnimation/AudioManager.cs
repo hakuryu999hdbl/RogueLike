@@ -58,7 +58,9 @@ public class AudioManager : MonoBehaviour
                      Jinye_tentacle_short, Jinye_tentacle_slow, Jinye_tentacle_middle, Jinye_tentacle_quick;
 
     public AudioClip SE_Rope,SE_Vibrator,SE_Electricity,magic_flame2;
-    [Header("叶语嫣")]
+    public AudioClip SE_Gate_Open, SE_Gate_Close;
+
+   [Header("叶语嫣")]
     public AudioClip Audio_03_Breath_3_Short_2;
     public AudioClip Audio_03_Breath_0, Audio_03_Breath_1, Audio_03_Breath_2, Audio_03_Breath_3, Audio_03_Breath_4, Audio_03_Breath_5;
     public AudioClip YYY_WalkClip_1, YYY_WalkClip_2, YYY_RunClip_1, YYY_RunClip_2, FootClip;

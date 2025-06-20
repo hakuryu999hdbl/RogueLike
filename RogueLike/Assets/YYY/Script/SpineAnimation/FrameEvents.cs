@@ -15,7 +15,8 @@ public class FrameEvents : MonoBehaviour
     /// </summary>
     #region
     [Header("声音")]
-    public AudioManager AudioManager;
+   　
+    AudioManager AudioManager;
     public AudioSource audioS;
 
  
@@ -98,6 +99,8 @@ public class FrameEvents : MonoBehaviour
 
     public void _magic_flame2() { audioS.PlayOneShot(AudioManager.magic_flame2); }//Spine帧事件没有，由敌人或玩家或者其他挂着FrameEvent脚本直接使用
 
+    public void _SE_Gate_Open() { audioS.PlayOneShot(AudioManager.SE_Gate_Open); }
+    public void _SE_Gate_Close() { audioS.PlayOneShot(AudioManager.SE_Gate_Close); }
 
     //------------叶语嫣
     public void _SE_HighHeels_Walk_1() { audioS.PlayOneShot(AudioManager.YYY_WalkClip_1); }

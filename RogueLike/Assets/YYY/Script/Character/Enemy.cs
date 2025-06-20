@@ -792,7 +792,7 @@ public class Enemy : MonoBehaviour
 
             // 向 Z 方向下沉一点，避免和角色重合
             Vector3 pos = blood.transform.position;
-            pos.z += 0.1f;
+            pos.z -= 0.1f;
             blood.transform.position = pos;
 
             // 可选：缩放或微调位置

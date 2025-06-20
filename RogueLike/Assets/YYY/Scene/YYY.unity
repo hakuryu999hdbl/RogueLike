@@ -343,7 +343,7 @@ MonoBehaviour:
   None: {fileID: 21300000, guid: e7dbb2c157ef8fd4e9d86420c36a6ac7, type: 3}
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 64
   isDodge: 0
   strike: {fileID: 904417489}
   moveAction: {fileID: 389908679454232702, guid: deaf91781ed4539448d73a93eae4fb40, type: 3}
@@ -939,7 +939,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &190881285
 Transform:
   m_ObjectHideFlags: 0
@@ -1217,7 +1217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   data:
-    dataString: UEsDBBQAAAgIAABIIexjd/LPcgIAAC0FAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFlVE1z2jAQ/SuMzoWxDRjorXUI6SEJU9rJxRchr7EGWfJIcoBk+O9dyTZ2yYnl7dd7uyt/Ei5NBcwqvdE8e1YZkO8j4mzybdQ7n+BMD0ru+Ad0MW88s4ULoj7mN7VcIR66NKNKsJqzH/IgXHCAYC15rnS5zg6QKGMNwjkVBtCllXXZEqHPETnjz3jlUi5oRQtnfaC1CkZXNBlIC7oP7QLjSbhaLpfT9TiI24zlZDGNZrPIQT63lkzQsoLMCelLxEFXZB40TSSKbGOcIKaE4KZlSOyl8hNIaGVq1IcBGaeo2NMKJ1MECuCHwjr+w/TXPDdgW9KaXh64xtE1dclP1cyzpObYcHunonadluEq8rSaqs9fAsahd+dalU9d49CLsgVnx9/0wqixg4kP4YcBdz+jExVHuhfwVoB8URutapmh0+rapdYGoof+701bUgA79nhD9Q6sq69769brNFy9/HMieLl3rsmsAXZC+ZH7qwCNy/mFhP3NmLYEoo7FXwN/6GF4XK3jkWtj0dWqlI7eXtXahZK1n5lTU9tEaQkebklXIKmwly2Wsfc7vPMN2t55Hql7Rm3z1te9jrsUD/fxQXDn2qrTbVmmUKdnMMVrbQWX0JN2jhecU6KkbE5sOJMubVfrnLJB2qHm2f+nRdiCzSkE8XyaQxhN8/E8XMR7xuIoW4RxNqPE3x6XqJOKbUO0HQ9uTfbFJd5Z93UZbTSt/Llnmp42/KNUg5Fzmasd0wDytalwIw4am+DDzNYZxwHtwFou/b7JZ0qEYkfI0luh1Ctdn62maV8lJRV/V9YhKUn85yQlDr7d8lbDO4eTa94Vu5LrP1BLAwQUAAAICAAASCHs6x8KR20AAAB4AAAACQAkAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAatWKkstKs7Mz1OyUjDRM9IzNNdRUEovSizIKAaKGII4pZkpIHa0UrJ5smliqoGZqXFaqqGRcZquqaG5WVJysplRirmhWYpJolIsUH1JZUGqX2JuKkRPQGJJRlpmXkpmXrqee1FmijvIaKXYWgBQSwECLQAUAAAICAAASCHsY3fyz3ICAAAtBQAACwAkAAAAAAAAAAAAAAAAAAAAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwECLQAUAAAICAAASCHs6x8KR20AAAB4AAAACQAkAAAAAAAAAAAAAAC/AgAAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsFBgAAAAACAAIAuAAAAHcDAAAAAA==
+    dataString: UEsDBBQAAAgIAABIIew2XoEGbgIAACoFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFlVMty4jAQ/BVK54WyeRiyt12HkD0koUK2cuEipDFWIUsuSQ6QFP++I9nGXnJCdM+jezTyFxHKlsCcNisj+JPmQH4OiD+TH4OOfIQT3Wu1EZ/QxrwL7nIfREPMK3VCIx77NKsLcEawX2ovfXCEYKVEpk2x5HtItXUW4YxKC0gZ7Xy2QuhrQE74M7zzKWc8jef+9Imnu2hwwSMD5cB0oW1gMorvFovFZDmMkiZjMZpPxtPp2EMht1JM0qIE7o10JZKoLTKL6iYKTTYx3hDTUgrbKCTuXIYJpLS0FfrDAC4oOg6y4tEEgRzEPndefz/9JcssuEa0oed7YXB0dV3yW9fzLKg91No+qKx8p2QaRNU1n77RwzjQmdHFY9s2DpZcLtjhlZ4Zta437z5831MeJnSk8kB3Et5zUM96ZXSlOJLOVD61sjC+7/5enaU5sEOH11JvwKr8fmvt5XoPl2D+lEpR7Dw1mtbARuow8LATYPBq/qDgsDG2KYGoV/HXwhvd91erIR6EsQ6pxqXy8na6Mj6ULMPMvJvKpdooCHAjugRFpTuvsYy7vcEbrtf2hnmg/hE1zRuufRs3KQHu4qPohlrr4/WybK6PT2Dzl8pJoaAT7YlnnFOqlaoXrD+TNm1TmYyyXtq+Evz/1SJszmYUomQ2ySAeT7LhLJ4nO8aSMZ/HCZ9SEnZPKPRJ5boW2owHb011xRXuWfttGawMLcOyc0OPK/FZ6N7Ihcr0hhkA9VJXuAoHg03wWfIlFzigDTgnVLhv8rUlUrMD8O210DY4XZ6coX2wFB/aeWBL0vAt2RIPX1d5beBDwNH3btMu5PIPUEsDBBQAAAgIAABIIezrHwpHbQAAAHgAAAAJACQAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1YqSy0qzszPU7JSMNEz0jM011FQSi9KLMgoBooYgjilmSkgdrRSsnmyaWKqgZmpcVqqoZFxmq6poblZUnKymVGKuaFZikmiUixQfUllQapfYm4qRE9AYklGWmZeSmZeup57UWaKO8hopdhaAFBLAQItABQAAAgIAABIIew2XoEGbgIAACoFAAALACQAAAAAAAAAAAAAAAAAAABncmFwaDAuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLAQItABQAAAgIAABIIezrHwpHbQAAAHgAAAAJACQAAAAAAAAAAAAAALsCAABtZXRhLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwUGAAAAAAIAAgC4AAAAcwMAAAAA
     upgradeData: 
     file_cachedStartup: {fileID: 0}
     data_cachedStartup: 
@@ -1461,6 +1461,10 @@ PrefabInstance:
     - target: {fileID: 8085956180755329075, guid: 90a92e097cc79514d896dce42d12675a, type: 3}
       propertyPath: m_Name
       value: FireEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085956180755329075, guid: 90a92e097cc79514d896dce42d12675a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3412,6 +3416,8 @@ MonoBehaviour:
   SE_Vibrator: {fileID: 8300000, guid: e22ed65fc5eacc644ad648ea1db6a497, type: 3}
   SE_Electricity: {fileID: 8300000, guid: 151d089ec20778d4ca8804f6d3e5381d, type: 3}
   magic_flame2: {fileID: 8300000, guid: 144214fa42bfaa44eb3da04015e1457d, type: 3}
+  SE_Gate_Open: {fileID: 8300000, guid: 6df1fceb335b39d43bd1b6882a53a1fe, type: 3}
+  SE_Gate_Close: {fileID: 8300000, guid: 0f2330eabf4b70d40821bc30ec53bd39, type: 3}
   Audio_03_Breath_3_Short_2: {fileID: 8300000, guid: 17497f1606514074fb28b11e3fe342fa, type: 3}
   Audio_03_Breath_0: {fileID: 8300000, guid: db2ce0c960bbcd7418cf75a219a5b76b, type: 3}
   Audio_03_Breath_1: {fileID: 8300000, guid: e47e3ad13654e8547bbcc405005f33f1, type: 3}
@@ -4923,7 +4929,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a1f4974e1b0f6e4fb434e87703edbdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AudioManager: {fileID: 1011113004}
   audioS: {fileID: 1547413900}
 --- !u!114 &1547413902
 MonoBehaviour:

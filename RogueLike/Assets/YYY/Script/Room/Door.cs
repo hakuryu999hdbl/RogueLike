@@ -1,0 +1,36 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Door : MonoBehaviour
+{
+    public Animator anim;
+    public bool isOpen = false;
+    [Header("主动触发声音")]
+    public FrameEvents frameEvents;
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+      
+        if (collision.gameObject.tag == "Player"|| collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Friend")
+        {
+
+            anim.SetBool("Open", true);
+
+
+            frameEvents._SE_Gate_Open();
+        }
+        
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Friend")
+        {
+
+            anim.SetBool("Open", false);
+
+            frameEvents._SE_Gate_Close();
+        }
+
+    }
+}
