@@ -4,6 +4,35 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour
 {
+    [Header("伤害类型")]
+    public int TypeOfAttack;
+
+    private int appliedDamage; // 当前生效的随机伤害
+    private int baseDamage; // 原始设定伤害
+    [Header("暴击")]
+    public bool isCritial = false;
+    public float chargeTime = 0f; // 由 Player 传入的蓄力时间
+
+    private void OnEnable()
+    {
+        TypeOfAttack = 1;//剑伤
+
+        baseDamage = Damage; // 保存原始值
+        appliedDamage = baseDamage + Random.Range(-50, 50); // 例如±10范围
+
+        if (isCritial)
+        {
+            appliedDamage *= 3; //暴击三倍伤害
+        }
+        else
+        {
+            // 非暴击时，根据蓄力时间提升伤害：最大 1.5 倍（>=1秒）
+            float chargeMultiplier = Mathf.Lerp(1f, 1.5f, Mathf.Clamp01(chargeTime));
+            appliedDamage = Mathf.RoundToInt(appliedDamage * chargeMultiplier);
+        }
+
+    }//初始化随机伤害
+
 
     public enum BulletOwnerType
     {
@@ -21,6 +50,8 @@ public class Shooting : MonoBehaviour
     public float lifetime = 3f;
     private Vector3 direction;
 
+
+
     public void SetDirection(Vector3 dir, BulletOwnerType owner)
     {
         direction = dir.normalized;
@@ -35,6 +66,7 @@ public class Shooting : MonoBehaviour
                 break;
 
         }
+
     }
 
     void Update()
@@ -55,6 +87,10 @@ public class Shooting : MonoBehaviour
     public Transform rayTarget;//特效的的位置
 
 
+
+
+
+
     private void OnTriggerEnter2D(Collider2D other)
     {
 
@@ -72,7 +108,7 @@ public class Shooting : MonoBehaviour
             if (other.gameObject.GetComponent<Plant>() != null)
             {
 
-                other.gameObject.GetComponent<Plant>().ChangeHealth(Damage, 1);//普通伤害
+                other.gameObject.GetComponent<Plant>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
             }
 
@@ -87,7 +123,9 @@ public class Shooting : MonoBehaviour
         {
             if (SpecialBullet != -1)
             {
-                other.GetComponent<Enemy>()?.ChangeHealth(Damage, 1);
+
+                if (isCritial) { other.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
+                other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);
             }
             Destroy(gameObject);
             return;
@@ -98,16 +136,24 @@ public class Shooting : MonoBehaviour
             if (SpecialBullet != -1)
             {
                 if (other.CompareTag("Player"))
-                    other.GetComponent<Player>()?.ChangeHealth(Damage, 1);
+                    other.GetComponent<Player>()?.ChangeHealth(appliedDamage, TypeOfAttack);
                 else if (other.CompareTag("Friend"))
-                    other.GetComponent<Enemy>()?.ChangeHealth(Damage, 1); // 队友是Enemy脚本
+                    other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack); // 队友是Enemy脚本
             }
             Destroy(gameObject);
             return;
         }
 
 
+        if (ownerType == BulletOwnerType.Enemy && other.CompareTag("Attack"))
+        {
+            if (other.gameObject.GetComponent<Dodge_Range>() != null)
+            {
 
+                other.gameObject.GetComponent<Dodge_Range>().Dodge();//直接触发闪避
+
+            }
+        }
     }
 
 

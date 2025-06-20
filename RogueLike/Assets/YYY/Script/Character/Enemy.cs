@@ -41,12 +41,12 @@ public class Enemy : MonoBehaviour
         //不同敌人攻击间隔不一样
         if (visionType == EnemyType.ShortRangeEnemy)
         {
-        
+
             attackCooldown = 1f;
             enemyVision.circleCollider2D.radius = 1.5f;
             //AttackRange = 1.21f;
         }
-        else 
+        else
         {
             attackCooldown = 1f;
             enemyVision.circleCollider2D.radius = 4f;
@@ -153,7 +153,7 @@ public class Enemy : MonoBehaviour
     float WalkSpeed = 2f;
 
 
-    
+
 
     private void BaseMove()
     {
@@ -184,7 +184,7 @@ public class Enemy : MonoBehaviour
                 }
                 else if (!isPatrol)
                 {
-                 
+
                     if (dist > 1)
                     {
                         //非巡逻队友跟，随情况下会你走/我也走/你跑/我也跑
@@ -201,13 +201,13 @@ public class Enemy : MonoBehaviour
 
                         }
                     }
-                    else 
+                    else
                     {
                         //玩家在队友旁边，队友站着不动
                         moveSpeed = 0;
                         aiPath.maxSpeed = 0.01f;
                     }
-                 
+
 
                 }
 
@@ -235,12 +235,12 @@ public class Enemy : MonoBehaviour
                     BaseAttack();//攻击
                 }
 
-              
-                
+
+
                 moveSpeed = 0;
                 aiPath.maxSpeed = 0.01f;
-                
-                
+
+
                 attack_Range.SetActive(true);//显示技能范围
                 //isAttack = true;
 
@@ -367,7 +367,7 @@ public class Enemy : MonoBehaviour
 
 
 
-    public void Draw() 
+    public void Draw()
     {
         if (visionType == EnemyType.ShortRangeEnemy)
         {
@@ -376,7 +376,7 @@ public class Enemy : MonoBehaviour
         else
         {
 
-            anim.SetInteger("Weapon",2);
+            anim.SetInteger("Weapon", 2);
         }
 
         anim.SetTrigger("DrawWeapon");
@@ -389,7 +389,7 @@ public class Enemy : MonoBehaviour
         anim.SetTrigger("SheatheWeapon");
     }
 
-    void ReSetAttack() 
+    void ReSetAttack()
     {
         if (visionType == EnemyType.ShortRangeEnemy)
         {
@@ -440,14 +440,14 @@ public class Enemy : MonoBehaviour
                 {
                     Attack_Start(); // 攻击警告开始闪
                 }
-                else 
-                {               
+                else
+                {
 
                     anim.Play("shoot_1", 0, 0);
                 }
 
 
-               
+
 
 
                 attackTimer = 0f;
@@ -555,16 +555,16 @@ public class Enemy : MonoBehaviour
         GameObject bullet = Instantiate(transparentBulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
 
 
-        if(tag == "Friend")
+        if (tag == "Friend")
         {
             bullet.GetComponent<Shooting>().SetDirection(dir, Shooting.BulletOwnerType.Friend);//队友发射子弹
         }
         else
         {
-            bullet.GetComponent<Shooting>().SetDirection(dir,Shooting.BulletOwnerType.Enemy);//敌人发射子弹
+            bullet.GetComponent<Shooting>().SetDirection(dir, Shooting.BulletOwnerType.Enemy);//敌人发射子弹
         }
 
-       
+
 
     }
 
@@ -684,35 +684,49 @@ public class Enemy : MonoBehaviour
                 isPatrol = false;//受伤后立刻进入战斗
 
 
-                //if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0 && amount != -currentHealth)
-                //{
-                //    //anim.SetTrigger("Block");
-                //    anim.Play("block");
-                //
-                //    switch (Random.Range(0, 3))
-                //    {
-                //        case 0:
-                //            frameEvents._Attack_sword_clash2();
-                //            break;
-                //        case 1:
-                //            frameEvents._Attack_sword_clash3();
-                //            break;
-                //        case 2:
-                //            frameEvents._Attack_sword_clash4();
-                //            break;
-                //    }
-                //
-                //    //显示伤害
-                //    HudText.HUD(0);//0会显示Miss
-                //
-                //    //火花特效
-                //    Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
-                //    Vector3 spawnPosition_2 = transform.position + offset_2;
-                //    GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
-                //    Destroy(effectPrefabs_2, 2f);
-                //
-                //    return;
-                //}
+                if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0 && amount != -currentHealth)
+                {
+
+                    if (visionType == EnemyType.ShortRangeEnemy)
+                    {
+                        anim.Play("Girl_Strike_Block");
+                    }
+                    else 
+                    {
+                        anim.Play("Girl_Shoot_Block");
+                    }
+
+
+                    //anim.SetTrigger("Block");
+
+
+
+
+                
+                    switch (Random.Range(0, 3))
+                    {
+                        case 0:
+                            frameEvents._Attack_sword_clash2();
+                            break;
+                        case 1:
+                            frameEvents._Attack_sword_clash3();
+                            break;
+                        case 2:
+                            frameEvents._Attack_sword_clash4();
+                            break;
+                    }
+                
+                    //显示伤害
+                    HudText.HUD(0);//0会显示Miss
+                
+                    //火花特效
+                    Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+                    Vector3 spawnPosition_2 = transform.position + offset_2;
+                    GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
+                    Destroy(effectPrefabs_2, 2f);
+                
+                    return;
+                }
 
             }
 
@@ -742,6 +756,10 @@ public class Enemy : MonoBehaviour
 
             isScreaming = true;
 
+
+
+            //血
+            #region
             switch (Random.Range(0, 3))
             {
                 case 0:
@@ -753,13 +771,14 @@ public class Enemy : MonoBehaviour
                 case 2:
                     frameEvents._Attack_blood3();
                     break;
-            }
 
+            }
             //血特效
             Vector3 offset = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
             Vector3 spawnPosition = transform.position + offset;
             GameObject effectPrefabs = Instantiate(BloodEffect, spawnPosition, transform.rotation);
             Destroy(effectPrefabs, 2f);
+
 
 
             // 从预设中随机挑一个
@@ -773,7 +792,7 @@ public class Enemy : MonoBehaviour
 
             // 向 Z 方向下沉一点，避免和角色重合
             Vector3 pos = blood.transform.position;
-            pos.z -= 0.1f;
+            pos.z += 0.1f;
             blood.transform.position = pos;
 
             // 可选：缩放或微调位置
@@ -781,22 +800,25 @@ public class Enemy : MonoBehaviour
 
             // 自动销毁血迹
             Destroy(blood, Random.Range(4f, 5f));
+            #endregion
+
+            if (currentHealth <= 0)
+            {
+                Die();
+
+                return;
+            }
+
+
+            //击倒再站起(和暴击结合)
+            if (Random.Range(0, 2) == 0 && !isDie && currentHealth > 0)
+            {
+                Knockdown();
+            }
         }
 
 
-        if (currentHealth <= 0)
-        {
-            Die();
-
-            return;
-        }
-
-
-        //击倒再站起(和暴击结合)
-        if (Random.Range(0, 2) == 0 && !isDie && currentHealth > 0)
-        {
-            Knockdown();
-        }
+       
 
     }
 
@@ -844,7 +866,7 @@ public class Enemy : MonoBehaviour
 
 
         isDie = true;
-        anim.SetTrigger("Die");
+        anim.Play("Girl_Default_Die");
 
         if (currentHealth >= 0)
         {
@@ -860,7 +882,7 @@ public class Enemy : MonoBehaviour
     public void Die()
     {
         isDie = true;
-        anim.SetTrigger("Die_2");//防止倒下又起来,搞了第二死亡
+        anim.Play("Girl_Default_Die_2");//防止倒下又起来,搞了第二死亡
 
         Invoke("Disappear", 1f);
     }//死亡

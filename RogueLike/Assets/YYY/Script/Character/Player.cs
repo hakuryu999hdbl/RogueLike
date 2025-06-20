@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
         // 随机从 Enum 中选择一个值
         //visionType = (PlayerType)Random.Range(0, System.Enum.GetValues(typeof(PlayerType)).Length);
 
-        visionType = PlayerType.LongRangePlayer;
+        //visionType = PlayerType.LongRangePlayer;
         //visionType = PlayerType.ShortRangePlayer;
 
         AnimSetWeapon();//设置好武器模式
@@ -30,8 +30,13 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-        if (!isDie)
+        if (currentHealth <= 0)
+        {
+            anim.Play("Girl_Default_Die_2");
+            //rbody.simulated = false;//当玩家挂的时候，如果踩着墙，会导致墙跳出来遮挡视线
+            return;
+        }//死亡完全切断所有输入
+        if (!isDie && currentHealth > 0)
         {
             BaseMove();//站走跑攻
 
@@ -57,7 +62,10 @@ public class Player : MonoBehaviour
             state.IsName("Attack_3") ||
             state.IsName("Attack_4") ||
             state.IsName("Shoot_1") ||
-            state.IsName("Girl_Strike_Block"))
+
+            state.IsName("Girl_Strike_Block") ||
+            state.IsName("Girl_Shoot_Block")
+            )
         {
             canMove = false;
         }
@@ -132,7 +140,7 @@ public class Player : MonoBehaviour
             attack.transform.rotation = Quaternion.Euler(0, 0, 180); // 下
             Arrow.transform.rotation = Quaternion.Euler(0, 0, 180);
         }
-        //else { inputX = 0; inputY = 0; } // 静止时也归零
+        else { inputX = 0; inputY = 0; } // 静止时也归零（这个很重要，当手机手柄在各自方向小于0.5的内圈时不会出现错位）
 
         // 保存上一次方向（用于静止状态播放对应Idle动画）
         if (inputX != 0 || inputY != 0)
@@ -205,6 +213,8 @@ public class Player : MonoBehaviour
         ShortRangePlayer,//近战
         LongRangePlayer//远程
     }
+
+    public CharacterSkin characterSkin;
 
     [Header("持械状态")]
 
@@ -421,23 +431,29 @@ public class Player : MonoBehaviour
 
     public void ResetCombo()
     {
-        currentCombo = 0;
-        comboQueued = false;
-        canCombo = false;
-        isAttacking2 = false;
+        if (currentHealth > 0) 
+        {
+            currentCombo = 0;
+            comboQueued = false;
+            canCombo = false;
+            isAttacking2 = false;
+
+
+
+            //这里不知道什么原因，必须分开
+            if (visionType == PlayerType.ShortRangePlayer)
+            {
+                anim.Play("Girl_Strike_Idle");
+            }
+            else
+            {
+                anim.Play("Girl_Shoot_Idle");
+
+            }
+
+        }//生命值大于0才可以resetCombo
+
       
-
-
-        //这里不知道什么原因，必须分开
-        if (visionType == PlayerType.ShortRangePlayer)
-        {
-            anim.Play("Girl_Strike_Idle");
-        }
-        else
-        {
-            anim.Play("Girl_Shoot_Idle");
-
-        }
     }
 
 
@@ -494,6 +510,10 @@ public class Player : MonoBehaviour
             if (closestEnemy != null)
             {
                 Vector3 dir = (closestEnemy.transform.position - bulletSpawnPoint.position).normalized;
+
+                // 🟢 更新角色面向方向（动画参数）
+                UpdateFacingDirection(dir);
+
                 FireBullet(dir);
                 return;
             }
@@ -527,11 +547,46 @@ public class Player : MonoBehaviour
         return closest;
     }
 
+    private void UpdateFacingDirection(Vector3 dir)
+    {
+        // 判断主方向（上下左右）
+        float absX = Mathf.Abs(dir.x);
+        float absY = Mathf.Abs(dir.y);
+
+        StopX = 0;
+        StopY = 0;
+
+        if (absX > absY)
+        {
+            StopX = dir.x > 0 ? 1 : -1;
+        }
+        else
+        {
+            StopY = dir.y > 0 ? 1 : -1;
+        }
+
+        // 传给 Spine 动画机
+        anim.SetFloat("InputX", StopX);
+        anim.SetFloat("InputY", StopY);
+    }//射击近距离敌人的时候朝向
+
     private void FireBullet(Vector3 direction)
     {
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+
+        // 计算当前暴击率
+        float critRate = (float)currentCritical / (float)maxCritical;
+
+        // 只有在暴击率大于等于 60% 时，才可能暴击
+        if (critRate >= 0.6f)
+        {
+            bullet.GetComponent<Shooting>().isCritial = true;
+        }
+
+        bullet.GetComponent<Shooting>().chargeTime = attackPressTime; // 把蓄力时间传过去（蓄力那段时间也能成攻击力 能加上去）
+
         bullet.GetComponent<Shooting>().SetDirection(direction, Shooting.BulletOwnerType.Friend); // 玩家属于Friend阵营
-    }
+    }//射击子弹
 
 
 
@@ -545,6 +600,8 @@ public class Player : MonoBehaviour
     }
 
     #endregion
+
+
 
     /// <summary>
     /// 闪避系统
@@ -766,6 +823,8 @@ public class Player : MonoBehaviour
 
     #endregion
 
+
+
     /// <summary>
     /// 多端输入
     /// </summary>
@@ -803,29 +862,57 @@ public class Player : MonoBehaviour
     }
     private void OnRunStarted(InputAction.CallbackContext context)
     {
-        isRunning = true;
+        if (!isDie && currentHealth > 0)
+        {
+            isRunning = true;
+        }
+        
     }
     private void OnRunCanceled(InputAction.CallbackContext context)
     {
-        isRunning = false;
+
+        if (!isDie && currentHealth > 0)
+        {
+            isRunning = false;
+        }
+       
     }
 
     private void OnAttackStarted(InputAction.CallbackContext context)
     {
-        Attack_Start();
+
+        if (!isDie && currentHealth > 0)
+        {
+            Attack_Start();
+        }
+        
     }
     private void OnAttackCanceled(InputAction.CallbackContext context)
     {
-        Attack_Cancel();
+        if (!isDie && currentHealth > 0)
+        {
+            Attack_Cancel();
+        }
+      
     }
 
     private void OnDodgeStarted(InputAction.CallbackContext context)
     {
-        Dodge_Start();
+
+        if (!isDie && currentHealth > 0)
+        {
+            Dodge_Start();
+        }
+        
     }
     private void OnDodgeCanceled(InputAction.CallbackContext context)
     {
-        Dodge_Cancel();
+
+        if (!isDie && currentHealth > 0)
+        {
+            Dodge_Cancel();
+        }
+        
     }
 
     [Header("手机端触发")]
@@ -835,34 +922,55 @@ public class Player : MonoBehaviour
     public bool isRunning = false;//持续按下跑步键
     public void ButtonSetRun()
     {
-        isRunning = true;
+        if (!isDie && currentHealth > 0)
+        {
+            isRunning = true;
+        }
+
     }
     public void ButtonSetStop()
     {
-        isRunning = false;
+        if (!isDie && currentHealth > 0)
+        {
+            isRunning = false;
+        }
+
     }
 
     //手机端触发
     public bool isAttacking = false;//持续按下攻击键
     public void ButtonSetAttack()
     {
-        Attack_Start();
+        if (!isDie && currentHealth > 0)
+        {
+            Attack_Start();
+        }
     }
     public void ButtonSetAttackOver()
     {
-        Attack_Cancel();
+        if (!isDie && currentHealth > 0)
+        {
+            Attack_Cancel();
+        }
+
     }
 
     //手机端触发
     public bool isDodging = false;//持续按下闪避键
     public void ButtonSetDodge()
     {
-        Dodge_Start();
+        if (!isDie && currentHealth > 0)
+        {
+            Dodge_Start();
+        }
     }
     public void ButtonSetDodgeOver()
     {
 
-        Dodge_Cancel();
+        if (!isDie && currentHealth > 0)
+        {
+            Dodge_Cancel();
+        }
     }
 
     #endregion
@@ -904,7 +1012,7 @@ public class Player : MonoBehaviour
 
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 0无  1剑击特效  2闪电特效  3冻结
     {
-        if (!isScreaming)
+        if (!isScreaming && currentHealth > 0 && !isDie)//冷却不受击，死亡后不受击，倒地不受击，(所有攻击都无法canMove)攻击中不受击
         {
 
 
@@ -929,9 +1037,16 @@ public class Player : MonoBehaviour
                 
                     if (Random.value < blockChance)
                     {
-                        anim.SetTrigger("Block");
+                        //anim.SetTrigger("Block");
+                        if (visionType == PlayerType.ShortRangePlayer)
+                        {
+                            anim.Play("Girl_Strike_Block");
+                        }
+                        else
+                        {
+                            anim.Play("Girl_Shoot_Block");
+                        }
 
-                
                         // 防御成功扣除体力
                         ChangeStrength(-50);
                 
@@ -1000,6 +1115,13 @@ public class Player : MonoBehaviour
 
 
 
+
+
+
+
+
+            //血
+            #region
             switch (Random.Range(0, 3))
             {
                 case 0:
@@ -1018,8 +1140,6 @@ public class Player : MonoBehaviour
             Vector3 spawnPosition = transform.position + offset;
             GameObject effectPrefabs = Instantiate(BloodEffect, spawnPosition, transform.rotation);
             Destroy(effectPrefabs, 2f);
-
-
 
 
 
@@ -1042,7 +1162,7 @@ public class Player : MonoBehaviour
 
             // 自动销毁血迹
             Destroy(blood, Random.Range(4f, 5f));
-
+            #endregion
 
 
 
@@ -1051,7 +1171,7 @@ public class Player : MonoBehaviour
             {
                 isDie = true;
 
-                anim.SetTrigger("Die_2");//防止倒下又起来,搞了第二死亡
+                anim.Play("Girl_Default_Die_2");
 
                 Critical.SetActive(false);
                 return;
@@ -1061,7 +1181,8 @@ public class Player : MonoBehaviour
             if (Random.Range(0, 2) == 0 && !isDie && currentHealth > 0)
             {
                 isDie = true;
-                anim.SetTrigger("Die");
+
+                anim.Play("Girl_Default_Die");
 
                 //防止最后一下又击倒站起
                 if (currentHealth > 0)
@@ -1087,12 +1208,23 @@ public class Player : MonoBehaviour
 
     void GetUp()
     {
-        isDie = false;
-        anim.SetTrigger("GetUp");
+        if (currentHealth > 0)
+        {
+            anim.SetTrigger("GetUp");
 
-        canMove = true;//站起同时按攻击导致无法移动但是仍旧播放站起动画
+            Invoke("GetUpOver", 0.2f);//完全站起来才能攻击
+        }
+      
     }
 
+
+
+    public void GetUpOver() 
+    {
+
+        isDie = false;
+        canMove = true;//站起同时按攻击导致无法移动但是仍旧播放站起动画
+    }
 
 
 
