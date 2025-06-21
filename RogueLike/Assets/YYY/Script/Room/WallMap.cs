@@ -17,27 +17,46 @@ public class WallMap : MonoBehaviour
     private void OnEnable()
     {
         mapSprite = transform.parent.GetChild(0).gameObject;//获取子物体
-        mapSprite.SetActive(false);
+
+        Invoke("HideMap", 0.2f);
 
 
     }
+    void HideMap() 
+    {
 
+        if (!PlayerInRoom) { mapSprite.SetActive(false); }
+       
+    }
 
     public void ShowMap()
     {
         mapSprite.SetActive(true);
 
     }//玩家进入地图柜子等显示
+
+
+    bool PlayerInRoom = false;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
             ShowMap();
-
+            PlayerInRoom = true;
 
 
             // 告知RoomGenerator玩家进入的房间位置
             Invoke("PlayerInThisRoomToRoomGenerator", 0.1f);
+        }
+
+
+    }//玩家进入显示房间小地图
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {         
+            PlayerInRoom = false;
         }
 
 

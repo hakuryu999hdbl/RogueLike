@@ -49,20 +49,18 @@ public class RoomGenerator : MonoBehaviour
     void Start()
     {
 
-        Invoke("PlayRegionBGM", 0.2f);//让主菜单的音乐先行
-
-
+      
 
 
 
         //随机房间大小
-        //roomNumber = Random.Range(4, 8);
-        roomNumber = 1;
+        roomNumber = Random.Range(4, 8);
+        //roomNumber = 1;
 
         ChoosePlace();
 
         //只有一个房间的时候
-        if (roomNumber == 1) { Instantiate(B, new Vector3(0, 0, 0), Quaternion.identity); }
+        if (roomNumber == 1) { Instantiate(LR, new Vector3(0, 0, 0), Quaternion.identity); }
 
         for (int i = 0; i < roomNumber; i++)
         {
@@ -107,9 +105,10 @@ public class RoomGenerator : MonoBehaviour
 
 
 
+        Invoke("Scan", 0.1f);
 
-        Scan();
 
+        Invoke("PlayRegionBGM", 0.3f);//让主菜单的音乐先行
 
 
 
