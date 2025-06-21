@@ -890,15 +890,27 @@ public class Enemy : MonoBehaviour
 
     [Header("全部自身存在")]
     public GameObject AllOfThis;
+    public WallMap wallmap;
     void Disappear()
     {
         if (!OneTimeRebirth)
         {
             Destroy(AllOfThis);
 
-            RoomGenerator.SetEnemy();
+            //RoomGenerator.SetEnemy();
 
             Time.timeScale = 1;//防止 Critial消失之前次物体已经被毁坏，然后卡住不动了
+
+
+            if (wallmap != null)
+            {
+                Debug.Log("调用 wallmap.CheckEnemyList()");
+                wallmap.CheckEnemyList();
+            }
+            else
+            {
+                Debug.LogWarning("wallmap 是 null，无法调用 CheckEnemyList()");
+            }
 
             OneTimeRebirth = true;
         }

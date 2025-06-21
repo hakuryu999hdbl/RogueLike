@@ -60,7 +60,7 @@ public class RoomGenerator : MonoBehaviour
         ChoosePlace();
 
         //只有一个房间的时候
-        if (roomNumber == 1) { Instantiate(LR, new Vector3(0, 0, 0), Quaternion.identity); }
+        if (roomNumber == 1) { Instantiate(B, new Vector3(0, 0, 0), Quaternion.identity); }
 
         for (int i = 0; i < roomNumber; i++)
         {
