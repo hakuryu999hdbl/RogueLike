@@ -187,18 +187,16 @@ public class Enemy : MonoBehaviour
 
                     if (dist > 1)
                     {
-                        //非巡逻队友跟，随情况下会你走/我也走/你跑/我也跑
-                        if (player.isRunning)
+                        //队友跟随玩家的时候，玩家走，队友走，玩家跑，队友跑/队友目标为敌人的时候只会跑
+                        if (player.isRunning == false&&CurrentTarget==_Player)
                         {
-                            moveSpeed = 2;
-                            aiPath.maxSpeed = RunSpeed;
+                            moveSpeed = 1;
+                            aiPath.maxSpeed = WalkSpeed;
                         }
                         else
                         {
-
-                            moveSpeed = 1;
-                            aiPath.maxSpeed = WalkSpeed;
-
+                            moveSpeed = 2;
+                            aiPath.maxSpeed = RunSpeed;                    
                         }
                     }
                     else
@@ -249,13 +247,37 @@ public class Enemy : MonoBehaviour
 
 
             //一旦target没有了就自动玩家
-            if (CurrentTarget == null)
+            if (CurrentTarget == null&& tag == "Enemy")
             {
                 CurrentTarget = _Player;
-
             }
 
             AntiOverlapping.SetActive(true);//这个玩意会让敌人队友不重叠，但是巡逻的时候会贴在一起，巡逻的时候去掉
+
+
+            if (tag == "Friend")
+            {
+                if (CurrentTarget == null || CurrentTarget.tag == "Friend" || !CurrentTarget.activeInHierarchy)
+                {
+                    GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+                    if (enemies.Length > 0)
+                    {
+                        int index = Random.Range(0, enemies.Length);
+                        CurrentTarget = enemies[index];
+
+                        Debug.Log("队友自行索敌");
+                    }
+                    else
+                    {
+                        CurrentTarget = _Player;
+                    }
+                }
+            }
+
+
+           
+
         }
         else
         {
@@ -312,6 +334,8 @@ public class Enemy : MonoBehaviour
         anim.SetFloat("InputY", StopY);
         anim.SetInteger("Speed", moveSpeed);
     }
+
+
 
 
     #endregion
@@ -552,6 +576,9 @@ public class Enemy : MonoBehaviour
 
         Vector3 dir = (CurrentTarget.transform.position - bulletSpawnPoint.position).normalized;
 
+        // 🟢 更新角色面向方向（动画参数）
+        UpdateFacingDirection(dir);
+
         GameObject bullet = Instantiate(transparentBulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
 
 
@@ -568,7 +595,28 @@ public class Enemy : MonoBehaviour
 
     }
 
+    private void UpdateFacingDirection(Vector3 dir)
+    {
+        // 判断主方向（上下左右）
+        float absX = Mathf.Abs(dir.x);
+        float absY = Mathf.Abs(dir.y);
 
+        StopX = 0;
+        StopY = 0;
+
+        if (absX > absY)
+        {
+            StopX = dir.x > 0 ? 1 : -1;
+        }
+        else
+        {
+            StopY = dir.y > 0 ? 1 : -1;
+        }
+
+        // 传给 Spine 动画机
+        anim.SetFloat("InputX", StopX);
+        anim.SetFloat("InputY", StopY);
+    }//射击近距离敌人的时候朝向
 
 
 
@@ -897,11 +945,11 @@ public class Enemy : MonoBehaviour
         {
             Destroy(AllOfThis);
 
-            //RoomGenerator.SetEnemy();
+           
 
             Time.timeScale = 1;//防止 Critial消失之前次物体已经被毁坏，然后卡住不动了
 
-
+            //RoomGenerator.SetEnemy();
             if (wallmap != null)
             {
                 Debug.Log("调用 wallmap.CheckEnemyList()");
@@ -971,6 +1019,9 @@ public class Enemy : MonoBehaviour
         Arrow.GetComponent<SpriteRenderer>().color = Color.green;
 
         Debug.Log($"{gameObject.name} has switched to Friend.");
+
+        //敌人攻击冷却
+        attackCooldown = 1f;
     }
 
     // 切换为敌人
@@ -1002,6 +1053,9 @@ public class Enemy : MonoBehaviour
 
 
         Debug.Log($"{gameObject.name} has switched to Enemy.");
+
+        //队友攻击冷却
+        attackCooldown = 0.2f;
     }
     #endregion
 

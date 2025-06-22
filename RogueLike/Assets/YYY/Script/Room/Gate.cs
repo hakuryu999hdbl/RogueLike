@@ -12,12 +12,28 @@ public class Gate : MonoBehaviour
     {
 
         if (collision.gameObject.tag == "Player")
-        {
+        {  
+
+            if (wallmap.isClean==0) 
+            {
+                wallmap.LockRoom();
 
 
+                // 找到所有带 Tag "Friend" 的对象
+                GameObject[] friends = GameObject.FindGameObjectsWithTag("Friend");
 
-            wallmap.LockRoom();
+                // 获取玩家位置
+                Vector3 playerPos = collision.transform.position;
+
+                foreach (GameObject friend in friends)
+                {
+                    // 偏移一点防止重叠
+                    Vector3 offset = Random.insideUnitCircle.normalized * 1.5f;
+                    friend.transform.position = playerPos + offset;
+                }
+            }
           
+
         }
 
     }

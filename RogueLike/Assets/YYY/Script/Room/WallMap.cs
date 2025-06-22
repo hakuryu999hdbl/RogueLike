@@ -170,6 +170,9 @@ public class WallMap : MonoBehaviour
             isClean = 2;
             UnLockRoom();
             Debug.Log("房间清理干净");
+
+            //奖励一个队友
+            _RoomGenerator.SetFriend();
         }
 
         // 移除所有 null（已被销毁的敌人）
