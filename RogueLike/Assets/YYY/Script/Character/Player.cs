@@ -1038,6 +1038,7 @@ public class Player : MonoBehaviour
                     if (Random.value < blockChance)
                     {
                         //anim.SetTrigger("Block");
+
                         if (visionType == PlayerType.ShortRangePlayer)
                         {
                             anim.Play("Girl_Strike_Block");

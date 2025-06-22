@@ -140,12 +140,20 @@ public class WallMap : MonoBehaviour
     //敌人列表
     //public List<GameObject> enemyList = new List<GameObject>();
     public int EnemyCount;
+
+    [Header("敌人出生点列表")]
+    public List<Transform> spawnPoints = new List<Transform>();
+
     public void SetEnemy()
     {
         int enemyToSpawn = Random.Range(4,8);
         for (int i = 0; i < enemyToSpawn; i++)
         {
-            GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
+            // 随机选一个出生点
+            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
+
+            // 在该点生成敌人
+            GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, spawnPoint.position, Quaternion.identity);
 
             Enemy enemyScript = NewEnemy.GetComponentInChildren<Enemy>();
             if (enemyScript != null)

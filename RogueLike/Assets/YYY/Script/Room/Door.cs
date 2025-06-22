@@ -14,23 +14,33 @@ public class Door : MonoBehaviour
         if (collision.gameObject.tag == "Player"|| collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Friend")
         {
 
-            anim.SetBool("Open", true);
+            if (!isOpen)
+            {
+                anim.SetBool("Open", true);
+                frameEvents._SE_Gate_Open();
 
+                isOpen = true;
 
-            frameEvents._SE_Gate_Open();
+            }
+
         }
         
     }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-
-        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Friend")
-        {
-
-            anim.SetBool("Open", false);
-
-            frameEvents._SE_Gate_Close();
-        }
-
-    }
+   // private void OnTriggerExit2D(Collider2D collision)
+   // {
+   //
+   //     if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Friend")
+   //     {
+   //         if (isOpen)
+   //         {
+   //             anim.SetBool("Open", false);
+   //             frameEvents._SE_Gate_Close();
+   //
+   //             isOpen = false;
+   //
+   //         }
+   //      
+   //     }
+   //
+   // }
 }

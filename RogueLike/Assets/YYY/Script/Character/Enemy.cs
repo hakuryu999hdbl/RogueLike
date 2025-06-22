@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour
 
 
 
-            //AntiOverlapping.SetActive(true);//站起后无法被穿过
+            AntiOverlapping.SetActive(true);//站起后无法被穿过
             //rbody.simulated = true;
         }
         else
@@ -85,7 +85,7 @@ public class Enemy : MonoBehaviour
 
 
 
-            //AntiOverlapping.SetActive(false);//跪下后被穿过防止堵着敌人
+            AntiOverlapping.SetActive(false);//跪下后被穿过防止堵着敌人
             //rbody.simulated = false ;
         }
 
@@ -257,7 +257,7 @@ public class Enemy : MonoBehaviour
 
             if (tag == "Friend")
             {
-                if (CurrentTarget == null || CurrentTarget.tag == "Friend" || !CurrentTarget.activeInHierarchy)
+                if (CurrentTarget == null || CurrentTarget.tag == "Friend" || !CurrentTarget.activeInHierarchy|| CurrentTarget == _Player)
                 {
                     GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
@@ -466,8 +466,10 @@ public class Enemy : MonoBehaviour
                 }
                 else
                 {
-
-                    anim.Play("shoot_1", 0, 0);
+                    //队友使用玩家的攻击动画
+                    if (tag == "Friend"){ anim.Play("Shoot_1", 0, 0); }
+                    else{ anim.Play("shoot_1", 0, 0); }
+                    
                 }
 
 
@@ -508,14 +510,30 @@ public class Enemy : MonoBehaviour
         InvokeRepeating(nameof(FlashWarning), 0f, 0.1f);
 
 
-        if (Random.Range(0, 2) == 1)
+        //队友使用玩家的攻击动画
+        if (tag == "Friend") 
         {
-            anim.Play("attack_1", 0, 0);
+            if (Random.Range(0, 2) == 1)
+            {
+                anim.Play("Attack_1", 0, 0);
+            }
+            else
+            {
+                anim.Play("Attack_2", 0, 0);
+            }
         }
-        else
+        else 
         {
-            anim.Play("attack_2", 0, 0);
+            if (Random.Range(0, 2) == 1)
+            {
+                anim.Play("attack_1", 0, 0);
+            }
+            else
+            {
+                anim.Play("attack_2", 0, 0);
+            }
         }
+       
 
 
 
@@ -532,11 +550,16 @@ public class Enemy : MonoBehaviour
         if (tag == "Friend")
         {
             AttackRangeImage.color = Color.green;
+
+
         }
         else
         {
             AttackRangeImage.color = Color.red;
         }
+
+
+
 
         ReSetAttack();
     }
@@ -732,48 +755,20 @@ public class Enemy : MonoBehaviour
                 isPatrol = false;//受伤后立刻进入战斗
 
 
-                if (Random.Range(0, 3) == 0 && !isDie && currentHealth > 0 && amount != -currentHealth)
+                if (!isDie && currentHealth > 0 && amount != -currentHealth)
                 {
-
-                    if (visionType == EnemyType.ShortRangeEnemy)
+                    //队友比敌人更加容易触发防御
+                    if (tag == "Friend"&& Random.Range(0, 2) == 0)
                     {
-                        anim.Play("Girl_Strike_Block");
-                    }
-                    else 
-                    {
-                        anim.Play("Girl_Shoot_Block");
+                        Block();
+                        return;
                     }
 
-
-                    //anim.SetTrigger("Block");
-
-
-
-
-                
-                    switch (Random.Range(0, 3))
+                    if (tag == "Enemy" && Random.Range(0, 5) == 0)
                     {
-                        case 0:
-                            frameEvents._Attack_sword_clash2();
-                            break;
-                        case 1:
-                            frameEvents._Attack_sword_clash3();
-                            break;
-                        case 2:
-                            frameEvents._Attack_sword_clash4();
-                            break;
+                        Block();
+                        return;
                     }
-                
-                    //显示伤害
-                    HudText.HUD(0);//0会显示Miss
-                
-                    //火花特效
-                    Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
-                    Vector3 spawnPosition_2 = transform.position + offset_2;
-                    GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
-                    Destroy(effectPrefabs_2, 2f);
-                
-                    return;
                 }
 
             }
@@ -886,7 +881,46 @@ public class Enemy : MonoBehaviour
     }//起身
 
 
+    void Block() 
+    {
+        if (visionType == EnemyType.ShortRangeEnemy)
+        {
+            anim.Play("Girl_Strike_Block");
+        }
+        else
+        {
+            anim.Play("Girl_Shoot_Block");
+        }
 
+
+        //anim.SetTrigger("Block");
+
+
+
+
+
+        switch (Random.Range(0, 3))
+        {
+            case 0:
+                frameEvents._Attack_sword_clash2();
+                break;
+            case 1:
+                frameEvents._Attack_sword_clash3();
+                break;
+            case 2:
+                frameEvents._Attack_sword_clash4();
+                break;
+        }
+
+        //显示伤害
+        HudText.HUD(0);//0会显示Miss
+
+        //火花特效
+        Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+        Vector3 spawnPosition_2 = transform.position + offset_2;
+        GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
+        Destroy(effectPrefabs_2, 2f);
+    }//防御
 
 
     [Header("暴击")]

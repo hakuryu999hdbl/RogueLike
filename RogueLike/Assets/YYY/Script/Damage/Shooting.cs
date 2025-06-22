@@ -94,29 +94,6 @@ public class Shooting : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.CompareTag("obstacle"))
-        {
-            if (SpecialBullet != -1)
-            {
-                GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
-                Destroy(EffectPrefabs, 2f);          
-
-            }//只要不是空包弹，就能有效果
-
-
-
-            if (other.gameObject.GetComponent<Plant>() != null)
-            {
-
-                other.gameObject.GetComponent<Plant>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
-
-            }
-
-            Destroy(gameObject);
-        }//打到墙壁上产生火花
-
-
-
 
         // 判断目标是否是敌人阵营
         if (ownerType == BulletOwnerType.Friend && other.CompareTag("Enemy"))
@@ -154,6 +131,28 @@ public class Shooting : MonoBehaviour
 
             }
         }
+
+
+        if (other.CompareTag("obstacle"))
+        {
+            if (SpecialBullet != -1)
+            {
+                GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
+                Destroy(EffectPrefabs, 2f);
+
+            }//只要不是空包弹，就能有效果
+
+
+
+            if (other.gameObject.GetComponent<Plant>() != null)
+            {
+
+                other.gameObject.GetComponent<Plant>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
+            }
+
+            Destroy(gameObject);
+        }//打到墙壁上产生火花
     }
 
 

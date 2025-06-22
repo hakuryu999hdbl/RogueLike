@@ -6,6 +6,7 @@ public class Gate : MonoBehaviour
 {
     public Animator anim;
     public WallMap wallmap;
+    public Transform PlayerPosition;
     [Header("主动触发声音")]
     public FrameEvents frameEvents;
     private void OnTriggerEnter2D(Collider2D collision)
@@ -18,6 +19,8 @@ public class Gate : MonoBehaviour
             {
                 wallmap.LockRoom();
 
+                //把玩家拉到门的中央位置来，防止撞到墙里
+                collision.gameObject.transform.position = PlayerPosition.transform.position;
 
                 // 找到所有带 Tag "Friend" 的对象
                 GameObject[] friends = GameObject.FindGameObjectsWithTag("Friend");
@@ -42,11 +45,11 @@ public class Gate : MonoBehaviour
     public void Open() 
     {
         anim.SetBool("Open", true);
-        frameEvents._SE_Gate_Open();
+        frameEvents._SE_IronDoor_Open();
     }
     public void Close()
     {
         anim.SetBool("Open", false);
-        frameEvents._SE_Gate_Close();
+        frameEvents._SE_IronDoor_Close();
     }
 }
