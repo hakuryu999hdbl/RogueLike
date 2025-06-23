@@ -32,6 +32,19 @@ public class CharacterSkin : MonoBehaviour
         //ShowCurrentHead();
         //ShowCurrentLegs();
 
+
+        if (enemy != null) 
+        {
+            if (enemy.Class == Enemy.EnemyClass.Man)
+            {
+
+                blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("Man/Body/Man_Body_color1"));
+                blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("Man/Head/Man_Head_color1"));
+                blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("Man/Hat/Man_Hat_color3"));//头罩
+            }
+        }
+
+
         blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("YYY/Body/YYY_Body_color1"));
         blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("YYY/Head/YYY_Head_color1"));
         blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("YYY/Legs/YYY_Legs_color1"));
@@ -107,7 +120,7 @@ public class CharacterSkin : MonoBehaviour
                 if (player.comboQueued && player.currentCombo < 4)
                 {
                     player.currentCombo++;
-                    player.anim.Play("Attack_" + player.currentCombo, 0, 0);
+                    player.anim.Play("Girl_Attack_" + player.currentCombo, 0, 0);
                     player.comboQueued = false;
                 }
                 else

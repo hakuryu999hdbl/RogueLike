@@ -31,6 +31,13 @@ public class Enemy : MonoBehaviour
         RunSpeed = Random.Range(3, 5);
         WalkSpeed = Random.Range(1, 3);
 
+        // 随机从 Enum 中选择一个值
+        Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
+
+
+        anim.Play(GetAnimPrefix() + "Default_Idle");
+
+
 
         // 随机从 Enum 中选择一个值
         visionType = (EnemyType)Random.Range(0, System.Enum.GetValues(typeof(EnemyType)).Length);
@@ -152,8 +159,9 @@ public class Enemy : MonoBehaviour
     float RunSpeed = 4f;
     float WalkSpeed = 2f;
 
-
-
+    [Header("队友索敌冷却")]
+    bool MakeSureEnemy = false;
+    float MakeSureEnemyTimer = 0;
 
     private void BaseMove()
     {
@@ -257,20 +265,36 @@ public class Enemy : MonoBehaviour
 
             if (tag == "Friend")
             {
+
+
                 if (CurrentTarget == null || CurrentTarget.tag == "Friend" || !CurrentTarget.activeInHierarchy|| CurrentTarget == _Player)
                 {
                     GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-                    if (enemies.Length > 0)
+                    if (enemies.Length > 0&& !MakeSureEnemy)
                     {
+
                         int index = Random.Range(0, enemies.Length);
                         CurrentTarget = enemies[index];
 
-                        Debug.Log("队友自行索敌");
+                        Debug.Log("队友索敌目标: " + CurrentTarget.name);
+
+                        MakeSureEnemy = true;
                     }
                     else
                     {
                         CurrentTarget = _Player;
+                    }
+                }
+
+
+                if (MakeSureEnemy) 
+                {
+                    MakeSureEnemyTimer += Time.deltaTime;
+
+                    if (MakeSureEnemyTimer >= 2f)
+                    {
+                        MakeSureEnemy = false;
                     }
                 }
             }
@@ -343,7 +367,7 @@ public class Enemy : MonoBehaviour
 
 
     /// <summary>
-    /// 持械状态
+    /// 持械状态/类型敌人
     /// </summary>
     #region
     [Header("类型敌人")]
@@ -353,6 +377,28 @@ public class Enemy : MonoBehaviour
         ShortRangeEnemy,//近战
         LongRangeEnemy//远程
     }
+
+
+    public EnemyClass Class;
+    public enum EnemyClass
+    {
+        Girl,
+        Man
+    }
+    private string GetAnimPrefix()
+    {
+        switch (Class)
+        {
+            case EnemyClass.Girl:
+                return "Girl_";
+            case EnemyClass.Man:
+                return "Man_";
+            // 未来扩展：Tentacle, Demon 等
+            default:
+                return "";
+        }
+    }
+
 
     //public float AttackRange = 1;//敌人接近多少才会开始攻击
 
@@ -415,14 +461,14 @@ public class Enemy : MonoBehaviour
 
     void ReSetAttack()
     {
+
         if (visionType == EnemyType.ShortRangeEnemy)
         {
-            anim.Play("Girl_Strike_Idle");
+            anim.Play(GetAnimPrefix() + "Strike_Idle");
         }
         else
         {
-
-            anim.Play("Girl_Shoot_Idle");
+            anim.Play(GetAnimPrefix() + "Shoot_Idle");
         }
     }
 
@@ -467,8 +513,8 @@ public class Enemy : MonoBehaviour
                 else
                 {
                     //队友使用玩家的攻击动画
-                    if (tag == "Friend"){ anim.Play("Shoot_1", 0, 0); }
-                    else{ anim.Play("shoot_1", 0, 0); }
+                    if (tag == "Friend"){ anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
+                    else{ anim.Play(GetAnimPrefix() + "shoot_1", 0, 0); }
                     
                 }
 
@@ -515,22 +561,22 @@ public class Enemy : MonoBehaviour
         {
             if (Random.Range(0, 2) == 1)
             {
-                anim.Play("Attack_1", 0, 0);
+                anim.Play(GetAnimPrefix() + "Attack_1", 0, 0);
             }
             else
             {
-                anim.Play("Attack_2", 0, 0);
+                anim.Play(GetAnimPrefix() + "Attack_2", 0, 0);
             }
         }
         else 
         {
             if (Random.Range(0, 2) == 1)
             {
-                anim.Play("attack_1", 0, 0);
+                anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
             }
             else
             {
-                anim.Play("attack_2", 0, 0);
+                anim.Play(GetAnimPrefix() + "attack_2", 0, 0);
             }
         }
        
@@ -885,11 +931,11 @@ public class Enemy : MonoBehaviour
     {
         if (visionType == EnemyType.ShortRangeEnemy)
         {
-            anim.Play("Girl_Strike_Block");
+            anim.Play(GetAnimPrefix() + "Strike_Block");
         }
         else
         {
-            anim.Play("Girl_Shoot_Block");
+            anim.Play(GetAnimPrefix() + "Shoot_Block");
         }
 
 
@@ -948,7 +994,7 @@ public class Enemy : MonoBehaviour
 
 
         isDie = true;
-        anim.Play("Girl_Default_Die");
+        anim.Play(GetAnimPrefix() + "Default_Die");
 
         if (currentHealth >= 0)
         {
@@ -964,7 +1010,7 @@ public class Enemy : MonoBehaviour
     public void Die()
     {
         isDie = true;
-        anim.Play("Girl_Default_Die_2");//防止倒下又起来,搞了第二死亡
+        anim.Play(GetAnimPrefix() + "Default_Die_2");//防止倒下又起来,搞了第二死亡
 
         Invoke("Disappear", 1f);
     }//死亡
@@ -991,7 +1037,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("wallmap 是 null，无法调用 CheckEnemyList()");
+                //Debug.LogWarning("wallmap 是 null，无法调用 CheckEnemyList()");
             }
 
             OneTimeRebirth = true;

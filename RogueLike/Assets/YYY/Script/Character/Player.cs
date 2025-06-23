@@ -25,6 +25,9 @@ public class Player : MonoBehaviour
         //visionType = PlayerType.ShortRangePlayer;
 
         AnimSetWeapon();//设置好武器模式
+
+
+        anim.Play("Girl_Default_Idle");
     }
 
 
@@ -203,7 +206,7 @@ public class Player : MonoBehaviour
 
 
     /// <summary>
-    /// 持械状态
+    /// 持械状态/类型玩家
     /// </summary>
     #region
     [Header("类型玩家")]
@@ -402,7 +405,7 @@ public class Player : MonoBehaviour
             {
                 if (CanShoot)
                 {
-                    anim.Play("Shoot_1", 0, 0);
+                    anim.Play("Girl_Shoot_1", 0, 0);
 
                     CanShoot = false;
                     Invoke("SetCanShoot", 0.3f);//似乎这是目前唯一
@@ -424,7 +427,7 @@ public class Player : MonoBehaviour
     {
         currentCombo = 1;
         isAttacking2 = true;
-        anim.Play("Attack_1", 0, 0);
+        anim.Play("Girl_Attack_1", 0, 0);
 
 
     }
