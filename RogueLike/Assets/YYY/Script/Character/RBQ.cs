@@ -1,0 +1,233 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RBQ : MonoBehaviour
+{
+    [Header("主动触发声音")]
+    public FrameEvents frameEvents;
+
+    [Header("寻找RoomGenerator")]
+    RoomGenerator RoomGenerator;//寻找RoomGenerator
+
+    [Header("基础数值")]
+    public Animator anim;//接入Spine动画机
+    private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle" };
+    private string[] punishAnims = { "RBQ_Punish_Rape", "RBQ_Punish_Hang" };
+
+    public int RBQState = 0;//0单人拘束 1双人拷问中
+
+    private float inputX, inputY;
+
+    void Start()
+    {
+        //寻找RoomGenerator
+        RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
+
+
+        RBQState = Random.Range(1, 2);
+
+        // 随机动画
+        if (RBQState == 1)
+        {
+            string animName = punishAnims[Random.Range(0, punishAnims.Length)];
+            anim.Play(animName);
+        }
+        else
+        {
+            int rand = Random.Range(0, tortureAnimations.Length);
+            anim.Play(tortureAnimations[rand]);
+        }
+
+
+
+        // 根据方向旋转（可选，或控制朝向动画片段）
+        ApplyFacingRotation();
+
+
+        //随机皮肤
+        SetRandomSkin();
+    }
+
+    void ApplyFacingRotation()
+    {
+        switch (Random.Range(1,5))
+        {
+            case 1:
+                inputX = 1; inputY = 0;
+                break;
+            case 2:
+                inputX = -1; inputY = 0;
+                break;
+            case 3:
+                inputX = 0; inputY = 1;
+                break;
+            case 4:
+                inputX = 0; inputY = -1;
+                break;
+        }
+
+        // 动画传入方向
+        anim.SetFloat("InputX", inputX);
+        anim.SetFloat("InputY", inputY);
+    }
+
+    [Header("产生敌人/友军")]
+    public GameObject Enemy;
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (other.CompareTag("Player"))
+        {
+            if (RBQState==1)
+            {
+                //出现敌人,停止拷问，冲向玩家
+                GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
+                Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
+                enemy.CanChangeSkin=false;
+                StartCoroutine(DelayedApplySkin(enemy));
+                enemy.ChangeClass(1);
+
+
+
+                RBQState = 0;
+
+                int rand = Random.Range(0, tortureAnimations.Length);
+                anim.Play(tortureAnimations[rand]);
+            }
+            else
+            {
+                //奖励一个队友
+                GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
+                Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
+                enemy.CanChangeSkin = false;
+                StartCoroutine(DelayedApplySkin(enemy));
+                enemy.ChangeClass(0);
+
+
+                enemy.ConvertToFriend();
+
+               
+                
+
+
+
+
+
+                // 消失自己(如果销毁的太快就容易传不进去)
+                Destroy(gameObject,0.2f);
+            }
+           
+
+          
+        }
+    }
+
+    private IEnumerator DelayedApplySkin(Enemy enemy)
+    {
+        yield return new WaitForSeconds(0.1f); // 延迟 0.1 秒后赋值
+
+        enemy.SaveCurrentSkin(
+            YYY_headIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
+            Man_headIndex, Man_bodyIndex, Man_hatIndex,
+            Girl_headIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
+            weaponIndex
+        );
+    }
+
+    /// <summary>
+    /// 皮肤
+    /// </summary>
+    #region
+    [Header("皮肤")]
+    public CharacterSkin characterSkin;
+
+    public int YYY_headIndex;
+    public int YYY_bodyIndex;
+    public int YYY_legsIndex;
+    public int YYY_hatIndex;
+
+    public int Man_headIndex;
+    public int Man_bodyIndex;
+    public int Man_hatIndex;
+
+    public int Girl_headIndex;
+    public int Girl_bodyIndex;
+    public int Girl_legsIndex;
+    public int Girl_hatIndex;
+
+    public int weaponIndex;
+
+    public void SetRandomSkin()
+    {
+        YYY_headIndex = Random.Range(1, 14);  // 1~13
+        YYY_bodyIndex = Random.Range(1, 14);
+        YYY_legsIndex = Random.Range(1, 14);
+        YYY_hatIndex = Random.Range(1, 14);
+
+        Man_headIndex = Random.Range(1, 7);   // 1~6
+        Man_bodyIndex = Random.Range(1, 7);
+        Man_hatIndex = Random.Range(1, 7);
+
+        Girl_headIndex = Random.Range(1, 14);  // 1~13
+        Girl_bodyIndex = Random.Range(1, 14);
+        Girl_legsIndex = Random.Range(1, 14);
+        Girl_hatIndex = Random.Range(1, 14);
+
+        weaponIndex = Random.Range(1, 5);   // 1~4
+
+        SetSkin();
+    }
+
+
+    public void SaveCurrentSkin
+        (
+           int _YYY_headIndex, int _YYY_bodyIndex, int _YYY_legsIndex, int _YYY_hatIndex,
+           int _Man_headIndex, int _Man_bodyIndex, int _Man_hatIndex,
+           int _Girl_headIndex, int _Girl_bodyIndex, int _Girl_legsIndex, int _Girl_hatIndex,
+           int _weaponIndex
+
+        )
+    {
+        // 保存 YYY 部位
+        YYY_headIndex = _YYY_headIndex;
+        YYY_bodyIndex = _YYY_bodyIndex;
+        YYY_legsIndex = _YYY_legsIndex;
+        YYY_hatIndex = _YYY_hatIndex;
+
+        // 保存 Man 部位
+        Man_headIndex = _Man_headIndex;
+        Man_bodyIndex = _Man_bodyIndex;
+        Man_hatIndex = _Man_hatIndex;
+
+        // 保存 Girl 部位
+        Girl_headIndex = _Girl_headIndex;
+        Girl_bodyIndex = _Girl_bodyIndex;
+        Girl_legsIndex = _Girl_legsIndex;
+        Girl_hatIndex = _Girl_hatIndex;
+
+        // 保存武器
+        weaponIndex = _weaponIndex;
+
+        SetSkin();
+    }
+
+    public void SetSkin()
+    {
+
+
+        characterSkin.ShowCurrentAll
+            (
+            YYY_headIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
+            Man_headIndex, Man_bodyIndex, Man_hatIndex,
+            Girl_headIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
+            weaponIndex
+            );
+
+
+
+    }
+
+    #endregion
+}

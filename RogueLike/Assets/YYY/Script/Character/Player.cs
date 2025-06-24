@@ -28,6 +28,10 @@ public class Player : MonoBehaviour
 
 
         anim.Play("Girl_Default_Idle");
+
+
+        //随机皮肤
+        SetRandomSkin();
     }
 
 
@@ -217,7 +221,7 @@ public class Player : MonoBehaviour
         LongRangePlayer//远程
     }
 
-    public CharacterSkin characterSkin;
+    
 
     [Header("持械状态")]
 
@@ -287,6 +291,102 @@ public class Player : MonoBehaviour
         }
     }//近远切换
 
+
+
+    #endregion
+
+    /// <summary>
+    /// 皮肤
+    /// </summary>
+    #region
+    [Header("皮肤")]
+    public CharacterSkin characterSkin;
+
+    public int YYY_headIndex;
+    public int YYY_bodyIndex;
+    public int YYY_legsIndex;
+    public int YYY_hatIndex;
+
+    public int Man_headIndex;
+    public int Man_bodyIndex;
+    public int Man_hatIndex;
+
+    public int Girl_headIndex;
+    public int Girl_bodyIndex;
+    public int Girl_legsIndex;
+    public int Girl_hatIndex;
+
+    public int weaponIndex;
+
+    public void SetRandomSkin()
+    {
+        YYY_headIndex = Random.Range(1, 14);  // 1~13
+        YYY_bodyIndex = Random.Range(1, 14);
+        YYY_legsIndex = Random.Range(1, 14);
+        YYY_hatIndex = Random.Range(1, 14);
+
+        Man_headIndex = Random.Range(1, 7);   // 1~6
+        Man_bodyIndex = Random.Range(1, 7);
+        Man_hatIndex = Random.Range(1, 7);
+
+        Girl_headIndex = Random.Range(1, 14);  // 1~13
+        Girl_bodyIndex = Random.Range(1, 14);
+        Girl_legsIndex = Random.Range(1, 14);
+        Girl_hatIndex = Random.Range(1, 14);
+
+        weaponIndex = Random.Range(1, 5);   // 1~4
+
+        SetSkin();
+    }
+
+
+    public void SaveCurrentSkin
+        (
+           int _YYY_headIndex, int _YYY_bodyIndex, int _YYY_legsIndex, int _YYY_hatIndex,
+           int _Man_headIndex, int _Man_bodyIndex, int _Man_hatIndex,
+           int _Girl_headIndex, int _Girl_bodyIndex, int _Girl_legsIndex, int _Girl_hatIndex,
+           int _weaponIndex
+
+        )
+    {
+        // 保存 YYY 部位
+        YYY_headIndex = _YYY_headIndex;
+        YYY_bodyIndex = _YYY_bodyIndex;
+        YYY_legsIndex = _YYY_legsIndex;
+        YYY_hatIndex = _YYY_hatIndex;
+
+        // 保存 Man 部位
+        Man_headIndex = _Man_headIndex;
+        Man_bodyIndex = _Man_bodyIndex;
+        Man_hatIndex = _Man_hatIndex;
+
+        // 保存 Girl 部位
+        Girl_headIndex = _Girl_headIndex;
+        Girl_bodyIndex = _Girl_bodyIndex;
+        Girl_legsIndex = _Girl_legsIndex;
+        Girl_hatIndex = _Girl_hatIndex;
+
+        // 保存武器
+        weaponIndex = _weaponIndex;
+
+        SetSkin();
+    }
+
+    public void SetSkin()
+    {
+
+
+        characterSkin.ShowCurrentAll
+            (
+            YYY_headIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
+            Man_headIndex, Man_bodyIndex, Man_hatIndex,
+            Girl_headIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
+            weaponIndex
+            );
+
+
+
+    }
 
 
     #endregion

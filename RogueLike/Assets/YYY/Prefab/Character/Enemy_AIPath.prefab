@@ -846,6 +846,9 @@ MonoBehaviour:
   aiPath: {fileID: 8554004954767888508}
   Arrow: {fileID: 172935440295651577}
   visionType: 1
+  Class: 0
+  characterSkin: {fileID: 3644815325698282983}
+  currentSkin: []
   attack: {fileID: 760764894458314857}
   attack_Collider: {fileID: 7492053745455533681}
   attack_Range: {fileID: 1220442738186765911}
@@ -1741,8 +1744,7 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: f4ee64981635fd842b441d28cd5e859c, type: 2}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1844,6 +1846,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   enemy: {fileID: 2231485002929699995}
+  rbq: {fileID: 0}
 --- !u!114 &3861130107560741678
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -16,46 +16,45 @@ public class CharacterSkin : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         //换皮肤
         skeletonAnimation = GetComponent<SkeletonMecanim>();
 
         //初始皮肤
-        ShowCurrentAll();
+        //ShowCurrentAll();
 
     }
-    public void ShowCurrentAll()
+
+
+    public void ShowCurrentAll
+        (
+           int _YYY_headIndex,int _YYY_bodyIndex,int _YYY_legsIndex,int _YYY_hatIndex,
+           int _Man_headIndex, int _Man_bodyIndex, int _Man_hatIndex,
+           int _Girl_headIndex, int _Girl_bodyIndex, int _Girl_legsIndex, int _Girl_hatIndex,
+           int _weaponIndex
+        )
     {
-        //初始设置为混合皮肤
-        //ShowCurrentBody();
-        //ShowCurrentHead();
-        //ShowCurrentLegs();
+        
+        if (_YYY_headIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Head/YYY_Head_color{_YYY_headIndex}")); }
+        if (_YYY_bodyIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Body/YYY_Body_color{_YYY_bodyIndex}")); }
+        if (_YYY_legsIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Legs/YYY_Legs_color{_YYY_legsIndex}")); }
+        if (_YYY_hatIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Hat/YYY_Hat_color{_YYY_hatIndex}")); }
+
+        if (_Man_headIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Man/Head/Man_Head_color{_Man_headIndex}")); }
+        if (_Man_bodyIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Man/Body/Man_Body_color{_Man_bodyIndex}")); }
+        if (_Man_hatIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Man/Hat/Man_Hat_color{_Man_hatIndex}")); }
 
 
-        if (enemy != null) 
-        {
-            if (enemy.Class == Enemy.EnemyClass.Man)
-            {
+        if (_Girl_headIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Girl/Head/Girl_Head_color{_Girl_headIndex}")); }
+        if (_Girl_bodyIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Girl/Body/Girl_Body_color{_Girl_bodyIndex}")); }
+        if (_Girl_legsIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Girl/Legs/Girl_Legs_color{_Girl_legsIndex}")); }
+        if (_Girl_hatIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Girl/Hat/Girl_Hat_color{_Girl_hatIndex}")); }
 
-                blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("Man/Body/Man_Body_color1"));
-                blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("Man/Head/Man_Head_color1"));
-                blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("Man/Hat/Man_Hat_color3"));//头罩
-            }
-        }
-
-
-        blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("YYY/Body/YYY_Body_color1"));
-        blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("YYY/Head/YYY_Head_color1"));
-        blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("YYY/Legs/YYY_Legs_color1"));
-        blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("YYY/Hat/YYY_Hat_color10"));//叶语嫣发饰
-
-        blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin("Weapon/Weapon_color3"));
+        if (_weaponIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Weapon/Weapon_color{_weaponIndex}")); }
 
         skeletonAnimation.Skeleton.SetSkin(blendSkin);
         skeletonAnimation.Skeleton.SetSlotsToSetupPose();
-
-        //Debug.Log("设置皮肤");
     }
 
     #endregion
@@ -68,6 +67,7 @@ public class CharacterSkin : MonoBehaviour
     [Header("帧事件触发")]
     public Player player;
     public Enemy enemy;
+    public RBQ rbq;
     public void AttackWarn()
     {
         if (player != null)
@@ -88,14 +88,14 @@ public class CharacterSkin : MonoBehaviour
     } //攻击开始无法移动
 
 
-    public void AttackShoot() 
+    public void AttackShoot()
     {
         if (player != null)
         {
 
             player.ShootBullet();
 
-           
+
         }
         if (enemy != null)
         {
@@ -112,7 +112,7 @@ public class CharacterSkin : MonoBehaviour
         if (player != null)
         {
 
-            if (player.visionType == Player.PlayerType.ShortRangePlayer) 
+            if (player.visionType == Player.PlayerType.ShortRangePlayer)
             {
                 player.canCombo = false;
 
@@ -136,7 +136,7 @@ public class CharacterSkin : MonoBehaviour
             }
 
 
-           
+
 
             // 攻击完毕扣除暴击值
             player.ChangeCritical(-100);

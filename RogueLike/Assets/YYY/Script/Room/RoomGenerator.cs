@@ -355,6 +355,12 @@ public class RoomGenerator : MonoBehaviour
 
         switch (WhichRoom) 
         {
+
+            case -2:
+
+                //拉到玩家当前一模一样的位置
+                MoveTarget.transform.position = _Player.transform.position;
+                break;
             case -1:
 
                 //拉到玩家当前位置
@@ -484,7 +490,7 @@ public class RoomGenerator : MonoBehaviour
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
         enemyList.Add(NewEnemy);
 
-        ChangeTargetPlace(NewEnemy,0);
+        ChangeTargetPlace(NewEnemy,-2);
     }
     public void SetFriend()
     {
@@ -498,7 +504,7 @@ public class RoomGenerator : MonoBehaviour
         Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
         enemy.ConvertToFriend();
 
-        ChangeTargetPlace(NewEnemy, -1);
+        ChangeTargetPlace(NewEnemy, -2);
     }
 
     #endregion

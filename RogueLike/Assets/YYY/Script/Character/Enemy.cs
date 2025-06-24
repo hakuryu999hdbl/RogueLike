@@ -31,11 +31,7 @@ public class Enemy : MonoBehaviour
         RunSpeed = Random.Range(3, 5);
         WalkSpeed = Random.Range(1, 3);
 
-        // 随机从 Enum 中选择一个值
-        Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
 
-
-        anim.Play(GetAnimPrefix() + "Default_Idle");
 
 
 
@@ -60,6 +56,18 @@ public class Enemy : MonoBehaviour
             //AttackRange = 0.9f;
 
         }
+
+
+
+        //随机皮肤
+        if (CanChangeSkin)
+        {
+            SetRandomSkin();
+            // 随机从 Enum 中选择一个值
+            Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
+        }
+
+        anim.Play(GetAnimPrefix() + "Default_Idle");
 
     }
 
@@ -196,7 +204,7 @@ public class Enemy : MonoBehaviour
                     if (dist > 1)
                     {
                         //队友跟随玩家的时候，玩家走，队友走，玩家跑，队友跑/队友目标为敌人的时候只会跑
-                        if (player.isRunning == false&&CurrentTarget==_Player)
+                        if (player.isRunning == false && CurrentTarget == _Player)
                         {
                             moveSpeed = 1;
                             aiPath.maxSpeed = WalkSpeed;
@@ -204,7 +212,7 @@ public class Enemy : MonoBehaviour
                         else
                         {
                             moveSpeed = 2;
-                            aiPath.maxSpeed = RunSpeed;                    
+                            aiPath.maxSpeed = RunSpeed;
                         }
                     }
                     else
@@ -255,7 +263,7 @@ public class Enemy : MonoBehaviour
 
 
             //一旦target没有了就自动玩家
-            if (CurrentTarget == null&& tag == "Enemy")
+            if (CurrentTarget == null && tag == "Enemy")
             {
                 CurrentTarget = _Player;
             }
@@ -267,11 +275,11 @@ public class Enemy : MonoBehaviour
             {
 
 
-                if (CurrentTarget == null || CurrentTarget.tag == "Friend" || !CurrentTarget.activeInHierarchy|| CurrentTarget == _Player)
+                if (CurrentTarget == null || CurrentTarget.tag == "Friend" || !CurrentTarget.activeInHierarchy || CurrentTarget == _Player)
                 {
                     GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-                    if (enemies.Length > 0&& !MakeSureEnemy)
+                    if (enemies.Length > 0 && !MakeSureEnemy)
                     {
 
                         int index = Random.Range(0, enemies.Length);
@@ -288,7 +296,7 @@ public class Enemy : MonoBehaviour
                 }
 
 
-                if (MakeSureEnemy) 
+                if (MakeSureEnemy)
                 {
                     MakeSureEnemyTimer += Time.deltaTime;
 
@@ -300,7 +308,7 @@ public class Enemy : MonoBehaviour
             }
 
 
-           
+
 
         }
         else
@@ -377,7 +385,18 @@ public class Enemy : MonoBehaviour
         ShortRangeEnemy,//近战
         LongRangeEnemy//远程
     }
-
+    public void ChangeType(int t)
+    {
+        switch (t)
+        {
+            case 0:
+                visionType = EnemyType.ShortRangeEnemy;
+                break;
+            case 1:
+                visionType = EnemyType.LongRangeEnemy;
+                break;
+        }
+    }
 
     public EnemyClass Class;
     public enum EnemyClass
@@ -385,6 +404,21 @@ public class Enemy : MonoBehaviour
         Girl,
         Man
     }
+    public void ChangeClass(int c)
+    {
+        switch (c)
+        {
+            case 0:
+                Class = EnemyClass.Girl;
+                break;
+            case 1:
+                Class = EnemyClass.Man;
+                break;
+        }
+    }
+
+
+
     private string GetAnimPrefix()
     {
         switch (Class)
@@ -474,8 +508,102 @@ public class Enemy : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// 皮肤
+    /// </summary>
+    #region
+    [Header("皮肤")]
+    public CharacterSkin characterSkin;
+    public bool CanChangeSkin = true;
+
+    public int YYY_headIndex;
+    public int YYY_bodyIndex;
+    public int YYY_legsIndex;
+    public int YYY_hatIndex;
+
+    public int Man_headIndex;
+    public int Man_bodyIndex;
+    public int Man_hatIndex;
+
+    public int Girl_headIndex;
+    public int Girl_bodyIndex;
+    public int Girl_legsIndex;
+    public int Girl_hatIndex;
+
+    public int weaponIndex;
+
+    public void SetRandomSkin()
+    {
+        YYY_headIndex = Random.Range(1, 14);  // 1~13
+        YYY_bodyIndex = Random.Range(1, 14);
+        YYY_legsIndex = Random.Range(1, 14);
+        YYY_hatIndex = Random.Range(1, 14);
+
+        Man_headIndex = Random.Range(1, 7);   // 1~6
+        Man_bodyIndex = Random.Range(1, 7);
+        Man_hatIndex = Random.Range(1, 7);
+
+        Girl_headIndex = Random.Range(1, 14);  // 1~13
+        Girl_bodyIndex = Random.Range(1, 14);
+        Girl_legsIndex = Random.Range(1, 14);
+        Girl_hatIndex = Random.Range(1, 14);
+
+        weaponIndex = Random.Range(1, 5);   // 1~4
+
+        SetSkin();
+    }
 
 
+    public void SaveCurrentSkin
+        (
+           int _YYY_headIndex, int _YYY_bodyIndex, int _YYY_legsIndex, int _YYY_hatIndex,
+           int _Man_headIndex, int _Man_bodyIndex, int _Man_hatIndex,
+           int _Girl_headIndex, int _Girl_bodyIndex, int _Girl_legsIndex, int _Girl_hatIndex,
+           int _weaponIndex
+
+        )
+    {
+        // 保存 YYY 部位
+        YYY_headIndex = _YYY_headIndex;
+        YYY_bodyIndex = _YYY_bodyIndex;
+        YYY_legsIndex = _YYY_legsIndex;
+        YYY_hatIndex = _YYY_hatIndex;
+
+        // 保存 Man 部位
+        Man_headIndex = _Man_headIndex;
+        Man_bodyIndex = _Man_bodyIndex;
+        Man_hatIndex = _Man_hatIndex;
+
+        // 保存 Girl 部位
+        Girl_headIndex = _Girl_headIndex;
+        Girl_bodyIndex = _Girl_bodyIndex;
+        Girl_legsIndex = _Girl_legsIndex;
+        Girl_hatIndex = _Girl_hatIndex;
+
+        // 保存武器
+        weaponIndex = _weaponIndex;
+
+        SetSkin();
+    }
+
+    public void SetSkin()
+    {
+
+
+        characterSkin.ShowCurrentAll
+            (
+            YYY_headIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
+            Man_headIndex, Man_bodyIndex, Man_hatIndex,
+            Girl_headIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
+            weaponIndex
+            );
+
+
+
+    }
+
+
+    #endregion
 
     /// <summary>
     /// 近战系统
@@ -513,9 +641,9 @@ public class Enemy : MonoBehaviour
                 else
                 {
                     //队友使用玩家的攻击动画
-                    if (tag == "Friend"){ anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
-                    else{ anim.Play(GetAnimPrefix() + "shoot_1", 0, 0); }
-                    
+                    if (tag == "Friend") { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
+                    else { anim.Play(GetAnimPrefix() + "shoot_1", 0, 0); }
+
                 }
 
 
@@ -557,7 +685,7 @@ public class Enemy : MonoBehaviour
 
 
         //队友使用玩家的攻击动画
-        if (tag == "Friend") 
+        if (tag == "Friend")
         {
             if (Random.Range(0, 2) == 1)
             {
@@ -568,7 +696,7 @@ public class Enemy : MonoBehaviour
                 anim.Play(GetAnimPrefix() + "Attack_2", 0, 0);
             }
         }
-        else 
+        else
         {
             if (Random.Range(0, 2) == 1)
             {
@@ -579,7 +707,7 @@ public class Enemy : MonoBehaviour
                 anim.Play(GetAnimPrefix() + "attack_2", 0, 0);
             }
         }
-       
+
 
 
 
@@ -804,7 +932,7 @@ public class Enemy : MonoBehaviour
                 if (!isDie && currentHealth > 0 && amount != -currentHealth)
                 {
                     //队友比敌人更加容易触发防御
-                    if (tag == "Friend"&& Random.Range(0, 2) == 0)
+                    if (tag == "Friend" && Random.Range(0, 2) == 0)
                     {
                         Block();
                         return;
@@ -907,7 +1035,7 @@ public class Enemy : MonoBehaviour
         }
 
 
-       
+
 
     }
 
@@ -927,7 +1055,7 @@ public class Enemy : MonoBehaviour
     }//起身
 
 
-    void Block() 
+    void Block()
     {
         if (visionType == EnemyType.ShortRangeEnemy)
         {
@@ -1025,7 +1153,7 @@ public class Enemy : MonoBehaviour
         {
             Destroy(AllOfThis);
 
-           
+
 
             Time.timeScale = 1;//防止 Critial消失之前次物体已经被毁坏，然后卡住不动了
 
