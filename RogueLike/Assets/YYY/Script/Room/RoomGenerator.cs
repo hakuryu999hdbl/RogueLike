@@ -479,8 +479,9 @@ public class RoomGenerator : MonoBehaviour
     #region
     [Header("设置敌人")]
     public GameObject Enemy;
+    public GameObject RBQ;
     //敌人列表
-    public List<GameObject> enemyList = new List<GameObject>();
+    //public List<GameObject> enemyList = new List<GameObject>();
 
     public void SetEnemy()
     {
@@ -488,7 +489,7 @@ public class RoomGenerator : MonoBehaviour
         //if (!Application.isMobilePlatform) return;
 
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
-        enemyList.Add(NewEnemy);
+        //enemyList.Add(NewEnemy);
 
         ChangeTargetPlace(NewEnemy,-2);
     }
@@ -498,7 +499,7 @@ public class RoomGenerator : MonoBehaviour
 
 
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
-        enemyList.Add(NewEnemy);
+        //enemyList.Add(NewEnemy);
 
 
         Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();

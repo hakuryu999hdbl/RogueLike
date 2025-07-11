@@ -8,7 +8,7 @@ public class RBQ : MonoBehaviour
     public FrameEvents frameEvents;
 
     [Header("寻找RoomGenerator")]
-    RoomGenerator RoomGenerator;//寻找RoomGenerator
+    RoomGenerator _RoomGenerator;//寻找RoomGenerator
 
     [Header("基础数值")]
     public Animator anim;//接入Spine动画机
@@ -22,7 +22,7 @@ public class RBQ : MonoBehaviour
     void Start()
     {
         //寻找RoomGenerator
-        RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
+        _RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
 
 
         RBQState = Random.Range(1, 2);
@@ -72,9 +72,6 @@ public class RBQ : MonoBehaviour
         anim.SetFloat("InputY", inputY);
     }
 
-    [Header("产生敌人/友军")]
-    public GameObject Enemy;
-
     private void OnTriggerEnter2D(Collider2D other)
     {
 
@@ -83,13 +80,13 @@ public class RBQ : MonoBehaviour
             if (RBQState==1)
             {
                 //出现敌人,停止拷问，冲向玩家
-                GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
+                GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
                 Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
                 enemy.CanChangeSkin=false;
                 StartCoroutine(DelayedApplySkin(enemy));
                 enemy.ChangeClass(1);
 
-
+                
 
                 RBQState = 0;
 
@@ -99,7 +96,7 @@ public class RBQ : MonoBehaviour
             else
             {
                 //奖励一个队友
-                GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
+                GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
                 Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
                 enemy.CanChangeSkin = false;
                 StartCoroutine(DelayedApplySkin(enemy));
@@ -161,21 +158,40 @@ public class RBQ : MonoBehaviour
 
     public void SetRandomSkin()
     {
-        YYY_headIndex = Random.Range(1, 14);  // 1~13
-        YYY_bodyIndex = Random.Range(1, 14);
-        YYY_legsIndex = Random.Range(1, 14);
-        YYY_hatIndex = Random.Range(1, 14);
+        //YYY_headIndex = Random.Range(1, 14);  // 1~13
+        //YYY_bodyIndex = Random.Range(1, 14);
+        //YYY_legsIndex = Random.Range(1, 14);
+        //YYY_hatIndex = Random.Range(1, 14);
+        //
+        //Man_headIndex = Random.Range(1, 7);   // 1~6
+        //Man_bodyIndex = Random.Range(1, 7);
+        //Man_hatIndex = Random.Range(1, 7);
+        //
+        //Girl_headIndex = Random.Range(1, 14);  // 1~13
+        //Girl_bodyIndex = Random.Range(1, 14);
+        //Girl_legsIndex = Random.Range(1, 14);
+        //Girl_hatIndex = Random.Range(1, 14);
+        //
+        //weaponIndex = Random.Range(1, 5);   // 1~4
 
-        Man_headIndex = Random.Range(1, 7);   // 1~6
-        Man_bodyIndex = Random.Range(1, 7);
-        Man_hatIndex = Random.Range(1, 7);
+
+
+        YYY_headIndex = Random.Range(1, 14);  // 1~13
+        YYY_bodyIndex = 11;
+        YYY_legsIndex = 11;
+        YYY_hatIndex = 1;
+
+        Man_headIndex = Random.Range(1, 6);
+        Man_bodyIndex = 2;
+        Man_hatIndex = Random.Range(1, 3);
 
         Girl_headIndex = Random.Range(1, 14);  // 1~13
         Girl_bodyIndex = Random.Range(1, 14);
         Girl_legsIndex = Random.Range(1, 14);
         Girl_hatIndex = Random.Range(1, 14);
 
-        weaponIndex = Random.Range(1, 5);   // 1~4
+        weaponIndex = 1;
+
 
         SetSkin();
     }

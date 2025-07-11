@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4082167208850628361}
   - component: {fileID: 5263928147567154303}
   - component: {fileID: 3488138539751155926}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: RBQ
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,7 +52,18 @@ MonoBehaviour:
   RBQState: 0
   Enemy: {fileID: 6987948351437209287, guid: 91df628e27ab1ae488b2f947d3d59f07, type: 3}
   characterSkin: {fileID: 3171481797097775974}
-  currentSkin: []
+  YYY_headIndex: 0
+  YYY_bodyIndex: 0
+  YYY_legsIndex: 0
+  YYY_hatIndex: 0
+  Man_headIndex: 0
+  Man_bodyIndex: 0
+  Man_hatIndex: 0
+  Girl_headIndex: 0
+  Girl_bodyIndex: 0
+  Girl_legsIndex: 0
+  Girl_hatIndex: 0
+  weaponIndex: 0
 --- !u!58 &3488138539751155926
 CircleCollider2D:
   m_ObjectHideFlags: 0

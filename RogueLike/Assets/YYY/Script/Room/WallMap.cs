@@ -114,6 +114,7 @@ public class WallMap : MonoBehaviour
 
             //_RoomGenerator.SetEnemy();
             SetEnemy();
+            SetRBQ();
             isClean = 1;
         }
 
@@ -137,8 +138,6 @@ public class WallMap : MonoBehaviour
     /// </summary>
     #region
     [Header("设置敌人")]
-    //敌人列表
-    //public List<GameObject> enemyList = new List<GameObject>();
     public int EnemyCount;
 
     [Header("敌人出生点列表")]
@@ -146,7 +145,7 @@ public class WallMap : MonoBehaviour
 
     public void SetEnemy()
     {
-        int enemyToSpawn = Random.Range(4,8);
+        int enemyToSpawn = Random.Range(3,6);
         for (int i = 0; i < enemyToSpawn; i++)
         {
             // 随机选一个出生点
@@ -161,12 +160,24 @@ public class WallMap : MonoBehaviour
                 enemyScript.wallmap = this;
                 EnemyCount++; // 每生成一个就记一次
             }
+        } 
+
+
+    }
+
+    public void SetRBQ()
+    {
+        int enemyToSpawn = Random.Range(1, 3);
+        for (int i = 0; i < enemyToSpawn; i++)
+        {
+            // 随机选一个出生点
+            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
+
+            // 在该点生成RBQ
+            Instantiate(_RoomGenerator.RBQ, spawnPoint.position, Quaternion.identity);
+
+           
         }
-
-
-
-        // enemyList.Add(NewEnemy);
-
 
 
     }

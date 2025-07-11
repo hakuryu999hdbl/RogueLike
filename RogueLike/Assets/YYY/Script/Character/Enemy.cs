@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
 
     public RoomGenerator RoomGenerator;//寻找RoomGenerator
 
-    private void Start()
+    public void Start()
     {
         //找玩家
         _Player = GameObject.FindGameObjectWithTag("Player");
@@ -534,21 +534,37 @@ public class Enemy : MonoBehaviour
 
     public void SetRandomSkin()
     {
-        YYY_headIndex = Random.Range(1, 14);  // 1~13
-        YYY_bodyIndex = Random.Range(1, 14);
-        YYY_legsIndex = Random.Range(1, 14);
-        YYY_hatIndex = Random.Range(1, 14);
+        //YYY_headIndex = Random.Range(1, 14);  // 1~13
+        //YYY_bodyIndex = Random.Range(1, 14);
+        //YYY_legsIndex = Random.Range(1, 14);
+        //YYY_hatIndex = Random.Range(1, 14);
+        //
+        //Man_headIndex = Random.Range(1, 7);   // 1~6
+        //Man_bodyIndex = Random.Range(1, 7);
+        //Man_hatIndex = Random.Range(1, 7);
+        //
+        //Girl_headIndex = Random.Range(1, 14);  // 1~13
+        //Girl_bodyIndex = Random.Range(1, 14);
+        //Girl_legsIndex = Random.Range(1, 14);
+        //Girl_hatIndex = Random.Range(1, 14);
+        //
+        //weaponIndex = Random.Range(1, 5);   // 1~4
 
-        Man_headIndex = Random.Range(1, 7);   // 1~6
-        Man_bodyIndex = Random.Range(1, 7);
-        Man_hatIndex = Random.Range(1, 7);
+        YYY_headIndex = Random.Range(1, 14);  // 1~13
+        YYY_bodyIndex = 11;
+        YYY_legsIndex = 11;
+        YYY_hatIndex = 1;
+
+        Man_headIndex = Random.Range(1, 6);
+        Man_bodyIndex = 2;
+        Man_hatIndex = Random.Range(1, 3);
 
         Girl_headIndex = Random.Range(1, 14);  // 1~13
         Girl_bodyIndex = Random.Range(1, 14);
         Girl_legsIndex = Random.Range(1, 14);
         Girl_hatIndex = Random.Range(1, 14);
 
-        weaponIndex = Random.Range(1, 5);   // 1~4
+        weaponIndex = 1;
 
         SetSkin();
     }
