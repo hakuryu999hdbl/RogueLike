@@ -50,7 +50,8 @@ MonoBehaviour:
   frameEvents: {fileID: 3295354428374483733}
   anim: {fileID: 8606172836366455440}
   RBQState: 0
-  Enemy: {fileID: 6987948351437209287, guid: 91df628e27ab1ae488b2f947d3d59f07, type: 3}
+  CurrentRapeType: 0
+  Torture_Rack: {fileID: 1636244720455495653, guid: a83208d1e86c5ff4f937c79079612814, type: 3}
   characterSkin: {fileID: 3171481797097775974}
   YYY_headIndex: 0
   YYY_bodyIndex: 0
@@ -99,7 +100,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.2
+  m_Radius: 2
 --- !u!1 &3335886473824860500
 GameObject:
   m_ObjectHideFlags: 0

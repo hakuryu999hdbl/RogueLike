@@ -1,22 +1,10 @@
 fileFormatVersion: 2
-guid: b243c2906ae913e469473d0950345ab9
+guid: 387b2bc0e08ec114a808779f3ee7c794
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: -8081868714207552363
     second: Back_Body_Clothes_0
-  - first:
-      213: -4804888271138157009
-    second: Back_Body_Clothes_1
-  - first:
-      213: 34805373783362431
-    second: Back_Body_Clothes_2
-  - first:
-      213: 7014922051293590060
-    second: Back_Body_Clothes_3
-  - first:
-      213: -4164256688417132823
-    second: Back_Body_Clothes_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -128,10 +116,10 @@ TextureImporter:
       name: Back_Body_Clothes_0
       rect:
         serializedVersion: 2
-        x: 221
-        y: 1089
-        width: 12
-        height: 10
+        x: 0
+        y: 0
+        width: 561
+        height: 1113
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,90 +129,6 @@ TextureImporter:
       bones: []
       spriteID: 59cd058593f67df80800000000000000
       internalID: -8081868714207552363
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Back_Body_Clothes_1
-      rect:
-        serializedVersion: 2
-        x: 334
-        y: 1089
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f2e8e55239b915db0800000000000000
-      internalID: -4804888271138157009
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Back_Body_Clothes_2
-      rect:
-        serializedVersion: 2
-        x: 202
-        y: 978
-        width: 164
-        height: 52
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f7bc1a49d47ab7000800000000000000
-      internalID: 34805373783362431
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Back_Body_Clothes_3
-      rect:
-        serializedVersion: 2
-        x: 105
-        y: 495
-        width: 350
-        height: 207
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c22b86260720a5160800000000000000
-      internalID: 7014922051293590060
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Back_Body_Clothes_4
-      rect:
-        serializedVersion: 2
-        x: 22
-        y: 78
-        width: 524
-        height: 172
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9ee2a55ea969536c0800000000000000
-      internalID: -4164256688417132823
       vertices: []
       indices: 
       edges: []
@@ -241,10 +145,6 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Back_Body_Clothes_0: -8081868714207552363
-      Back_Body_Clothes_1: -4804888271138157009
-      Back_Body_Clothes_2: 34805373783362431
-      Back_Body_Clothes_3: 7014922051293590060
-      Back_Body_Clothes_4: -4164256688417132823
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

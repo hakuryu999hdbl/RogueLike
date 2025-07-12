@@ -151,8 +151,15 @@ public class WallMap : MonoBehaviour
             // 随机选一个出生点
             Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
 
+            // 添加随机偏移
+            Vector2 randomOffset = new Vector2(
+                 Random.Range(-0.5f, 0.5f),  // X方向偏移（左右）
+                Random.Range(-0.5f, 0.5f)   // Y方向偏移（上下）
+            );
+            Vector3 spawnPosition = spawnPoint.position + (Vector3)randomOffset;
+
             // 在该点生成敌人
-            GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, spawnPoint.position, Quaternion.identity);
+            GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, spawnPosition, Quaternion.identity);
 
             Enemy enemyScript = NewEnemy.GetComponentInChildren<Enemy>();
             if (enemyScript != null)
@@ -170,11 +177,21 @@ public class WallMap : MonoBehaviour
         int enemyToSpawn = Random.Range(1, 3);
         for (int i = 0; i < enemyToSpawn; i++)
         {
+
+          
+
             // 随机选一个出生点
             Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
 
+            // 添加随机偏移
+            Vector2 randomOffset = new Vector2(
+                Random.Range(-0.5f, 0.5f),  // X方向偏移（左右）
+                Random.Range(-0.5f, 0.5f)   // Y方向偏移（上下）
+            );
+            Vector3 spawnPosition = spawnPoint.position + (Vector3)randomOffset;
+
             // 在该点生成RBQ
-            Instantiate(_RoomGenerator.RBQ, spawnPoint.position, Quaternion.identity);
+            Instantiate(_RoomGenerator.RBQ, spawnPosition, Quaternion.identity);
 
            
         }
@@ -191,7 +208,7 @@ public class WallMap : MonoBehaviour
             Debug.Log("房间清理干净");
 
             //奖励一个队友
-            _RoomGenerator.SetFriend();
+           // _RoomGenerator.SetFriend();
         }
 
         // 移除所有 null（已被销毁的敌人）

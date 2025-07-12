@@ -1,19 +1,10 @@
 fileFormatVersion: 2
-guid: 5d53c94683c09fb409debe77529cb52a
+guid: de452a58b49885546877bb3bf3641c03
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: -2288096043419052477
     second: Front_Body_Clothes_0
-  - first:
-      213: 8794890868085086484
-    second: Front_Body_Clothes_1
-  - first:
-      213: 1300599709907523023
-    second: Front_Body_Clothes_2
-  - first:
-      213: -6924821149138155823
-    second: Front_Body_Clothes_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -125,10 +116,10 @@ TextureImporter:
       name: Front_Body_Clothes_0
       rect:
         serializedVersion: 2
-        x: 191
-        y: 1096
-        width: 10
-        height: 9
+        x: 149
+        y: 79
+        width: 182
+        height: 161
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -138,69 +129,6 @@ TextureImporter:
       bones: []
       spriteID: 346d70875cc0f30e0800000000000000
       internalID: -2288096043419052477
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Front_Body_Clothes_1
-      rect:
-        serializedVersion: 2
-        x: 297
-        y: 1096
-        width: 10
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 419d98ea5aabd0a70800000000000000
-      internalID: 8794890868085086484
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Front_Body_Clothes_2
-      rect:
-        serializedVersion: 2
-        x: 72
-        y: 540
-        width: 354
-        height: 500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: fc593089b88ac0210800000000000000
-      internalID: 1300599709907523023
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Front_Body_Clothes_3
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 98
-        width: 502
-        height: 172
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1d60288aad716ef90800000000000000
-      internalID: -6924821149138155823
       vertices: []
       indices: 
       edges: []
@@ -217,9 +145,6 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Front_Body_Clothes_0: -2288096043419052477
-      Front_Body_Clothes_1: 8794890868085086484
-      Front_Body_Clothes_2: 1300599709907523023
-      Front_Body_Clothes_3: -6924821149138155823
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

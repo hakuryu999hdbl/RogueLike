@@ -12,10 +12,11 @@ public class RBQ : MonoBehaviour
 
     [Header("基础数值")]
     public Animator anim;//接入Spine动画机
-    private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle" };
-    private string[] punishAnims = { "RBQ_Punish_Rape", "RBQ_Punish_Hang" };
+    private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle", "RBQ_Torture_CutDown" };
 
-    public int RBQState = 0;//0单人拘束 1双人拷问中
+    public int RBQState = 0;//0单人拘束 1双人拷问中  2尸体
+    public int CurrentRapeType=0;//1吊缚抽打 2后入奸
+    public GameObject Torture_Rack;//刑架
 
     private float inputX, inputY;
 
@@ -25,13 +26,27 @@ public class RBQ : MonoBehaviour
         _RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
 
 
-        RBQState = Random.Range(1, 2);
+        RBQState = Random.Range(1, 3);
 
         // 随机动画
         if (RBQState == 1)
         {
-            string animName = punishAnims[Random.Range(0, punishAnims.Length)];
-            anim.Play(animName);
+            //string animName = punishAnims[Random.Range(0, punishAnims.Length)];
+            //anim.Play(animName);
+
+            CurrentRapeType = Random.Range(1, 3);
+
+            switch (CurrentRapeType) 
+            {
+                case 1:
+                    anim.Play("RBQ_Punish_Hang");
+                    break;
+                case 2:
+                    anim.Play("RBQ_Punish_Rape");
+                    break;
+
+            }
+
         }
         else
         {
@@ -90,10 +105,21 @@ public class RBQ : MonoBehaviour
 
                 RBQState = 0;
 
-                int rand = Random.Range(0, tortureAnimations.Length);
-                anim.Play(tortureAnimations[rand]);
+
+                switch (CurrentRapeType)
+                {
+                    case 1:
+                        anim.Play("RBQ_Punish_Hang_2");
+                        break;
+                    case 2:
+                        anim.Play("RBQ_Punish_Rape_2");
+                        break;
+
+                }
+
+
             }
-            else
+            else if (RBQState == 0)
             {
                 //奖励一个队友
                 GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
@@ -105,10 +131,18 @@ public class RBQ : MonoBehaviour
 
                 enemy.ConvertToFriend();
 
-               
-                
 
 
+
+                //生成刑架
+                switch (CurrentRapeType)
+                {
+                    case 1:
+                        GameObject TortureDevice = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
+                        TortureDevice.GetComponent<Plant>().SetImage(0);
+                        break;
+
+                }
 
 
 
@@ -179,7 +213,7 @@ public class RBQ : MonoBehaviour
         YYY_headIndex = Random.Range(1, 14);  // 1~13
         YYY_bodyIndex = 11;
         YYY_legsIndex = 11;
-        YYY_hatIndex = 1;
+        YYY_hatIndex = Random.Range(1, 3);
 
         Man_headIndex = Random.Range(1, 6);
         Man_bodyIndex = 2;
@@ -190,7 +224,7 @@ public class RBQ : MonoBehaviour
         Girl_legsIndex = Random.Range(1, 14);
         Girl_hatIndex = Random.Range(1, 14);
 
-        weaponIndex = 1;
+        weaponIndex = Random.Range(1, 7);
 
 
         SetSkin();

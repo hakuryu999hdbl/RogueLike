@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 068c35ff3bcbdee489c705314f12419a
+guid: 1da36c94c61b92047b8a2607d7e8f920
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: -1357300750711641131
     second: Back_Body_Clothes_Broken_0
-  - first:
-      213: 6170655629470108543
-    second: Back_Body_Clothes_Broken_1
-  - first:
-      213: 317185554961272846
-    second: Back_Body_Clothes_Broken_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -122,10 +116,10 @@ TextureImporter:
       name: Back_Body_Clothes_Broken_0
       rect:
         serializedVersion: 2
-        x: 201
-        y: 977
-        width: 166
-        height: 51
+        x: 0
+        y: 0
+        width: 561
+        height: 1113
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -135,48 +129,6 @@ TextureImporter:
       bones: []
       spriteID: 5db26749826e92de0800000000000000
       internalID: -1357300750711641131
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Back_Body_Clothes_Broken_1
-      rect:
-        serializedVersion: 2
-        x: 111
-        y: 495
-        width: 335
-        height: 208
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f7b84d9f99292a550800000000000000
-      internalID: 6170655629470108543
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Back_Body_Clothes_Broken_2
-      rect:
-        serializedVersion: 2
-        x: 22
-        y: 78
-        width: 524
-        height: 171
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e001a5be49ed66400800000000000000
-      internalID: 317185554961272846
       vertices: []
       indices: 
       edges: []
@@ -193,8 +145,6 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Back_Body_Clothes_Broken_0: -1357300750711641131
-      Back_Body_Clothes_Broken_1: 6170655629470108543
-      Back_Body_Clothes_Broken_2: 317185554961272846
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

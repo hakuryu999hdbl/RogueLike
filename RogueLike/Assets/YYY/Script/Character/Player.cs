@@ -37,6 +37,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         if (currentHealth <= 0)
         {
             anim.Play("Girl_Default_Die_2");
@@ -83,6 +84,7 @@ public class Player : MonoBehaviour
     }
 
     public bool isDie = false;
+    public bool isRape = false;//防止被多个敌人重复捕获
 
     /// <summary>
     /// 基础数值
@@ -341,7 +343,7 @@ public class Player : MonoBehaviour
         YYY_headIndex = Random.Range(1, 14);  // 1~13
         YYY_bodyIndex = 11;
         YYY_legsIndex = 11;
-        YYY_hatIndex = 1;
+        YYY_hatIndex = Random.Range(1, 3);
 
         Man_headIndex = Random.Range(1, 6); 
         Man_bodyIndex = 2;
@@ -352,7 +354,7 @@ public class Player : MonoBehaviour
         Girl_legsIndex = Random.Range(1, 14);
         Girl_hatIndex = Random.Range(1, 14);
 
-        weaponIndex = 1;
+        weaponIndex = Random.Range(1, 7);
 
 
 

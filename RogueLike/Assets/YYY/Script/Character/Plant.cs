@@ -21,17 +21,24 @@ public class Plant : MonoBehaviour
 
     void Start()
     {
-        if (objectType ==ObjectType.TortureDevice) 
+        if (objectType ==ObjectType.TortureDevice&&!SetOver) 
         {
 
             int randomIndex = Random.Range(0, spriteList.Count);
-            Object.sprite = spriteList[randomIndex];
+            SetImage(randomIndex);
+
         }
 
 
         
     }
+    bool SetOver = false;//只能设定一遍
+    public void SetImage(int ImageIndex) 
+    {
+        Object.sprite = spriteList[ImageIndex];
 
+        SetOver = true;
+    }
 
     //伤害显示
     public GameObject SmokeEffect;

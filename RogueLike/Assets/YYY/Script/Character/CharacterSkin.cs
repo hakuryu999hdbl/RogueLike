@@ -57,6 +57,17 @@ public class CharacterSkin : MonoBehaviour
         skeletonAnimation.Skeleton.SetSlotsToSetupPose();
     }
 
+    public void HideSkeleton()
+    {
+        skeletonAnimation.Skeleton.A = 0f; // 完全透明
+    }
+
+    public void ShowSkeleton()
+    {
+        skeletonAnimation.Skeleton.A = 1f; // 完全不透明
+    }
+
+
     #endregion
 
 
@@ -152,7 +163,7 @@ public class CharacterSkin : MonoBehaviour
 
 
 
-    void Attack()
+    void AttackStrike()
     {
         if (player != null)
         {

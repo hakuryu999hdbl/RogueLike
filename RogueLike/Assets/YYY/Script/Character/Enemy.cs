@@ -146,6 +146,7 @@ public class Enemy : MonoBehaviour
     public bool isPatrol = false;
     public bool isAttack = false;//用来作为处于攻击状态的……标准
     public bool isDie = false;
+    public bool isRape = false;
 
     /// <summary>
     /// 基础数值
@@ -187,79 +188,96 @@ public class Enemy : MonoBehaviour
 
         if (!isPatrol)
         {
-
-            if (!isAttack)
+            if (player.currentHealth <= 0)
             {
                 if (tag != "Friend")
                 {
-                    //目前战斗下全员跑
+                    //只要玩家生命值为0就聚过去
                     moveSpeed = 2;
                     aiPath.maxSpeed = RunSpeed;
-
-
-                }
-                else if (!isPatrol)
-                {
-
-                    if (dist > 1)
-                    {
-                        //队友跟随玩家的时候，玩家走，队友走，玩家跑，队友跑/队友目标为敌人的时候只会跑
-                        if (player.isRunning == false && CurrentTarget == _Player)
-                        {
-                            moveSpeed = 1;
-                            aiPath.maxSpeed = WalkSpeed;
-                        }
-                        else
-                        {
-                            moveSpeed = 2;
-                            aiPath.maxSpeed = RunSpeed;
-                        }
-                    }
-                    else
-                    {
-                        //玩家在队友旁边，队友站着不动
-                        moveSpeed = 0;
-                        aiPath.maxSpeed = 0.01f;
-                    }
-
-
-                }
-
-
-
-                //重置计数
-                attackTimer = 0f;//间隔归零
-                isInAttackDelay = false;
-
-
-
-                attack_Range.SetActive(false);//关闭技能范围    
-                //isAttack = false;
-
-
-            }
-            else
-            {
-                if (tag == "Friend" && CurrentTarget == _Player)
-                {
-                    //队友在追随玩家的情况下必须在一定距离停下
                 }
                 else
                 {
-                    BaseAttack();//攻击
+                    //玩家死亡时队友也全部死亡
+                    ChangeHealth(-maxHealth,0);
                 }
-
-
-
-                moveSpeed = 0;
-                aiPath.maxSpeed = 0.01f;
-
-
-                attack_Range.SetActive(true);//显示技能范围
-                //isAttack = true;
-
+               
             }
+            else
+            {
 
+                if (!isAttack)
+                {
+                    if (tag != "Friend")
+                    {
+                        //目前战斗下全员跑
+                        moveSpeed = 2;
+                        aiPath.maxSpeed = RunSpeed;
+
+
+                    }
+                    else if (!isPatrol)
+                    {
+
+                        if (dist > 1)
+                        {
+                            //队友跟随玩家的时候，玩家走，队友走，玩家跑，队友跑/队友目标为敌人的时候只会跑
+                            if (player.isRunning == false && CurrentTarget == _Player)
+                            {
+                                moveSpeed = 1;
+                                aiPath.maxSpeed = WalkSpeed;
+                            }
+                            else
+                            {
+                                moveSpeed = 2;
+                                aiPath.maxSpeed = RunSpeed;
+                            }
+                        }
+                        else
+                        {
+                            //玩家在队友旁边，队友站着不动
+                            moveSpeed = 0;
+                            aiPath.maxSpeed = 0.01f;
+                        }
+
+
+                    }
+
+
+
+                    //重置计数
+                    attackTimer = 0f;//间隔归零
+                    isInAttackDelay = false;
+
+
+
+                    attack_Range.SetActive(false);//关闭技能范围    
+                                                  //isAttack = false;
+
+
+                }
+                else
+                {
+                    if (tag == "Friend" && CurrentTarget == _Player)
+                    {
+                        //队友在追随玩家的情况下必须在一定距离停下
+                    }
+                    else
+                    {
+                        BaseAttack();//攻击
+                    }
+
+
+
+                    moveSpeed = 0;
+                    aiPath.maxSpeed = 0.01f;
+
+
+                    attack_Range.SetActive(true);//显示技能范围
+                                                 //isAttack = true;
+
+                }
+            }
 
 
             //一旦target没有了就自动玩家
@@ -372,7 +390,44 @@ public class Enemy : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// 捕获与被捕获
+    /// </summary>
+    #region
 
+    private void OnTriggerEnter2D(Collider2D collision)//检测到玩家显示
+    {
+
+        if (collision.gameObject.tag == "Player")
+        {
+            if (collision.gameObject.GetComponent<Player>().currentHealth <= 0)
+            {
+                if (collision.gameObject.GetComponent<Player>().isRape == false)
+                {
+                    isRape = true;
+                    anim.Play("RBQ_Punish_Rape");
+
+                    gameObject.transform.position = collision.gameObject.transform.position;
+
+
+                    collision.gameObject.GetComponent<Player>().characterSkin.HideSkeleton();
+
+
+                    collision.gameObject.GetComponent<Player>().isRape = true;
+                }
+                else
+                {
+                    //isPatrol = true;
+                    //isDie = true;
+                }
+
+            }
+
+        }//敌人捕获玩家
+    }
+
+
+    #endregion
 
     /// <summary>
     /// 持械状态/类型敌人
@@ -553,7 +608,7 @@ public class Enemy : MonoBehaviour
         YYY_headIndex = Random.Range(1, 14);  // 1~13
         YYY_bodyIndex = 11;
         YYY_legsIndex = 11;
-        YYY_hatIndex = 1;
+        YYY_hatIndex = Random.Range(1, 3);
 
         Man_headIndex = Random.Range(1, 6);
         Man_bodyIndex = 2;
@@ -564,7 +619,7 @@ public class Enemy : MonoBehaviour
         Girl_legsIndex = Random.Range(1, 14);
         Girl_hatIndex = Random.Range(1, 14);
 
-        weaponIndex = 1;
+        weaponIndex = Random.Range(1, 7);
 
         SetSkin();
     }
@@ -922,7 +977,7 @@ public class Enemy : MonoBehaviour
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式  0无  1剑击特效  2闪电特效  3冻结
     {
 
-        if (!isScreaming)
+        if (!isScreaming&&!isRape)//冷却中与捕获中不会被伤到
         {
 
 
