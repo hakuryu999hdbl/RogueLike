@@ -212,9 +212,9 @@ public class RBQ : MonoBehaviour
 
 
         YYY_headIndex = Random.Range(1, 14);  // 1~13
-        YYY_bodyIndex = 11;
-        YYY_legsIndex = 11;
-        YYY_hatIndex = Random.Range(1, 3);
+        YYY_bodyIndex = Random.Range(11, 13);
+        YYY_legsIndex = Random.Range(11, 13);
+        YYY_hatIndex = Random.Range(1, 5);
 
         Man_headIndex = Random.Range(1, 6);
         Man_bodyIndex = 2;

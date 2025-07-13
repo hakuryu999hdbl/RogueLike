@@ -123,6 +123,9 @@ public class RoomGenerator : MonoBehaviour
         //Invoke("SetEnemy", 3.5f);
         //
         //Invoke("SetFriend", 6f);
+
+
+        SetFog(2);
     }
 
 
@@ -144,6 +147,56 @@ public class RoomGenerator : MonoBehaviour
 
 
     #endregion
+
+
+    /// <summary>
+    /// 雾气与天气
+    /// </summary>
+    #region
+    [Header("雾气与天气")]
+    public SkyboxSample SkyboxSample;
+    public void SetFog(int color)
+    {
+
+        // 启用线性雾效
+        RenderSettings.fog = true;
+        RenderSettings.fogMode = FogMode.Linear;
+
+        // 设置雾效开始和结束距离
+        RenderSettings.fogStartDistance = 0f;
+        RenderSettings.fogEndDistance = 100f;
+
+
+
+        switch (color)
+        {
+            case 0:
+                RenderSettings.fog = false;
+                SkyboxSample.Night();
+                break;
+            case 1:
+                RenderSettings.fog = false;
+                SkyboxSample.Day();
+                break;
+            case 2:
+                // 设置雾效模式和浓度（电脑版打开）
+                //RenderSettings.fogMode = FogMode.ExponentialSquared; // 使用指数雾
+                //RenderSettings.fogDensity = 0.05f; // 雾的浓度（根据需要调整）
+                //RenderSettings.fogColor = new Color(0.8f, 0.8f, 0.8f); // 稍深的灰色
+
+
+                RenderSettings.fogColor = Color.gray;
+                SkyboxSample.WhiteSky();
+                break;
+            case 3:
+                RenderSettings.fogColor = Color.red;
+                SkyboxSample.RedSky();
+                break;
+        }
+
+    }
+    #endregion
+
 
 
     /// <summary>

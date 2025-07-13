@@ -673,6 +673,7 @@ MonoBehaviour:
   CurrentRegionSituation: 0
   CurrentRegionMission: 0
   AstarPath: {fileID: 249096737}
+  SkyboxSample: {fileID: 1162173333}
   BGM: {fileID: 475258306}
   _Player: {fileID: 65564740}
   offsetRange: 2
@@ -4026,6 +4027,7 @@ GameObject:
   - component: {fileID: 1162173332}
   - component: {fileID: 1162173331}
   - component: {fileID: 1162173330}
+  - component: {fileID: 1162173333}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -4080,7 +4082,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 44855
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4107,6 +4109,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 65564742}
   m_LocalEulerAnglesHint: {x: -80, y: 0, z: 0}
+--- !u!114 &1162173333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162173329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07c18739103fe414a910ce1dce1f656e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mats:
+  - {fileID: 2100000, guid: 624056bfd8a0b6145b678a8fad5cdcab, type: 2}
+  - {fileID: 2100000, guid: 1492d09c65d33a64ab3d131a35ccb94f, type: 2}
+  - {fileID: 2100000, guid: 80b3e6e0940efed43b0788e3cc9715f1, type: 2}
+  - {fileID: 2100000, guid: 8a0b60e2e0043d84f92799f70ed20f36, type: 2}
+  - {fileID: 2100000, guid: ddac3830313ecb54e914a0add2089de9, type: 2}
+  mainCamera: {fileID: 1162173331}
+  DayLight: {fileID: 1197196987}
 --- !u!1 &1164126165
 GameObject:
   m_ObjectHideFlags: 0

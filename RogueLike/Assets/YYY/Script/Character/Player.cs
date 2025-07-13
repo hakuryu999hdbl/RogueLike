@@ -39,6 +39,9 @@ public class Player : MonoBehaviour
         anim.Play(GetAnimPrefix() + "Default_Idle");
 
 
+
+        //Debug.Log("目前的天空" + PlayerPrefs.GetInt("Time"));//0早上 1晚上
+
     }
 
 
@@ -387,9 +390,9 @@ public class Player : MonoBehaviour
 
 
         YYY_headIndex = Random.Range(1, 14);  // 1~13
-        YYY_bodyIndex = 11;
-        YYY_legsIndex = 11;
-        YYY_hatIndex = Random.Range(1, 3);
+        YYY_bodyIndex = Random.Range(11, 13);
+        YYY_legsIndex = Random.Range(11, 13);
+        YYY_hatIndex = Random.Range(1, 5);
 
         Man_headIndex = Random.Range(1, 6); 
         Man_bodyIndex = 2;
