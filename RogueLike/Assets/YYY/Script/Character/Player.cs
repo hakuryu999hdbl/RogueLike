@@ -27,11 +27,18 @@ public class Player : MonoBehaviour
         AnimSetWeapon();//设置好武器模式
 
 
-        anim.Play("Girl_Default_Idle");
-
+        
 
         //随机皮肤
         SetRandomSkin();
+
+        // 随机从 Enum 中选择一个值
+        //Class = (PlayerClass)Random.Range(0, System.Enum.GetValues(typeof(PlayerClass)).Length);
+        Class = PlayerClass.Girl;
+
+        anim.Play(GetAnimPrefix() + "Default_Idle");
+
+
     }
 
 
@@ -65,14 +72,15 @@ public class Player : MonoBehaviour
         //当这些动画在播放的时候玩家不能移动
         AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
 
-        if (state.IsName("Girl_Attack_1") ||
-            state.IsName("Girl_Attack_2") ||
-            state.IsName("Girl_Attack_3") ||
-            state.IsName("Girl_Attack_4") ||
-            state.IsName("Girl_Shoot_1") ||
+        if (
+            state.IsName(GetAnimPrefix() + "Attack_1") ||
+            state.IsName(GetAnimPrefix() + "Attack_2") ||
+            state.IsName(GetAnimPrefix() + "Attack_3") ||
+            state.IsName(GetAnimPrefix() + "Attack_4") ||
+            state.IsName(GetAnimPrefix() + "Shoot_1") ||
 
-            state.IsName("Girl_Strike_Block") ||
-            state.IsName("Girl_Shoot_Block")
+            state.IsName(GetAnimPrefix() + "Strike_Block") ||
+            state.IsName(GetAnimPrefix() + "Shoot_Block")
             )
         {
             canMove = false;
@@ -223,7 +231,45 @@ public class Player : MonoBehaviour
         LongRangePlayer//远程
     }
 
-    
+    public PlayerClass Class;
+    public enum PlayerClass
+    {
+        Girl,
+        Man,
+        Succubus,
+    }
+    public void ChangeClass(int c)
+    {
+        switch (c)
+        {
+            case 0:
+                Class = PlayerClass.Girl;
+                break;
+            case 1:
+                Class = PlayerClass.Man;
+                break;
+            case 2:
+                Class = PlayerClass.Succubus;
+                break;
+        }
+
+        anim.Play(GetAnimPrefix() + "Default_Idle");
+    }
+    public string GetAnimPrefix()
+    {
+        switch (Class)
+        {
+            case PlayerClass.Girl:
+                return "Girl_";
+            case PlayerClass.Man:
+                return "Man_";
+            case PlayerClass.Succubus:
+                return "Succubus_";
+            // 未来扩展：Tentacle, Demon 等
+            default:
+                return "";
+        }
+    }
 
     [Header("持械状态")]
 
@@ -496,6 +542,50 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void _Attack_Cancel() 
+    {
+        if (visionType == Player.PlayerType.ShortRangePlayer)//男性女性女魔族近战都用这个
+        {
+            canCombo = false;
+
+
+            if (comboQueued && currentCombo < 4)
+            {
+                currentCombo++;
+                anim.Play(GetAnimPrefix() + "Attack_" + currentCombo, 0, 0);
+                comboQueued = false;
+            }
+            else
+            {
+                ResetCombo();
+            }
+        }
+        else
+        {
+            //只有魔族需要更改
+            if (Class == PlayerClass.Succubus)
+            {
+                anim.Play(GetAnimPrefix() + "Default_Idle");
+            }
+            else 
+            {
+                anim.Play(GetAnimPrefix() + "Shoot_Idle");
+            }
+
+           
+
+            //player.CanShoot = true;//这里用Invoke替代了
+        }
+
+
+
+
+        // 攻击完毕扣除暴击值
+        ChangeCritical(-100);
+        //player.ChangeCritical(-player.maxCritical); // 或者换成一部分
+    }
+
+
     [Header("攻击")]
     public int currentCombo = 0;
     public bool isAttacking2 = false;
@@ -530,7 +620,7 @@ public class Player : MonoBehaviour
             {
                 if (CanShoot)
                 {
-                    anim.Play("Girl_Shoot_1", 0, 0);
+                    anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0);
 
                     CanShoot = false;
                     Invoke("SetCanShoot", 0.3f);//似乎这是目前唯一
@@ -552,7 +642,7 @@ public class Player : MonoBehaviour
     {
         currentCombo = 1;
         isAttacking2 = true;
-        anim.Play("Girl_Attack_1", 0, 0);
+        anim.Play(GetAnimPrefix() + "Attack_1", 0, 0);
 
 
     }
@@ -567,17 +657,25 @@ public class Player : MonoBehaviour
             isAttacking2 = false;
 
 
-
-            //这里不知道什么原因，必须分开
-            if (visionType == PlayerType.ShortRangePlayer)
+            //只有魔族需要更改
+            if (Class == PlayerClass.Succubus)
             {
-                anim.Play("Girl_Strike_Idle");
+                anim.Play(GetAnimPrefix() + "Default_Idle");
             }
             else
             {
-                anim.Play("Girl_Shoot_Idle");
-
+                //这里不知道什么原因，必须分开
+                if (visionType == PlayerType.ShortRangePlayer)
+                {
+                    anim.Play(GetAnimPrefix() + "Strike_Idle");
+                }
+                else
+                {
+                    anim.Play(GetAnimPrefix() + "Shoot_Idle");
+                }
+               
             }
+           
 
         }//生命值大于0才可以resetCombo
 
@@ -770,6 +868,16 @@ public class Player : MonoBehaviour
                 else
                 {
                     //魔族变身
+
+                    if(Class == PlayerClass.Succubus)
+                    {
+                        ChangeClass(0);
+                    }
+                    else
+                    {
+                        ChangeClass(2);
+                    }
+                    GateEffect.SetActive(true);//传送门特效
 
                     //PlayChargeAttack(); // 蓄力攻击
                 }
@@ -1121,7 +1229,7 @@ public class Player : MonoBehaviour
     public GameObject Strike_Effect;//剑光特效
     public GameObject BloodEffect;//受伤特效
     public GameObject SparkEffect;//火星特效
-
+    public GameObject GateEffect;//传送门特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
 
@@ -1166,16 +1274,20 @@ public class Player : MonoBehaviour
                 
                     if (Random.value < blockChance)
                     {
-                        //anim.SetTrigger("Block");
 
-                        if (visionType == PlayerType.ShortRangePlayer)
+                        if (Class == PlayerClass.Succubus) { anim.Play(GetAnimPrefix() + "Default_Idle");}//只有魔族需要更改
+                        else 
                         {
-                            anim.Play("Girl_Strike_Block");
+                            if (visionType == PlayerType.ShortRangePlayer)
+                            {
+                                anim.Play(GetAnimPrefix() + "Strike_Block");
+                            }
+                            else
+                            {
+                                anim.Play(GetAnimPrefix() + "Shoot_Block");
+                            }
                         }
-                        else
-                        {
-                            anim.Play("Girl_Shoot_Block");
-                        }
+                      
 
                         // 防御成功扣除体力
                         ChangeStrength(-50);
@@ -1301,7 +1413,7 @@ public class Player : MonoBehaviour
             {
                 isDie = true;
 
-                anim.Play("Girl_Default_Die_2");
+                anim.Play(GetAnimPrefix() + "Default_Die_2");
 
                 Critical.SetActive(false);
                 return;
@@ -1312,7 +1424,7 @@ public class Player : MonoBehaviour
             {
                 isDie = true;
 
-                anim.Play("Girl_Default_Die");
+                anim.Play(GetAnimPrefix() + "Default_Die");
 
                 //防止最后一下又击倒站起
                 if (currentHealth > 0)

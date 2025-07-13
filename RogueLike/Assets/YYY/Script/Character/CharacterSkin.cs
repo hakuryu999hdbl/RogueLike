@@ -123,35 +123,7 @@ public class CharacterSkin : MonoBehaviour
         if (player != null)
         {
 
-            if (player.visionType == Player.PlayerType.ShortRangePlayer)
-            {
-                player.canCombo = false;
-
-
-                if (player.comboQueued && player.currentCombo < 4)
-                {
-                    player.currentCombo++;
-                    player.anim.Play("Girl_Attack_" + player.currentCombo, 0, 0);
-                    player.comboQueued = false;
-                }
-                else
-                {
-                    player.ResetCombo();
-                }
-            }
-            else
-            {
-                player.anim.Play("Girl_Shoot_Idle");
-
-                //player.CanShoot = true;//这里用Invoke替代了
-            }
-
-
-
-
-            // 攻击完毕扣除暴击值
-            player.ChangeCritical(-100);
-            //player.ChangeCritical(-player.maxCritical); // 或者换成一部分
+            player._Attack_Cancel();
 
         }
         if (enemy != null)

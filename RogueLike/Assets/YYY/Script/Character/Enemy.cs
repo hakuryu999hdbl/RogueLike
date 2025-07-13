@@ -41,21 +41,21 @@ public class Enemy : MonoBehaviour
         //visionType = EnemyType.LongRangeEnemy;
         //visionType = EnemyType.ShortRangeEnemy;
 
-        //不同敌人攻击间隔不一样
-        if (visionType == EnemyType.ShortRangeEnemy)
-        {
 
-            attackCooldown = 1f;
-            enemyVision.circleCollider2D.radius = 1.5f;
-            //AttackRange = 1.21f;
-        }
-        else
+        //不同敌人攻击范围不一样
+        switch (visionType) 
         {
-            attackCooldown = 1f;
-            enemyVision.circleCollider2D.radius = 4f;
-            //AttackRange = 0.9f;
+            case EnemyType.ShortRangeEnemy:
+                attackCooldown = 1f;
+                enemyVision.circleCollider2D.radius = 1.5f;
+                break;
 
+            case EnemyType.LongRangeEnemy:
+                attackCooldown = 1f;
+                enemyVision.circleCollider2D.radius = 4f;
+                break;
         }
+
 
 
 
@@ -65,10 +65,15 @@ public class Enemy : MonoBehaviour
             SetRandomSkin();
             // 随机从 Enum 中选择一个值
             Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
+
+            Class = EnemyClass.Succubus;
         }
+
 
         anim.Play(GetAnimPrefix() + "Default_Idle");
 
+
+        GateEffect.SetActive(true);//传送门特效
     }
 
     void FixedUpdate()
@@ -438,7 +443,7 @@ public class Enemy : MonoBehaviour
     public enum EnemyType
     {
         ShortRangeEnemy,//近战
-        LongRangeEnemy//远程
+        LongRangeEnemy,//远程
     }
     public void ChangeType(int t)
     {
@@ -457,7 +462,8 @@ public class Enemy : MonoBehaviour
     public enum EnemyClass
     {
         Girl,
-        Man
+        Man,
+        Succubus,
     }
     public void ChangeClass(int c)
     {
@@ -468,6 +474,9 @@ public class Enemy : MonoBehaviour
                 break;
             case 1:
                 Class = EnemyClass.Man;
+                break;
+            case 2:
+                Class = EnemyClass.Succubus;
                 break;
         }
     }
@@ -482,6 +491,8 @@ public class Enemy : MonoBehaviour
                 return "Girl_";
             case EnemyClass.Man:
                 return "Man_";
+            case EnemyClass.Succubus:
+                return "Succubus_";
             // 未来扩展：Tentacle, Demon 等
             default:
                 return "";
@@ -528,14 +539,16 @@ public class Enemy : MonoBehaviour
 
     public void Draw()
     {
-        if (visionType == EnemyType.ShortRangeEnemy)
-        {
-            anim.SetInteger("Weapon", 1);
-        }
-        else
-        {
 
-            anim.SetInteger("Weapon", 2);
+        switch (visionType)
+        {
+            case EnemyType.ShortRangeEnemy:
+                anim.SetInteger("Weapon", 1);
+                break;
+
+            case EnemyType.LongRangeEnemy:
+                anim.SetInteger("Weapon", 2);
+                break;
         }
 
         anim.SetTrigger("DrawWeapon");
@@ -550,15 +563,22 @@ public class Enemy : MonoBehaviour
 
     void ReSetAttack()
     {
+        if (Class == EnemyClass.Succubus){ anim.Play(GetAnimPrefix() + "Default_Idle");return; }//只有魔族需要更改
 
-        if (visionType == EnemyType.ShortRangeEnemy)
+        switch (visionType)
         {
-            anim.Play(GetAnimPrefix() + "Strike_Idle");
+
+            case EnemyType.ShortRangeEnemy:
+                anim.Play(GetAnimPrefix() + "Strike_Idle");
+                break;
+
+          
+            case EnemyType.LongRangeEnemy:
+                anim.Play(GetAnimPrefix() + "Shoot_Idle");
+                break;
+
         }
-        else
-        {
-            anim.Play(GetAnimPrefix() + "Shoot_Idle");
-        }
+
     }
 
     #endregion
@@ -704,20 +724,23 @@ public class Enemy : MonoBehaviour
             if (attackTimer >= attackCooldown)
             {
 
-                //攻击
-                if (visionType == EnemyType.ShortRangeEnemy)
+                switch (visionType)
                 {
-                    Attack_Start(); // 攻击警告开始闪
+
+                    case EnemyType.ShortRangeEnemy:
+
+                        Attack_Start(); // 攻击警告开始闪
+
+                        break;
+
+                    case EnemyType.LongRangeEnemy:
+
+                        //队友使用玩家的攻击动画
+                        if (tag == "Friend") { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
+                        else { anim.Play(GetAnimPrefix() + "shoot_1", 0, 0); }
+
+                        break;
                 }
-                else
-                {
-                    //队友使用玩家的攻击动画
-                    if (tag == "Friend") { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
-                    else { anim.Play(GetAnimPrefix() + "shoot_1", 0, 0); }
-
-                }
-
-
 
 
 
@@ -758,24 +781,41 @@ public class Enemy : MonoBehaviour
         //队友使用玩家的攻击动画
         if (tag == "Friend")
         {
-            if (Random.Range(0, 2) == 1)
+
+            switch (Random.Range(1, 5))
             {
-                anim.Play(GetAnimPrefix() + "Attack_1", 0, 0);
+                case 1:
+                    anim.Play(GetAnimPrefix() + "Attack_1", 0, 0);
+                    break;
+                case 2:
+                    anim.Play(GetAnimPrefix() + "Attack_2", 0, 0);
+                    break;
+                case 3:
+                    anim.Play(GetAnimPrefix() + "Attack_3", 0, 0);
+                    break;
+                case 4:
+                    anim.Play(GetAnimPrefix() + "Attack_4", 0, 0);
+                    break;
             }
-            else
-            {
-                anim.Play(GetAnimPrefix() + "Attack_2", 0, 0);
-            }
+
+
         }
         else
         {
-            if (Random.Range(0, 2) == 1)
+            switch (Random.Range(1, 5))
             {
-                anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
-            }
-            else
-            {
-                anim.Play(GetAnimPrefix() + "attack_2", 0, 0);
+                case 1:
+                    anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
+                    break;
+                case 2:
+                    anim.Play(GetAnimPrefix() + "attack_2", 0, 0);
+                    break;
+                case 3:
+                    anim.Play(GetAnimPrefix() + "attack_3", 0, 0);
+                    break;
+                case 4:
+                    anim.Play(GetAnimPrefix() + "attack_4", 0, 0);
+                    break;
             }
         }
 
@@ -961,6 +1001,7 @@ public class Enemy : MonoBehaviour
     public GameObject Strike_Effect;//剑光特效
     public GameObject BloodEffect;//受伤特效
     public GameObject SparkEffect;//火星特效
+    public GameObject GateEffect;//传送门特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
 
@@ -1128,17 +1169,19 @@ public class Enemy : MonoBehaviour
 
     void Block()
     {
-        if (visionType == EnemyType.ShortRangeEnemy)
+        switch (visionType)
         {
-            anim.Play(GetAnimPrefix() + "Strike_Block");
-        }
-        else
-        {
-            anim.Play(GetAnimPrefix() + "Shoot_Block");
+          
+            case EnemyType.ShortRangeEnemy:
+                anim.Play(GetAnimPrefix() + "Strike_Block");
+                break;
+          
+            case EnemyType.LongRangeEnemy:
+                anim.Play(GetAnimPrefix() + "Shoot_Block");
+                break;
+
         }
 
-
-        //anim.SetTrigger("Block");
 
 
 

@@ -20,6 +20,7 @@ public class RBQ : MonoBehaviour
 
     private float inputX, inputY;
 
+
     void Start()
     {
         //寻找RoomGenerator
