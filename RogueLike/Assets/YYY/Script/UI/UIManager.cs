@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,6 +11,31 @@ public class UIManager : MonoBehaviour
     {
         instance = this;
     }
+    /// <summary>
+    /// 主菜单
+    /// </summary>
+    #region
+    public GameObject Common_All;//移动血条等
+    public GameObject NextButton;//播放结局动画
+    public GameObject Loading;
+    public void Ending_UI() 
+    {
+        Common_All.SetActive(false);
+        NextButton.SetActive(true);
+
+        
+    }
+
+    public void ReLoadScene() 
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Loading.SetActive(true);
+    }
+
+    #endregion
+
+
+
 
     /// <summary>
     /// 血条等各种值

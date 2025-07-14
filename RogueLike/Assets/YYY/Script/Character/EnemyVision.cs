@@ -28,10 +28,10 @@ public class EnemyVision : MonoBehaviour
             if (collision.gameObject.tag == "Player")
             {
 
-                if (visionType == VisionType.PatrolVision)
-                {
-                    if (Enemy.isPatrol) { Enemy.isPatrol = false; }  //敌人从巡逻进入战斗
-                }
+                //if (visionType == VisionType.PatrolVision)
+                //{
+                //    if (Enemy.isPatrol) { Enemy.isPatrol = false; }  //敌人从巡逻进入战斗
+                //}
 
 
                 if (visionType == VisionType.AttackRangeVision) 
@@ -47,10 +47,10 @@ public class EnemyVision : MonoBehaviour
             if (collision.gameObject.tag == "Friend")
             {
 
-                if (visionType == VisionType.PatrolVision)
-                {
-                    if (Enemy.isPatrol) { Enemy.isPatrol = false; }  //敌人从巡逻进入战斗
-                }
+                //if (visionType == VisionType.PatrolVision)
+                //{
+                //    if (Enemy.isPatrol) { Enemy.isPatrol = false; }  //敌人从巡逻进入战斗
+                //}
 
                 if (visionType == VisionType.AttackRangeVision)
                 {
@@ -69,10 +69,10 @@ public class EnemyVision : MonoBehaviour
         {
             if (collision.gameObject.tag == "Enemy")
             {
-                if (visionType == VisionType.PatrolVision)
-                {
-                    if (Enemy.isPatrol) { Enemy.isPatrol = false; }  //队友从巡逻进入战斗
-                }
+                //if (visionType == VisionType.PatrolVision)
+                //{
+                //    if (Enemy.isPatrol) { Enemy.isPatrol = false; }  //队友从巡逻进入战斗
+                //}
 
                 if (visionType == VisionType.AttackRangeVision)
                 {

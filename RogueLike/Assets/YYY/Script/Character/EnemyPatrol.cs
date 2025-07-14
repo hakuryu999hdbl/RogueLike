@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyPatrol : MonoBehaviour
 {
-    public Enemy Enemy;//获取链接RoomGenerator能力
+    public Enemy Enemy;//获取链接RoomGenerator/出生WallMap能力
 
     private void Start()
     {
@@ -26,6 +26,11 @@ public class EnemyPatrol : MonoBehaviour
 
     private void ChangeTargetPlace()
     {
-        Enemy.RoomGenerator.ChangeTargetPlace(this.gameObject,3);
+        //Enemy.RoomGenerator.ChangeTargetPlace(this.gameObject,3);
+
+        if (Enemy != null && Enemy.wallmap != null)
+        {
+            Enemy.wallmap.ChangeTargetPlace(this.gameObject);
+        }
     }
 }

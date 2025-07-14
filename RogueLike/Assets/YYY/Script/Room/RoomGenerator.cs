@@ -125,7 +125,7 @@ public class RoomGenerator : MonoBehaviour
         //Invoke("SetFriend", 6f);
 
 
-        SetFog(2);
+        SetFog(Random.Range(0,4));
     }
 
 

@@ -66,7 +66,7 @@ public class Enemy : MonoBehaviour
             // 随机从 Enum 中选择一个值
             Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
 
-            Class = EnemyClass.Succubus;
+            //Class = EnemyClass.Succubus;
         }
 
 
@@ -80,6 +80,9 @@ public class Enemy : MonoBehaviour
     {
         if (!isDie)
         {
+
+            if (MakeSureIsPatrol) { isPatrol=true; }//碰到已死玩家强制巡逻
+
             BaseMove();//站走跑攻射
 
 
@@ -148,6 +151,7 @@ public class Enemy : MonoBehaviour
 
     }
 
+    public bool MakeSureIsPatrol = false;//这个是强制巡逻(同时监视碰撞检测只执行一次)
     public bool isPatrol = false;
     public bool isAttack = false;//用来作为处于攻击状态的……标准
     public bool isDie = false;
@@ -160,7 +164,7 @@ public class Enemy : MonoBehaviour
     [Header("基础数值")]
     public Animator anim;//接入Spine动画机
     private float inputX, inputY;
-    private float StopX, StopY;
+    private int StopX, StopY;
     int moveSpeed = 0;//改动画器用的
 
     public Rigidbody2D rbody;//声明刚体
@@ -200,6 +204,8 @@ public class Enemy : MonoBehaviour
                     //只要玩家生命值为0就聚过去
                     moveSpeed = 2;
                     aiPath.maxSpeed = RunSpeed;
+
+ 
                 }
                 else
                 {
@@ -380,8 +386,8 @@ public class Enemy : MonoBehaviour
         // 储存方向用于 idle 状态
         if (inputX != 0 || inputY != 0)
         {
-            StopX = inputX;
-            StopY = inputY;
+            StopX = Mathf.RoundToInt(inputX);
+            StopY = Mathf.RoundToInt(inputY);
         }
 
         // 动画传入方向
@@ -400,31 +406,58 @@ public class Enemy : MonoBehaviour
     /// </summary>
     #region
 
-    private void OnTriggerEnter2D(Collider2D collision)//检测到玩家显示
+    private void OnTriggerStay2D(Collider2D collision)//检测到玩家显示
     {
 
         if (collision.gameObject.tag == "Player")
         {
-            if (collision.gameObject.GetComponent<Player>().currentHealth <= 0)
+            if (collision.gameObject.GetComponent<Player>().currentHealth <= 0&&!MakeSureIsPatrol)
             {
                 if (collision.gameObject.GetComponent<Player>().isRape == false)
                 {
                     isRape = true;
                     anim.Play("RBQ_Punish_Rape");
 
-                    gameObject.transform.position = collision.gameObject.transform.position;
+                    gameObject.transform.position = collision.gameObject.transform.position;//敌人拉到玩家位置
 
 
-                    collision.gameObject.GetComponent<Player>().characterSkin.HideSkeleton();
+                    collision.gameObject.GetComponent<Player>().characterSkin.HideSkeleton();//隐藏玩家
 
 
                     collision.gameObject.GetComponent<Player>().isRape = true;
+
+                    rbody.simulated = false;//当捕获折磨玩家挂的时候，不能移动
+
+                    #region
+                    // 只获取 YYY 部位的皮肤
+                    int yHead = player.YYY_headIndex;
+                    int yBody = player.YYY_bodyIndex;
+                    int yLegs = player.YYY_legsIndex;
+                    int yHat = player.YYY_hatIndex;
+
+                    // 读取敌人自己原本的其他部位
+                    int mHead = Man_headIndex;
+                    int mBody = Man_bodyIndex;
+                    int mHat = Man_hatIndex;
+
+                    int gHead = Girl_headIndex;
+                    int gBody = Girl_bodyIndex;
+                    int gLegs = Girl_legsIndex;
+                    int gHat = Girl_hatIndex;
+
+                    int weapon = weaponIndex;
+
+                    // 调用保存方法
+                    SaveCurrentSkin(
+                        yHead, yBody, yLegs, yHat,
+                        mHead, mBody, mHat,
+                        gHead, gBody, gLegs, gHat,
+                        weapon
+                    );
+                    #endregion
                 }
-                else
-                {
-                    //isPatrol = true;
-                    //isDie = true;
-                }
+
+                MakeSureIsPatrol = true;
 
             }
 
@@ -1002,6 +1035,7 @@ public class Enemy : MonoBehaviour
     public GameObject BloodEffect;//受伤特效
     public GameObject SparkEffect;//火星特效
     public GameObject GateEffect;//传送门特效
+    public GameObject ProtectiveCoverEffect;//防护罩特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
 
@@ -1169,6 +1203,13 @@ public class Enemy : MonoBehaviour
 
     void Block()
     {
+
+        if (Class == EnemyClass.Succubus)
+        {
+            anim.Play(GetAnimPrefix() + "Strike_Block");
+            ProtectiveCoverEffect.SetActive(true);
+        }//只有魔族需要更改
+
         switch (visionType)
         {
           
@@ -1258,7 +1299,7 @@ public class Enemy : MonoBehaviour
     }//死亡
 
 
-    [Header("全部自身存在")]
+    [Header("全部自身存在与出生点WallMap")]
     public GameObject AllOfThis;
     public WallMap wallmap;
     void Disappear()

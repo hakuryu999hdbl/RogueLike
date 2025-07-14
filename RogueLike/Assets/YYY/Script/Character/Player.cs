@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
 
         // 随机从 Enum 中选择一个值
         //Class = (PlayerClass)Random.Range(0, System.Enum.GetValues(typeof(PlayerClass)).Length);
-        Class = PlayerClass.Girl;
+        Class = PlayerClass.Succubus;
 
         anim.Play(GetAnimPrefix() + "Default_Idle");
 
@@ -48,12 +48,6 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
 
-        if (currentHealth <= 0)
-        {
-            anim.Play("Girl_Default_Die_2");
-            //rbody.simulated = false;//当玩家挂的时候，如果踩着墙，会导致墙跳出来遮挡视线
-            return;
-        }//死亡完全切断所有输入
         if (!isDie && currentHealth > 0)
         {
             BaseMove();//站走跑攻
@@ -66,7 +60,11 @@ public class Player : MonoBehaviour
         }
         else
         {
+            //死亡完全切断所有输入
             rbody.velocity = Vector2.zero; // 停止所有移动
+            anim.Play("Girl_Default_Die_2");
+            //rbody.simulated = false;//当玩家挂的时候，如果踩着墙，会导致墙跳出来遮挡视线
+            return;
         }
 
         // 每帧更新剑物体的旋转
@@ -87,6 +85,7 @@ public class Player : MonoBehaviour
             )
         {
             canMove = false;
+
         }
         else
         {
@@ -104,7 +103,9 @@ public class Player : MonoBehaviour
     [Header("基础数值")]
     public Animator anim;//接入Spine动画机
     private float inputX, inputY;
-    private float StopX, StopY;
+    private int StopX, StopY;
+
+    public bool FirstMove = false;//玩家还没有按下任何按钮的时候，Update里强制方向
 
     int moveSpeed = 0;//改动画器用的
 
@@ -165,8 +166,8 @@ public class Player : MonoBehaviour
         // 保存上一次方向（用于静止状态播放对应Idle动画）
         if (inputX != 0 || inputY != 0)
         {
-            StopX = inputX;
-            StopY = inputY;
+            StopX = Mathf.RoundToInt(inputX);
+            StopY = Mathf.RoundToInt(inputY);
             if (isRunning)
             {
                 moveSpeed = 2; speed = 4;
@@ -181,7 +182,7 @@ public class Player : MonoBehaviour
 
             }
 
-
+            FirstMove = true;//一旦按下方向，初始强制方向去掉
         }
         else
         {
@@ -201,12 +202,20 @@ public class Player : MonoBehaviour
         if (!canMove)
         {
             input = Vector2.zero;
+            moveSpeed = 0;//攻击期间永远不要出现【跑】动画
 
         }//玩家只有在不攻击的时候才能移动，闪避的时候也无法叠加
 
 
 
         rbody.velocity = input * speed;
+
+
+        if (!FirstMove)
+        {
+            StopX = 0;
+            StopY = -1;
+        }//玩家还没有按下任何按钮的时候，Update里强制方向（正面）
 
         // 传给 Spine 动画机
         anim.SetFloat("InputX", StopX);
@@ -591,7 +600,7 @@ public class Player : MonoBehaviour
 
     [Header("攻击")]
     public int currentCombo = 0;
-    public bool isAttacking2 = false;
+    public bool isAttacking2 = false;//是否处于单个连击近战攻击动画中
     public bool canCombo = false;
     public bool comboQueued = false;
 
@@ -605,7 +614,7 @@ public class Player : MonoBehaviour
 
             //if (isDodge) { strike.isCritial = true; }//闪避中攻击冲刺（这个可以做冲刺攻击动画）
 
-            attackTriggered = true;
+            attackTriggered = true;//这个要不要留着考虑一下
 
 
             if (visionType == PlayerType.ShortRangePlayer)
@@ -864,26 +873,34 @@ public class Player : MonoBehaviour
 
             if (!dodgeTriggered)
             {
-                if (dodgePressTime < 0.2f)
+                if (canMove) 
                 {
-                    PlayDodge(); // 闪避
-                }
-                else
-                {
-                    //魔族变身
-
-                    if(Class == PlayerClass.Succubus)
+                    if (dodgePressTime < 0.2f)
                     {
-                        ChangeClass(0);
+                        PlayDodge(); // 闪避
                     }
                     else
                     {
-                        ChangeClass(2);
-                    }
-                    GateEffect.SetActive(true);//传送门特效
+                        //魔族变身
 
-                    //PlayChargeAttack(); // 蓄力攻击
+                        if (Class == PlayerClass.Succubus)
+                        {
+                            ChangeClass(0);
+                        }
+                        else
+                        {
+                            ChangeClass(2);
+                        }
+                        GateEffect.SetActive(true);//传送门特效
+
+                        //PlayChargeAttack(); // 蓄力攻击
+                    }
                 }
+
+               
+
+
+
 
                 dodgePressTime = 0;
 
@@ -1101,7 +1118,7 @@ public class Player : MonoBehaviour
     }
     private void OnRunStarted(InputAction.CallbackContext context)
     {
-        if (!isDie && currentHealth > 0)
+        if (!isDie && currentHealth > 0 &&canMove)
         {
             isRunning = true;
         }
@@ -1233,6 +1250,7 @@ public class Player : MonoBehaviour
     public GameObject BloodEffect;//受伤特效
     public GameObject SparkEffect;//火星特效
     public GameObject GateEffect;//传送门特效
+    public GameObject ProtectiveCoverEffect;//防护罩特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
 
@@ -1278,7 +1296,11 @@ public class Player : MonoBehaviour
                     if (Random.value < blockChance)
                     {
 
-                        if (Class == PlayerClass.Succubus) { anim.Play(GetAnimPrefix() + "Default_Idle");}//只有魔族需要更改
+                        if (Class == PlayerClass.Succubus) 
+                        { 
+                            anim.Play(GetAnimPrefix() + "Strike_Block");
+                            ProtectiveCoverEffect.SetActive(true);
+                        }//只有魔族需要更改
                         else 
                         {
                             if (visionType == PlayerType.ShortRangePlayer)
@@ -1419,6 +1441,9 @@ public class Player : MonoBehaviour
                 anim.Play(GetAnimPrefix() + "Default_Die_2");
 
                 Critical.SetActive(false);
+
+                UIManager.instance.Ending_UI();
+
                 return;
             }
 

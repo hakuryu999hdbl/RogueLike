@@ -134,10 +134,10 @@ public class WallMap : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// 设置敌人
+    /// 设置敌人与RBQ
     /// </summary>
     #region
-    [Header("设置敌人")]
+    [Header("设置敌人与RBQ")]
     public int EnemyCount;
 
     [Header("敌人出生点列表")]
@@ -164,7 +164,7 @@ public class WallMap : MonoBehaviour
             Enemy enemyScript = NewEnemy.GetComponentInChildren<Enemy>();
             if (enemyScript != null)
             {
-                enemyScript.wallmap = this;
+                enemyScript.wallmap = this;//告诉自己生成的Enemy出生WallMap
                 EnemyCount++; // 每生成一个就记一次
             }
         } 
@@ -174,26 +174,22 @@ public class WallMap : MonoBehaviour
 
     public void SetRBQ()
     {
-        int enemyToSpawn = Random.Range(1, 3);
+        int enemyToSpawn = Mathf.Min(spawnPoints.Count, Random.Range(1, 3)); // 最多不超过可用点数量
+
         for (int i = 0; i < enemyToSpawn; i++)
         {
+            Transform spawnPoint = spawnPoints[i];
 
-          
-
-            // 随机选一个出生点
-            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
-
-            // 添加随机偏移
-            Vector2 randomOffset = new Vector2(
-                Random.Range(-0.5f, 0.5f),  // X方向偏移（左右）
-                Random.Range(-0.5f, 0.5f)   // Y方向偏移（上下）
+            // 可选：添加一点小偏移避免完全贴边（也可以不加）
+            Vector2 offset = new Vector2(
+                Random.Range(-0.2f, 0.2f),
+                Random.Range(-0.2f, 0.2f)
             );
-            Vector3 spawnPosition = spawnPoint.position + (Vector3)randomOffset;
 
-            // 在该点生成RBQ
-            Instantiate(_RoomGenerator.RBQ, spawnPosition, Quaternion.identity);
-
-           
+            Vector3 spawnPosition = spawnPoint.position + (Vector3)offset;
+            //告诉自己生成的RBQ出生WallMap
+            GameObject NewEnemy = Instantiate(_RoomGenerator.RBQ, spawnPosition, Quaternion.identity);
+            NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;
         }
 
 
@@ -226,4 +222,26 @@ public class WallMap : MonoBehaviour
         return obj == null || obj == default;
     }
     #endregion
+
+
+
+    public void ChangeTargetPlace(GameObject MoveTarget)
+    {
+
+
+        if (spawnPoints.Count <= 1) return;
+
+        // 找一个不等于当前位置的随机点
+        Transform currentTarget = MoveTarget.transform;
+        Transform newTarget;
+
+        do
+        {
+            newTarget = spawnPoints[Random.Range(0, spawnPoints.Count)];
+        } while (newTarget == currentTarget && spawnPoints.Count > 1);
+
+        MoveTarget.transform.position = newTarget.position;
+
+
+    }
 }
