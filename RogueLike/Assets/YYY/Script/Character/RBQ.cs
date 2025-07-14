@@ -172,9 +172,9 @@ public class RBQ : MonoBehaviour
         yield return new WaitForSeconds(0.1f); // 延迟 0.1 秒后赋值
 
         enemy.SaveCurrentSkin(
-            YYY_headIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
+            YYY_headIndex, YYY_eyesIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
             Man_headIndex, Man_bodyIndex, Man_hatIndex,
-            Girl_headIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
+            Girl_headIndex, Girl_eyesIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
             weaponIndex
         );
     }
@@ -187,6 +187,7 @@ public class RBQ : MonoBehaviour
     public CharacterSkin characterSkin;
 
     public int YYY_headIndex;
+    public int YYY_eyesIndex;
     public int YYY_bodyIndex;
     public int YYY_legsIndex;
     public int YYY_hatIndex;
@@ -196,6 +197,7 @@ public class RBQ : MonoBehaviour
     public int Man_hatIndex;
 
     public int Girl_headIndex;
+    public int Girl_eyesIndex;
     public int Girl_bodyIndex;
     public int Girl_legsIndex;
     public int Girl_hatIndex;
@@ -223,6 +225,7 @@ public class RBQ : MonoBehaviour
 
 
         YYY_headIndex = Random.Range(1, 14);  // 1~13
+        YYY_eyesIndex = Random.Range(1, 14);  // 1~13
         YYY_bodyIndex = Random.Range(11, 13);
         YYY_legsIndex = Random.Range(11, 13);
         YYY_hatIndex = Random.Range(1, 5);
@@ -232,6 +235,7 @@ public class RBQ : MonoBehaviour
         Man_hatIndex = Random.Range(1, 3);
 
         Girl_headIndex = Random.Range(1, 14);  // 1~13
+        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
         Girl_bodyIndex = Random.Range(1, 14);
         Girl_legsIndex = Random.Range(1, 14);
         Girl_hatIndex = Random.Range(1, 14);
@@ -245,15 +249,16 @@ public class RBQ : MonoBehaviour
 
     public void SaveCurrentSkin
         (
-           int _YYY_headIndex, int _YYY_bodyIndex, int _YYY_legsIndex, int _YYY_hatIndex,
+           int _YYY_headIndex, int _YYY_eyesIndex, int _YYY_bodyIndex, int _YYY_legsIndex, int _YYY_hatIndex,
            int _Man_headIndex, int _Man_bodyIndex, int _Man_hatIndex,
-           int _Girl_headIndex, int _Girl_bodyIndex, int _Girl_legsIndex, int _Girl_hatIndex,
+           int _Girl_headIndex, int _Girl_eyesIndex, int _Girl_bodyIndex, int _Girl_legsIndex, int _Girl_hatIndex,
            int _weaponIndex
 
         )
     {
         // 保存 YYY 部位
         YYY_headIndex = _YYY_headIndex;
+        YYY_eyesIndex = _YYY_eyesIndex;
         YYY_bodyIndex = _YYY_bodyIndex;
         YYY_legsIndex = _YYY_legsIndex;
         YYY_hatIndex = _YYY_hatIndex;
@@ -265,6 +270,7 @@ public class RBQ : MonoBehaviour
 
         // 保存 Girl 部位
         Girl_headIndex = _Girl_headIndex;
+        Girl_eyesIndex = _Girl_eyesIndex;
         Girl_bodyIndex = _Girl_bodyIndex;
         Girl_legsIndex = _Girl_legsIndex;
         Girl_hatIndex = _Girl_hatIndex;
@@ -281,9 +287,9 @@ public class RBQ : MonoBehaviour
 
         characterSkin.ShowCurrentAll
             (
-            YYY_headIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
+            YYY_headIndex, YYY_eyesIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
             Man_headIndex, Man_bodyIndex, Man_hatIndex,
-            Girl_headIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
+            Girl_headIndex, Girl_eyesIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
             weaponIndex
             );
 

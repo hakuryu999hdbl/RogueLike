@@ -29,14 +29,15 @@ public class CharacterSkin : MonoBehaviour
 
     public void ShowCurrentAll
         (
-           int _YYY_headIndex,int _YYY_bodyIndex,int _YYY_legsIndex,int _YYY_hatIndex,
+           int _YYY_headIndex, int _YYY_eyesIndex, int _YYY_bodyIndex,int _YYY_legsIndex,int _YYY_hatIndex,
            int _Man_headIndex, int _Man_bodyIndex, int _Man_hatIndex,
-           int _Girl_headIndex, int _Girl_bodyIndex, int _Girl_legsIndex, int _Girl_hatIndex,
+           int _Girl_headIndex, int _Girl_eyesIndex, int _Girl_bodyIndex, int _Girl_legsIndex, int _Girl_hatIndex,
            int _weaponIndex
         )
     {
         
         if (_YYY_headIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Head/YYY_Head_color{_YYY_headIndex}")); }
+        if (_YYY_eyesIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Eyes/YYY_Eyes_color{_YYY_eyesIndex}")); }
         if (_YYY_bodyIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Body/YYY_Body_color{_YYY_bodyIndex}")); }
         if (_YYY_legsIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Legs/YYY_Legs_color{_YYY_legsIndex}")); }
         if (_YYY_hatIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Hat/YYY_Hat_color{_YYY_hatIndex}")); }
@@ -47,6 +48,7 @@ public class CharacterSkin : MonoBehaviour
 
 
         if (_Girl_headIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Girl/Head/Girl_Head_color{_Girl_headIndex}")); }
+        if (_Girl_eyesIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Girl/Eyes/Girl_Eyes_color{_Girl_eyesIndex}")); }
         if (_Girl_bodyIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Girl/Body/Girl_Body_color{_Girl_bodyIndex}")); }
         if (_Girl_legsIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Girl/Legs/Girl_Legs_color{_Girl_legsIndex}")); }
         if (_Girl_hatIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"Girl/Hat/Girl_Hat_color{_Girl_hatIndex}")); }

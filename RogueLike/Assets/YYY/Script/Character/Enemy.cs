@@ -76,6 +76,11 @@ public class Enemy : MonoBehaviour
         GateEffect.SetActive(true);//传送门特效
     }
 
+
+
+
+
+
     void FixedUpdate()
     {
         if (!isDie)
@@ -431,6 +436,7 @@ public class Enemy : MonoBehaviour
                     #region
                     // 只获取 YYY 部位的皮肤
                     int yHead = player.YYY_headIndex;
+                    int yEyes = player.YYY_eyesIndex;
                     int yBody = player.YYY_bodyIndex;
                     int yLegs = player.YYY_legsIndex;
                     int yHat = player.YYY_hatIndex;
@@ -441,6 +447,7 @@ public class Enemy : MonoBehaviour
                     int mHat = Man_hatIndex;
 
                     int gHead = Girl_headIndex;
+                    int gEyes = Girl_eyesIndex;
                     int gBody = Girl_bodyIndex;
                     int gLegs = Girl_legsIndex;
                     int gHat = Girl_hatIndex;
@@ -449,9 +456,9 @@ public class Enemy : MonoBehaviour
 
                     // 调用保存方法
                     SaveCurrentSkin(
-                        yHead, yBody, yLegs, yHat,
+                        yHead, yEyes, yBody, yLegs, yHat,
                         mHead, mBody, mHat,
-                        gHead, gBody, gLegs, gHat,
+                        gHead, gEyes, gBody, gLegs, gHat,
                         weapon
                     );
                     #endregion
@@ -616,15 +623,19 @@ public class Enemy : MonoBehaviour
 
     #endregion
 
+
+    public bool CanChangeSkin = false;
+
+
     /// <summary>
     /// 皮肤
     /// </summary>
     #region
     [Header("皮肤")]
     public CharacterSkin characterSkin;
-    public bool CanChangeSkin = true;
 
     public int YYY_headIndex;
+    public int YYY_eyesIndex;
     public int YYY_bodyIndex;
     public int YYY_legsIndex;
     public int YYY_hatIndex;
@@ -634,6 +645,7 @@ public class Enemy : MonoBehaviour
     public int Man_hatIndex;
 
     public int Girl_headIndex;
+    public int Girl_eyesIndex;
     public int Girl_bodyIndex;
     public int Girl_legsIndex;
     public int Girl_hatIndex;
@@ -658,7 +670,10 @@ public class Enemy : MonoBehaviour
         //
         //weaponIndex = Random.Range(1, 5);   // 1~4
 
+
+
         YYY_headIndex = Random.Range(1, 14);  // 1~13
+        YYY_eyesIndex = Random.Range(1, 14);  // 1~13
         YYY_bodyIndex = Random.Range(11, 13);
         YYY_legsIndex = Random.Range(11, 13);
         YYY_hatIndex = Random.Range(1, 5);
@@ -668,11 +683,13 @@ public class Enemy : MonoBehaviour
         Man_hatIndex = Random.Range(1, 3);
 
         Girl_headIndex = Random.Range(1, 14);  // 1~13
+        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
         Girl_bodyIndex = Random.Range(1, 14);
         Girl_legsIndex = Random.Range(1, 14);
         Girl_hatIndex = Random.Range(1, 14);
 
         weaponIndex = Random.Range(1, 7);
+
 
         SetSkin();
     }
@@ -680,15 +697,16 @@ public class Enemy : MonoBehaviour
 
     public void SaveCurrentSkin
         (
-           int _YYY_headIndex, int _YYY_bodyIndex, int _YYY_legsIndex, int _YYY_hatIndex,
+           int _YYY_headIndex, int _YYY_eyesIndex, int _YYY_bodyIndex, int _YYY_legsIndex, int _YYY_hatIndex,
            int _Man_headIndex, int _Man_bodyIndex, int _Man_hatIndex,
-           int _Girl_headIndex, int _Girl_bodyIndex, int _Girl_legsIndex, int _Girl_hatIndex,
+           int _Girl_headIndex, int _Girl_eyesIndex, int _Girl_bodyIndex, int _Girl_legsIndex, int _Girl_hatIndex,
            int _weaponIndex
 
         )
     {
         // 保存 YYY 部位
         YYY_headIndex = _YYY_headIndex;
+        YYY_eyesIndex = _YYY_eyesIndex;
         YYY_bodyIndex = _YYY_bodyIndex;
         YYY_legsIndex = _YYY_legsIndex;
         YYY_hatIndex = _YYY_hatIndex;
@@ -700,6 +718,7 @@ public class Enemy : MonoBehaviour
 
         // 保存 Girl 部位
         Girl_headIndex = _Girl_headIndex;
+        Girl_eyesIndex = _Girl_eyesIndex;
         Girl_bodyIndex = _Girl_bodyIndex;
         Girl_legsIndex = _Girl_legsIndex;
         Girl_hatIndex = _Girl_hatIndex;
@@ -716,16 +735,15 @@ public class Enemy : MonoBehaviour
 
         characterSkin.ShowCurrentAll
             (
-            YYY_headIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
+            YYY_headIndex, YYY_eyesIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
             Man_headIndex, Man_bodyIndex, Man_hatIndex,
-            Girl_headIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
+            Girl_headIndex, Girl_eyesIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
             weaponIndex
             );
 
 
 
     }
-
 
     #endregion
 

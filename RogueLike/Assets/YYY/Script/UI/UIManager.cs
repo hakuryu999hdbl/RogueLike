@@ -34,6 +34,30 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// 捏人菜单
+    /// </summary>
+    #region
+    public bool isPause = false;
+    public Animator MainCamera;
+    public void OpenCloseMenu() 
+    {
+        if (!isPause)
+        {
+            MainCamera.SetBool("Track", true);
+            Common_All.SetActive(false);
+        }
+        else
+        {
+            MainCamera.SetBool("Track", false);
+            Common_All.SetActive(true);
+        }
+
+        isPause = !isPause;
+    }
+
+
+    #endregion
 
 
 
