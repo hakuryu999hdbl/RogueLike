@@ -27,14 +27,24 @@ public class Player : MonoBehaviour
         AnimSetWeapon();//设置好武器模式
 
 
-        
+        //随机皮肤(你的皮肤里面Man/Girl是随机的)
+        //SetRandomSkin();
 
-        //随机皮肤
-        SetRandomSkin();
+        //PlayerSaveData data = SaveManager.Load("CurrentPlayer");
+        //if (data != null)
+        //{
+        //    ApplySaveData(data); // 套用保存的数据（比如皮肤）
+        //}
+        //else 
+        //{
+        //    //SaveCurrent();
+        //}
+
+      
 
         // 随机从 Enum 中选择一个值
         //Class = (PlayerClass)Random.Range(0, System.Enum.GetValues(typeof(PlayerClass)).Length);
-        Class = PlayerClass.Succubus;
+        Class = PlayerClass.Girl;
 
         anim.Play(GetAnimPrefix() + "Default_Idle");
 
@@ -43,6 +53,99 @@ public class Player : MonoBehaviour
         //Debug.Log("目前的天空" + PlayerPrefs.GetInt("Time"));//0早上 1晚上
 
     }
+
+
+
+
+    /// <summary>
+    /// 存读档
+    /// </summary>
+    #region
+    public void ApplySaveData(PlayerSaveData data)
+    {
+        // 应用皮肤信息
+        this.YYY_headIndex = data.headIndex;
+        this.YYY_eyesIndex = data.eyesIndex;
+        this.YYY_bodyIndex = data.bodyIndex;
+        this.YYY_legsIndex = data.legsIndex;
+        this.YYY_hatIndex = data.hatIndex;
+
+        // 应用武器
+        this.weaponIndex = data.weaponIndex;
+
+        // 根据这些数据设置皮肤
+        SetSkin(); // 你已有的方法（或自己写个用这些 Index 设置皮肤的方法）
+    }//存档形式赋值皮肤数值
+
+
+    public void _CreateNewSkin()
+    {
+        SetRandomSkin();
+        SaveCurrent();
+    }//新增皮肤临时随机
+
+    void SaveCurrent()
+    {
+        PlayerSaveData data = new PlayerSaveData();
+
+        List<string> allSaves = SaveManager.GetAllSaveNames();  // 获取已有存档名
+        string newName = NameGenerator.GenerateUniqueName(allSaves);
+        data.characterName = newName; // ✅ 记得设置进去！
+
+        data.headIndex = this.YYY_headIndex;
+        data.eyesIndex = this.YYY_eyesIndex;
+        data.bodyIndex = this.YYY_bodyIndex;
+        data.legsIndex = this.YYY_legsIndex;
+        data.hatIndex = this.YYY_hatIndex;
+        data.weaponIndex = this.weaponIndex;
+
+        SaveManager.Save(data);
+    }//记录当前皮肤
+
+
+    public void OpenSaveURL() 
+    {
+        Application.OpenURL(Application.persistentDataPath);
+    }//打开存档位置文件夹
+
+
+    public static class NameGenerator
+    {
+        static readonly string[] FirstNames = { "爱", "梦", "音", "雪", "夜", "光", "希", "结", "星", "花" };
+        static readonly string[] LastNames = { "奈", "音", "香", "乃", "子", "花", "里", "美", "月", "菜" };
+
+        static readonly System.Random rng = new System.Random();
+
+        public static string GenerateUniqueName(List<string> existingNames)
+        {
+            string baseName = FirstNames[rng.Next(FirstNames.Length)] + LastNames[rng.Next(LastNames.Length)];
+            string finalName = baseName;
+            int index = 1;
+
+            while (existingNames.Contains(finalName))
+            {
+                finalName = $"{baseName}_{index}";
+                index++;
+            }
+
+            return finalName;
+        }
+
+    }//女孩名称随机（重名的情况下会加编号）
+
+    public void ClearSkin()
+    {
+        this.YYY_headIndex = 1;
+        this.YYY_eyesIndex = 1;
+        this.YYY_bodyIndex = 1;
+        this.YYY_legsIndex = 1;
+        this.YYY_hatIndex = 1;
+        this.weaponIndex = 1;
+
+        SetSkin(); // 用于更新显示，可处理 -1 为“空白”资源
+    }//清除皮肤
+
+    #endregion
 
 
     private void FixedUpdate()

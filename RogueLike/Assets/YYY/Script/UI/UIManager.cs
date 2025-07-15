@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+using System;
+using System.IO;
+
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance { get; private set; }
@@ -15,6 +18,7 @@ public class UIManager : MonoBehaviour
     /// 主菜单
     /// </summary>
     #region
+    [Header("主菜单")]
     public GameObject Common_All;//移动血条等
     public GameObject NextButton;//播放结局动画
     public GameObject Loading;
@@ -38,19 +42,26 @@ public class UIManager : MonoBehaviour
     /// 捏人菜单
     /// </summary>
     #region
-    public bool isPause = false;
+    [Header("捏人菜单")]
+    public bool isPause;
     public Animator MainCamera;
+    public GameObject ShowSaveCavans;
+    public Animator ShowSaveCavansAnim;
     public void OpenCloseMenu() 
     {
         if (!isPause)
         {
             MainCamera.SetBool("Track", true);
             Common_All.SetActive(false);
+            ShowSaveCavans.SetActive(true);
+            ShowSaveCavansAnim.SetBool("Track", true);
         }
         else
         {
             MainCamera.SetBool("Track", false);
             Common_All.SetActive(true);
+            //ShowSaveCavans.SetActive(false);
+            ShowSaveCavansAnim.SetBool("Track",false);
         }
 
         isPause = !isPause;
@@ -59,8 +70,99 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// 存档显示
+    /// </summary>
+    #region
+    [Header("寻找玩家")]
+    public GameObject _Player;//玩家
+    public Player player;
+
+    [Header("存档显示")]
+    public GameObject saveSlotPrefab;
+    public Transform saveSlotParent;
+
+    void Start()
+    {
+        //找玩家
+        _Player = GameObject.FindGameObjectWithTag("Player");
+        player = _Player.GetComponent<Player>();
 
 
+
+        string folder = Application.persistentDataPath + "/Saves/";
+        if (!Directory.Exists(folder)) return;
+
+        foreach (string file in Directory.GetFiles(folder, "save_*.json"))
+        {
+            string json = File.ReadAllText(file);
+            PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
+
+            GameObject slot = Instantiate(saveSlotPrefab, saveSlotParent);
+            slot.GetComponent<SaveSlotUI>().SetInfo(data, skinParts);  // ✅ 新增头像预览
+
+        }
+    }//读取，显示存档
+
+    public void CreateNewSave() 
+    {
+        player._CreateNewSkin();
+        RefreshSaveSlots();
+    }//点击【＋】就会随机存档
+
+    public void RefreshSaveSlots()
+    {
+        // 清除已有的
+        foreach (Transform child in saveSlotParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        string folder = Application.persistentDataPath + "/Saves/";
+        if (!Directory.Exists(folder)) return;
+
+        foreach (string file in Directory.GetFiles(folder, "save_*.json"))
+        {
+            string json = File.ReadAllText(file);
+            PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
+
+            GameObject slot = Instantiate(saveSlotPrefab, saveSlotParent);
+            slot.GetComponent<SaveSlotUI>().SetInfo(data, skinParts);  // ✅ 新增头像预览
+
+
+
+            SetCurrentSlot(slot.GetComponent<SaveSlotUI>());// 自动选中
+        }
+    }//刷新当前存档UI
+
+    //////////////////////高亮显示//////////////////////////////////
+
+    [HideInInspector]
+    public SaveSlotUI currentSelectedSlot = null;
+
+    public void SetCurrentSlot(SaveSlotUI newSlot)
+    {
+        if (currentSelectedSlot != null)
+        {
+            currentSelectedSlot.SetHighlight(false);
+        }
+
+        currentSelectedSlot = newSlot;
+        currentSelectedSlot.SetHighlight(true);
+    }
+
+    //////////////////////头像贴图显示//////////////////////////////////
+
+    public SkinPartsDatabase skinParts;
+
+   
+
+
+
+
+
+
+    #endregion
     /// <summary>
     /// 血条等各种值
     /// </summary>
