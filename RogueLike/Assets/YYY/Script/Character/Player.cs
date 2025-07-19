@@ -48,10 +48,10 @@ public class Player : MonoBehaviour
 
         anim.Play(GetAnimPrefix() + "Default_Idle");
 
+        isMage = true;
 
 
-        //Debug.Log("目前的天空" + PlayerPrefs.GetInt("Time"));//0早上 1晚上
-
+     
     }
 
 
@@ -182,6 +182,7 @@ public class Player : MonoBehaviour
             state.IsName(GetAnimPrefix() + "Attack_3") ||
             state.IsName(GetAnimPrefix() + "Attack_4") ||
             state.IsName(GetAnimPrefix() + "Shoot_1") ||
+            state.IsName(GetAnimPrefix() + "Spell_1") ||
 
             state.IsName(GetAnimPrefix() + "Strike_Block") ||
             state.IsName(GetAnimPrefix() + "Shoot_Block")
@@ -386,6 +387,10 @@ public class Player : MonoBehaviour
         }
     }
 
+    [Header("远程射手/法师")]
+    public bool isMage = false;//false 射手   true 法师
+
+
     [Header("持械状态")]
 
     bool isKeepWeapon = false;
@@ -439,7 +444,10 @@ public class Player : MonoBehaviour
         }
 
         AnimSetWeapon();
-    }
+    }//【武器切换】备用
+
+
+
     public void AnimSetWeapon() 
     {
 
@@ -449,14 +457,18 @@ public class Player : MonoBehaviour
         }
         else
         {
-            anim.SetInteger("Weapon", 2);
-
+            if (isMage) { anim.SetInteger("Weapon", 3); }
+            else { anim.SetInteger("Weapon", 2); }       
         }
-    }//近远切换
+
+        CheckWeapon();
+    }//设置武器
 
 
 
     #endregion
+
+
 
     /// <summary>
     /// 皮肤
@@ -505,8 +517,8 @@ public class Player : MonoBehaviour
 
         YYY_headIndex = Random.Range(1, 14);  // 1~13
         YYY_eyesIndex = Random.Range(1, 14);  // 1~13
-        YYY_bodyIndex = Random.Range(11, 13);
-        YYY_legsIndex = Random.Range(11, 13);
+        YYY_bodyIndex = Random.Range(10, 13);
+        YYY_legsIndex = Random.Range(10, 13);
         YYY_hatIndex = Random.Range(1, 5);
 
         Man_headIndex = Random.Range(1, 6);
@@ -573,10 +585,12 @@ public class Player : MonoBehaviour
             );
 
 
-
+        CheckWeapon();
     }
 
     #endregion
+
+
 
     /// <summary>
     /// 近战系统
@@ -685,7 +699,10 @@ public class Player : MonoBehaviour
             }
             else 
             {
-                anim.Play(GetAnimPrefix() + "Shoot_Idle");
+
+                if (isMage) { anim.Play(GetAnimPrefix() + "Spell_Idle"); }
+                else { anim.Play(GetAnimPrefix() + "Shoot_Idle"); }
+                
             }
 
            
@@ -736,7 +753,14 @@ public class Player : MonoBehaviour
             {
                 if (CanShoot)
                 {
-                    anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0);
+                    if(Class == PlayerClass.Succubus) { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
+                    else
+                    {
+                        if (isMage) { anim.Play(GetAnimPrefix() + "Spell_1", 0, 0); }
+                        else { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
+                    }
+                  
+                   
 
                     CanShoot = false;
                     Invoke("SetCanShoot", 0.3f);//似乎这是目前唯一
@@ -787,7 +811,10 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
-                    anim.Play(GetAnimPrefix() + "Shoot_Idle");
+                    if (isMage) { anim.Play(GetAnimPrefix() + "Spell_Idle"); }
+                    else { anim.Play(GetAnimPrefix() + "Shoot_Idle"); }
+
+                  
                 }
                
             }
@@ -828,6 +855,8 @@ public class Player : MonoBehaviour
 
 
     #endregion
+
+
 
 
     /// <summary>
@@ -916,6 +945,52 @@ public class Player : MonoBehaviour
     {
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
 
+
+
+        switch (CurrentWeapon) 
+        {
+        
+
+            case 201:
+            case 202:
+            case 203:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(3);//火焰法球
+                break;
+            case 204:
+            case 205:
+            case 206:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(2);//雷电法球
+                break;
+
+            case 101:
+            case 102:
+            case 103:
+                frameEvents._Bullet_Arrow();
+                bullet.GetComponent<Shooting>().SetSpecialBullet(1);//弩弓
+                break;
+
+
+            case 104:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                frameEvents._Bullet_Pistol();
+                break;
+            case 105:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                frameEvents._Bullet_Pistol_2();
+                break;
+            case 106:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                frameEvents._Bullet_Pistol_3();
+                break;
+
+
+
+
+            default:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                break;
+        }
+
         // 计算当前暴击率
         float critRate = (float)currentCritical / (float)maxCritical;
 
@@ -928,6 +1003,7 @@ public class Player : MonoBehaviour
         bullet.GetComponent<Shooting>().chargeTime = attackPressTime; // 把蓄力时间传过去（蓄力那段时间也能成攻击力 能加上去）
 
         bullet.GetComponent<Shooting>().SetDirection(direction, Shooting.BulletOwnerType.Friend); // 玩家属于Friend阵营
+
     }//射击子弹
 
 
@@ -946,12 +1022,30 @@ public class Player : MonoBehaviour
 
 
     /// <summary>
+    /// 武器系统
+    /// </summary>
+    #region
+    [Header("武器系统")]
+    public int CurrentWeapon;
+    //0无武器  1铁剑  2大刀  3武士刀  4长枪   5长柄斧   6铁剑        101轻弩   102重弩   103复合弩   104火绳枪  105短枪   106长枪    201黄木短杖  202黑乌木短章   203红宝石短杖    204蓝宝石短杖   205黄玉短杖   206鹰身短杖
+
+    public void CheckWeapon()
+    {
+
+        if (visionType == PlayerType.ShortRangePlayer) { CurrentWeapon = weaponIndex; }//实装战士武器
+        if (visionType == PlayerType.LongRangePlayer && !isMage) { CurrentWeapon = weaponIndex + 100; }//实装射手武器
+        if (visionType == PlayerType.LongRangePlayer && isMage) { CurrentWeapon = weaponIndex + 200; }//实装法师武器
+    }
+
+    #endregion
+
+    /// <summary>
     /// 闪避系统
     /// </summary>
     #region
     [Header("闪避键按下")]
-    private float dodgePressTime = 0f;      // 持续按下时长计时器
-    private bool dodgeTriggered = false;    // 是否已经触发攻击动作（防止反复触发）
+    public float dodgePressTime = 0f;      // 持续按下时长计时器
+    public bool dodgeTriggered = false;    // 是否已经触发攻击动作（防止反复触发）
 
 
     public SpriteRenderer GhostPhantom;//幻影
@@ -1354,6 +1448,7 @@ public class Player : MonoBehaviour
     public GameObject BloodEffect;//受伤特效
     public GameObject SparkEffect;//火星特效
     public GameObject GateEffect;//传送门特效
+    public GameObject Palsy_Effect;//闪电特效
     public GameObject ProtectiveCoverEffect;//防护罩特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
@@ -1400,23 +1495,23 @@ public class Player : MonoBehaviour
                     if (Random.value < blockChance)
                     {
 
-                        if (Class == PlayerClass.Succubus) 
-                        { 
-                            anim.Play(GetAnimPrefix() + "Strike_Block");
+                        if (Class == PlayerClass.Succubus||isMage) 
+                        {    
                             ProtectiveCoverEffect.SetActive(true);
-                        }//只有魔族需要更改
-                        else 
+
+                        }//只有魔族和法师需要特效（遮挡无防御动画）
+
+                        if (visionType == PlayerType.ShortRangePlayer)
                         {
-                            if (visionType == PlayerType.ShortRangePlayer)
-                            {
-                                anim.Play(GetAnimPrefix() + "Strike_Block");
-                            }
-                            else
-                            {
-                                anim.Play(GetAnimPrefix() + "Shoot_Block");
-                            }
+                            anim.Play(GetAnimPrefix() + "Strike_Block");
                         }
-                      
+                        else
+                        {
+
+                            if (isMage) { anim.Play(GetAnimPrefix() + "Spell_Block"); } 
+                            else { anim.Play(GetAnimPrefix() + "Shoot_Block"); }
+                           
+                        }
 
                         // 防御成功扣除体力
                         ChangeStrength(-50);
@@ -1467,7 +1562,7 @@ public class Player : MonoBehaviour
                     Strike_Effect.SetActive(true);//剑伤害
                     break;
                 case 2:
-                    //Palsy_Effect.SetActive(true);//雷电伤害
+                    Palsy_Effect.SetActive(true);//雷电伤害
                     break;
             }
 

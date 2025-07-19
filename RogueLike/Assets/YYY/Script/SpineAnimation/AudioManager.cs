@@ -41,7 +41,7 @@ public class AudioManager : MonoBehaviour
 
     public AudioClip Attack_hit2;
 
-    public AudioClip Bullet_Pistol, Bullet_Pistol_2, Bullet_Pistol_3, Bullet_Pistol_Load2,Bullet_SD, Bullet_SD_Load1, Bullet_AK, Bullet_OutOfBullet, SE_Blast;//这些Spine动画帧事件不再使用，FrameEvent那里作为脚本使用声音
+    public AudioClip Bullet_Arrow, Bullet_Pistol, Bullet_Pistol_2, Bullet_Pistol_3, Bullet_Pistol_Load2,Bullet_SD, Bullet_SD_Load1, Bullet_AK, Bullet_OutOfBullet, SE_Blast;//这些Spine动画帧事件不再使用，FrameEvent那里作为脚本使用声音
 
     public AudioClip Attack_pai1, Attack_pai2, Attack_whip_1, Attack_whip_2, Attack_whip_3, Attack_whip_4, Attack_whip_5,
                      Attack_sword_chop1, Attack_sword_chop2, Attack_sword_chop3, Attack_katana, Attack_katana_in, Attack_katana_draw,

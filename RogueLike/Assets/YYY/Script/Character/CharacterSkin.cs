@@ -118,7 +118,10 @@ public class CharacterSkin : MonoBehaviour
     }
 
 
-
+    public void AttackSpell()
+    {
+        AttackShoot();
+    }
 
     public void AttackOver()
     {

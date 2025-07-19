@@ -24,6 +24,8 @@ public class FrameEvents : MonoBehaviour
     //------------效果音
     public void _BGM_Theme() { audioS.PlayOneShot(AudioManager.BGM_Theme); }//Spine帧事件没有，由敌人或玩家或者其他挂着FrameEvent脚本直接使用
     public void _Attack_hit2() { audioS.PlayOneShot(AudioManager.Attack_hit2); }
+
+    public void _Bullet_Arrow() { audioS.PlayOneShot(AudioManager.Bullet_Arrow); }//Spine帧事件没有，由敌人或玩家或者其他挂着FrameEvent脚本直接使用【目前还留着】
     public void _Bullet_Pistol() { audioS.PlayOneShot(AudioManager.Bullet_Pistol); }//Spine帧事件没有，由敌人或玩家或者其他挂着FrameEvent脚本直接使用【目前还留着】
     public void _Bullet_Pistol_2() { audioS.PlayOneShot(AudioManager.Bullet_Pistol_2); }//Spine帧事件没有，由敌人或玩家或者其他挂着FrameEvent脚本直接使用【目前还留着】
     public void _Bullet_Pistol_3() { audioS.PlayOneShot(AudioManager.Bullet_Pistol_3); }//Spine帧事件没有，由敌人或玩家或者其他挂着FrameEvent脚本直接使用【目前还留着】

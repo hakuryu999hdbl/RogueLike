@@ -15,7 +15,7 @@ public class Shooting : MonoBehaviour
 
     private void OnEnable()
     {
-        TypeOfAttack = 1;//剑伤
+        
 
         baseDamage = Damage; // 保存原始值
         appliedDamage = baseDamage + Random.Range(-50, 50); // 例如±10范围
@@ -31,21 +31,23 @@ public class Shooting : MonoBehaviour
             appliedDamage = Mathf.RoundToInt(appliedDamage * chargeMultiplier);
         }
 
+
+
     }//初始化随机伤害
 
-
+    [Header("子弹来源")]
+    public BulletOwnerType ownerType;
     public enum BulletOwnerType
     {
         Enemy,
         Friend
     }
 
-    [Header("子弹来源")]
-    public BulletOwnerType ownerType;
+  
 
     [Header("子弹基础参数")]
 
-    public float speed = 2f;
+    public float speed = 60f;
     int Damage = -100;
     public float lifetime = 3f;
     private Vector3 direction;
@@ -58,16 +60,12 @@ public class Shooting : MonoBehaviour
         ownerType = owner;
         Destroy(gameObject, lifetime); // 自动销毁
 
-        //特殊子弹
-        switch (SpecialBullet)
-        {
-            case 0:
-                CurrentBulletEffect = FireEffect;//当前的这种子弹打到墙壁上弹出火花
-                break;
-
-        }
+      
 
     }
+
+  
+
 
     void Update()
     {
@@ -78,11 +76,54 @@ public class Shooting : MonoBehaviour
 
 
     [Header("特殊类型子弹")]
-    public int SpecialBullet;//-1空包弹     0一般子弹
-    public SpriteRenderer spriteReRenderer;
+    public int specialBullet;
+    public GameObject Bullet, Arrow, Electricity, Flame;
+    public void SetSpecialBullet(int SpecialBullet)// 0一般子弹   1弩箭   2魔法雷电球   3魔法火焰球
+    {
+        //特殊子弹
+        switch (SpecialBullet)
+        {
+            case 0:
+                Bullet.SetActive(true);
+                CurrentBulletEffect = FireEffect;
+                speed = 60f;
+
+                lifetime = 3f;
+                break;
+            case 1:
+                Arrow.SetActive(true);
+                CurrentBulletEffect = FireEffect;
+                TypeOfAttack = 1;//剑伤
+                speed = 40f;
+                lifetime = 3f;
+                break;
+            case 2:
+                Electricity.SetActive(true);
+                CurrentBulletEffect = LightingEffect;
+                speed = 20f;
+                TypeOfAttack = 2;//雷伤
+                lifetime = 5f;
+                break;
+            case 3:
+                Flame.SetActive(true);
+                CurrentBulletEffect = BlastEffect;
+                speed = 20f;
+
+                lifetime = 5f;
+                break;
+        }
+        specialBullet = SpecialBullet;
+    }
+
+ 
+
+  
+
+    GameObject CurrentBulletEffect;//当前的这种子弹打到墙壁上弹出哪种特效
 
     public GameObject FireEffect;//子弹火星
-    GameObject CurrentBulletEffect;//当前的这种子弹打到墙壁上弹出哪种特效
+    public GameObject BlastEffect;//爆炸特效
+    public GameObject LightingEffect;//爆炸特效
 
     public Transform rayTarget;//特效的的位置
 
@@ -98,25 +139,58 @@ public class Shooting : MonoBehaviour
         // 判断目标是否是敌人阵营
         if (ownerType == BulletOwnerType.Friend && other.CompareTag("Enemy"))
         {
-            if (SpecialBullet != -1)
-            {
 
-                if (isCritial) { other.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
-                other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);
+            switch (specialBullet)
+            {
+                case 0:
+                case 1:
+                    if (isCritial) { other.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
+                    other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);
+                    break;
+                case 2:
+                case 3:
+                    GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
+                    Strike strike = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Strike>();
+                    strike.DamageToEnemy = true;
+                    Destroy(EffectPrefabs, 1f);
+
+                    break;
+
+
             }
+
             Destroy(gameObject);
             return;
         }
 
         if (ownerType == BulletOwnerType.Enemy && (other.CompareTag("Player") || other.CompareTag("Friend")))
         {
-            if (SpecialBullet != -1)
+
+            switch (specialBullet)
             {
-                if (other.CompareTag("Player"))
-                    other.GetComponent<Player>()?.ChangeHealth(appliedDamage, TypeOfAttack);
-                else if (other.CompareTag("Friend"))
-                    other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack); // 队友是Enemy脚本
+                case 0:
+                case 1:
+
+                    if (other.CompareTag("Player"))
+                        other.GetComponent<Player>()?.ChangeHealth(appliedDamage, TypeOfAttack);
+                    else if (other.CompareTag("Friend"))
+                        other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack); // 队友是Enemy脚本
+
+                    break;
+                case 2:
+                case 3:
+                    GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
+                    Strike strike = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Strike>();
+                    strike.DamageToPlayer = true;
+                    strike.DamageToFriend = true;
+                    Destroy(EffectPrefabs, 1f);
+
+                    break;
+
+
             }
+
+
             Destroy(gameObject);
             return;
         }
@@ -135,13 +209,8 @@ public class Shooting : MonoBehaviour
 
         if (other.CompareTag("obstacle"))
         {
-            if (SpecialBullet != -1)
-            {
-                GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
-                Destroy(EffectPrefabs, 2f);
-
-            }//只要不是空包弹，就能有效果
-
+            GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
+            Destroy(EffectPrefabs, 2f);
 
 
             if (other.gameObject.GetComponent<Plant>() != null)
@@ -154,7 +223,5 @@ public class Shooting : MonoBehaviour
             Destroy(gameObject);
         }//打到墙壁上产生火花
     }
-
-
 
 }

@@ -67,6 +67,13 @@ public class Enemy : MonoBehaviour
             Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
 
             //Class = EnemyClass.Succubus;
+            Class = EnemyClass.Girl;
+
+            if (Class == EnemyClass.Girl && visionType ==EnemyType.LongRangeEnemy && Random.Range(0,2)==0) 
+            {
+                isMage = true;
+            }//一部分远程女射手变成女法师
+
         }
 
 
@@ -74,6 +81,9 @@ public class Enemy : MonoBehaviour
 
 
         GateEffect.SetActive(true);//传送门特效
+
+
+        
     }
 
 
@@ -540,8 +550,8 @@ public class Enemy : MonoBehaviour
     }
 
 
-    //public float AttackRange = 1;//敌人接近多少才会开始攻击
-
+    [Header("远程射手/法师")]
+    public bool isMage = false;//false 射手   true 法师
 
     [Header("持械状态")]
     bool isKeepWeapon = false;
@@ -587,11 +597,15 @@ public class Enemy : MonoBehaviour
                 break;
 
             case EnemyType.LongRangeEnemy:
-                anim.SetInteger("Weapon", 2);
+                if (isMage) { anim.SetInteger("Weapon", 3); } 
+                else { anim.SetInteger("Weapon", 2); }   
                 break;
         }
 
         anim.SetTrigger("DrawWeapon");
+
+
+        CheckWeapon();//根据当前皮肤，代码层面武器确认
     }
     public void Sheathe()
     {
@@ -614,7 +628,8 @@ public class Enemy : MonoBehaviour
 
           
             case EnemyType.LongRangeEnemy:
-                anim.Play(GetAnimPrefix() + "Shoot_Idle");
+                if (isMage) { anim.Play(GetAnimPrefix() + "Spell_Idle"); }
+                else { anim.Play(GetAnimPrefix() + "Shoot_Idle"); }              
                 break;
 
         }
@@ -674,8 +689,8 @@ public class Enemy : MonoBehaviour
 
         YYY_headIndex = Random.Range(1, 14);  // 1~13
         YYY_eyesIndex = Random.Range(1, 14);  // 1~13
-        YYY_bodyIndex = Random.Range(11, 13);
-        YYY_legsIndex = Random.Range(11, 13);
+        YYY_bodyIndex = Random.Range(10, 13);
+        YYY_legsIndex = Random.Range(10, 13);
         YYY_hatIndex = Random.Range(1, 5);
 
         Man_headIndex = Random.Range(1, 6);
@@ -741,8 +756,7 @@ public class Enemy : MonoBehaviour
             weaponIndex
             );
 
-
-
+        CheckWeapon();
     }
 
     #endregion
@@ -786,9 +800,19 @@ public class Enemy : MonoBehaviour
 
                     case EnemyType.LongRangeEnemy:
 
-                        //队友使用玩家的攻击动画
-                        if (tag == "Friend") { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
-                        else { anim.Play(GetAnimPrefix() + "shoot_1", 0, 0); }
+                        if (isMage)
+                        {
+                            //队友使用玩家的攻击动画
+                            if (tag == "Friend") { anim.Play(GetAnimPrefix() + "Spell_1", 0, 0); }
+                            else { anim.Play(GetAnimPrefix() + "spell_1", 0, 0); }
+                        }
+                        else
+                        {
+                            //队友使用玩家的攻击动画
+                            if (tag == "Friend") { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
+                            else { anim.Play(GetAnimPrefix() + "shoot_1", 0, 0); }
+
+                        }
 
                         break;
                 }
@@ -941,6 +965,52 @@ public class Enemy : MonoBehaviour
         GameObject bullet = Instantiate(transparentBulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
 
 
+     
+
+        switch (CurrentWeapon)
+        {
+          
+
+            case 201:
+            case 202:
+            case 203:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(3);//火焰法球
+                break;
+            case 204:
+            case 205:
+            case 206:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(2);//雷电法球
+                break;
+
+            case 101:
+            case 102:
+            case 103:
+                frameEvents._Bullet_Arrow();
+                bullet.GetComponent<Shooting>().SetSpecialBullet(1);//弩弓
+                break;
+
+
+            case 104:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                frameEvents._Bullet_Pistol();
+                break;
+            case 105:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                frameEvents._Bullet_Pistol_2();
+                break;
+            case 106:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                frameEvents._Bullet_Pistol_3();
+                break;
+
+
+
+
+            default:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                break;
+        }
+
         if (tag == "Friend")
         {
             bullet.GetComponent<Shooting>().SetDirection(dir, Shooting.BulletOwnerType.Friend);//队友发射子弹
@@ -949,9 +1019,6 @@ public class Enemy : MonoBehaviour
         {
             bullet.GetComponent<Shooting>().SetDirection(dir, Shooting.BulletOwnerType.Enemy);//敌人发射子弹
         }
-
-
-
     }
 
     private void UpdateFacingDirection(Vector3 dir)
@@ -983,6 +1050,24 @@ public class Enemy : MonoBehaviour
 
     #endregion
 
+
+    /// <summary>
+    /// 武器系统
+    /// </summary>
+    #region
+    [Header("武器系统")]
+    public int CurrentWeapon;
+    //0无武器  1铁剑  2大刀  3武士刀  4长枪   5长柄斧   6铁剑        101轻弩   102重弩   103复合弩   104火绳枪  105短枪   106长枪    201黄木短杖  202黑乌木短章   203红宝石短杖    204蓝宝石短杖   205黄玉短杖   206鹰身短杖
+
+    public void CheckWeapon() 
+    {
+
+        if (visionType == EnemyType.ShortRangeEnemy){ CurrentWeapon = weaponIndex; }//实装战士武器
+        if (visionType == EnemyType.LongRangeEnemy && !isMage) { CurrentWeapon = weaponIndex + 100; }//实装射手武器
+        if (visionType == EnemyType.LongRangeEnemy&&isMage) { CurrentWeapon = weaponIndex+200; }//实装法师武器
+    }
+
+    #endregion
 
 
     /// <summary>
@@ -1053,6 +1138,7 @@ public class Enemy : MonoBehaviour
     public GameObject BloodEffect;//受伤特效
     public GameObject SparkEffect;//火星特效
     public GameObject GateEffect;//传送门特效
+    public GameObject Palsy_Effect;//闪电特效
     public GameObject ProtectiveCoverEffect;//防护罩特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
@@ -1118,7 +1204,7 @@ public class Enemy : MonoBehaviour
                     Strike_Effect.SetActive(true);//剑伤害
                     break;
                 case 2:
-                    //Palsy_Effect.SetActive(true);//雷电伤害
+                    Palsy_Effect.SetActive(true);//雷电伤害
                     break;
             }
 
@@ -1222,24 +1308,30 @@ public class Enemy : MonoBehaviour
     void Block()
     {
 
-        if (Class == EnemyClass.Succubus)
+        if (Class == EnemyClass.Succubus || isMage)
+        {
+            ProtectiveCoverEffect.SetActive(true);
+
+        }//只有魔族和法师需要特效（遮挡无防御动画）
+
+        if (visionType == EnemyType.ShortRangeEnemy)
         {
             anim.Play(GetAnimPrefix() + "Strike_Block");
-            ProtectiveCoverEffect.SetActive(true);
-        }//只有魔族需要更改
-
-        switch (visionType)
-        {
-          
-            case EnemyType.ShortRangeEnemy:
-                anim.Play(GetAnimPrefix() + "Strike_Block");
-                break;
-          
-            case EnemyType.LongRangeEnemy:
-                anim.Play(GetAnimPrefix() + "Shoot_Block");
-                break;
-
         }
+        else
+        {
+            if (isMage)
+            {
+                anim.Play(GetAnimPrefix() + "Spell_Block");
+            }
+            else 
+            {
+                anim.Play(GetAnimPrefix() + "Shoot_Block");
+            }
+
+           
+        }
+
 
 
 
