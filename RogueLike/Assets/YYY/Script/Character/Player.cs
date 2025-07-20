@@ -61,6 +61,10 @@ public class Player : MonoBehaviour
     /// 存读档
     /// </summary>
     #region
+
+    [Header("当前操纵的存档名称")]
+    public string currentSaveName; // 当前操作的存档名
+
     public void ApplySaveData(PlayerSaveData data)
     {
         // 应用皮肤信息
@@ -84,23 +88,50 @@ public class Player : MonoBehaviour
         SaveCurrent();
     }//新增皮肤临时随机
 
-    void SaveCurrent()
+    public void SaveCurrent()
     {
-        PlayerSaveData data = new PlayerSaveData();
+       
+        if (string.IsNullOrEmpty(currentSaveName))
+        {
+            // 如果还没有命名，则生成
 
-        List<string> allSaves = SaveManager.GetAllSaveNames();  // 获取已有存档名
-        string newName = NameGenerator.GenerateUniqueName(allSaves);
-        data.characterName = newName; // ✅ 记得设置进去！
+            PlayerSaveData data = new PlayerSaveData();
 
-        data.headIndex = this.YYY_headIndex;
-        data.eyesIndex = this.YYY_eyesIndex;
-        data.bodyIndex = this.YYY_bodyIndex;
-        data.legsIndex = this.YYY_legsIndex;
-        data.hatIndex = this.YYY_hatIndex;
-        data.weaponIndex = this.weaponIndex;
+            List<string> allSaves = SaveManager.GetAllSaveNames();  // 获取已有存档名
+            string newName = NameGenerator.GenerateUniqueName(allSaves);
+            data.characterName = newName; // ✅ 记得设置进去！
 
-        SaveManager.Save(data);
-    }//记录当前皮肤
+            data.headIndex = this.YYY_headIndex;
+            data.eyesIndex = this.YYY_eyesIndex;
+            data.bodyIndex = this.YYY_bodyIndex;
+            data.legsIndex = this.YYY_legsIndex;
+            data.hatIndex = this.YYY_hatIndex;
+            data.weaponIndex = this.weaponIndex;
+
+            SaveManager.Save(data);
+
+            currentSaveName = data.characterName;//记录当前名称
+
+        }
+        else 
+        {
+
+            // 处于捏人界面中，已有命名，覆盖当前
+            PlayerSaveData data = SaveManager.Load(currentSaveName);
+
+            data.headIndex = this.YYY_headIndex;
+            data.eyesIndex = this.YYY_eyesIndex;
+            data.bodyIndex = this.YYY_bodyIndex;
+            data.legsIndex = this.YYY_legsIndex;
+            data.hatIndex = this.YYY_hatIndex;
+            data.weaponIndex = this.weaponIndex;
+
+            SaveManager.Save(data);
+        }
+
+
+
+    }//记录当前皮肤并新建随机名称存档
 
 
     public void OpenSaveURL() 
@@ -142,7 +173,7 @@ public class Player : MonoBehaviour
         this.YYY_hatIndex = 1;
         this.weaponIndex = 1;
 
-        SetSkin(); // 用于更新显示，可处理 -1 为“空白”资源
+        SetSkin();
     }//清除皮肤
 
     #endregion

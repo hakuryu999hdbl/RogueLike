@@ -42,25 +42,84 @@ public class UIManager : MonoBehaviour
     /// 捏人菜单
     /// </summary>
     #region
-    [Header("捏人菜单")]
+    [Header("各类菜单")]
     public bool isPause;
-    public Animator MainCamera;
-    public GameObject ShowSaveCavans;
-    public Animator ShowSaveCavansAnim;
+    public Animator MainCamera;//控制摄像机拉近远离
+    public Animator ShowSaveCavansAnim;//黑幕显示背景
+
+    public GameObject SaveCavans,CreateCavans;//存档界面,捏人界面
+
+    [Header("捏人界面UI")]
+    public Text nameLabel;
+    public Text hairLabel;
+    public Text eyesLabel;
+    public Text raceLabel;
+    public Text classLabel;
+
+
+
+    public void OnHairLeft() { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1); }
+    public void OnHairRight() { ChangeSkin(ref player.YYY_headIndex, 1, 13, +1); }
+
+    public void OnEyesLeft() { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, -1); }
+    public void OnEyesRight() { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, +1); }
+
+    public void OnRaceLeft() { ChangeSkin(ref player.YYY_hatIndex, 1, 4, -1); }
+    public void OnRaceRight() { ChangeSkin(ref player.YYY_hatIndex, 1, 4, +1); }
+
+    public void OnClassLeft() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, -1); }
+    public void OnClassRight() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1); }
+    void ChangeSkin(ref int index, int min, int max, int delta)
+    {
+        index += delta;
+        if (index < min) index = max;
+        if (index > max) index = min;
+
+        player.SetSkin();         // 更新角色外观
+        UpdateUI();               // 更新文字
+        player.SaveCurrent();     // 存一份当前皮肤到缓存/存档
+
+        RefreshSaveSlots();//刷新存档界面
+    }
+
+    void UpdateUI()
+    {
+        nameLabel.text = player.currentSaveName;
+
+        hairLabel.text = $"Hair_{player.YYY_headIndex}";
+        eyesLabel.text = $"Eyes_{player.YYY_eyesIndex}";
+        raceLabel.text = $"Race_{player.YYY_hatIndex}";
+        classLabel.text = $"Class_{player.YYY_bodyIndex}";
+    }//捏人界面UI显示
+
+    public void OnConfirm()
+    {
+        // 可能额外做点逻辑（比如保存到最终存档槽）
+        Debug.Log("确认创建角色: " + player.YYY_headIndex);
+
+        //抹去当前名称，下次捏人再度选中名称
+        player.currentSaveName = null;
+
+        //显示存档界面，隐藏捏人界面
+        CreateCavans.SetActive(false);
+        SaveCavans.SetActive(true);
+    }
+
+
     public void OpenCloseMenu() 
     {
         if (!isPause)
         {
             MainCamera.SetBool("Track", true);
             Common_All.SetActive(false);
-            ShowSaveCavans.SetActive(true);
+            ShowSaveCavansAnim.gameObject.SetActive(true);
             ShowSaveCavansAnim.SetBool("Track", true);
         }
         else
         {
             MainCamera.SetBool("Track", false);
             Common_All.SetActive(true);
-            //ShowSaveCavans.SetActive(false);
+            ShowSaveCavansAnim.gameObject.SetActive(false);
             ShowSaveCavansAnim.SetBool("Track",false);
         }
 
@@ -108,6 +167,13 @@ public class UIManager : MonoBehaviour
     {
         player._CreateNewSkin();
         RefreshSaveSlots();
+
+        //显示捏人界面，隐藏存档界面
+        SaveCavans.SetActive(false);
+        CreateCavans.SetActive(true);
+
+        UpdateUI();//更新捏人界面UI
+
     }//点击【＋】就会随机存档
 
     public void RefreshSaveSlots()
