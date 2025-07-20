@@ -77,8 +77,8 @@ public class Shooting : MonoBehaviour
 
     [Header("特殊类型子弹")]
     public int specialBullet;
-    public GameObject Bullet, Arrow, Electricity, Flame;
-    public void SetSpecialBullet(int SpecialBullet)// 0一般子弹   1弩箭   2魔法雷电球   3魔法火焰球
+    public GameObject Bullet, Arrow, Electricity, Flame, Ice,Poison;
+    public void SetSpecialBullet(int SpecialBullet)// 0一般子弹   1弩箭   2魔法雷电球   3魔法火焰球  4冰魔法  5毒魔法
     {
         //特殊子弹
         switch (SpecialBullet)
@@ -111,6 +111,21 @@ public class Shooting : MonoBehaviour
 
                 lifetime = 5f;
                 break;
+            case 4:
+                Ice.SetActive(true);
+                CurrentBulletEffect = IceEffect;
+                speed = 30f;
+                TypeOfAttack = 3;//冻结
+                lifetime = 5f;
+                break;
+
+            case 5:
+                Poison.SetActive(true);
+                CurrentBulletEffect = PoisonEffect;
+                speed = 30f;
+
+                lifetime = 5f;
+                break;
         }
         specialBullet = SpecialBullet;
     }
@@ -121,9 +136,11 @@ public class Shooting : MonoBehaviour
 
     GameObject CurrentBulletEffect;//当前的这种子弹打到墙壁上弹出哪种特效
 
-    public GameObject FireEffect;//子弹火星
+    public GameObject FireEffect;//火星特效
     public GameObject BlastEffect;//爆炸特效
-    public GameObject LightingEffect;//爆炸特效
+    public GameObject LightingEffect;//雷柱特效
+    public GameObject IceEffect;//冰特效
+    public GameObject PoisonEffect;//毒气特效
 
     public Transform rayTarget;//特效的的位置
 
@@ -142,13 +159,19 @@ public class Shooting : MonoBehaviour
 
             switch (specialBullet)
             {
+                //子弹，弓箭，冰弹
                 case 0:
                 case 1:
+                case 4:
+
                     if (isCritial) { other.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
                     other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);
                     break;
+
+                //火球，雷球，毒球
                 case 2:
                 case 3:
+                case 5:
                     GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
                     Strike strike = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Strike>();
                     strike.DamageToEnemy = true;
@@ -168,8 +191,11 @@ public class Shooting : MonoBehaviour
 
             switch (specialBullet)
             {
+
+                //子弹，弓箭，冰弹
                 case 0:
                 case 1:
+                case 4:
 
                     if (other.CompareTag("Player"))
                         other.GetComponent<Player>()?.ChangeHealth(appliedDamage, TypeOfAttack);
@@ -177,13 +203,24 @@ public class Shooting : MonoBehaviour
                         other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack); // 队友是Enemy脚本
 
                     break;
+
+                //火球，雷球
                 case 2:
                 case 3:
                     GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
                     Strike strike = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Strike>();
                     strike.DamageToPlayer = true;
                     strike.DamageToFriend = true;
-                    Destroy(EffectPrefabs, 1f);
+
+
+                   //strike.Damage = appliedDamage; // ← 直接把算好的值传进去
+                   //strike.isCritial = isCritial;
+                   //strike.chargeTime = chargeTime;
+                   //strike.TypeOfAttack = TypeOfAttack; // 如果你有这个字段的话
+
+
+
+                    Destroy(EffectPrefabs, 0.5f);
 
                     break;
 
@@ -210,7 +247,7 @@ public class Shooting : MonoBehaviour
         if (other.CompareTag("obstacle"))
         {
             GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
-            Destroy(EffectPrefabs, 2f);
+            Destroy(EffectPrefabs, 0.5f);
 
 
             if (other.gameObject.GetComponent<Plant>() != null)

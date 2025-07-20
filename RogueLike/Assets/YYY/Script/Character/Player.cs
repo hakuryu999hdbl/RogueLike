@@ -183,9 +183,16 @@ public class Player : MonoBehaviour
             state.IsName(GetAnimPrefix() + "Attack_4") ||
             state.IsName(GetAnimPrefix() + "Shoot_1") ||
             state.IsName(GetAnimPrefix() + "Spell_1") ||
+            state.IsName(GetAnimPrefix() + "Spell_2") ||
 
             state.IsName(GetAnimPrefix() + "Strike_Block") ||
-            state.IsName(GetAnimPrefix() + "Shoot_Block")
+            state.IsName(GetAnimPrefix() + "Shoot_Block") ||
+
+            state.IsName(GetAnimPrefix() + "_Default_Die") ||
+            state.IsName(GetAnimPrefix() + "_Default_Die_2") ||
+            state.IsName(GetAnimPrefix() + "_Default_GetUp") ||
+            isFrozen
+
             )
         {
             canMove = false;
@@ -662,6 +669,8 @@ public class Player : MonoBehaviour
             {
                 ChangeCritical(10);//按下暴击率快速上升
                 //attack_Range.SetActive(true);//技能范围
+
+                if (isMage){ ShowMagicEffect(); }//法师产生法阵
             }
 
 
@@ -669,6 +678,8 @@ public class Player : MonoBehaviour
         else
         {
             ChangeCritical(-10);//松开暴击率快速下降
+
+            if (isMage) { HideMagicEffect(); }//法师隐藏法阵
         }
     }
 
@@ -756,7 +767,19 @@ public class Player : MonoBehaviour
                     if(Class == PlayerClass.Succubus) { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
                     else
                     {
-                        if (isMage) { anim.Play(GetAnimPrefix() + "Spell_1", 0, 0); }
+                        if (isMage) 
+                        {
+                            if (MageAttackType)
+                            {
+                                anim.Play(GetAnimPrefix() + "Spell_1", 0, 0);
+                            }
+                            else
+                            {
+                                anim.Play(GetAnimPrefix() + "Spell_2", 0, 0);
+                            }
+                            MageAttackType = !MageAttackType;
+
+                        }
                         else { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
                     }
                   
@@ -776,7 +799,7 @@ public class Player : MonoBehaviour
 
     }//普通攻击
 
-
+    bool MageAttackType = false;
 
     void StartCombo()
     {
@@ -953,10 +976,14 @@ public class Player : MonoBehaviour
 
             case 201:
             case 202:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(5);//剧毒法球
+                break;
             case 203:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(3);//火焰法球
                 break;
             case 204:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(4);//冰冻法球
+                break;
             case 205:
             case 206:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(2);//雷电法球
@@ -1035,7 +1062,83 @@ public class Player : MonoBehaviour
         if (visionType == PlayerType.ShortRangePlayer) { CurrentWeapon = weaponIndex; }//实装战士武器
         if (visionType == PlayerType.LongRangePlayer && !isMage) { CurrentWeapon = weaponIndex + 100; }//实装射手武器
         if (visionType == PlayerType.LongRangePlayer && isMage) { CurrentWeapon = weaponIndex + 200; }//实装法师武器
+
+        if (isMage) 
+        {
+            switch (CurrentWeapon) 
+            {
+
+
+                case 201:
+                case 202:
+                    ChangeMagicEffectColor(5);//剧毒法球
+                    break;
+                case 203:
+                    ChangeMagicEffectColor(2);//火焰法球
+                    break;
+                case 204:
+                    ChangeMagicEffectColor(4);//冰冻法球
+                    break;
+                case 205:
+                case 206:
+                    ChangeMagicEffectColor(3);//雷电法球
+                    break;
+            }
+        }
+
     }
+
+    public GameObject ExitEffect;//施法粒子特效（出现消失）
+    public ParticleSystem exitEffect;//施法粒子特效(改变颜色)
+
+
+
+    public Animator MagicFormationAnim;//魔法阵
+    public SpriteRenderer MagicFormation;//魔法阵样式
+    public Sprite Magic_Fire, Magic_Electricity, Magic_Ice, Magic_Poison;
+
+    public void ChangeMagicEffectColor(int ColorNumber) 
+    {
+        switch (ColorNumber) 
+        {
+            case 2:
+                MagicFormation.sprite = Magic_Fire;
+                var main = exitEffect.main;
+                main.startColor = new Color(1f, 0.5f, 0f); //橘黄色
+                break;
+            case 3:
+                MagicFormation.sprite = Magic_Electricity;
+                var main2 = exitEffect.main;
+                main2.startColor = Color.yellow;
+                break;
+            case 4:
+                MagicFormation.sprite = Magic_Ice;
+                var main3 = exitEffect.main;
+                main3.startColor = Color.cyan;
+                break;
+            case 5:
+                MagicFormation.sprite = Magic_Poison;
+                var main4 = exitEffect.main;
+                main4.startColor = new Color(0.5f, 0f, 0.5f); //紫色
+                break;
+        }
+    }
+
+
+    public void ShowMagicEffect() 
+    {
+        //exitEffect.Play();
+        ExitEffect.SetActive(true);
+        MagicFormationAnim.SetBool("Show",true);
+    }
+    public void HideMagicEffect()
+    {
+        //exitEffect.Stop();
+        ExitEffect.SetActive(false);
+        MagicFormationAnim.SetBool("Show", false);
+    }
+
+
 
     #endregion
 
@@ -1449,6 +1552,7 @@ public class Player : MonoBehaviour
     public GameObject SparkEffect;//火星特效
     public GameObject GateEffect;//传送门特效
     public GameObject Palsy_Effect;//闪电特效
+    public GameObject Frozen_Effect;//冻结特效
     public GameObject ProtectiveCoverEffect;//防护罩特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
@@ -1563,6 +1667,9 @@ public class Player : MonoBehaviour
                     break;
                 case 2:
                     Palsy_Effect.SetActive(true);//雷电伤害
+                    break;
+                case 3:
+                    Freeze(1);//冻结伤害
                     break;
             }
 
@@ -1760,4 +1867,37 @@ public class Player : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    /// 异常状态
+    /// </summary>
+    #region
+    //————————————————————冻结
+    public bool isFrozen =false;
+    public void Freeze(int Timer)
+    {
+
+        anim.speed = 0f;// 将动画速度设置为0，冻结动画
+        Frozen_Effect.SetActive(true);//在受到冰冻伤害的时候就已经非处冰冻特效了,这里再写一遍因为有些时候敌人挡住了伤害，这里的冰冻是无法被挡住的  
+
+
+
+
+        isFrozen = true;
+
+        Invoke("Recover", Timer);
+    }
+    public void Recover()//死亡，自我恢复，麻痹恢复调用
+    {
+
+        isFrozen = false;
+
+        Frozen_Effect.SetActive(false);//去除冻结特效
+
+        anim.speed = 1f; // 恢复到原来的时间缩放值，解除冻结
+
+
+    }
+
+
+    #endregion
 }

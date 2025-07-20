@@ -83,7 +83,6 @@ public class Enemy : MonoBehaviour
         GateEffect.SetActive(true);//传送门特效
 
 
-        
     }
 
 
@@ -128,8 +127,8 @@ public class Enemy : MonoBehaviour
         }
 
 
-
-
+        //只要是法师且处于攻击就使用魔法阵
+        if (isAttack&&isMage) { ShowMagicEffect(); } else{ HideMagicEffect(); }
 
 
 
@@ -803,8 +802,18 @@ public class Enemy : MonoBehaviour
                         if (isMage)
                         {
                             //队友使用玩家的攻击动画
-                            if (tag == "Friend") { anim.Play(GetAnimPrefix() + "Spell_1", 0, 0); }
-                            else { anim.Play(GetAnimPrefix() + "spell_1", 0, 0); }
+                            if (MageAttackType)
+                            {
+                                if (tag == "Friend") { anim.Play(GetAnimPrefix() + "Spell_1", 0, 0); }
+                                else { anim.Play(GetAnimPrefix() + "spell_1", 0, 0); }
+                            }
+                            else
+                            {
+                                if (tag == "Friend") { anim.Play(GetAnimPrefix() + "Spell_2", 0, 0); }
+                                else { anim.Play(GetAnimPrefix() + "spell_2", 0, 0); }
+                            }
+                            MageAttackType = !MageAttackType;
+                           
                         }
                         else
                         {
@@ -823,14 +832,20 @@ public class Enemy : MonoBehaviour
 
 
                 isInAttackDelay = true;
+
+
+
             }
 
 
             isKeepWeapon = true;//没有持械的话进入持械状态
+
+
         }
 
     }
 
+    bool MageAttackType = false;
 
     void FlashWarning()
     {
@@ -969,14 +984,19 @@ public class Enemy : MonoBehaviour
 
         switch (CurrentWeapon)
         {
-          
+
+
 
             case 201:
             case 202:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(5);//剧毒法球
+                break;
             case 203:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(3);//火焰法球
                 break;
             case 204:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(4);//冰冻法球
+                break;
             case 205:
             case 206:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(2);//雷电法球
@@ -1065,8 +1085,79 @@ public class Enemy : MonoBehaviour
         if (visionType == EnemyType.ShortRangeEnemy){ CurrentWeapon = weaponIndex; }//实装战士武器
         if (visionType == EnemyType.LongRangeEnemy && !isMage) { CurrentWeapon = weaponIndex + 100; }//实装射手武器
         if (visionType == EnemyType.LongRangeEnemy&&isMage) { CurrentWeapon = weaponIndex+200; }//实装法师武器
+
+        if (isMage)
+        {
+            switch (CurrentWeapon)
+            {
+
+
+                case 201:
+                case 202:
+                    ChangeMagicEffectColor(5);//剧毒法球
+                    break;
+                case 203:
+                    ChangeMagicEffectColor(2);//火焰法球
+                    break;
+                case 204:
+                    ChangeMagicEffectColor(4);//冰冻法球
+                    break;
+                case 205:
+                case 206:
+                    ChangeMagicEffectColor(3);//雷电法球
+                    break;
+            }
+        }
+    }
+    public GameObject ExitEffect;//施法粒子特效（出现消失）
+    public ParticleSystem exitEffect;//施法粒子特效(改变颜色)
+
+
+
+    public Animator MagicFormationAnim;//魔法阵
+    public SpriteRenderer MagicFormation;//魔法阵样式
+    public Sprite Magic_Fire, Magic_Electricity, Magic_Ice, Magic_Poison;
+
+    public void ChangeMagicEffectColor(int ColorNumber)
+    {
+        switch (ColorNumber)
+        {
+            case 2:
+                MagicFormation.sprite = Magic_Fire;
+                var main = exitEffect.main;
+                main.startColor = new Color(1f, 0.5f, 0f); //橘黄色
+                break;
+            case 3:
+                MagicFormation.sprite = Magic_Electricity;
+                var main2 = exitEffect.main;
+                main2.startColor = Color.yellow;
+                break;
+            case 4:
+                MagicFormation.sprite = Magic_Ice;
+                var main3 = exitEffect.main;
+                main3.startColor = Color.cyan;
+                break;
+            case 5:
+                MagicFormation.sprite = Magic_Poison;
+                var main4 = exitEffect.main;
+                main4.startColor = new Color(0.5f, 0f, 0.5f); //紫色
+                break;
+        }
     }
 
+
+    public void ShowMagicEffect()
+    {
+        //exitEffect.Play();
+        ExitEffect.SetActive(true);
+        MagicFormationAnim.SetBool("Show", true);
+    }
+    public void HideMagicEffect()
+    {
+        //exitEffect.Stop();
+        ExitEffect.SetActive(false);
+        MagicFormationAnim.SetBool("Show", false);
+    }
     #endregion
 
 
@@ -1139,6 +1230,8 @@ public class Enemy : MonoBehaviour
     public GameObject SparkEffect;//火星特效
     public GameObject GateEffect;//传送门特效
     public GameObject Palsy_Effect;//闪电特效
+    public GameObject Frozen_Effect;//冻结特效
+
     public GameObject ProtectiveCoverEffect;//防护罩特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
@@ -1205,6 +1298,9 @@ public class Enemy : MonoBehaviour
                     break;
                 case 2:
                     Palsy_Effect.SetActive(true);//雷电伤害
+                    break;
+                case 3:
+                    Freeze(1);//冻结伤害
                     break;
             }
 
@@ -1451,9 +1547,48 @@ public class Enemy : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// 异常状态
+    /// </summary>
+    #region
+    //————————————————————冻结
+
+    public void Freeze(int Timer)
+    {
+
+        anim.speed = 0f;// 将动画速度设置为0，冻结动画
+        Frozen_Effect.SetActive(true);//在受到冰冻伤害的时候就已经非处冰冻特效了,这里再写一遍因为有些时候敌人挡住了伤害，这里的冰冻是无法被挡住的  
 
 
 
+
+        aiPath.canMove = false;
+
+        // 保留物理模拟，只冻结移动
+        rbody.velocity = Vector2.zero;
+        rbody.constraints = RigidbodyConstraints2D.FreezeAll;
+
+        Invoke("Recover", Timer);
+    }
+    public void Recover()//死亡，自我恢复，麻痹恢复调用
+    {
+
+        aiPath.canMove = true;
+
+        // 恢复物理移动
+        rbody.constraints = RigidbodyConstraints2D.None;
+        rbody.constraints = RigidbodyConstraints2D.FreezeRotation; // 恢复默认状态（通常冻结旋转即可）
+
+
+        Frozen_Effect.SetActive(false);//去除冻结特效
+
+        anim.speed = 1f; // 恢复到原来的时间缩放值，解除冻结
+
+
+    }
+
+
+    #endregion
     /// <summary>
     /// 阵营转换
     /// </summary>
