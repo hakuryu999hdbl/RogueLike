@@ -499,10 +499,13 @@ public class Enemy : MonoBehaviour
         switch (t)
         {
             case 0:
-                visionType = EnemyType.ShortRangeEnemy;
+                visionType = EnemyType.ShortRangeEnemy; isMage = false;//战士
                 break;
             case 1:
-                visionType = EnemyType.LongRangeEnemy;
+                visionType = EnemyType.LongRangeEnemy; isMage = false;//射手
+                break;
+            case 2:
+                visionType = EnemyType.LongRangeEnemy; isMage = true;//法师
                 break;
         }
     }

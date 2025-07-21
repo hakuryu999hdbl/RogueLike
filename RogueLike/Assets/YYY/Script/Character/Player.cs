@@ -181,6 +181,8 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+       
+
 
         if (!isDie && currentHealth > 0)
         {
@@ -259,7 +261,7 @@ public class Player : MonoBehaviour
     private void BaseMove()
     {
 
-
+       
 
         //这个是拉杆控制，最优先，如果手柄没有输入，再检测手柄键盘等
         inputX = Joystick.Horizontal;
@@ -350,7 +352,7 @@ public class Player : MonoBehaviour
 
 
 
-        rbody.velocity = input * speed;
+      
 
 
         if (!FirstMove)
@@ -358,6 +360,21 @@ public class Player : MonoBehaviour
             StopX = 0;
             StopY = -1;
         }//玩家还没有按下任何按钮的时候，Update里强制方向（正面）
+
+        if (isInputBlocked)
+        {
+            StopX = 0;
+            StopY = -1;
+
+            moveSpeed = 0;
+
+        }//只要处于切断输入中，永远切掉输入正面朝向
+        else 
+        {
+            rbody.velocity = input * speed;
+        }
+
+
 
         // 传给 Spine 动画机
         anim.SetFloat("InputX", StopX);
@@ -384,7 +401,25 @@ public class Player : MonoBehaviour
         ShortRangePlayer,//近战
         LongRangePlayer//远程
     }
+    public void ChangeType(int t)
+    {
+        switch (t)
+        {
+            case 0:
+                visionType = PlayerType.ShortRangePlayer; isMage = false;//战士
+                break;
+            case 1:
+                visionType = PlayerType.LongRangePlayer; isMage = false;//射手
+                break;
+            case 2:
+                visionType = PlayerType.LongRangePlayer; isMage = true;//法师
+                break;
+        }
 
+        //武器（尤其是远程）更新
+        CheckWeapon();
+
+    }
     public PlayerClass Class;
     public enum PlayerClass
     {
@@ -501,6 +536,27 @@ public class Player : MonoBehaviour
 
         CheckWeapon();
     }//设置武器
+
+
+
+    public void _ClothesToClass() 
+    {
+
+        //目前暂时以上衣区别职业
+        switch (YYY_bodyIndex)
+        {
+            case 10:
+                ChangeType(0);
+                break;
+            case 11:
+                ChangeType(1);
+                break;
+            case 12:
+                ChangeType(2);
+                break;
+        }
+
+    }//临时根据玩家的衣服来确定职业
 
 
 
@@ -768,7 +824,7 @@ public class Player : MonoBehaviour
     public bool comboQueued = false;
 
 
-    private void PlayNormalAttack()
+    public void PlayNormalAttack()
     {
 
         if (!isDie)
@@ -1427,6 +1483,8 @@ public class Player : MonoBehaviour
 
     private InputAction DodgeAction;
 
+    public bool isInputBlocked = true;//在捏人界面暂时切断玩家的输入
+
     private void RegisterHandle()
     {
         // 获取动作（根据你的Action Map结构可能需要调整路径）
@@ -1450,7 +1508,8 @@ public class Player : MonoBehaviour
     }
     private void OnRunStarted(InputAction.CallbackContext context)
     {
-        if (!isDie && currentHealth > 0 &&canMove)
+
+        if (!isDie && currentHealth > 0 &&canMove &&!isInputBlocked)
         {
             isRunning = true;
         }
@@ -1459,7 +1518,7 @@ public class Player : MonoBehaviour
     private void OnRunCanceled(InputAction.CallbackContext context)
     {
 
-        if (!isDie && currentHealth > 0)
+        if (!isDie && currentHealth > 0 && !isInputBlocked)
         {
             isRunning = false;
         }
@@ -1469,7 +1528,7 @@ public class Player : MonoBehaviour
     private void OnAttackStarted(InputAction.CallbackContext context)
     {
 
-        if (!isDie && currentHealth > 0)
+        if (!isDie && currentHealth > 0 && !isInputBlocked)
         {
             Attack_Start();
         }
@@ -1477,7 +1536,8 @@ public class Player : MonoBehaviour
     }
     private void OnAttackCanceled(InputAction.CallbackContext context)
     {
-        if (!isDie && currentHealth > 0)
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked)
         {
             Attack_Cancel();
         }
@@ -1487,7 +1547,7 @@ public class Player : MonoBehaviour
     private void OnDodgeStarted(InputAction.CallbackContext context)
     {
 
-        if (!isDie && currentHealth > 0)
+        if (!isDie && currentHealth > 0 && !isInputBlocked)
         {
             Dodge_Start();
         }
@@ -1496,7 +1556,7 @@ public class Player : MonoBehaviour
     private void OnDodgeCanceled(InputAction.CallbackContext context)
     {
 
-        if (!isDie && currentHealth > 0)
+        if (!isDie && currentHealth > 0 && !isInputBlocked)
         {
             Dodge_Cancel();
         }
@@ -1510,7 +1570,8 @@ public class Player : MonoBehaviour
     public bool isRunning = false;//持续按下跑步键
     public void ButtonSetRun()
     {
-        if (!isDie && currentHealth > 0)
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked)
         {
             isRunning = true;
         }
@@ -1518,7 +1579,8 @@ public class Player : MonoBehaviour
     }
     public void ButtonSetStop()
     {
-        if (!isDie && currentHealth > 0)
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked)
         {
             isRunning = false;
         }
@@ -1529,14 +1591,16 @@ public class Player : MonoBehaviour
     public bool isAttacking = false;//持续按下攻击键
     public void ButtonSetAttack()
     {
-        if (!isDie && currentHealth > 0)
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked)
         {
             Attack_Start();
         }
     }
     public void ButtonSetAttackOver()
     {
-        if (!isDie && currentHealth > 0)
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked)
         {
             Attack_Cancel();
         }
@@ -1547,7 +1611,8 @@ public class Player : MonoBehaviour
     public bool isDodging = false;//持续按下闪避键
     public void ButtonSetDodge()
     {
-        if (!isDie && currentHealth > 0)
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked)
         {
             Dodge_Start();
         }
@@ -1555,7 +1620,7 @@ public class Player : MonoBehaviour
     public void ButtonSetDodgeOver()
     {
 
-        if (!isDie && currentHealth > 0)
+        if (!isDie && currentHealth > 0&&!isInputBlocked)
         {
             Dodge_Cancel();
         }

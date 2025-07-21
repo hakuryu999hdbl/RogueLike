@@ -36,6 +36,10 @@ public class UIManager : MonoBehaviour
         Loading.SetActive(true);
     }
 
+
+    
+   
+
     #endregion
 
     /// <summary>
@@ -43,14 +47,15 @@ public class UIManager : MonoBehaviour
     /// </summary>
     #region
     [Header("各类菜单")]
-    public bool isPause;
+    public bool isPause=true;//一开始就Menu界面
     public Animator MainCamera;//控制摄像机拉近远离
     public Animator ShowSaveCavansAnim;//黑幕显示背景
 
     public GameObject SaveCavans,CreateCavans;//存档界面,捏人界面
 
     [Header("捏人界面UI")]
-    public Text nameLabel;
+    public InputField nameInputField; // 绑定在 Inspector 里
+
     public Text hairLabel;
     public Text eyesLabel;
     public Text raceLabel;
@@ -67,8 +72,8 @@ public class UIManager : MonoBehaviour
     public void OnRaceLeft() { ChangeSkin(ref player.YYY_hatIndex, 1, 4, -1); }
     public void OnRaceRight() { ChangeSkin(ref player.YYY_hatIndex, 1, 4, +1); }
 
-    public void OnClassLeft() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, -1); }
-    public void OnClassRight() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1); }
+    public void OnClassLeft() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, -1); player.PlayNormalAttack(); }
+    public void OnClassRight() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1); player.PlayNormalAttack(); }
     void ChangeSkin(ref int index, int min, int max, int delta)
     {
         index += delta;
@@ -80,11 +85,18 @@ public class UIManager : MonoBehaviour
         player.SaveCurrent();     // 存一份当前皮肤到缓存/存档
 
         RefreshSaveSlots();//刷新存档界面
-    }
+
+
+
+        player._ClothesToClass();//临时让衣服改变职业
+
+
+
+    }//捏人界面玩家点击单个皮肤选项左右之后
 
     void UpdateUI()
     {
-        nameLabel.text = player.currentSaveName;
+        nameInputField.text = player.currentSaveName;
 
         hairLabel.text = $"Hair_{player.YYY_headIndex}";
         eyesLabel.text = $"Eyes_{player.YYY_eyesIndex}";
@@ -92,10 +104,51 @@ public class UIManager : MonoBehaviour
         classLabel.text = $"Class_{player.YYY_bodyIndex}";
     }//捏人界面UI显示
 
+
+    
+    public void OnConfirmNameInput()
+    {
+        string newName = nameInputField.text.Trim();
+
+        if (string.IsNullOrEmpty(newName))
+            return; // 不处理空输入
+
+        string oldName = player.currentSaveName;
+
+        // 避免重复操作
+        if (oldName == newName) return;
+
+        // 如果该名称已存在（可选：检查冲突）
+        if (SaveManager.HasSave(newName))
+        {
+            Debug.LogWarning("已存在此命名的存档！");
+            return;
+        }
+
+        // 创建新存档数据（复制当前捏人数据）
+        PlayerSaveData data = new PlayerSaveData
+        {
+            characterName = newName,
+            headIndex = player.YYY_headIndex,
+            eyesIndex = player.YYY_eyesIndex,
+            bodyIndex = player.YYY_bodyIndex,
+            legsIndex = player.YYY_legsIndex,
+            hatIndex = player.YYY_hatIndex,
+            weaponIndex = player.weaponIndex
+        };
+
+        SaveManager.Save(data); // ✅ 保存新名字存档
+        SaveManager.DeleteSave(oldName); // 🗑️ 删除旧存档
+
+        player.currentSaveName = newName; // 更新记录
+        Debug.Log($"名称更换成功：{oldName} → {newName}");
+
+        RefreshSaveSlots();//每次单独更新名称也需要刷新存档界面
+
+    }// 玩家输入新名字，调用此函数
+
     public void OnConfirm()
     {
-        // 可能额外做点逻辑（比如保存到最终存档槽）
-        Debug.Log("确认创建角色: " + player.YYY_headIndex);
 
         //抹去当前名称，下次捏人再度选中名称
         player.currentSaveName = null;
@@ -103,7 +156,7 @@ public class UIManager : MonoBehaviour
         //显示存档界面，隐藏捏人界面
         CreateCavans.SetActive(false);
         SaveCavans.SetActive(true);
-    }
+    }//玩家点击Ok
 
 
     public void OpenCloseMenu() 
@@ -114,6 +167,9 @@ public class UIManager : MonoBehaviour
             Common_All.SetActive(false);
             ShowSaveCavansAnim.gameObject.SetActive(true);
             ShowSaveCavansAnim.SetBool("Track", true);
+
+
+            player.isInputBlocked = true;//切断玩家的方向攻击等输入
         }
         else
         {
@@ -121,6 +177,8 @@ public class UIManager : MonoBehaviour
             Common_All.SetActive(true);
             ShowSaveCavansAnim.gameObject.SetActive(false);
             ShowSaveCavansAnim.SetBool("Track",false);
+
+            player.isInputBlocked = false;//恢复玩家的方向攻击等输入
         }
 
         isPause = !isPause;
@@ -143,9 +201,7 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        //找玩家
-        _Player = GameObject.FindGameObjectWithTag("Player");
-        player = _Player.GetComponent<Player>();
+
 
 
 

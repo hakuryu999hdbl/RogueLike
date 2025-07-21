@@ -34,7 +34,7 @@ public static class SaveManager
             Debug.LogWarning("存档不存在：" + path);
             return null;
         }
-    }//读取指定名称的存档(好像没有被用上)
+    }//读取指定名称的存档(玩家切换单个皮肤时)
 
     public static void DeleteSave(string characterName)
     {
@@ -52,4 +52,10 @@ public static class SaveManager
         string[] files = Directory.GetFiles(dir, "*.json");
         return files.Select(Path.GetFileNameWithoutExtension).ToList();
     }// 取名时获取已有存档名
+
+    public static bool HasSave(string characterName)
+    {
+        string path = Application.persistentDataPath + "/Saves/save_" + characterName + ".json";
+        return File.Exists(path);
+    }//确认有没有这个存档(捏人界面改名字时)
 }

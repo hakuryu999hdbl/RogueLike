@@ -81,6 +81,9 @@ public class SaveSlotUI : MonoBehaviour
         player.ApplySaveData(Data);
         UIManager.instance.SetCurrentSlot(this); // 通知UIManager进行高亮更新
 
+
+        player._ClothesToClass();//临时让衣服改变职业
+
     }//选择这个档的皮肤
 
     public void Delete()
