@@ -74,7 +74,14 @@ public class SaveSlotUI : MonoBehaviour
     public void SetHighlight(bool on)
     {
         highlightFrame.SetActive(on);
+
+
     }//高亮显示
+
+    public void DelayChoose() 
+    {
+        Invoke("Choose", 0.1f);
+    }
 
     public void Choose() 
     {
@@ -88,12 +95,22 @@ public class SaveSlotUI : MonoBehaviour
 
     public void Delete()
     {
+        UIManager.instance.MakeSureDeleteCurrentSave.SetActive(true);
+        UIManager.instance.CurrentChooseList = -1;
+    }//弹出确认删除存档框
+    public void DeleteCurrentSave() 
+    {
         SaveManager.DeleteSave(Data.characterName);
         player.ClearSkin(); // ✅ 清除当前皮肤
 
         Destroy(this.gameObject);
-        UIManager.instance.RefreshSaveSlots(); // ✅ 删除后刷新
-    }//删除这个档的皮肤
 
+
+        UIManager.instance.RefreshSaveSlots(); // ✅ 删除后刷新
+
+        UIManager.instance.UpdateCurrentSelection(UIManager.instance.currentIndex);//刷新列表后也是选中当前
+
+        AudioManager.instance.AudioPlay(AudioManager.instance.Effect_tear1);
+    }//删除这个档的皮肤
 
 }

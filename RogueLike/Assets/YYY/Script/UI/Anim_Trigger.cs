@@ -26,11 +26,13 @@ public class Anim_Trigger : MonoBehaviour
 
     public void HightLight_Voice()
     {
+        AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
         //AudioManager.instance.AudioPlay(AudioManager.instance.Effect_tear1);//手动SE音频替换,筹码放置
     }
     public void Click_Voice()
     {
-        AudioManager.instance.AudioPlay(AudioManager.instance.SE_Reba);//手动SE音频替换,筹码放置
+        AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
+        //AudioManager.instance.AudioPlay(AudioManager.instance.SE_Reba);//手动SE音频替换,筹码放置
     }
 
     public void SetActiveFalse()
