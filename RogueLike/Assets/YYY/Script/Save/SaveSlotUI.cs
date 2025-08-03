@@ -91,12 +91,13 @@ public class SaveSlotUI : MonoBehaviour
 
         player._ClothesToClass();//临时让衣服改变职业
 
+       // AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
+
     }//选择这个档的皮肤
 
     public void Delete()
     {
-        UIManager.instance.MakeSureDeleteCurrentSave.SetActive(true);
-        UIManager.instance.CurrentChooseList = -1;
+        UIManager.instance.TryDelete();
     }//弹出确认删除存档框
     public void DeleteCurrentSave() 
     {

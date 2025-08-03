@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.Audio;
 
 using System;
 using System.IO;
@@ -29,18 +30,25 @@ public class UIManager : MonoBehaviour
         NextButton.SetActive(true);
 
 
-    }
+    }//生命值归0后触发
 
     public void ReLoadScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Loading.SetActive(true);
-    }
+    }//重刷场景
 
     [Header("主菜单界面层级")]
-    public int CurrentChooseList = 0;//-1确认是否删除存档  0 存档界面   1捏人界面
-    public int CreatNewcurrentIndex = 0;//0 名称 1眼睛  2头  3种族  4职业  5确定
+    int CurrentChooseList = 0;// -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面
+    public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
+    public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
+    public int SettingPagecurrentIndex = 0;//0 BGM  1 SE  2 语言  3 删除存档
+    public int LanguagePagecurrentIndex = 0;//0 日语 1中文 2繁中 3英语 4韩语
+
+    [SerializeField] private GameObject[] HomePage_highlightObjs; // 主页高亮显示
     [SerializeField] private GameObject[] highlightObjs; // 捏人界面高亮显示
+    [SerializeField] private GameObject[] SettingPage_highlightObjs; // 设置高亮显示
+    [SerializeField] private GameObject[] LanguagePage_highlightObjs; // 设置高亮显示
 
     private void UpdateHighlight()
     {
@@ -50,12 +58,64 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void UpdateHomePage_Highlight()
+    {
+        for (int i = 0; i < HomePage_highlightObjs.Length; i++)
+        {
+            HomePage_highlightObjs[i].SetActive(i == HomePagecurrentIndex);
+        }
+    }
+    private void UpdateSettingPage_Highlight()
+    {
+        for (int i = 0; i < SettingPage_highlightObjs.Length; i++)
+        {
+            SettingPage_highlightObjs[i].SetActive(i == SettingPagecurrentIndex);
+        }
+    }
+    private void UpdateLanguagePage_Highlight()
+    {
+        for (int i = 0; i < LanguagePage_highlightObjs.Length; i++)
+        {
+            LanguagePage_highlightObjs[i].SetActive(i == LanguagePagecurrentIndex);
+        }
+    }
+
     [SerializeField] private Button HairLeft, HairRight;
     [SerializeField] private Button EyesLeft, EyesRight;
     [SerializeField] private Button RaceLeft, RaceRight;
     [SerializeField] private Button ClassLeft, ClassRight;
 
     public Button okButton;
+
+
+    public void ToSavePage() 
+    {
+
+        HomePageCavans.SetActive(false);
+        CurrentChooseList = 2;
+
+
+    }
+
+    public void ToSettingPage() 
+    {
+        SettingCavans.SetActive(true);
+        LanguageCavans.SetActive(false);
+        CurrentChooseList = 3;
+    }
+
+    public void ToLanguagePage()
+    {
+        LanguageCavans.SetActive(true);
+        CurrentChooseList = 4;
+    }
+    public void ToHomePage() 
+    {
+        HomePageCavans.SetActive(true);
+        SettingCavans.SetActive(false);
+        CurrentChooseList = 0;
+    }
+
 
     #endregion
 
@@ -68,7 +128,7 @@ public class UIManager : MonoBehaviour
     public Animator MainCamera;//控制摄像机拉近远离
     public Animator ShowSaveCavansAnim;//黑幕显示背景
 
-    public GameObject SaveCavans, CreateCavans;//存档界面,捏人界面
+    public GameObject HomePageCavans, SaveCavans, CreateCavans,SettingCavans, LanguageCavans;//主菜单界面，存档界面,捏人界面,设置界面
 
     [Header("捏人界面UI")]
     public InputField nameInputField; // 绑定在 Inspector 里
@@ -176,7 +236,7 @@ public class UIManager : MonoBehaviour
 
         UpdateCurrentSelection(currentIndex);//完成捏人后再一次回到当前选中
 
-        CurrentChooseList = 0;//返回存档界面
+        CurrentChooseList = 2;//返回存档界面
 
         //再度把捏人的检索回到名字
         CreatNewcurrentIndex = 0;
@@ -346,7 +406,13 @@ public class UIManager : MonoBehaviour
     public void CancelDelete() 
     {
         MakeSureDeleteCurrentSave.SetActive(false);
-        CurrentChooseList = 0;//返回存档界面
+        CurrentChooseList = 2;//返回存档界面
+    }
+
+    public void TryDelete()
+    {
+        MakeSureDeleteCurrentSave.SetActive(true);
+        CurrentChooseList = -1;//弹出确认删除存档框
     }
 
     //////////////////////高亮显示//////////////////////////////////
@@ -436,6 +502,61 @@ public class UIManager : MonoBehaviour
 
 
     /// <summary>
+    /// 语言设置，声音设置
+    /// </summary>
+    #region
+
+
+    public void ReStart_DeleteAll()
+    {
+        PlayerPrefs.DeleteAll();
+        Debug.Log("删除存档");
+
+        ReLoadScene();
+
+    }//删除存档
+
+    public void SetLanguage(int Number) 
+    {
+        LanguagePagecurrentIndex = Number;
+
+        SetLanguage_2();
+    }
+    void SetLanguage_2() 
+    {
+        PlayerPrefs.SetInt("language",LanguagePagecurrentIndex);
+       
+        ReLoadScene();
+    }
+
+    public AudioMixer audioMixer;
+    public AudioMixer BGM_Mixer;
+
+
+
+    //--------音量
+    public void SetVolune(float value)
+    {
+        audioMixer.SetFloat("MainVolume", value);
+        SE_Bar.fillAmount = Mathf.InverseLerp(-80f, 0f, SEVolume);
+    }
+    public void SetBGMVolune(float value)
+    {
+        BGM_Mixer.SetFloat("BGMVolume", value);
+        BGM_Bar.fillAmount = Mathf.InverseLerp(-80f, 0f, BGMVolume);
+    }
+
+    public Image BGM_Bar;
+    public Image SE_Bar;
+
+    public float BGMVolume = 0f;
+    public float SEVolume = 0f;
+
+
+
+    #endregion
+
+    /// <summary>
     /// 菜单层面多端输入
     /// </summary>
     #region
@@ -500,60 +621,75 @@ public class UIManager : MonoBehaviour
         {
             Vector2 dir = ctx.ReadValue<Vector2>();
 
-
-            if (CurrentChooseList == 0)
+            //主菜单界面
+            if (CurrentChooseList == 0) 
             {
-                if (dir.x != 0)
+                // 当前菜单项内的上下切换
+                if (dir.y > 0.5f)
                 {
-                    // 当前菜单项内的左右切换
-                    if (dir.x > 0.5f)
-                    {
-                        UpdateCurrentSelection(currentIndex + 1);
-                    }
-                    else if (dir.x < -0.5f)
-                    {
-                        UpdateCurrentSelection(currentIndex - 1);
-                    }
+                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex - 1, 0, 4);
+                    UpdateHomePage_Highlight();
+
 
                 }
-                else
+                else if (dir.y < -0.5f)
                 {
-                    // 当前菜单项内的上下切换
-                    if (dir.y > 0.5f)
-                    {
-
-                        if (currentIndex - 5 < 0)
-                        {
-                            UpdateCurrentSelection(0);
-                        }
-                        else
-                        {
-                            UpdateCurrentSelection(currentIndex - 5);
-                        }
-
-                        if (ScrollUp_Button.activeSelf) { ScrollUp(); }
-
-                    }
-                    else if (dir.y < -0.5f)
-                    {
-
-                        if (currentIndex + 5 > saveSlots.Count)
-                        {
-                            UpdateCurrentSelection(saveSlots.Count);
-                        }
-                        else
-                        {
-                            UpdateCurrentSelection(currentIndex + 5);
-                        }
-                        if (currentIndex >= 6 && ScrollDown_Button.activeSelf) { ScrollDown(); }
-
-                    }
-
+                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex + 1, 0, 4);
+                    UpdateHomePage_Highlight();
 
 
                 }
             }
-            else
+
+            //存档界面
+            if (CurrentChooseList == 2)
+            {
+                // 当前菜单项内的左右切换
+                if (dir.x > 0.5f)
+                {
+                    UpdateCurrentSelection(currentIndex + 1);
+                }
+                else if (dir.x < -0.5f)
+                {
+                    UpdateCurrentSelection(currentIndex - 1);
+                }
+
+
+                // 当前菜单项内的上下切换
+                if (dir.y > 0.5f)
+                {
+
+                    if (currentIndex - 5 < 0)
+                    {
+                        UpdateCurrentSelection(0);
+                    }
+                    else
+                    {
+                        UpdateCurrentSelection(currentIndex - 5);
+                    }
+
+                    if (ScrollUp_Button.activeSelf) { ScrollUp(); }
+
+                }
+                else if (dir.y < -0.5f)
+                {
+
+                    if (currentIndex + 5 > saveSlots.Count)
+                    {
+                        UpdateCurrentSelection(saveSlots.Count);
+                    }
+                    else
+                    {
+                        UpdateCurrentSelection(currentIndex + 5);
+                    }
+                    if (currentIndex >= 6 && ScrollDown_Button.activeSelf) { ScrollDown(); }
+
+                }
+               
+            }
+
+            //捏人界面
+            if (CurrentChooseList == 1)
             {
                 // 当前菜单项内的左右切换
                 if (dir.x > 0.5f)
@@ -584,22 +720,106 @@ public class UIManager : MonoBehaviour
                 {
                     CreatNewcurrentIndex = Mathf.Clamp(CreatNewcurrentIndex - 1, 0, 5);
                     UpdateHighlight();
-                    //CreatNewcurrentIndex++;
+
 
                 }
                 else if (dir.y < -0.5f)
                 {
                     CreatNewcurrentIndex = Mathf.Clamp(CreatNewcurrentIndex + 1, 0, 5);
                     UpdateHighlight();
-                    //CreatNewcurrentIndex--;
+  
 
                 }
 
             }
 
+            //设置界面
+            if (CurrentChooseList == 3)
+            {
+
+                // 当前菜单项内的左右切换
+                if (dir.x > 0.5f)
+                {
+                    switch (SettingPagecurrentIndex)
+                    {
+                        case 0:
+
+                            float NewBGMVolume = BGMVolume + 10f;
+                            SetBGMVolune(NewBGMVolume);
+                            BGMVolume = NewBGMVolume;
+                            Debug.Log("拉高BGM");
+                            break;
+                        case 1:
+                            float NewSEVolume = SEVolume + 10f;
+                            SetVolune(NewSEVolume);
+                            SEVolume = NewSEVolume;
+                            Debug.Log("拉高SE");
+                            break;
+
+                    }
+                  
+                }
+                else if (dir.x < -0.5f)
+                {
+
+                    switch (SettingPagecurrentIndex)
+                    {
 
 
+                        case 0:
 
+                            float NewBGMVolume = BGMVolume - 10f;
+                            SetBGMVolune(NewBGMVolume);
+                            BGMVolume = NewBGMVolume;
+                            Debug.Log("降低BGM");
+                            break;
+                        case 1:
+                            float NewSEVolume = SEVolume - 10f;
+                            SetVolune(NewSEVolume);
+                            SEVolume = NewSEVolume;
+                            Debug.Log("降低SE");
+                            break;
+
+                    }
+                }
+
+
+                // 当前菜单项内的上下切换
+                if (dir.y > 0.5f)
+                {
+                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex - 1, 0, 4);
+                    UpdateSettingPage_Highlight();
+
+
+                }
+                else if (dir.y < -0.5f)
+                {
+                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex + 1, 0, 4);
+                    UpdateSettingPage_Highlight();
+
+
+                }
+            }
+
+            //语言界面
+            if (CurrentChooseList == 4)
+            {
+                // 当前菜单项内的上下切换
+                if (dir.y > 0.5f)
+                {
+                    LanguagePagecurrentIndex = Mathf.Clamp(LanguagePagecurrentIndex - 1, 0, 4);
+                    UpdateLanguagePage_Highlight();
+
+
+                }
+                else if (dir.y < -0.5f)
+                {
+                    LanguagePagecurrentIndex = Mathf.Clamp(LanguagePagecurrentIndex + 1, 0, 4);
+                    UpdateLanguagePage_Highlight();
+
+
+                }
+            }
 
             AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
         }
@@ -614,15 +834,45 @@ public class UIManager : MonoBehaviour
         if (player.isInputBlocked)
         {
             // 可选：进入下一级菜单、确认开始游戏等
+
+            //确认删除界面
             if (CurrentChooseList == -1)
             {
                 DeleteCurrentSelection();//删除角色
             }
+
+            //主菜单界面
             if (CurrentChooseList == 0)
+            {
+                switch (HomePagecurrentIndex) 
+                {
+                    case 0:
+                        //ToSavePage();
+                        Invoke("ToSavePage",0.1f);//开始游戏进入存档界面
+                        break;
+                    case 1:
+                       
+                        break;
+                    case 2:
+                        //ToSettingPage();
+                        Invoke("ToSettingPage", 0.1f);//进入设置界面
+                        break;
+                    case 3:
+                        ExitGame();
+                        break;
+                }
+
+                AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
+            }
+
+            //存档界面
+            if (CurrentChooseList == 2)
             {
                 CreateNewSave();
                 AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
             }
+
+            //捏人界面
             if (CurrentChooseList == 1)
             {
 
@@ -639,9 +889,30 @@ public class UIManager : MonoBehaviour
                 }
             }
 
+            //设置界面
+            if (CurrentChooseList == 3)
+            {
+                switch (SettingPagecurrentIndex)
+                {
+                 
+                    case 2:
+                        //ToSettingPage();
+                        Invoke("ToLanguagePage", 0.1f);//进入设置界面
+                        break;
+                    case 3:
+                        ReStart_DeleteAll();//删除存档重刷场景
+                        break;
+                }
 
+                AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
+            }
 
-           
+            //语言界面
+            if (CurrentChooseList == 4)
+            {
+                SetLanguage_2();
+            }
+
         }
 
 
@@ -652,13 +923,28 @@ public class UIManager : MonoBehaviour
         if (player.isInputBlocked)
         {
             // 可选：退出菜单、返回上一级等
+
+            //确认删除界面
             if (CurrentChooseList == -1)
             {
-                CancelDelete();//取消删除
+                //CancelDelete();//取消删除
+                Invoke("CancelDelete", 0.1f);
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
-            
+            //存档界面//设置界面
+            if (CurrentChooseList == 2|| CurrentChooseList == 3)
+            {
+                ToHomePage();
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+
+            //语言设置界面
+            if (CurrentChooseList == 4) 
+            {
+                ToSettingPage();
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
         }
 
     }
@@ -668,7 +954,7 @@ public class UIManager : MonoBehaviour
         if (player.isInputBlocked)
         {
             // 可选：删除存档
-            if (CurrentChooseList == 0)
+            if (CurrentChooseList == 2)
             {
                 currentSelectedSlot.Delete();//跳出是否删除存档界面
                 //DeleteCurrentSelection();
@@ -682,7 +968,7 @@ public class UIManager : MonoBehaviour
 
 
         // 可选：暂停继续游戏
-        if (CurrentChooseList == 0)
+        if (CurrentChooseList == 2)
         {
             OpenCloseMenu();
         }
@@ -694,8 +980,39 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// 跳转网页/退出游戏
+    /// </summary>
+    #region
+    public void OpenURL_Patreon()
+    {
+        Application.OpenURL("https://www.patreon.com/c/NEKOUJI/posts");
+    }
+
+    public void OpenURL_Discord()
+    {
+        Application.OpenURL("https://discord.com/channels/1342112706274267249/1342112706274267252");
+    }
+
+    public void OpenURL_Steam()
+    {
+        Application.OpenURL("https://store.steampowered.com/");
+    }
 
 
+    public void OpenURL_YYY()
+    {
+        Application.OpenURL("https://x.com/Detective_ye");
+    }
+
+    public void ExitGame()
+    {
+        Debug.Log("Exiting game...");
+
+        Application.Quit();
+    }
+
+    #endregion
 
 
 
