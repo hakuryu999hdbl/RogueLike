@@ -236,11 +236,11 @@ public class RBQ : MonoBehaviour
 
         Girl_headIndex = Random.Range(1, 14);  // 1~13
         Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = Random.Range(1, 14);
-        Girl_legsIndex = Random.Range(1, 14);
+        Girl_bodyIndex = Random.Range(10, 13);
+        Girl_legsIndex = Random.Range(10, 13);
         Girl_hatIndex = Random.Range(1, 14);
 
-        weaponIndex = Random.Range(1, 7);
+        weaponIndex = Random.Range(1, 11);
 
 
         SetSkin();

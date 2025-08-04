@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
         //    //SaveCurrent();
         //}
 
-      
+
 
         // 随机从 Enum 中选择一个值
         //Class = (PlayerClass)Random.Range(0, System.Enum.GetValues(typeof(PlayerClass)).Length);
@@ -51,7 +51,8 @@ public class Player : MonoBehaviour
         isMage = true;
 
 
-     
+        Debug.Log("目前存档里的语言" + PlayerPrefs.GetInt("language"));//0 日语 1中文 2繁中 3英语 4韩语
+
     }
 
 
@@ -90,7 +91,7 @@ public class Player : MonoBehaviour
 
     public void SaveCurrent()
     {
-       
+
         if (string.IsNullOrEmpty(currentSaveName))
         {
             // 如果还没有命名，则生成
@@ -113,7 +114,7 @@ public class Player : MonoBehaviour
             currentSaveName = data.characterName;//记录当前名称
 
         }
-        else 
+        else
         {
 
             // 处于捏人界面中，已有命名，覆盖当前
@@ -134,7 +135,7 @@ public class Player : MonoBehaviour
     }//记录当前皮肤并新建随机名称存档
 
 
-    public void OpenSaveURL() 
+    public void OpenSaveURL()
     {
         Application.OpenURL(Application.persistentDataPath);
     }//打开存档位置文件夹
@@ -142,14 +143,27 @@ public class Player : MonoBehaviour
 
     public static class NameGenerator
     {
-        static readonly string[] FirstNames = { "爱", "梦", "音", "雪", "夜", "光", "希", "结", "星", "花" };
-        static readonly string[] LastNames = { "奈", "音", "香", "乃", "子", "花", "里", "美", "月", "菜" };
-
         static readonly System.Random rng = new System.Random();
+
+        // 每种语言的 First / Last Name 列表
+        static readonly string[] JP_First = { "結", "琴", "美", "雪", "凛", "小", "陽", "咲", "優", "愛" };
+        static readonly string[] JP_Last = { "月", "音", "咲", "乃", "菜", "子", "花", "里", "奈", "美" };
+
+        static readonly string[] CN_First = { "梦", "思", "晓", "灵", "婉", "语", "可", "诗", "柔", "雪" };
+        static readonly string[] CN_Last = { "雪", "儿", "彤", "涵", "瑶", "嫣", "欣", "瑾", "菲", "音" };
+
+        static readonly string[] TC_First = { "夢", "思", "曉", "靈", "婉", "語", "可", "詩", "柔", "雪" };
+        static readonly string[] TC_Last = { "雪", "兒", "彤", "涵", "瑤", "嫣", "欣", "瑾", "菲", "音" };
+
+        static readonly string[] EN_First = { "Lily", "Sophie", "Emily", "Chloe", "Emma", "Mia", "Ella", "Grace", "Lucy", "Olivia" };
+        static readonly string[] EN_Last = { "Smith", "Brown", "Miller", "Wilson", "Taylor", "White", "Clark", "Hall", "Lewis", "Young" };
+
+        static readonly string[] KR_First = { "지", "수", "하", "예", "소", "채", "은", "유", "민", "서" };
+        static readonly string[] KR_Last = { "은", "아", "림", "빈", "진", "연", "희", "원", "지", "경" };
 
         public static string GenerateUniqueName(List<string> existingNames)
         {
-            string baseName = FirstNames[rng.Next(FirstNames.Length)] + LastNames[rng.Next(LastNames.Length)];
+            string baseName = GenerateNameByLanguage();
             string finalName = baseName;
             int index = 1;
 
@@ -160,6 +174,27 @@ public class Player : MonoBehaviour
             }
 
             return finalName;
+        }
+
+        private static string GenerateNameByLanguage()
+        {
+            int lang = PlayerPrefs.GetInt("language", 0); // 0日语 1简中 2繁中 3英文 4韩文
+
+            switch (lang)
+            {
+                case 0: // Japanese
+                    return JP_First[rng.Next(JP_First.Length)] + JP_Last[rng.Next(JP_Last.Length)];
+                case 1: // Simplified Chinese
+                    return CN_First[rng.Next(CN_First.Length)] + CN_Last[rng.Next(CN_Last.Length)];
+                case 2: // Traditional Chinese
+                    return TC_First[rng.Next(TC_First.Length)] + TC_Last[rng.Next(TC_Last.Length)];
+                case 3: // English: 用空格隔开
+                    return EN_First[rng.Next(EN_First.Length)] + " " + EN_Last[rng.Next(EN_Last.Length)];
+                case 4: // Korean
+                    return KR_First[rng.Next(KR_First.Length)] + KR_Last[rng.Next(KR_Last.Length)];
+                default:
+                    return JP_First[rng.Next(JP_First.Length)] + JP_Last[rng.Next(JP_Last.Length)];
+            }
         }
 
     }//女孩名称随机（重名的情况下会加编号）
@@ -181,7 +216,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-       
+
 
 
         if (!isDie && currentHealth > 0)
@@ -221,9 +256,10 @@ public class Player : MonoBehaviour
             state.IsName(GetAnimPrefix() + "Strike_Block") ||
             state.IsName(GetAnimPrefix() + "Shoot_Block") ||
 
-            state.IsName(GetAnimPrefix() + "_Default_Die") ||
-            state.IsName(GetAnimPrefix() + "_Default_Die_2") ||
-            state.IsName(GetAnimPrefix() + "_Default_GetUp") ||
+            state.IsName(GetAnimPrefix() + "Default_Die") ||
+            state.IsName(GetAnimPrefix() + "Default_Die_2") ||
+            state.IsName(GetAnimPrefix() + "Default_GetUp") ||
+            state.IsName(GetAnimPrefix() + "Default_Hurt") ||
             isFrozen
 
             )
@@ -261,7 +297,7 @@ public class Player : MonoBehaviour
     private void BaseMove()
     {
 
-       
+
 
         //这个是拉杆控制，最优先，如果手柄没有输入，再检测手柄键盘等
         inputX = Joystick.Horizontal;
@@ -341,18 +377,18 @@ public class Player : MonoBehaviour
         CheckAttack();//检测你按着攻击键或者没有
         CheckDodge();//检测你按着闪避键或者没有
 
+        CheckJump();
 
-
-        if (!canMove)
+        if (!canMove|| !IsGrounded())
         {
             input = Vector2.zero;
             moveSpeed = 0;//攻击期间永远不要出现【跑】动画
 
-        }//玩家只有在不攻击的时候才能移动，闪避的时候也无法叠加
+        }//玩家只有在不攻击的时候才能移动，闪避的时候也无法叠加,在空中时没有输入
 
 
 
-      
+
 
 
         if (!FirstMove)
@@ -369,7 +405,7 @@ public class Player : MonoBehaviour
             moveSpeed = 0;
 
         }//只要处于切断输入中，永远切掉输入正面朝向
-        else 
+        else
         {
             rbody.velocity = input * speed;
         }
@@ -521,7 +557,7 @@ public class Player : MonoBehaviour
 
 
 
-    public void AnimSetWeapon() 
+    public void AnimSetWeapon()
     {
 
         if (visionType == PlayerType.ShortRangePlayer)
@@ -531,7 +567,7 @@ public class Player : MonoBehaviour
         else
         {
             if (isMage) { anim.SetInteger("Weapon", 3); }
-            else { anim.SetInteger("Weapon", 2); }       
+            else { anim.SetInteger("Weapon", 2); }
         }
 
         CheckWeapon();
@@ -539,7 +575,7 @@ public class Player : MonoBehaviour
 
 
 
-    public void _ClothesToClass() 
+    public void _ClothesToClass()
     {
 
         //目前暂时以上衣区别职业
@@ -621,11 +657,11 @@ public class Player : MonoBehaviour
 
         Girl_headIndex = Random.Range(1, 14);  // 1~13
         Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = Random.Range(1, 14);
-        Girl_legsIndex = Random.Range(1, 14);
+        Girl_bodyIndex = Random.Range(10, 13);
+        Girl_legsIndex = Random.Range(10, 13);
         Girl_hatIndex = Random.Range(1, 14);
 
-        weaponIndex = Random.Range(1, 7);
+        weaponIndex = Random.Range(1, 11);
 
 
         SetSkin();
@@ -757,7 +793,7 @@ public class Player : MonoBehaviour
                 ChangeCritical(10);//按下暴击率快速上升
                 //attack_Range.SetActive(true);//技能范围
 
-                if (isMage){ ShowMagicEffect(); }//法师产生法阵
+                if (isMage) { ShowMagicEffect(); }//法师产生法阵
             }
 
 
@@ -770,7 +806,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void _Attack_Cancel() 
+    public void _Attack_Cancel()
     {
         if (visionType == Player.PlayerType.ShortRangePlayer)//男性女性女魔族近战都用这个
         {
@@ -795,15 +831,15 @@ public class Player : MonoBehaviour
             {
                 anim.Play(GetAnimPrefix() + "Default_Idle");
             }
-            else 
+            else
             {
 
                 if (isMage) { anim.Play(GetAnimPrefix() + "Spell_Idle"); }
                 else { anim.Play(GetAnimPrefix() + "Shoot_Idle"); }
-                
+
             }
 
-           
+
 
             //player.CanShoot = true;//这里用Invoke替代了
         }
@@ -851,10 +887,10 @@ public class Player : MonoBehaviour
             {
                 if (CanShoot)
                 {
-                    if(Class == PlayerClass.Succubus) { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
+                    if (Class == PlayerClass.Succubus) { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
                     else
                     {
-                        if (isMage) 
+                        if (isMage)
                         {
                             if (MageAttackType)
                             {
@@ -869,13 +905,13 @@ public class Player : MonoBehaviour
                         }
                         else { anim.Play(GetAnimPrefix() + "Shoot_1", 0, 0); }
                     }
-                  
-                   
+
+
 
                     CanShoot = false;
                     Invoke("SetCanShoot", 0.3f);//似乎这是目前唯一
                 }
-              
+
             }
 
 
@@ -899,7 +935,7 @@ public class Player : MonoBehaviour
 
     public void ResetCombo()
     {
-        if (currentHealth > 0) 
+        if (currentHealth > 0)
         {
             currentCombo = 0;
             comboQueued = false;
@@ -924,15 +960,15 @@ public class Player : MonoBehaviour
                     if (isMage) { anim.Play(GetAnimPrefix() + "Spell_Idle"); }
                     else { anim.Play(GetAnimPrefix() + "Shoot_Idle"); }
 
-                  
+
                 }
-               
+
             }
-           
+
 
         }//生命值大于0才可以resetCombo
 
-      
+
     }
 
 
@@ -1057,22 +1093,27 @@ public class Player : MonoBehaviour
 
 
 
-        switch (CurrentWeapon) 
+        switch (CurrentWeapon)
         {
-        
+
+
 
             case 201:
-            case 202:
+            case 207:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(5);//剧毒法球
                 break;
             case 203:
+            case 210:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(3);//火焰法球
                 break;
             case 204:
+            case 206:
+            case 208:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(4);//冰冻法球
                 break;
             case 205:
-            case 206:
+            case 209:
+            case 202:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(2);//雷电法球
                 break;
 
@@ -1096,8 +1137,16 @@ public class Player : MonoBehaviour
                 bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
                 frameEvents._Bullet_Pistol_3();
                 break;
-
-
+            case 107:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                frameEvents._Bullet_AK();
+                break;
+            case 108:
+            case 109:
+            case 110:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                frameEvents._Bullet_SD();
+                break;
 
 
             default:
@@ -1141,7 +1190,10 @@ public class Player : MonoBehaviour
     #region
     [Header("武器系统")]
     public int CurrentWeapon;
-    //0无武器  1铁剑  2大刀  3武士刀  4长枪   5长柄斧   6铁剑        101轻弩   102重弩   103复合弩   104火绳枪  105短枪   106长枪    201黄木短杖  202黑乌木短章   203红宝石短杖    204蓝宝石短杖   205黄玉短杖   206鹰身短杖
+    //0无武器
+    //1铁剑  2阔剑  3长柄双刃斧  4长枪   5长柄斧   6冻结剑   7黑铁刺剑  8熔岩剑  9引雷剑  10古重剑
+    //101轻弩   102重弩   103复合弩   104火绳复合枪  105火绳短枪   106火绳长枪   107火绳黄铜枪
+    //201黄木短杖  202鹰身短杖   203红宝石短杖    204蓝宝石短杖   205黄玉短杖   206冰冻法杖  207紫水晶法杖  208翡翠法杖  209雷霆法杖  210古木法杖
 
     public void CheckWeapon()
     {
@@ -1150,24 +1202,28 @@ public class Player : MonoBehaviour
         if (visionType == PlayerType.LongRangePlayer && !isMage) { CurrentWeapon = weaponIndex + 100; }//实装射手武器
         if (visionType == PlayerType.LongRangePlayer && isMage) { CurrentWeapon = weaponIndex + 200; }//实装法师武器
 
-        if (isMage) 
+        if (isMage)
         {
-            switch (CurrentWeapon) 
+            switch (CurrentWeapon)
             {
 
 
                 case 201:
-                case 202:
+                case 207:
                     ChangeMagicEffectColor(5);//剧毒法球
                     break;
                 case 203:
+                case 210:
                     ChangeMagicEffectColor(2);//火焰法球
                     break;
                 case 204:
+                case 206:
+                case 208:
                     ChangeMagicEffectColor(4);//冰冻法球
                     break;
                 case 205:
-                case 206:
+                case 209:
+                case 202:
                     ChangeMagicEffectColor(3);//雷电法球
                     break;
             }
@@ -1184,9 +1240,9 @@ public class Player : MonoBehaviour
     public SpriteRenderer MagicFormation;//魔法阵样式
     public Sprite Magic_Fire, Magic_Electricity, Magic_Ice, Magic_Poison;
 
-    public void ChangeMagicEffectColor(int ColorNumber) 
+    public void ChangeMagicEffectColor(int ColorNumber)
     {
-        switch (ColorNumber) 
+        switch (ColorNumber)
         {
             case 2:
                 MagicFormation.sprite = Magic_Fire;
@@ -1212,17 +1268,171 @@ public class Player : MonoBehaviour
     }
 
 
-    public void ShowMagicEffect() 
+    public void ShowMagicEffect()
     {
         //exitEffect.Play();
         ExitEffect.SetActive(true);
-        MagicFormationAnim.SetBool("Show",true);
+        MagicFormationAnim.SetBool("Show", true);
     }
     public void HideMagicEffect()
     {
         //exitEffect.Stop();
         ExitEffect.SetActive(false);
         MagicFormationAnim.SetBool("Show", false);
+    }
+
+
+
+    #endregion
+
+    /// <summary>
+    /// 击飞系统
+    /// </summary>
+    #region
+    [Header("模拟跳跃")]
+    // 模拟跳跃高度
+    float zHeight = 0f;
+    float zVelocity = 0f;
+    float gravity = -20f; // 可以调成 -20f 更快落下
+    float jumpForce = 7f;//原来是5f
+
+    // 角色跳跃偏移对象（Spine动画对象）
+    float groundZ = 0f; // 初始化地面位置
+    bool wasInAir = false; // 前一帧是否在空中
+    public void PlayJump()
+    {
+        if (IsGrounded())
+        {
+            Debug.Log("跳跃");
+            zVelocity = jumpForce;
+            frameEvents._SE_Clothes();
+        }
+
+
+    }
+
+    void CheckJump()
+    {
+        // 应用重力
+        zVelocity += gravity * Time.deltaTime;
+        zHeight += zVelocity * Time.deltaTime;
+
+
+
+        bool isGroundedNow = zHeight <= 0f;
+
+        //落地
+        if (isGroundedNow)
+        {
+            if (wasInAir) // 刚刚落地的那一帧
+            {
+                frameEvents._Effect_falldown();// 播放落地音效等逻辑
+                Knockdown();
+            }
+
+
+
+            zHeight = 0f;
+            zVelocity = 0f;
+            groundZ = transform.position.z;
+
+
+
+            // ✅ 落地时重置击飞速度
+            knockbackX = 0f;
+            knockbackY = 0f;
+        }
+
+        if (zHeight > 0f)
+        {
+            Vector3 pos = transform.position;
+            pos.z = groundZ - zHeight;
+            transform.position = pos;
+
+        }
+
+
+        // 更新前一帧状态
+        wasInAir = !isGroundedNow;
+
+
+
+
+
+        //被击飞
+        if (!IsGrounded() && (knockbackX != 0f || knockbackY != 0f))
+        {
+
+            // 计算潜在新位置
+            Vector3 nextPos = transform.position - new Vector3(knockbackX, knockbackY, 0f) * Time.deltaTime;
+
+            // 发射射线检测墙壁（Room Layer）
+            Vector2 direction = nextPos - transform.position;
+            float distance = direction.magnitude;
+
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction.normalized, distance, LayerMask.GetMask("Room"));
+
+            //当这些动画在播放的时候玩家不能移动
+            //AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+            //
+            //if (state.IsName(GetAnimPrefix() + "Default_Die") ||
+            //    state.IsName(GetAnimPrefix() + "Default_Die_2") ||
+            //    state.IsName(GetAnimPrefix() + "Default_GetUp") ||
+            //    state.IsName(GetAnimPrefix() + "Default_Hurt")
+            //)
+            //{
+            //    // ❌ 撞到了墙壁，阻止移动
+            //    knockbackX = 0f;
+            //    knockbackY = 0f;
+            //
+            //    // 你也可以在这里播放一个“撞墙反弹”的音效或特效
+            //}
+            //else if (hit.collider == null)
+            //{
+            //
+            //    // ✅ 没有撞墙，可以移动
+            //    Vector3 move = new Vector3(knockbackX, knockbackY, 0f) * Time.deltaTime;
+            //    transform.position -= move;
+            //
+            //}
+
+            if (hit.collider == null)
+            {
+                // ✅ 没有撞墙，可以移动
+                transform.position = nextPos;
+            }
+            else
+            {
+                // ❌ 撞到了墙壁，阻止移动
+                knockbackX = 0f;
+                knockbackY = 0f;
+
+                // 你也可以在这里播放一个“撞墙反弹”的音效或特效
+            }
+
+        }
+
+
+
+    }
+
+    public bool IsGrounded()
+    {
+        return zHeight <= 0.01f; // 只要高度为 0 即为落地
+    }
+
+
+
+
+    [Header("被击飞")]
+    float knockbackX = 0f; // X方向击飞
+    float knockbackY = 0f; // Y方向击飞
+
+    public void Knockback(float forceX, float forceY = 0f)
+    {
+        knockbackX = forceX;
+        knockbackY = forceY;
+        zVelocity = jumpForce; // 上弹
     }
 
 
@@ -1261,7 +1471,7 @@ public class Player : MonoBehaviour
 
             if (!dodgeTriggered)
             {
-                if (canMove) 
+                if (canMove)
                 {
                     if (dodgePressTime < 0.2f)
                     {
@@ -1285,7 +1495,7 @@ public class Player : MonoBehaviour
                     }
                 }
 
-               
+
 
 
 
@@ -1381,7 +1591,6 @@ public class Player : MonoBehaviour
             Invoke("ResetCombo", 1f);//防止挂了又站起来
         }
 
-
         // 音效、体力扣除
         frameEvents._SE_Clothes();
         //ChangeStrength(-50);
@@ -1426,7 +1635,7 @@ public class Player : MonoBehaviour
 
         GhostPhantom.sprite = None;
 
-       
+
 
     }
 
@@ -1509,11 +1718,11 @@ public class Player : MonoBehaviour
     private void OnRunStarted(InputAction.CallbackContext context)
     {
 
-        if (!isDie && currentHealth > 0 &&canMove &&!isInputBlocked)
+        if (!isDie && currentHealth > 0 && canMove && !isInputBlocked)
         {
             isRunning = true;
         }
-        
+
     }
     private void OnRunCanceled(InputAction.CallbackContext context)
     {
@@ -1522,7 +1731,7 @@ public class Player : MonoBehaviour
         {
             isRunning = false;
         }
-       
+
     }
 
     private void OnAttackStarted(InputAction.CallbackContext context)
@@ -1532,7 +1741,7 @@ public class Player : MonoBehaviour
         {
             Attack_Start();
         }
-        
+
     }
     private void OnAttackCanceled(InputAction.CallbackContext context)
     {
@@ -1541,7 +1750,7 @@ public class Player : MonoBehaviour
         {
             Attack_Cancel();
         }
-      
+
     }
 
     private void OnDodgeStarted(InputAction.CallbackContext context)
@@ -1551,7 +1760,7 @@ public class Player : MonoBehaviour
         {
             Dodge_Start();
         }
-        
+
     }
     private void OnDodgeCanceled(InputAction.CallbackContext context)
     {
@@ -1560,7 +1769,7 @@ public class Player : MonoBehaviour
         {
             Dodge_Cancel();
         }
-        
+
     }
 
     [Header("手机端触发")]
@@ -1620,7 +1829,7 @@ public class Player : MonoBehaviour
     public void ButtonSetDodgeOver()
     {
 
-        if (!isDie && currentHealth > 0&&!isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked)
         {
             Dodge_Cancel();
         }
@@ -1687,16 +1896,16 @@ public class Player : MonoBehaviour
                 {
                     // 计算体力百分比
                     float strengthPercent = (float)currentStrength / maxStrength;
-                
+
                     // 根据体力百分比决定防御几率（体力越高越容易防御）
                     // 比如体力满时为 100% 几率，体力最低时为 10%
                     float blockChance = Mathf.Lerp(0.1f, 1f, strengthPercent);
-                
+
                     if (Random.value < blockChance)
                     {
 
-                        if (Class == PlayerClass.Succubus||isMage) 
-                        {    
+                        if (Class == PlayerClass.Succubus || isMage)
+                        {
                             ProtectiveCoverEffect.SetActive(true);
 
                         }//只有魔族和法师需要特效（遮挡无防御动画）
@@ -1708,15 +1917,18 @@ public class Player : MonoBehaviour
                         else
                         {
 
-                            if (isMage) { anim.Play(GetAnimPrefix() + "Spell_Block"); } 
+                            if (isMage)
+                            { 
+                                //没有法师防御动画
+                            }
                             else { anim.Play(GetAnimPrefix() + "Shoot_Block"); }
-                           
+
                         }
 
                         // 防御成功扣除体力
                         ChangeStrength(-50);
-                
-                
+
+
                         switch (Random.Range(0, 3))
                         {
                             case 0:
@@ -1729,20 +1941,20 @@ public class Player : MonoBehaviour
                                 frameEvents._Attack_sword_clash4();
                                 break;
                         }
-                
-                
+
+
                         //显示伤害
                         HudText.HUD(0);//0会显示Miss
-                
+
                         //火花特效
                         Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
                         Vector3 spawnPosition_2 = transform.position + offset_2;
                         GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
                         Destroy(effectPrefabs_2, 2f);
-                
+
                         return;
                     }
-                
+
                 }
 
 
@@ -1781,7 +1993,6 @@ public class Player : MonoBehaviour
             Invoke("HurtOver", 0.5f);
             RedScreen.SetActive(true);
             isScreaming = true;
-
 
 
 
@@ -1852,19 +2063,32 @@ public class Player : MonoBehaviour
             //击倒再站起
             if (Random.Range(0, 2) == 0 && !isDie && currentHealth > 0)
             {
-                isDie = true;
-
-                anim.Play(GetAnimPrefix() + "Default_Die");
-
-                //防止最后一下又击倒站起
-                if (currentHealth > 0)
-                {
-                    Invoke("GetUp", 0.5f);//比起敌人，玩家可以更快站起来
-                }
+                Knockdown();
 
                 Critial.SetActive(true);
             }
+            else 
+            {
 
+                //击飞
+                if (StopX < 0)
+                    Knockback(forceX: -3f);
+                else if (StopX > 0)
+                    Knockback(forceX: 3f);
+                else if (StopY < 0)
+                    Knockback(forceX: 0, forceY: -3f);
+                else if (StopY > 0)
+                    Knockback(forceX: 0, forceY: 3f);
+
+
+
+
+                //PlayJump();
+
+                //受伤动画
+                anim.Play(GetAnimPrefix() + "Default_Hurt");
+                Invoke("ReSetAttack", 0.5f);//防止动画回不去
+            }
         }
 
     }
@@ -1876,7 +2100,21 @@ public class Player : MonoBehaviour
         RedScreen.SetActive(false);
     }//有1秒左右的伤害冷却
 
+    public void Knockdown()
+    {
 
+
+        isDie = true;
+
+        anim.Play(GetAnimPrefix() + "Default_Die");
+
+        //防止最后一下又击倒站起
+        if (currentHealth > 0)
+        {
+            Invoke("GetUp", 0.5f);//比起敌人，玩家可以更快站起来
+        }
+
+    }//击倒
 
     void GetUp()
     {
@@ -1886,12 +2124,12 @@ public class Player : MonoBehaviour
 
             Invoke("GetUpOver", 0.2f);//完全站起来才能攻击
         }
-      
+
     }
 
 
 
-    public void GetUpOver() 
+    public void GetUpOver()
     {
 
         isDie = false;
@@ -1968,7 +2206,7 @@ public class Player : MonoBehaviour
     /// </summary>
     #region
     //————————————————————冻结
-    public bool isFrozen =false;
+    public bool isFrozen = false;
     public void Freeze(int Timer)
     {
 

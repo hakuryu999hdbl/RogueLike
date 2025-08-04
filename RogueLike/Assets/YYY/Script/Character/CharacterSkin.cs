@@ -131,11 +131,13 @@ public class CharacterSkin : MonoBehaviour
             player._Attack_Cancel();
 
         }
-        if (enemy != null)
-        {
-            enemy.Attack_Cancel();
 
-        }
+        //一旦动画帧事件被跳过就会站着不动不攻击，所以这个还是Invoke触发
+        //if (enemy != null)
+        //{
+        //    enemy.Attack_Cancel();
+        //
+        //}
     } //攻击结束可以移动
 
 

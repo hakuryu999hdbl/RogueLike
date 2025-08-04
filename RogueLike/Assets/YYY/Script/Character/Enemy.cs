@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour
 
 
         //不同敌人攻击范围不一样
-        switch (visionType) 
+        switch (visionType)
         {
             case EnemyType.ShortRangeEnemy:
                 attackCooldown = 1f;
@@ -67,9 +67,10 @@ public class Enemy : MonoBehaviour
             Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
 
             //Class = EnemyClass.Succubus;
-            Class = EnemyClass.Girl;
+            //Class = EnemyClass.Girl;
+            //Class = EnemyClass.Man;
 
-            if (Class == EnemyClass.Girl && visionType ==EnemyType.LongRangeEnemy && Random.Range(0,2)==0) 
+            if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
             {
                 isMage = true;
             }//一部分远程女射手变成女法师
@@ -95,7 +96,7 @@ public class Enemy : MonoBehaviour
         if (!isDie)
         {
 
-            if (MakeSureIsPatrol) { isPatrol=true; }//碰到已死玩家强制巡逻
+            if (MakeSureIsPatrol) { isPatrol = true; }//碰到已死玩家强制巡逻
 
             BaseMove();//站走跑攻射
 
@@ -128,7 +129,7 @@ public class Enemy : MonoBehaviour
 
 
         //只要是法师且处于攻击就使用魔法阵
-        if (isAttack&&isMage) { ShowMagicEffect(); } else{ HideMagicEffect(); }
+        if (isAttack && isMage) { ShowMagicEffect(); } else { HideMagicEffect(); }
 
 
 
@@ -139,29 +140,43 @@ public class Enemy : MonoBehaviour
 
         }
 
-
+       
 
         // 每帧更新剑物体的旋转
         Strike_Effect.transform.Rotate(0, 0, 100 * Time.deltaTime);
 
 
         //当这些动画在播放的时候玩家不能移动
-        //AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
-        //
-        //if (state.IsName("attack_1") ||
-        //    state.IsName("attack_2") ||
-        //    state.IsName("attack_3") ||
-        //    state.IsName("attack_4") ||
-        //    state.IsName("Girl_Strike_Block") ||
-        //    state.IsName("Girl_Strike_Idle"))
-        //{
-        //    aiPath.canMove = false;
-        //
-        //}
-        //else
-        //{
-        //    aiPath.canMove = true;
-        //}
+       // AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+
+       // if (
+       //     state.IsName(GetAnimPrefix() + "Attack_1") ||
+       //     state.IsName(GetAnimPrefix() + "Attack_2") ||
+       //     state.IsName(GetAnimPrefix() + "Attack_3") ||
+       //     state.IsName(GetAnimPrefix() + "Attack_4") ||
+       //     state.IsName(GetAnimPrefix() + "Shoot_1") ||
+       //     state.IsName(GetAnimPrefix() + "Spell_1") ||
+       //     state.IsName(GetAnimPrefix() + "Spell_2") ||
+       //
+       //     state.IsName(GetAnimPrefix() + "Strike_Block") ||
+       //     state.IsName(GetAnimPrefix() + "Shoot_Block") ||
+       //
+       //     state.IsName(GetAnimPrefix() + "Default_Die") ||
+       //     state.IsName(GetAnimPrefix() + "Default_Die_2") ||
+       //     state.IsName(GetAnimPrefix() + "Default_GetUp") ||
+       //     state.IsName(GetAnimPrefix() + "Default_Hurt")
+       //     )
+       // {
+       //     aiPath.canMove = false;
+       //
+       // }
+       // else
+       // {
+       //     aiPath.canMove = true;
+       // }
+
+
+        //不知道什么原因，敌人滑跪可能是这个强制可移动产生的原因
 
     }
 
@@ -219,14 +234,14 @@ public class Enemy : MonoBehaviour
                     moveSpeed = 2;
                     aiPath.maxSpeed = RunSpeed;
 
- 
+
                 }
                 else
                 {
                     //玩家死亡时队友也全部死亡
-                    ChangeHealth(-maxHealth,0);
+                    ChangeHealth(-maxHealth, 0);
                 }
-               
+
             }
             else
             {
@@ -367,7 +382,7 @@ public class Enemy : MonoBehaviour
             AntiOverlapping.SetActive(false);//这个玩意会让敌人队友不重叠，但是巡逻的时候会贴在一起，巡逻的时候去掉
         }
 
-
+        CheckJump();
 
         // 八方向判断（上下左右为主）
         if (dir.x > 0.5f)
@@ -425,7 +440,7 @@ public class Enemy : MonoBehaviour
 
         if (collision.gameObject.tag == "Player")
         {
-            if (collision.gameObject.GetComponent<Player>().currentHealth <= 0&&!MakeSureIsPatrol)
+            if (collision.gameObject.GetComponent<Player>().currentHealth <= 0 && !MakeSureIsPatrol)
             {
                 if (collision.gameObject.GetComponent<Player>().isRape == false)
                 {
@@ -599,8 +614,8 @@ public class Enemy : MonoBehaviour
                 break;
 
             case EnemyType.LongRangeEnemy:
-                if (isMage) { anim.SetInteger("Weapon", 3); } 
-                else { anim.SetInteger("Weapon", 2); }   
+                if (isMage) { anim.SetInteger("Weapon", 3); }
+                else { anim.SetInteger("Weapon", 2); }
                 break;
         }
 
@@ -619,22 +634,27 @@ public class Enemy : MonoBehaviour
 
     void ReSetAttack()
     {
-        if (Class == EnemyClass.Succubus){ anim.Play(GetAnimPrefix() + "Default_Idle");return; }//只有魔族需要更改
-
-        switch (visionType)
+        if (currentHealth > 0)
         {
+            if (Class == EnemyClass.Succubus) { anim.Play(GetAnimPrefix() + "Default_Idle"); return; }//只有魔族需要更改
 
-            case EnemyType.ShortRangeEnemy:
-                anim.Play(GetAnimPrefix() + "Strike_Idle");
-                break;
+            switch (visionType)
+            {
 
-          
-            case EnemyType.LongRangeEnemy:
-                if (isMage) { anim.Play(GetAnimPrefix() + "Spell_Idle"); }
-                else { anim.Play(GetAnimPrefix() + "Shoot_Idle"); }              
-                break;
+                case EnemyType.ShortRangeEnemy:
+                    anim.Play(GetAnimPrefix() + "Strike_Idle");
+                    break;
 
+
+                case EnemyType.LongRangeEnemy:
+                    if (isMage) { anim.Play(GetAnimPrefix() + "Spell_Idle"); }
+                    else { anim.Play(GetAnimPrefix() + "Shoot_Idle"); }
+                    break;
+
+            }
         }
+
+
 
     }
 
@@ -701,11 +721,11 @@ public class Enemy : MonoBehaviour
 
         Girl_headIndex = Random.Range(1, 14);  // 1~13
         Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = Random.Range(1, 14);
-        Girl_legsIndex = Random.Range(1, 14);
+        Girl_bodyIndex = Random.Range(10, 13);
+        Girl_legsIndex = Random.Range(10, 13);
         Girl_hatIndex = Random.Range(1, 14);
 
-        weaponIndex = Random.Range(1, 7);
+        weaponIndex = Random.Range(1, 11);
 
 
         SetSkin();
@@ -816,7 +836,7 @@ public class Enemy : MonoBehaviour
                                 else { anim.Play(GetAnimPrefix() + "spell_2", 0, 0); }
                             }
                             MageAttackType = !MageAttackType;
-                           
+
                         }
                         else
                         {
@@ -829,7 +849,8 @@ public class Enemy : MonoBehaviour
                         break;
                 }
 
-
+                //20攻击帧相当于0.7
+                Invoke("Attack_Cancel", 0.7f);//一旦动画帧事件被跳过就会站着不动不攻击，所以这个还是Invoke触发(触发检测生命值，防止倒地上后突然站起来攻击)
 
                 attackTimer = 0f;
 
@@ -915,7 +936,6 @@ public class Enemy : MonoBehaviour
 
 
 
-        //Invoke("Attack_Cancel", 1f);//一旦动画帧事件被跳过就会站着不动不攻击，所以这个还是Invoke触发
     }
 
 
@@ -983,25 +1003,28 @@ public class Enemy : MonoBehaviour
         GameObject bullet = Instantiate(transparentBulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
 
 
-     
+
 
         switch (CurrentWeapon)
         {
 
 
-
             case 201:
-            case 202:
+            case 207:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(5);//剧毒法球
                 break;
             case 203:
+            case 210:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(3);//火焰法球
                 break;
             case 204:
+            case 206:
+            case 208:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(4);//冰冻法球
                 break;
             case 205:
-            case 206:
+            case 209:
+            case 202:
                 bullet.GetComponent<Shooting>().SetSpecialBullet(2);//雷电法球
                 break;
 
@@ -1025,8 +1048,16 @@ public class Enemy : MonoBehaviour
                 bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
                 frameEvents._Bullet_Pistol_3();
                 break;
-
-
+            case 107:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                frameEvents._Bullet_AK();
+                break;
+            case 108:
+            case 109:
+            case 110:
+                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                frameEvents._Bullet_SD();
+                break;
 
 
             default:
@@ -1080,14 +1111,17 @@ public class Enemy : MonoBehaviour
     #region
     [Header("武器系统")]
     public int CurrentWeapon;
-    //0无武器  1铁剑  2大刀  3武士刀  4长枪   5长柄斧   6铁剑        101轻弩   102重弩   103复合弩   104火绳枪  105短枪   106长枪    201黄木短杖  202黑乌木短章   203红宝石短杖    204蓝宝石短杖   205黄玉短杖   206鹰身短杖
+    //0无武器
+    //1铁剑  2阔剑  3长柄双刃斧  4长枪   5长柄斧   6冻结剑   7黑铁刺剑  8熔岩剑  9引雷剑  10古重剑
+    //101轻弩   102重弩   103复合弩   104火绳复合枪  105火绳短枪   106火绳长枪   107火绳黄铜枪
+    //201黄木短杖  202鹰身短杖   203红宝石短杖    204蓝宝石短杖   205黄玉短杖   206冰冻法杖  207紫水晶法杖  208翡翠法杖  209雷霆法杖  210古木法杖
 
-    public void CheckWeapon() 
+    public void CheckWeapon()
     {
 
-        if (visionType == EnemyType.ShortRangeEnemy){ CurrentWeapon = weaponIndex; }//实装战士武器
+        if (visionType == EnemyType.ShortRangeEnemy) { CurrentWeapon = weaponIndex; }//实装战士武器
         if (visionType == EnemyType.LongRangeEnemy && !isMage) { CurrentWeapon = weaponIndex + 100; }//实装射手武器
-        if (visionType == EnemyType.LongRangeEnemy&&isMage) { CurrentWeapon = weaponIndex+200; }//实装法师武器
+        if (visionType == EnemyType.LongRangeEnemy && isMage) { CurrentWeapon = weaponIndex + 200; }//实装法师武器
 
         if (isMage)
         {
@@ -1096,17 +1130,21 @@ public class Enemy : MonoBehaviour
 
 
                 case 201:
-                case 202:
+                case 207:
                     ChangeMagicEffectColor(5);//剧毒法球
                     break;
                 case 203:
+                case 210:
                     ChangeMagicEffectColor(2);//火焰法球
                     break;
                 case 204:
+                case 206:
+                case 208:
                     ChangeMagicEffectColor(4);//冰冻法球
                     break;
                 case 205:
-                case 206:
+                case 209:
+                case 202:
                     ChangeMagicEffectColor(3);//雷电法球
                     break;
             }
@@ -1212,7 +1250,159 @@ public class Enemy : MonoBehaviour
     #endregion
 
 
+    /// <summary>
+    /// 击飞系统
+    /// </summary>
+    #region
+    [Header("模拟跳跃")]
+    // 模拟跳跃高度
+    float zHeight = 0f;
+    float zVelocity = 0f;
+    float gravity = -20f; // 可以调成 -20f 更快落下
+    float jumpForce = 7f;//原来是5f
 
+    // 角色跳跃偏移对象（Spine动画对象）
+    float groundZ = 0f; // 初始化地面位置
+    bool wasInAir = false; // 前一帧是否在空中
+    public void PlayJump()
+    {
+        if (IsGrounded())
+        {
+            Debug.Log("跳跃");
+            zVelocity = jumpForce;
+            frameEvents._SE_Clothes();
+        }
+
+
+    }
+
+    void CheckJump()
+    {
+        // 应用重力
+        zVelocity += gravity * Time.deltaTime;
+        zHeight += zVelocity * Time.deltaTime;
+
+
+
+        bool isGroundedNow = zHeight <= 0f;
+
+        //落地
+        if (isGroundedNow)
+        {
+            if (wasInAir) // 刚刚落地的那一帧
+            {
+                frameEvents._Effect_falldown();// 播放落地音效等逻辑
+                Knockdown();
+            }
+
+
+
+            zHeight = 0f;
+            zVelocity = 0f;
+            groundZ = transform.position.z;
+
+
+
+            // ✅ 落地时重置击飞速度
+            knockbackX = 0f;
+            knockbackY = 0f;
+        }
+
+        if (zHeight > 0f)
+        {
+            Vector3 pos = transform.position;
+            pos.z = groundZ - zHeight;
+            transform.position = pos;
+
+        }
+
+
+        // 更新前一帧状态
+        wasInAir = !isGroundedNow;
+
+
+
+
+
+        //被击飞
+        if (!IsGrounded() && (knockbackX != 0f || knockbackY != 0f))
+        {
+
+            // 计算潜在新位置
+            Vector3 nextPos = transform.position - new Vector3(knockbackX, knockbackY, 0f) * Time.deltaTime;
+
+            // 发射射线检测墙壁（Room Layer）
+            Vector2 direction = nextPos - transform.position;
+            float distance = direction.magnitude;
+
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction.normalized, distance, LayerMask.GetMask("Room"));
+
+            //当这些动画在播放的时候玩家不能移动
+            //AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+            //
+            //if (state.IsName(GetAnimPrefix() + "Default_Die") ||
+            //    state.IsName(GetAnimPrefix() + "Default_Die_2") ||
+            //    state.IsName(GetAnimPrefix() + "Default_GetUp") ||
+            //    state.IsName(GetAnimPrefix() + "Default_Hurt")
+            //)
+            //{
+            //    // ❌ 撞到了墙壁，阻止移动
+            //    knockbackX = 0f;
+            //    knockbackY = 0f;
+            //
+            //    // 你也可以在这里播放一个“撞墙反弹”的音效或特效
+            //}
+            //else if (hit.collider == null)
+            //{
+            //
+            //    // ✅ 没有撞墙，可以移动
+            //    Vector3 move = new Vector3(knockbackX, knockbackY, 0f) * Time.deltaTime;
+            //    transform.position -= move;
+            //
+            //}
+
+            if (hit.collider == null)
+            {
+                // ✅ 没有撞墙，可以移动
+                transform.position = nextPos;
+            }
+            else
+            {
+                // ❌ 撞到了墙壁，阻止移动
+                knockbackX = 0f;
+                knockbackY = 0f;
+
+                // 你也可以在这里播放一个“撞墙反弹”的音效或特效
+            }
+
+        }
+
+
+
+    }
+
+    public bool IsGrounded()
+    {
+        return zHeight <= 0.01f; // 只要高度为 0 即为落地
+    }
+
+
+
+
+    [Header("被击飞")]
+    float knockbackX = 0f; // X方向击飞
+    float knockbackY = 0f; // Y方向击飞
+
+    public void Knockback(float forceX, float forceY = 0f)
+    {
+        knockbackX = forceX;
+        knockbackY = forceY;
+        zVelocity = jumpForce; // 上弹
+    }
+
+
+
+    #endregion
 
 
 
@@ -1252,7 +1442,7 @@ public class Enemy : MonoBehaviour
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式  0无  1剑击特效  2闪电特效  3冻结
     {
 
-        if (!isScreaming&&!isRape)//冷却中与捕获中不会被伤到
+        if (!isScreaming && !isRape && IsGrounded() )//冷却中与捕获中不会被伤到,在空中也不会被伤到
         {
 
 
@@ -1306,6 +1496,7 @@ public class Enemy : MonoBehaviour
                     Freeze(1);//冻结伤害
                     break;
             }
+
 
 
 
@@ -1377,10 +1568,37 @@ public class Enemy : MonoBehaviour
 
 
             //击倒再站起(和暴击结合)
-            if (Random.Range(0, 2) == 0 && !isDie && currentHealth > 0)
+
+            if( !isDie && currentHealth > 0)
             {
-                Knockdown();
+                if (Random.Range(0, 2) == 0)
+                {
+                    Knockdown();
+                }
+                else
+                {
+
+                    //击飞
+                    if (StopX < 0)
+                        Knockback(forceX: -3f);
+                    else if (StopX > 0)
+                        Knockback(forceX: 3f);
+                    else if (StopY < 0)
+                        Knockback(forceX: 0, forceY: -3f);
+                    else if (StopY > 0)
+                        Knockback(forceX: 0, forceY: 3f);
+
+
+
+
+                    //PlayJump();
+
+                    //受伤动画
+                    anim.Play(GetAnimPrefix() + "Default_Hurt");
+                    Invoke("ReSetAttack", 0.5f);//防止动画回不去
+                }
             }
+            
         }
 
 
@@ -1423,12 +1641,12 @@ public class Enemy : MonoBehaviour
             {
                 anim.Play(GetAnimPrefix() + "Spell_Block");
             }
-            else 
+            else
             {
                 anim.Play(GetAnimPrefix() + "Shoot_Block");
             }
 
-           
+
         }
 
 
@@ -1467,7 +1685,7 @@ public class Enemy : MonoBehaviour
     public void CritialAttack()
     {
 
-        Knockdown();
+        //Knockdown();
 
 
 
