@@ -114,4 +114,8 @@ public class SaveSlotUI : MonoBehaviour
         AudioManager.instance.AudioPlay(AudioManager.instance.Effect_tear1);
     }//删除这个档的皮肤
 
+    public void ClickVoice() 
+    {
+        AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
+    }
 }

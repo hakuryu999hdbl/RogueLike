@@ -51,8 +51,15 @@ public class Player : MonoBehaviour
         isMage = true;
 
 
-        Debug.Log("目前存档里的语言" + PlayerPrefs.GetInt("language"));//0 日语 1中文 2繁中 3英语 4韩语
-
+       
+       
+       
+       
+       
+       
+       
+       
+       
     }
 
 
@@ -598,7 +605,20 @@ public class Player : MonoBehaviour
 
     #endregion
 
+    public void ForCGRandomEnemySkin() 
+    {
+        Man_headIndex = Random.Range(1, 6);
+        Man_bodyIndex = 2;
+        Man_hatIndex = Random.Range(1, 3);
 
+        Girl_headIndex = Random.Range(1, 14);  // 1~13
+        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+        Girl_bodyIndex = Random.Range(10, 13);
+        Girl_legsIndex = Random.Range(10, 13);
+        Girl_hatIndex = Random.Range(1, 14);
+
+        SetSkin();
+    }//CG鉴赏的时候，敌人皮肤是不存到存档的，所以更新一下
 
     /// <summary>
     /// 皮肤
@@ -1718,7 +1738,7 @@ public class Player : MonoBehaviour
     private void OnRunStarted(InputAction.CallbackContext context)
     {
 
-        if (!isDie && currentHealth > 0 && canMove && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && canMove && !isInputBlocked && IsGrounded())
         {
             isRunning = true;
         }
@@ -1727,7 +1747,7 @@ public class Player : MonoBehaviour
     private void OnRunCanceled(InputAction.CallbackContext context)
     {
 
-        if (!isDie && currentHealth > 0 && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             isRunning = false;
         }
@@ -1737,7 +1757,7 @@ public class Player : MonoBehaviour
     private void OnAttackStarted(InputAction.CallbackContext context)
     {
 
-        if (!isDie && currentHealth > 0 && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             Attack_Start();
         }
@@ -1746,7 +1766,7 @@ public class Player : MonoBehaviour
     private void OnAttackCanceled(InputAction.CallbackContext context)
     {
 
-        if (!isDie && currentHealth > 0 && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             Attack_Cancel();
         }
@@ -1756,7 +1776,7 @@ public class Player : MonoBehaviour
     private void OnDodgeStarted(InputAction.CallbackContext context)
     {
 
-        if (!isDie && currentHealth > 0 && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             Dodge_Start();
         }
@@ -1765,7 +1785,7 @@ public class Player : MonoBehaviour
     private void OnDodgeCanceled(InputAction.CallbackContext context)
     {
 
-        if (!isDie && currentHealth > 0 && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             Dodge_Cancel();
         }
@@ -1780,7 +1800,7 @@ public class Player : MonoBehaviour
     public void ButtonSetRun()
     {
 
-        if (!isDie && currentHealth > 0 && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             isRunning = true;
         }
@@ -1789,7 +1809,7 @@ public class Player : MonoBehaviour
     public void ButtonSetStop()
     {
 
-        if (!isDie && currentHealth > 0 && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             isRunning = false;
         }
@@ -1801,7 +1821,7 @@ public class Player : MonoBehaviour
     public void ButtonSetAttack()
     {
 
-        if (!isDie && currentHealth > 0 && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             Attack_Start();
         }
@@ -1809,7 +1829,7 @@ public class Player : MonoBehaviour
     public void ButtonSetAttackOver()
     {
 
-        if (!isDie && currentHealth > 0 && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             Attack_Cancel();
         }
@@ -1821,7 +1841,7 @@ public class Player : MonoBehaviour
     public void ButtonSetDodge()
     {
 
-        if (!isDie && currentHealth > 0 && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             Dodge_Start();
         }
@@ -1829,7 +1849,7 @@ public class Player : MonoBehaviour
     public void ButtonSetDodgeOver()
     {
 
-        if (!isDie && currentHealth > 0 && !isInputBlocked)
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             Dodge_Cancel();
         }
@@ -2087,7 +2107,7 @@ public class Player : MonoBehaviour
 
                 //受伤动画
                 anim.Play(GetAnimPrefix() + "Default_Hurt");
-                Invoke("ReSetAttack", 0.5f);//防止动画回不去
+                Invoke("ReSetAttack", 0.5f);//防止动画回不去(这个在被击倒/站起流程后)
             }
         }
 

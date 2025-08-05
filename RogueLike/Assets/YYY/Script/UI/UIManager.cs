@@ -15,6 +15,23 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+
+        //Debug.Log("目前存档里的语言" + PlayerPrefs.GetInt("language"));//0 日语 1中文 2繁中 3英语 4韩语
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_OnanismFront_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_OnanismSide_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_InsultSide_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_GagSide_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_FistingFront_1"));//0未解锁  1解锁
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_RapeFront_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_RapeSide_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_AssaultFront_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_AssaultSide_1"));//0未解锁  1解锁
+
+        //PlayerPrefs.SetInt("CG_InsultSide_1", 1);
+        //PlayerPrefs.SetInt("CG_RapeFront_1", 1);
+        //PlayerPrefs.SetInt("CG_RapeSide_1", 1);
     }
     /// <summary>
     /// 主菜单
@@ -39,7 +56,8 @@ public class UIManager : MonoBehaviour
     }//重刷场景
 
     [Header("主菜单界面层级")]
-    int CurrentChooseList = 0;// -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面
+    public int CurrentChooseList = 0;// -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中
+    public int CurrentMode = 0;//0 进入CG界面  1捏人/进入游戏
     public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
     public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
     public int SettingPagecurrentIndex = 0;//0 BGM  1 SE  2 语言  3 删除存档
@@ -87,17 +105,38 @@ public class UIManager : MonoBehaviour
 
     public Button okButton;
 
-
-    public void ToSavePage() 
+    public void ToSavePageButton(int currentMode)
     {
+        Invoke("ToSavePage", 0.1f);//开始游戏进入存档界面(CG)
+        CurrentMode = currentMode;
 
-        HomePageCavans.SetActive(false);
-        CurrentChooseList = 2;
-
+        if (CurrentMode == 0)
+        {
+            //CG鉴赏
+            player.anim.Play("Girl_Broken_Idle");
+        }
+        else
+        {
+            //主界面
+            player.anim.Play("Girl_Default_Idle");
+        }
 
     }
 
-    public void ToSettingPage() 
+
+    public void ToSavePage()
+    {
+
+        HomePageCavans.SetActive(false);
+        CGCavans.SetActive(false);
+        CurrentChooseList = 2;
+
+    }
+
+
+
+
+    public void ToSettingPage()
     {
         SettingCavans.SetActive(true);
         LanguageCavans.SetActive(false);
@@ -109,13 +148,28 @@ public class UIManager : MonoBehaviour
         LanguageCavans.SetActive(true);
         CurrentChooseList = 4;
     }
-    public void ToHomePage() 
+    public void ToHomePage()
     {
         HomePageCavans.SetActive(true);
         SettingCavans.SetActive(false);
         CurrentChooseList = 0;
     }
 
+    public void ToCGPage()
+    {
+        CGCavans.SetActive(true);
+        CurrentChooseList = 5;
+
+
+
+        MainCamera.SetInteger("View", 0);
+        ShowSaveCavansAnim.SetBool("Track", true);
+        ShowSaveCavansAnim.gameObject.SetActive(true);
+
+
+        player.frameEvents.audioS.Stop();
+        player.anim.Play("Girl_Broken_Idle");
+    }
 
     #endregion
 
@@ -128,7 +182,7 @@ public class UIManager : MonoBehaviour
     public Animator MainCamera;//控制摄像机拉近远离
     public Animator ShowSaveCavansAnim;//黑幕显示背景
 
-    public GameObject HomePageCavans, SaveCavans, CreateCavans,SettingCavans, LanguageCavans;//主菜单界面，存档界面,捏人界面,设置界面
+    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面
 
     [Header("捏人界面UI")]
     public InputField nameInputField; // 绑定在 Inspector 里
@@ -246,31 +300,52 @@ public class UIManager : MonoBehaviour
 
     public void OpenCloseMenu()
     {
-        if (!isPause)
+        if (CurrentMode == 0)
         {
-            MainCamera.SetBool("Track", true);
-            Common_All.SetActive(false);
-            ShowSaveCavansAnim.gameObject.SetActive(true);
-            ShowSaveCavansAnim.SetBool("Track", true);
-
-
-            player.isInputBlocked = true;//切断玩家的方向攻击等输入
-
-
-        }
-        else
-        {
-            MainCamera.SetBool("Track", false);
-            Common_All.SetActive(true);
-            ShowSaveCavansAnim.gameObject.SetActive(false);
-            ShowSaveCavansAnim.SetBool("Track", false);
-
-            player.isInputBlocked = false;//恢复玩家的方向攻击等输入
-
-
+            //ToCGPage();//打开CG界面
+            Invoke("ToCGPage", 0.1f);
         }
 
-        isPause = !isPause;
+        if (CurrentMode == 1)
+        {
+            if (!isPause)
+            {
+                MainCamera.SetInteger("View",0);
+                Common_All.SetActive(false);
+                ShowSaveCavansAnim.gameObject.SetActive(true);
+                ShowSaveCavansAnim.SetBool("Track", true);
+
+
+                player.isInputBlocked = true;//切断玩家的方向攻击等输入
+
+
+            }
+            else
+            {
+                MainCamera.SetInteger("View", 2);
+                Common_All.SetActive(true);
+                ShowSaveCavansAnim.gameObject.SetActive(false);
+                ShowSaveCavansAnim.SetBool("Track", false);
+
+                player.isInputBlocked = false;//恢复玩家的方向攻击等输入
+
+
+            }
+
+            isPause = !isPause;
+        }
+
+
+
+    }
+
+    public void To_CGScence()
+    {
+
+        CurrentChooseList = 6;
+
+        ShowSaveCavansAnim.gameObject.SetActive(false);
+        MainCamera.SetInteger("View", 1);
     }
 
 
@@ -290,7 +365,7 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-
+        CGUnclockStart();//检测CG解锁
 
 
 
@@ -399,11 +474,11 @@ public class UIManager : MonoBehaviour
 
         currentSelectedSlot.DeleteCurrentSave();
 
-        Invoke("CancelDelete",0.1f);//目前暂时这么做，以防确定按太快直接跳到捏人界面
+        Invoke("CancelDelete", 0.1f);//目前暂时这么做，以防确定按太快直接跳到捏人界面
 
     }//删除这个角色
 
-    public void CancelDelete() 
+    public void CancelDelete()
     {
         MakeSureDeleteCurrentSave.SetActive(false);
         CurrentChooseList = 2;//返回存档界面
@@ -516,16 +591,16 @@ public class UIManager : MonoBehaviour
 
     }//删除存档
 
-    public void SetLanguage(int Number) 
+    public void SetLanguage(int Number)
     {
         LanguagePagecurrentIndex = Number;
 
         SetLanguage_2();
     }
-    void SetLanguage_2() 
+    void SetLanguage_2()
     {
-        PlayerPrefs.SetInt("language",LanguagePagecurrentIndex);
-       
+        PlayerPrefs.SetInt("language", LanguagePagecurrentIndex);
+
         ReLoadScene();
     }
 
@@ -553,6 +628,105 @@ public class UIManager : MonoBehaviour
     public float SEVolume = 0f;
 
 
+
+    #endregion
+
+    /// <summary>
+    /// CG界面选中
+    /// </summary>
+    #region
+    public List<CGOptionUI> cgButtons = new List<CGOptionUI>();
+    int CGcurrentIndex = 0;
+
+
+
+    void CGUnclockStart()
+    {
+        foreach (var btn in cgButtons)
+        {
+            btn.SetUnlockedFromPrefs();
+        }
+
+        // 查找第一个已解锁的
+        for (int i = 0; i < cgButtons.Count; i++)
+        {
+            if (cgButtons[i].unlocked)
+            {
+                currentIndex = i;
+                break;
+            }
+        }
+        UpdateHighlight();
+    }//开始检测CG解锁数
+    void MoveSelection(int direction)
+    {
+        // 取消旧高亮
+        cgButtons[CGcurrentIndex].SetHighlight(false);
+
+        // 循环查找下一个已解锁的项
+        int max = cgButtons.Count;
+        for (int i = 1; i < max; i++)
+        {
+            int newIndex = (CGcurrentIndex + direction * i + max) % max;
+            if (cgButtons[newIndex].unlocked)
+            {
+                CGcurrentIndex = newIndex;
+                break;
+            }
+        }
+
+        // 更新高亮
+        UpdateHighlight_CG();
+    }//切换当前选中
+
+    void UpdateHighlight_CG()
+    {
+        for (int i = 0; i < cgButtons.Count; i++)
+        {
+            cgButtons[i].SetHighlight(i == CGcurrentIndex);
+        }
+    }
+
+
+    public void PlayPlayerCG(string CGName)
+    {
+        player.ForCGRandomEnemySkin();
+        player.frameEvents.audioS.Stop();
+
+        switch (CGName)
+        {
+            case "CG_OnanismFront_1":
+                player.anim.Play("CG/CG_OnanismFront_1");
+                break;
+            case "CG_OnanismSide_1":
+                player.anim.Play("CG/CG_OnanismSide_1");
+                break;
+
+
+            case "CG_InsultSide_1":
+                player.anim.Play("CG/CG_InsultSide_1");
+                break;
+            case "CG_GagSide_1":
+                player.anim.Play("CG/CG_GagSide_1");
+                break;
+            case "CG_FistingFront_1":
+                player.anim.Play("CG/CG_FistingFront_1");
+                break;
+
+            case "CG_RapeFront_1":
+                player.anim.Play("CG/CG_RapeFront_1");
+                break;
+            case "CG_RapeSide_1":
+                player.anim.Play("CG/CG_RapeSide_1");
+                break;
+            case "CG_AssaultFront_1":
+                player.anim.Play("CG/CG_AssaultFront_1");
+                break;
+            case "CG_AssaultSide_1":
+                player.anim.Play("CG/CG_AssaultSide_1");
+                break;
+        }
+    }
 
     #endregion
 
@@ -622,7 +796,7 @@ public class UIManager : MonoBehaviour
             Vector2 dir = ctx.ReadValue<Vector2>();
 
             //主菜单界面
-            if (CurrentChooseList == 0) 
+            if (CurrentChooseList == 0)
             {
                 // 当前菜单项内的上下切换
                 if (dir.y > 0.5f)
@@ -685,7 +859,7 @@ public class UIManager : MonoBehaviour
                     if (currentIndex >= 6 && ScrollDown_Button.activeSelf) { ScrollDown(); }
 
                 }
-               
+
             }
 
             //捏人界面
@@ -727,7 +901,7 @@ public class UIManager : MonoBehaviour
                 {
                     CreatNewcurrentIndex = Mathf.Clamp(CreatNewcurrentIndex + 1, 0, 5);
                     UpdateHighlight();
-  
+
 
                 }
 
@@ -757,7 +931,7 @@ public class UIManager : MonoBehaviour
                             break;
 
                     }
-                  
+
                 }
                 else if (dir.x < -0.5f)
                 {
@@ -821,6 +995,22 @@ public class UIManager : MonoBehaviour
                 }
             }
 
+            //CG界面
+            if (CurrentChooseList == 5)
+            {
+                // 当前菜单项内的上下切换
+                if (dir.y > 0.5f)
+                {
+                    MoveSelection(-1);
+
+                }
+                else if (dir.y < -0.5f)
+                {
+
+                    MoveSelection(1);
+                }
+            }
+
             AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
         }
 
@@ -844,14 +1034,13 @@ public class UIManager : MonoBehaviour
             //主菜单界面
             if (CurrentChooseList == 0)
             {
-                switch (HomePagecurrentIndex) 
+                switch (HomePagecurrentIndex)
                 {
                     case 0:
-                        //ToSavePage();
-                        Invoke("ToSavePage",0.1f);//开始游戏进入存档界面
+                        ToSavePageButton(1);//开始游戏进入存档界面
                         break;
                     case 1:
-                       
+                        ToSavePageButton(0);//开始游戏进入存档界面(CG)
                         break;
                     case 2:
                         //ToSettingPage();
@@ -868,7 +1057,18 @@ public class UIManager : MonoBehaviour
             //存档界面
             if (CurrentChooseList == 2)
             {
-                CreateNewSave();
+                if (CurrentMode == 0)
+                {
+                    //ToCGPage();//打开CG界面
+                    Invoke("ToCGPage", 0.1f);
+                }
+
+                if (CurrentMode == 1)
+                {
+                    CreateNewSave();//新建角色
+                }
+
+
                 AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
             }
 
@@ -894,7 +1094,7 @@ public class UIManager : MonoBehaviour
             {
                 switch (SettingPagecurrentIndex)
                 {
-                 
+
                     case 2:
                         //ToSettingPage();
                         Invoke("ToLanguagePage", 0.1f);//进入设置界面
@@ -913,6 +1113,11 @@ public class UIManager : MonoBehaviour
                 SetLanguage_2();
             }
 
+            //CG界面
+            if (CurrentChooseList == 5)
+            {
+                cgButtons[CGcurrentIndex].PlayCG();
+            }
         }
 
 
@@ -933,16 +1138,29 @@ public class UIManager : MonoBehaviour
             }
 
             //存档界面//设置界面
-            if (CurrentChooseList == 2|| CurrentChooseList == 3)
+            if (CurrentChooseList == 2 || CurrentChooseList == 3)
             {
                 ToHomePage();
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
             //语言设置界面
-            if (CurrentChooseList == 4) 
+            if (CurrentChooseList == 4)
             {
                 ToSettingPage();
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+            //CG界面
+            if (CurrentChooseList == 5)
+            {
+                Invoke("ToSavePage", 0.1f);//开始游戏进入存档界面(CG)
+                CurrentMode = 0;
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+            //CG鉴赏中
+            if (CurrentChooseList == 6)
+            {
+                Invoke("ToCGPage", 0.1f);//开始游戏进入存档界面(CG)
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
         }
@@ -959,7 +1177,7 @@ public class UIManager : MonoBehaviour
                 currentSelectedSlot.Delete();//跳出是否删除存档界面
                 //DeleteCurrentSelection();
             }
-          
+
         }
 
     }
@@ -972,7 +1190,7 @@ public class UIManager : MonoBehaviour
         {
             OpenCloseMenu();
         }
-       
+
 
         AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
     }

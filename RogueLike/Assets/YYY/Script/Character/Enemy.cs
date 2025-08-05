@@ -445,7 +445,41 @@ public class Enemy : MonoBehaviour
                 if (collision.gameObject.GetComponent<Player>().isRape == false)
                 {
                     isRape = true;
-                    anim.Play("RBQ_Punish_Rape");
+                    //anim.Play("RBQ_Punish_Rape");
+
+                    switch (Random.Range(1,9))
+                    {
+                        case 1:
+                            anim.Play("CG/CG_OnanismFront_1");
+                            break;
+                        case 2:
+                            anim.Play("CG/CG_OnanismSide_1");
+                            break;
+
+
+                        case 3:
+                            anim.Play("CG/CG_GagSide_1");
+                            break;
+                        case 4:
+                            anim.Play("CG/CG_FistingFront_1");
+                            break;
+
+
+                        case 5:
+                            anim.Play("CG/CG_RapeFront_1");
+                            break;
+                        case 6:
+                            anim.Play("CG/CG_RapeSide_1");
+                            break;
+                        case 7:
+                            anim.Play("CG/CG_AssaultFront_1");
+                            break;
+                        case 8:
+                            anim.Play("CG/CG_AssaultSide_1");
+                            break;
+
+                    }
+
 
                     gameObject.transform.position = collision.gameObject.transform.position;//敌人拉到玩家位置
 
