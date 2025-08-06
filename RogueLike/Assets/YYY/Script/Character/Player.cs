@@ -226,7 +226,7 @@ public class Player : MonoBehaviour
 
 
 
-        if (!isDie && currentHealth > 0)
+        if (!isDie && currentHealth > 0)//不能&&IsGrounded()
         {
             BaseMove();//站走跑攻
 
@@ -240,7 +240,9 @@ public class Player : MonoBehaviour
         {
             //死亡完全切断所有输入
             rbody.velocity = Vector2.zero; // 停止所有移动
-            anim.Play("Girl_Default_Die_2");
+
+            //anim.Play("Girl_Default_Die_2");//这个地方干扰了跳跃落地
+
             //rbody.simulated = false;//当玩家挂的时候，如果踩着墙，会导致墙跳出来遮挡视线
             return;
         }
@@ -1348,6 +1350,7 @@ public class Player : MonoBehaviour
             {
                 frameEvents._Effect_falldown();// 播放落地音效等逻辑
                 Knockdown();
+               
             }
 
 
@@ -1604,7 +1607,7 @@ public class Player : MonoBehaviour
 
     IEnumerator Dodge(Vector2 direction, float dodgeSpeed, float dodgeDistance)
     {
-
+        PlayJump();
         //闪避后连击取消
         if (currentHealth > 0)
         {
@@ -1911,44 +1914,44 @@ public class Player : MonoBehaviour
             }//闪避伤害
             if (amount < 0)
             {
-
+           
                 if (!isDie && canMove)//处于攻击状态下无法防御
                 {
                     // 计算体力百分比
                     float strengthPercent = (float)currentStrength / maxStrength;
-
+           
                     // 根据体力百分比决定防御几率（体力越高越容易防御）
                     // 比如体力满时为 100% 几率，体力最低时为 10%
                     float blockChance = Mathf.Lerp(0.1f, 1f, strengthPercent);
-
+           
                     if (Random.value < blockChance)
                     {
-
+           
                         if (Class == PlayerClass.Succubus || isMage)
                         {
                             ProtectiveCoverEffect.SetActive(true);
-
+           
                         }//只有魔族和法师需要特效（遮挡无防御动画）
-
+           
                         if (visionType == PlayerType.ShortRangePlayer)
                         {
                             anim.Play(GetAnimPrefix() + "Strike_Block");
                         }
                         else
                         {
-
+           
                             if (isMage)
                             { 
                                 //没有法师防御动画
                             }
                             else { anim.Play(GetAnimPrefix() + "Shoot_Block"); }
-
+           
                         }
-
+           
                         // 防御成功扣除体力
                         ChangeStrength(-50);
-
-
+           
+           
                         switch (Random.Range(0, 3))
                         {
                             case 0:
@@ -1961,30 +1964,30 @@ public class Player : MonoBehaviour
                                 frameEvents._Attack_sword_clash4();
                                 break;
                         }
-
-
+           
+           
                         //显示伤害
                         HudText.HUD(0);//0会显示Miss
-
+           
                         //火花特效
                         Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
                         Vector3 spawnPosition_2 = transform.position + offset_2;
                         GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
                         Destroy(effectPrefabs_2, 2f);
-
+           
                         return;
                     }
-
+           
                 }
-
-
+           
+           
                 //受伤时连击取消
                 if (currentHealth > 0)
                 {
                     Invoke("ResetCombo", 1f);//防止挂了又站起来
                 }
-
-
+           
+           
             }//格挡
 
             //伤害类型
@@ -2081,34 +2084,39 @@ public class Player : MonoBehaviour
             }
 
             //击倒再站起
-            if (Random.Range(0, 2) == 0 && !isDie && currentHealth > 0)
+
+            if (!isDie && currentHealth > 0) 
             {
-                Knockdown();
+                if (Random.Range(0, 2) == 0)
+                {
+                    Knockdown();
 
-                Critial.SetActive(true);
+                    Critial.SetActive(true);
+                }
+                else
+                {
+
+                    //击飞
+                    if (StopX < 0)
+                        Knockback(forceX: -3f);
+                    else if (StopX > 0)
+                        Knockback(forceX: 3f);
+                    else if (StopY < 0)
+                        Knockback(forceX: 0, forceY: -3f);
+                    else if (StopY > 0)
+                        Knockback(forceX: 0, forceY: 3f);
+
+
+
+
+                    //PlayJump();
+
+                    //受伤动画
+                    anim.Play(GetAnimPrefix() + "Default_Hurt");
+                    //Invoke("ReSetAttack", 0.5f);//防止动画回不去(这个在被击倒/站起流程后)
+                }
             }
-            else 
-            {
-
-                //击飞
-                if (StopX < 0)
-                    Knockback(forceX: -3f);
-                else if (StopX > 0)
-                    Knockback(forceX: 3f);
-                else if (StopY < 0)
-                    Knockback(forceX: 0, forceY: -3f);
-                else if (StopY > 0)
-                    Knockback(forceX: 0, forceY: 3f);
-
-
-
-
-                //PlayJump();
-
-                //受伤动画
-                anim.Play(GetAnimPrefix() + "Default_Hurt");
-                Invoke("ReSetAttack", 0.5f);//防止动画回不去(这个在被击倒/站起流程后)
-            }
+           
         }
 
     }
@@ -2132,6 +2140,8 @@ public class Player : MonoBehaviour
         if (currentHealth > 0)
         {
             Invoke("GetUp", 0.5f);//比起敌人，玩家可以更快站起来
+
+            Invoke("ReSetAttack", 0.5f);//防止动画回不去(这个在被击倒/站起流程后)
         }
 
     }//击倒
