@@ -32,6 +32,11 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("CG_InsultSide_1", 1);
         //PlayerPrefs.SetInt("CG_RapeFront_1", 1);
         //PlayerPrefs.SetInt("CG_RapeSide_1", 1);
+
+        //PlayerPrefs.SetInt("CG_TentacleBagFront_1", 1);
+        //PlayerPrefs.SetInt("CG_TentacleBugSide_1", 1);
+        //PlayerPrefs.SetInt("CG_TentacleWallFront_1", 1);
+        //PlayerPrefs.SetInt("CG_TentacleFront_1", 1);
     }
     /// <summary>
     /// 主菜单
@@ -693,39 +698,45 @@ public class UIManager : MonoBehaviour
         player.ForCGRandomEnemySkin();
         player.frameEvents.audioS.Stop();
 
-        switch (CGName)
+
+        if (!string.IsNullOrEmpty(CGName))
         {
-            case "CG_OnanismFront_1":
-                player.anim.Play("CG/CG_OnanismFront_1");
-                break;
-            case "CG_OnanismSide_1":
-                player.anim.Play("CG/CG_OnanismSide_1");
-                break;
-
-
-            case "CG_InsultSide_1":
-                player.anim.Play("CG/CG_InsultSide_1");
-                break;
-            case "CG_GagSide_1":
-                player.anim.Play("CG/CG_GagSide_1");
-                break;
-            case "CG_FistingFront_1":
-                player.anim.Play("CG/CG_FistingFront_1");
-                break;
-
-            case "CG_RapeFront_1":
-                player.anim.Play("CG/CG_RapeFront_1");
-                break;
-            case "CG_RapeSide_1":
-                player.anim.Play("CG/CG_RapeSide_1");
-                break;
-            case "CG_AssaultFront_1":
-                player.anim.Play("CG/CG_AssaultFront_1");
-                break;
-            case "CG_AssaultSide_1":
-                player.anim.Play("CG/CG_AssaultSide_1");
-                break;
+            player.anim.Play("CG/" + CGName);
         }
+
+        //switch (CGName)
+        //{
+        //    case "CG_OnanismFront_1":
+        //        player.anim.Play("CG/CG_OnanismFront_1");
+        //        break;
+        //    case "CG_OnanismSide_1":
+        //        player.anim.Play("CG/CG_OnanismSide_1");
+        //        break;
+        //
+        //
+        //    case "CG_InsultSide_1":
+        //        player.anim.Play("CG/CG_InsultSide_1");
+        //        break;
+        //    case "CG_GagSide_1":
+        //        player.anim.Play("CG/CG_GagSide_1");
+        //        break;
+        //    case "CG_FistingFront_1":
+        //        player.anim.Play("CG/CG_FistingFront_1");
+        //        break;
+        //
+        //    case "CG_RapeFront_1":
+        //        player.anim.Play("CG/CG_RapeFront_1");
+        //        break;
+        //    case "CG_RapeSide_1":
+        //        player.anim.Play("CG/CG_RapeSide_1");
+        //        break;
+        //    case "CG_AssaultFront_1":
+        //        player.anim.Play("CG/CG_AssaultFront_1");
+        //        break;
+        //    case "CG_AssaultSide_1":
+        //        player.anim.Play("CG/CG_AssaultSide_1");
+        //        break;
+        //}
     }
 
     #endregion
