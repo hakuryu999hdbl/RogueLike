@@ -1260,6 +1260,10 @@ public class UIManager : MonoBehaviour
 
     [Header("暴击值")]
     public Image CriticalBar;
+
+    [Header("经验值等级")]
+    public Image ExperienceBar;
+
     // 用于闪烁控制
     private float flashTimer = 0f;
 
@@ -1331,6 +1335,12 @@ public class UIManager : MonoBehaviour
             CriticalBar.color = baseColor;
         }
     }
+
+    public void UpdateExperienceBar(int curAmount, int maxAmount)
+    {
+        ExperienceBar.fillAmount = (float)curAmount / (float)maxAmount;  
+    }
+
     #endregion
 
 

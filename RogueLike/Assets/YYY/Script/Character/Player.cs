@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 
 
@@ -87,6 +88,33 @@ public class Player : MonoBehaviour
 
         // 根据这些数据设置皮肤
         SetSkin(); // 你已有的方法（或自己写个用这些 Index 设置皮肤的方法）
+
+
+        //数值赋予
+        this.maxHealth = data.maxHP;
+        currentHealth = maxHealth;
+        UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
+
+        this.maxStrength = maxHealth;
+        currentStrength = maxStrength;
+        UIManager.instance.UpdateStrengthBar(currentStrength, maxStrength);
+
+        this.Level  = data.level;
+        LevelText.text = Level.ToString();
+        maxExperience = data.level * 1000;
+        currentExperience = data.exp;
+        UIManager.instance.UpdateExperienceBar(currentExperience, maxExperience);
+
+        MeleeDamage = data.meleeDamage;
+        ShootDamage = data.shootDamage;
+        SpellDamage = data.spellDamage;
+
+        CurrentWeaponPower = data.weaponAtk;
+        CurrentArmorDefence = data.armorDef;
+        CurrentStockingDefence = data.stockingDef;
+
+        currentSaveName = data.characterName;//记录当前名称
+
     }//存档形式赋值皮肤数值
 
 
@@ -115,6 +143,18 @@ public class Player : MonoBehaviour
             data.legsIndex = this.YYY_legsIndex;
             data.hatIndex = this.YYY_hatIndex;
             data.weaponIndex = this.weaponIndex;
+
+
+            data.level = 1;
+            data.exp = Random.Range(0,1000);
+            data.maxHP = 1000;
+            data.meleeDamage = 100;
+            data.shootDamage = 100;
+            data.spellDamage = 100;
+
+            data.weaponAtk = Random.Range(100,200);
+            data.armorDef= Random.Range(10,50);
+            data.stockingDef = Random.Range(5, 25);
 
             SaveManager.Save(data);
 
@@ -795,9 +835,11 @@ public class Player : MonoBehaviour
                 attackPressTime = 0;
 
                 attackTriggered = true;
+
+               
             }
 
-            //attack_Range.SetActive(false);//关闭技能范围
+            attack_Range.SetActive(false);//关闭技能范围
         }
 
 
@@ -813,7 +855,7 @@ public class Player : MonoBehaviour
             if (attackPressTime >= 0.2f)
             {
                 ChangeCritical(10);//按下暴击率快速上升
-                //attack_Range.SetActive(true);//技能范围
+                attack_Range.SetActive(true);//技能范围
 
                 if (isMage) { ShowMagicEffect(); }//法师产生法阵
             }
@@ -884,6 +926,7 @@ public class Player : MonoBehaviour
 
     public void PlayNormalAttack()
     {
+        
 
         if (!isDie)
         {
@@ -1020,7 +1063,73 @@ public class Player : MonoBehaviour
     }//攻击声音
 
 
+    public void BattleCryVoice()
+    {
+        switch (Class)
+        {
+            case PlayerClass.Girl:
+            case PlayerClass.Succubus:
+                switch (Random.Range(0, 4))
+                {
+                    case 0:
+                        frameEvents._JK_attack1();
+                        break;
+                    case 1:
+                        frameEvents._JK_attack2();
+                        break;
+                    case 2:
+                        frameEvents._JK_attack3();
+                        break;
+                    case 3:
+                        frameEvents._JK_attack4();
+                        break;
+                }//女性
+                break;
+            case PlayerClass.Man:
+                frameEvents._Man_attack();//男性
+                break;
 
+                //case 2:
+                //case 3:
+                //    switch (Random.Range(0, 2))
+                //    {
+                //        case 0:
+                //            frameEvents._Zombie_Summon_1();
+                //            break;
+                //        case 1:
+                //            frameEvents._Zombie_Summon_2();
+                //            break;
+                //    }//感染者 变异体
+                //    break;
+                //case 4:
+                //    switch (Random.Range(0, 2))
+                //    {
+                //        case 0:
+                //            frameEvents._Orangutan_Summon_1();
+                //            break;
+                //        case 1:
+                //            frameEvents._Orangutan_Attack_1();
+                //            break;
+                //    }//肉翅蜂
+                //    break;
+                //case 5:
+                //case 6:
+                //case 7:
+                //    switch (Random.Range(0, 3))
+                //    {
+                //        case 0:
+                //            frameEvents._monster_Summon_01();
+                //            break;
+                //        case 1:
+                //            frameEvents._monster_Summon_02();
+                //            break;
+                //        case 2:
+                //            frameEvents._Shrike_Summon_Attack();
+                //            break;
+                //    }//肉袋 淫毒肉炮
+                //    break;
+        }
+    }//近战攻击发出的叫声
 
     #endregion
 
@@ -1303,8 +1412,14 @@ public class Player : MonoBehaviour
         MagicFormationAnim.SetBool("Show", false);
     }
 
+    [Header("基础与武器装备结合后数值")]
+    public int MeleeDamage;
+    public int ShootDamage;
+    public int SpellDamage;
 
-
+    public int CurrentWeaponPower;    // 武器攻击值
+    public int CurrentArmorDefence;      // 衣服防御值
+    public int CurrentStockingDefence;   // 丝袜防御值
     #endregion
 
     /// <summary>
@@ -1555,6 +1670,12 @@ public class Player : MonoBehaviour
 
     void PlayDodge()
     {
+        //当这些动画在播放的时候玩家不可以闪避(动画与可移动重合)
+        if (!canMove) 
+        {
+            return;//防止连续闪避
+        }
+
 
         if (currentStrength > 50) // 确保不在连续闪避状态
         {
@@ -1607,7 +1728,7 @@ public class Player : MonoBehaviour
 
     IEnumerator Dodge(Vector2 direction, float dodgeSpeed, float dodgeDistance)
     {
-        PlayJump();
+
         //闪避后连击取消
         if (currentHealth > 0)
         {
@@ -2229,6 +2350,83 @@ public class Player : MonoBehaviour
             strike.isCritial = false;
         }
     }
+
+    [Header("经验值")]
+    public int currentExperience;
+    public int maxExperience;
+
+    public int Level;
+    public Text LevelText;
+
+    public GameObject LevelUpEffect;
+    public void ChangeExperience(int amount)
+    {
+        PlayerSaveData data = SaveManager.Load(currentSaveName);
+
+        currentExperience = Mathf.Clamp(currentExperience + amount, 0, maxExperience);
+        UIManager.instance.UpdateExperienceBar(currentExperience, maxExperience);
+
+
+        if (currentExperience >= maxExperience)
+        {
+            Level += 1;
+            maxExperience = Level * 1000;
+            LevelText.text = Level.ToString();
+
+            data.level = Level;
+
+
+            currentExperience = 0;
+            UIManager.instance.UpdateExperienceBar(currentExperience, maxExperience);      
+
+            LevelUpEffect.SetActive(true);
+
+
+
+
+            //随机升级一项数值并储存（但是当前武器的偏向会增大）
+
+            switch (Random.Range(0,5)) 
+            {
+                case 0:
+                    //升级奖励：增大最大体力值和生命值(回满状态)
+                    data.maxHP = maxHealth + 100;
+
+                    this.maxHealth = data.maxHP;
+                    currentHealth = maxHealth;
+                    UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
+
+                    this.maxStrength = maxHealth;
+                    currentStrength = maxStrength;
+                    UIManager.instance.UpdateStrengthBar(currentStrength, maxStrength);
+
+                    break;
+                case 1:
+                    //升级奖励：增大近战伤害
+                    data.meleeDamage = MeleeDamage + 10;
+                    break;
+                case 2:
+                    //升级奖励：增大远程伤害
+                    data.shootDamage = ShootDamage + 10;
+                    break;
+                case 3:
+                    //升级奖励：增大法术伤害
+                    data.spellDamage = SpellDamage + 10;
+                    break;
+            }
+
+
+        }
+
+
+     
+        data.exp = currentExperience;
+        SaveManager.Save(data);
+
+        //我不太清除频繁刷新会不会不太好……
+        UIManager.instance.RefreshSaveSlots();
+    }
+
     #endregion
 
     /// <summary>

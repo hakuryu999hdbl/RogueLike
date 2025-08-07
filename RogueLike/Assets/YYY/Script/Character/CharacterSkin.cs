@@ -81,18 +81,22 @@ public class CharacterSkin : MonoBehaviour
     public Player player;
     public Enemy enemy;
     public RBQ rbq;
+
+    bool PlayerBattleCry = false;
+
     public void AttackWarn()
     {
-        if (player != null)
+        if (player != null&&!PlayerBattleCry)
         {
-
+            player.BattleCryVoice();
+            PlayerBattleCry = true;
         }
 
 
         if (enemy != null)
         {
 
-            //enemy.ShootBullet();
+            enemy.BattleCryVoice();
 
         }
 
@@ -129,6 +133,8 @@ public class CharacterSkin : MonoBehaviour
         {
 
             player._Attack_Cancel();
+
+            PlayerBattleCry = false;
 
         }
 

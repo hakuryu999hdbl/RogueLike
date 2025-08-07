@@ -892,7 +892,6 @@ public class Enemy : MonoBehaviour
                 isInAttackDelay = true;
 
 
-
             }
 
 
@@ -1011,6 +1010,74 @@ public class Enemy : MonoBehaviour
                 break;
         }
     }//攻击声音
+
+    public void BattleCryVoice()
+    {
+        switch (Class)
+        {
+            case EnemyClass.Girl:
+            case EnemyClass.Succubus:
+                switch (Random.Range(0, 4))
+                {
+                    case 0:
+                        frameEvents._JK_attack1();
+                        break;
+                    case 1:
+                        frameEvents._JK_attack2();
+                        break;
+                    case 2:
+                        frameEvents._JK_attack3();
+                        break;
+                    case 3:
+                        frameEvents._JK_attack4();
+                        break;
+                }//女性
+                break;
+            case EnemyClass.Man:
+                frameEvents._Man_attack();//男性
+                break;
+
+            //case 2:
+            //case 3:
+            //    switch (Random.Range(0, 2))
+            //    {
+            //        case 0:
+            //            frameEvents._Zombie_Summon_1();
+            //            break;
+            //        case 1:
+            //            frameEvents._Zombie_Summon_2();
+            //            break;
+            //    }//感染者 变异体
+            //    break;
+            //case 4:
+            //    switch (Random.Range(0, 2))
+            //    {
+            //        case 0:
+            //            frameEvents._Orangutan_Summon_1();
+            //            break;
+            //        case 1:
+            //            frameEvents._Orangutan_Attack_1();
+            //            break;
+            //    }//肉翅蜂
+            //    break;
+            //case 5:
+            //case 6:
+            //case 7:
+            //    switch (Random.Range(0, 3))
+            //    {
+            //        case 0:
+            //            frameEvents._monster_Summon_01();
+            //            break;
+            //        case 1:
+            //            frameEvents._monster_Summon_02();
+            //            break;
+            //        case 2:
+            //            frameEvents._Shrike_Summon_Attack();
+            //            break;
+            //    }//肉袋 淫毒肉炮
+            //    break;
+        }
+    }//近战攻击发出的叫声
 
     #endregion
 
@@ -1532,8 +1599,8 @@ public class Enemy : MonoBehaviour
             }
 
 
-
-
+            //敌人受伤玩家获取经验
+            player.ChangeExperience(100);
 
 
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
