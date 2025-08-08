@@ -13,9 +13,14 @@ public class Shooting : MonoBehaviour
     public bool isCritial = false;
     public float chargeTime = 0f; // 由 Player 传入的蓄力时间
 
-    private void OnEnable()
+    public void Init(int damage, int prefabs_damage, bool isCrit, float charge, int specialType,
+                 Vector3 dir, BulletOwnerType owner)
     {
-        
+        Damage = damage;
+        PrefabsDamage = prefabs_damage;
+        isCritial = isCrit;
+        chargeTime = charge;
+        SetSpecialBullet(specialType);
 
         baseDamage = Damage; // 保存原始值
         appliedDamage = baseDamage + Random.Range(-50, 50); // 例如±10范围
@@ -31,7 +36,9 @@ public class Shooting : MonoBehaviour
             appliedDamage = Mathf.RoundToInt(appliedDamage * chargeMultiplier);
         }
 
+        //Debug.Log("子弹最终伤害" + appliedDamage + "子弹基础伤害" + baseDamage + "传送伤害" +Damage);
 
+        SetDirection(dir, owner);
 
     }//初始化随机伤害
 
@@ -48,7 +55,8 @@ public class Shooting : MonoBehaviour
     [Header("子弹基础参数")]
 
     public float speed = 60f;
-    int Damage = -100;
+    public int Damage = -100;//带入对应的值(子弹伤害)
+    public int PrefabsDamage = -300;//带入对应的值（子弹生成物的法术伤害）
     public float lifetime = 3f;
     private Vector3 direction;
 
@@ -171,14 +179,23 @@ public class Shooting : MonoBehaviour
                 //火球，雷球，毒球
                 case 2:
                 case 3:
-                case 5:
                     GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
-                    Strike strike = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Strike>();
-                    strike.DamageToEnemy = true;
-                    Destroy(EffectPrefabs, 1f);
+                    var s = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Spell>();
+                    s.DamageToEnemy = true;
+                    s.Init(PrefabsDamage, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
+
+                    Destroy(EffectPrefabs, 0.5f);
 
                     break;
+                case 5:
+                    GameObject EffectPrefabs2 = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
+                    var s2 = EffectPrefabs2.transform.Find("Attack_Collider").GetComponent<Spell>();
+                    s2.DamageToEnemy = true;
+                    s2.Init(PrefabsDamage, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
 
+                    Destroy(EffectPrefabs2, 1f);
+
+                    break;
 
             }
 
@@ -208,22 +225,25 @@ public class Shooting : MonoBehaviour
                 case 2:
                 case 3:
                     GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
-                    Strike strike = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Strike>();
-                    strike.DamageToPlayer = true;
-                    strike.DamageToFriend = true;
-
-
-                   //strike.Damage = appliedDamage; // ← 直接把算好的值传进去
-                   //strike.isCritial = isCritial;
-                   //strike.chargeTime = chargeTime;
-                   //strike.TypeOfAttack = TypeOfAttack; // 如果你有这个字段的话
-
-
+                    var s = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Spell>();
+                    s.DamageToPlayer = true;
+                    s.DamageToFriend = true;
+                    s.Init(PrefabsDamage, TypeOfAttack, isCritial,chargeTime);// ← 直接把算好的值传进去
 
                     Destroy(EffectPrefabs, 0.5f);
 
                     break;
+                case 5:
+                    GameObject EffectPrefabs2 = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
+                    var s2 = EffectPrefabs2.transform.Find("Attack_Collider").GetComponent<Spell>();
+                    s2.DamageToPlayer = true;
+                    s2.DamageToFriend = true;
+                    s2.Init(PrefabsDamage, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
 
+
+                    Destroy(EffectPrefabs2, 1f);
+
+                    break;
 
             }
 
@@ -247,7 +267,16 @@ public class Shooting : MonoBehaviour
         if (other.CompareTag("obstacle"))
         {
             GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
-            Destroy(EffectPrefabs, 0.5f);
+            switch (specialBullet)
+            {
+                case 5:
+                    Destroy(EffectPrefabs, 1f);
+                    break;
+                default:
+                    Destroy(EffectPrefabs, 0.5f);
+                    break;
+            }
+            
 
 
             if (other.gameObject.GetComponent<Plant>() != null)

@@ -74,6 +74,7 @@ public class Player : MonoBehaviour
     [Header("当前操纵的存档名称")]
     public string currentSaveName; // 当前操作的存档名
 
+
     public void ApplySaveData(PlayerSaveData data)
     {
         // 应用皮肤信息
@@ -105,7 +106,8 @@ public class Player : MonoBehaviour
         currentExperience = data.exp;
         UIManager.instance.UpdateExperienceBar(currentExperience, maxExperience);
 
-        MeleeDamage = data.meleeDamage;
+        //涉及升级储存，所以保持正数，只有在需要攻击伤害的时候变成复数
+        MeleeDamage = data.meleeDamage; 
         ShootDamage = data.shootDamage;
         SpellDamage = data.spellDamage;
 
@@ -113,7 +115,80 @@ public class Player : MonoBehaviour
         CurrentArmorDefence = data.armorDef;
         CurrentStockingDefence = data.stockingDef;
 
-        currentSaveName = data.characterName;//记录当前名称
+
+        //这会使捏人界面覆盖编辑当前选项
+        //currentSaveName = data.characterName;//记录当前名称
+
+
+        //近战武器赋值
+        strike.Damage = -data.meleeDamage;
+        switch (weaponIndex) 
+        {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 7:
+            case 8:
+            case 10:
+                strike.TypeOfAttack = 1;//剑伤
+                break;
+
+            case 6:
+                strike.TypeOfAttack = 3;//冻结
+                break;
+            case 9:
+                strike.TypeOfAttack = 2;//闪电
+                break;
+        }
+
+        //升级需求
+        switch (data.level)
+        {
+            case 1:
+            case 2:
+            case 3:
+                Level_Icon.sprite = UIManager.instance.skinParts.LevelSprites[0];
+                break;
+            case 4:
+            case 5:
+            case 6:
+                Level_Icon.sprite = UIManager.instance.skinParts.LevelSprites[1];
+                break;
+            case 7:
+            case 8:
+            case 9:
+                Level_Icon.sprite = UIManager.instance.skinParts.LevelSprites[2];
+                break;
+            case 10:
+            case 11:
+            case 12:
+                Level_Icon.sprite = UIManager.instance.skinParts.LevelSprites[3];
+                break;
+            case 13:
+            case 14:
+            case 15:
+                Level_Icon.sprite = UIManager.instance.skinParts.LevelSprites[4];
+                break;
+            case 16:
+            case 17:
+            case 18:
+                Level_Icon.sprite = UIManager.instance.skinParts.LevelSprites[5];
+                break;
+            case 19:
+            case 20:
+            case 21:
+                Level_Icon.sprite = UIManager.instance.skinParts.LevelSprites[6];
+                break;
+            case 22:
+            case 23:
+            case 24:
+            default:
+                Level_Icon.sprite = UIManager.instance.skinParts.LevelSprites[7];
+                break;
+        }
 
     }//存档形式赋值皮肤数值
 
@@ -124,41 +199,46 @@ public class Player : MonoBehaviour
         SaveCurrent();
     }//新增皮肤临时随机
 
+    public void RandomNewSave() 
+    {
+        // 如果还没有命名，则生成
+
+        PlayerSaveData data = new PlayerSaveData();
+
+        List<string> allSaves = SaveManager.GetAllSaveNames();  // 获取已有存档名
+        string newName = NameGenerator.GenerateUniqueName(allSaves);
+        data.characterName = newName; // ✅ 记得设置进去！
+
+        data.headIndex = this.YYY_headIndex;
+        data.eyesIndex = this.YYY_eyesIndex;
+        data.bodyIndex = this.YYY_bodyIndex;
+        data.legsIndex = this.YYY_legsIndex;
+        data.hatIndex = this.YYY_hatIndex;
+        data.weaponIndex = this.weaponIndex;
+
+
+        data.level = 1;
+        data.exp = Random.Range(0, 1000);
+        data.maxHP = 1000;
+        data.meleeDamage = 100;
+        data.shootDamage = 100;
+        data.spellDamage = 100;
+
+        data.weaponAtk = Random.Range(100, 200);
+        data.armorDef = Random.Range(10, 50);
+        data.stockingDef = Random.Range(5, 25);
+
+        SaveManager.Save(data);
+
+        currentSaveName = data.characterName;//记录当前名称
+    }//这个地方和重命名存档重复
+
     public void SaveCurrent()
     {
 
         if (string.IsNullOrEmpty(currentSaveName))
         {
-            // 如果还没有命名，则生成
-
-            PlayerSaveData data = new PlayerSaveData();
-
-            List<string> allSaves = SaveManager.GetAllSaveNames();  // 获取已有存档名
-            string newName = NameGenerator.GenerateUniqueName(allSaves);
-            data.characterName = newName; // ✅ 记得设置进去！
-
-            data.headIndex = this.YYY_headIndex;
-            data.eyesIndex = this.YYY_eyesIndex;
-            data.bodyIndex = this.YYY_bodyIndex;
-            data.legsIndex = this.YYY_legsIndex;
-            data.hatIndex = this.YYY_hatIndex;
-            data.weaponIndex = this.weaponIndex;
-
-
-            data.level = 1;
-            data.exp = Random.Range(0,1000);
-            data.maxHP = 1000;
-            data.meleeDamage = 100;
-            data.shootDamage = 100;
-            data.spellDamage = 100;
-
-            data.weaponAtk = Random.Range(100,200);
-            data.armorDef= Random.Range(10,50);
-            data.stockingDef = Random.Range(5, 25);
-
-            SaveManager.Save(data);
-
-            currentSaveName = data.characterName;//记录当前名称
+            RandomNewSave();
 
         }
         else
@@ -912,7 +992,7 @@ public class Player : MonoBehaviour
 
 
         // 攻击完毕扣除暴击值
-        ChangeCritical(-100);
+        //ChangeCritical(-100);
         //player.ChangeCritical(-player.maxCritical); // 或者换成一部分
     }
 
@@ -1218,11 +1298,14 @@ public class Player : MonoBehaviour
         anim.SetFloat("InputY", StopY);
     }//射击近距离敌人的时候朝向
 
+    int special;//暂时储存子弹类型
+
     private void FireBullet(Vector3 direction)
     {
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        var go = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        var s = go.GetComponent<Shooting>();
 
-
+       
 
         switch (CurrentWeapon)
         {
@@ -1231,72 +1314,65 @@ public class Player : MonoBehaviour
 
             case 201:
             case 207:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(5);//剧毒法球
+                special = 5;//剧毒法球
                 break;
             case 203:
             case 210:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(3);//火焰法球
+                special = 3;//火焰法球
                 break;
             case 204:
             case 206:
             case 208:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(4);//冰冻法球
+                special = 4;//冰冻法球
                 break;
             case 205:
             case 209:
             case 202:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(2);//雷电法球
+                special = 2;//雷电法球
                 break;
 
             case 101:
             case 102:
             case 103:
                 frameEvents._Bullet_Arrow();
-                bullet.GetComponent<Shooting>().SetSpecialBullet(1);//弩弓
+                special = 1;//弩弓
                 break;
 
 
             case 104:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 frameEvents._Bullet_Pistol();
                 break;
             case 105:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 frameEvents._Bullet_Pistol_2();
                 break;
             case 106:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 frameEvents._Bullet_Pistol_3();
                 break;
             case 107:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 frameEvents._Bullet_AK();
                 break;
             case 108:
             case 109:
             case 110:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 frameEvents._Bullet_SD();
                 break;
 
 
             default:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 break;
         }
 
-        // 计算当前暴击率
-        float critRate = (float)currentCritical / (float)maxCritical;
 
         // 只有在暴击率大于等于 60% 时，才可能暴击
-        if (critRate >= 0.6f)
-        {
-            bullet.GetComponent<Shooting>().isCritial = true;
-        }
+        bool willCrit = ((float)currentCritical / (float)maxCritical) >= 0.6f;
 
-        bullet.GetComponent<Shooting>().chargeTime = attackPressTime; // 把蓄力时间传过去（蓄力那段时间也能成攻击力 能加上去）
-
-        bullet.GetComponent<Shooting>().SetDirection(direction, Shooting.BulletOwnerType.Friend); // 玩家属于Friend阵营
+        s.Init(-ShootDamage, -SpellDamage, willCrit, attackPressTime, special, direction, Shooting.BulletOwnerType.Friend);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
 
     }//射击子弹
 
@@ -2002,6 +2078,7 @@ public class Player : MonoBehaviour
     public GameObject GateEffect;//传送门特效
     public GameObject Palsy_Effect;//闪电特效
     public GameObject Frozen_Effect;//冻结特效
+    public GameObject IceEffect;//冰特效
     public GameObject ProtectiveCoverEffect;//防护罩特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
@@ -2024,6 +2101,8 @@ public class Player : MonoBehaviour
         if (!isScreaming && currentHealth > 0 && !isDie)//冷却不受击，死亡后不受击，倒地不受击，(所有攻击都无法canMove)攻击中不受击
         {
 
+            
+            
 
 
             if (isDodging)
@@ -2035,7 +2114,8 @@ public class Player : MonoBehaviour
             }//闪避伤害
             if (amount < 0)
             {
-           
+               
+
                 if (!isDie && canMove)//处于攻击状态下无法防御
                 {
                     // 计算体力百分比
@@ -2051,7 +2131,20 @@ public class Player : MonoBehaviour
                         if (Class == PlayerClass.Succubus || isMage)
                         {
                             ProtectiveCoverEffect.SetActive(true);
-           
+                          
+                            switch (Random.Range(0, 3))
+                            {
+                                case 0:
+                                    ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 0);
+                                    break;
+                                case 1:
+                                    ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 1);
+                                    break;
+                                case 2:
+                                    ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 2);
+                                    break;
+                            }
+
                         }//只有魔族和法师需要特效（遮挡无防御动画）
            
                         if (visionType == PlayerType.ShortRangePlayer)
@@ -2062,7 +2155,7 @@ public class Player : MonoBehaviour
                         {
            
                             if (isMage)
-                            { 
+                            {
                                 //没有法师防御动画
                             }
                             else { anim.Play(GetAnimPrefix() + "Shoot_Block"); }
@@ -2107,8 +2200,19 @@ public class Player : MonoBehaviour
                 {
                     Invoke("ResetCombo", 1f);//防止挂了又站起来
                 }
-           
-           
+
+
+                //防护检测
+                amount += CurrentArmorDefence;
+                amount += CurrentStockingDefence;
+
+                if (amount>=0)
+                {
+                    amount = 0;
+                }
+
+                ChangeCritical(-maxCritical);//受伤暴击清零
+
             }//格挡
 
             //伤害类型
@@ -2121,7 +2225,18 @@ public class Player : MonoBehaviour
                     Palsy_Effect.SetActive(true);//雷电伤害
                     break;
                 case 3:
-                    Freeze(1);//冻结伤害
+                    if (Random.Range(0,3)==0) 
+                    {
+                        Freeze(1);//冻结伤害
+                    }
+                    else
+                    {
+                        Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+                        Vector3 spawnPosition_2 = transform.position + offset_2;
+                        GameObject EffectPrefabs = Instantiate(IceEffect, spawnPosition_2, transform.rotation);
+                        Destroy(EffectPrefabs, 0.5f);
+                    }
+                   
                     break;
             }
 
@@ -2358,6 +2473,8 @@ public class Player : MonoBehaviour
     public int Level;
     public Text LevelText;
 
+    public Image Level_Icon;
+
     public GameObject LevelUpEffect;
     public void ChangeExperience(int amount)
     {
@@ -2388,18 +2505,10 @@ public class Player : MonoBehaviour
 
             switch (Random.Range(0,5)) 
             {
+                default:
                 case 0:
                     //升级奖励：增大最大体力值和生命值(回满状态)
-                    data.maxHP = maxHealth + 100;
-
-                    this.maxHealth = data.maxHP;
-                    currentHealth = maxHealth;
-                    UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
-
-                    this.maxStrength = maxHealth;
-                    currentStrength = maxStrength;
-                    UIManager.instance.UpdateStrengthBar(currentStrength, maxStrength);
-
+                    data.maxHP = maxHealth + 100;        
                     break;
                 case 1:
                     //升级奖励：增大近战伤害
@@ -2415,7 +2524,10 @@ public class Player : MonoBehaviour
                     break;
             }
 
+            //升级后生命值回满
+           
 
+            ApplySaveData(data);//将更新后的值重新带入
         }
 
 
@@ -2424,8 +2536,9 @@ public class Player : MonoBehaviour
         SaveManager.Save(data);
 
         //我不太清除频繁刷新会不会不太好……
-        UIManager.instance.RefreshSaveSlots();
+        //UIManager.instance.RefreshSaveSlots();
     }
+
 
     #endregion
 

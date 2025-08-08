@@ -109,10 +109,19 @@ public class CharacterSkin : MonoBehaviour
     {
         if (player != null)
         {
+            //法杖只能蓄力远程攻击，法杖近程肉搏调用近战伤害无武器
+            if (player.isMage&&player.currentCritical<50)
+            {
+                if (player.isDie == false) { player.attack_Collider.SetActive(true); }//我方和敌方被击倒期间无法发出攻击碰撞体
+                player.AttackVoice();
+                Invoke("HideAttack", 0.2f);
+            }
+            else 
+            {
+                player.ShootBullet();
+            }
 
-            player.ShootBullet();
-
-
+            player.ChangeCritical(-player.maxCritical);//防止反复触发
         }
         if (enemy != null)
         {
@@ -122,10 +131,7 @@ public class CharacterSkin : MonoBehaviour
     }
 
 
-    public void AttackSpell()
-    {
-        AttackShoot();
-    }
+
 
     public void AttackOver()
     {
@@ -155,6 +161,8 @@ public class CharacterSkin : MonoBehaviour
             if (player.isDie == false) { player.attack_Collider.SetActive(true); }//我方和敌方被击倒期间无法发出攻击碰撞体
             player.canCombo = true;
             player.AttackVoice();
+
+            player.ChangeCritical(-player.maxCritical);//防止反复触发
         }
         if (enemy != null)
         {

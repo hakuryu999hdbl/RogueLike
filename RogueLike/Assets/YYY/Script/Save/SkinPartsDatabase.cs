@@ -11,4 +11,6 @@ public class SkinPartsDatabase : ScriptableObject
     public Sprite[] ClothesSprites;
     public Sprite[] LonghairSprites;
     public Sprite[] PonytailSprites;
+
+    public Sprite[] LevelSprites;
 }

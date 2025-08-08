@@ -898,6 +898,7 @@ MonoBehaviour:
   GateEffect: {fileID: 908704472}
   Palsy_Effect: {fileID: 168104390}
   Frozen_Effect: {fileID: 1554205031}
+  IceEffect: {fileID: 3437740937752795120, guid: 819364397993ff644b7b46fe7d760f65, type: 3}
   ProtectiveCoverEffect: {fileID: 1275863067}
   Floor_Blood_0: {fileID: 3847335236365124758, guid: f15a558e588307946844104b598ed691, type: 3}
   Floor_Blood_1: {fileID: 8773297149955030747, guid: 7ee8f04e3eac831439b5fc33a9b94a38, type: 3}
@@ -918,6 +919,7 @@ MonoBehaviour:
   maxExperience: 0
   Level: 0
   LevelText: {fileID: 2145376075}
+  Level_Icon: {fileID: 1848494376}
   LevelUpEffect: {fileID: 1286819634}
   isFrozen: 0
 --- !u!4 &65564742
@@ -1626,7 +1628,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -2241,8 +2243,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -182.5318, y: -111.31626}
-  m_SizeDelta: {x: 322.1414, y: 183.0368}
+  m_AnchoredPosition: {x: -182.5318, y: -111.3162}
+  m_SizeDelta: {x: 322.1414, y: 184.782}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &137628387
 MonoBehaviour:

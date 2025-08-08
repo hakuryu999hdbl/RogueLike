@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
         //速度岔开
         RunSpeed = Random.Range(3, 5);
         WalkSpeed = Random.Range(1, 3);
-
+        StopDir = Random.Range(0.8f, 1.15f);
 
 
 
@@ -205,6 +205,7 @@ public class Enemy : MonoBehaviour
     [Header("速度岔开")]
     float RunSpeed = 4f;
     float WalkSpeed = 2f;
+    float StopDir = 1f;//队友在玩家身边停止的位置岔开
 
     [Header("队友索敌冷却")]
     bool MakeSureEnemy = false;
@@ -259,7 +260,7 @@ public class Enemy : MonoBehaviour
                     else if (!isPatrol)
                     {
 
-                        if (dist > 1)
+                        if (dist > StopDir)
                         {
                             //队友跟随玩家的时候，玩家走，队友走，玩家跑，队友跑/队友目标为敌人的时候只会跑
                             if (player.isRunning == false && CurrentTarget == _Player)
@@ -1091,7 +1092,7 @@ public class Enemy : MonoBehaviour
     public GameObject transparentBulletPrefab;
     public Transform bulletSpawnPoint;
 
-
+    int special;//暂时储存子弹类型
     public void ShootBullet()
     {
         if (CurrentTarget == null) return;
@@ -1101,8 +1102,8 @@ public class Enemy : MonoBehaviour
         // 🟢 更新角色面向方向（动画参数）
         UpdateFacingDirection(dir);
 
-        GameObject bullet = Instantiate(transparentBulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
-
+        var go = Instantiate(transparentBulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        var s = go.GetComponent<Shooting>();
 
 
 
@@ -1110,69 +1111,70 @@ public class Enemy : MonoBehaviour
         {
 
 
+
             case 201:
             case 207:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(5);//剧毒法球
+                special = 5;//剧毒法球
                 break;
             case 203:
             case 210:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(3);//火焰法球
+                special = 3;//火焰法球
                 break;
             case 204:
             case 206:
             case 208:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(4);//冰冻法球
+                special = 4;//冰冻法球
                 break;
             case 205:
             case 209:
             case 202:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(2);//雷电法球
+                special = 2;//雷电法球
                 break;
 
             case 101:
             case 102:
             case 103:
                 frameEvents._Bullet_Arrow();
-                bullet.GetComponent<Shooting>().SetSpecialBullet(1);//弩弓
+                special = 1;//弩弓
                 break;
 
 
             case 104:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 frameEvents._Bullet_Pistol();
                 break;
             case 105:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 frameEvents._Bullet_Pistol_2();
                 break;
             case 106:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 frameEvents._Bullet_Pistol_3();
                 break;
             case 107:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 frameEvents._Bullet_AK();
                 break;
             case 108:
             case 109:
             case 110:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 frameEvents._Bullet_SD();
                 break;
 
 
             default:
-                bullet.GetComponent<Shooting>().SetSpecialBullet(0);//子弹
+                special = 0;//子弹
                 break;
         }
 
         if (tag == "Friend")
         {
-            bullet.GetComponent<Shooting>().SetDirection(dir, Shooting.BulletOwnerType.Friend);//队友发射子弹
+            s.Init(-ShootDamage, -SpellDamage, false, 0, special, dir, Shooting.BulletOwnerType.Friend);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
         }
         else
         {
-            bullet.GetComponent<Shooting>().SetDirection(dir, Shooting.BulletOwnerType.Enemy);//敌人发射子弹
+            s.Init(-ShootDamage, -SpellDamage, false, 0, special, dir, Shooting.BulletOwnerType.Enemy);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
         }
     }
 
@@ -1300,6 +1302,15 @@ public class Enemy : MonoBehaviour
         ExitEffect.SetActive(false);
         MagicFormationAnim.SetBool("Show", false);
     }
+
+    [Header("基础与武器装备结合后数值")]
+     int MeleeDamage =100;
+     int ShootDamage = 100;
+     int SpellDamage = 100;
+
+     int CurrentWeaponPower = 10;    // 武器攻击值
+     int CurrentArmorDefence = 10;      // 衣服防御值
+     int CurrentStockingDefence = 10;   // 丝袜防御值
     #endregion
 
 
@@ -1525,7 +1536,7 @@ public class Enemy : MonoBehaviour
     public GameObject GateEffect;//传送门特效
     public GameObject Palsy_Effect;//闪电特效
     public GameObject Frozen_Effect;//冻结特效
-
+    public GameObject IceEffect;//冰特效
     public GameObject ProtectiveCoverEffect;//防护罩特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
@@ -1580,6 +1591,17 @@ public class Enemy : MonoBehaviour
                         Block();
                         return;
                     }
+
+                 
+                }
+
+                //防护检测
+                amount += CurrentArmorDefence;
+                amount += CurrentStockingDefence;
+
+                if (amount >= 0)
+                {
+                    amount = 0;
                 }
 
             }
@@ -1594,7 +1616,17 @@ public class Enemy : MonoBehaviour
                     Palsy_Effect.SetActive(true);//雷电伤害
                     break;
                 case 3:
-                    Freeze(1);//冻结伤害
+                    if (Random.Range(0, 3) == 0)
+                    {
+                        Freeze(1);//冻结伤害
+                    }
+                    else
+                    {
+                        Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+                        Vector3 spawnPosition_2 = transform.position + offset_2;
+                        GameObject EffectPrefabs = Instantiate(IceEffect, spawnPosition_2, transform.rotation);
+                        Destroy(EffectPrefabs, 0.5f);
+                    }
                     break;
             }
 
@@ -1729,7 +1761,18 @@ public class Enemy : MonoBehaviour
         if (Class == EnemyClass.Succubus || isMage)
         {
             ProtectiveCoverEffect.SetActive(true);
-
+            switch (Random.Range(0, 3))
+            {
+                case 0:
+                    ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 0);
+                    break;
+                case 1:
+                    ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 1);
+                    break;
+                case 2:
+                    ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 2);
+                    break;
+            }
         }//只有魔族和法师需要特效（遮挡无防御动画）
 
         if (visionType == EnemyType.ShortRangeEnemy)

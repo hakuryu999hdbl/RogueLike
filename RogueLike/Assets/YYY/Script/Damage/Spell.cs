@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Strike : MonoBehaviour
+public class Spell : MonoBehaviour
 {
     [Header("伤害对象")]
     public int Damage;
@@ -17,13 +17,18 @@ public class Strike : MonoBehaviour
     private int baseDamage; // 原始设定伤害
 
     [Header("暴击")]
-    public bool isCritial=false;
+    public bool isCritial = false;
     public float chargeTime = 0f; // 由 Player 传入的蓄力时间
 
-
-    private void OnEnable()
+    // 显式初始化，外部调用
+    public void Init(int damage, int typeOfAttack, bool isCrit, float charge)
     {
-        //TypeOfAttack = 1;//剑伤
+        Damage = damage;
+        TypeOfAttack = typeOfAttack;
+        isCritial = isCrit;
+        chargeTime = charge;
+
+
 
         baseDamage = Damage; // 保存原始值
         appliedDamage = baseDamage + Random.Range(-50, 50); // 例如±10范围
@@ -75,7 +80,7 @@ public class Strike : MonoBehaviour
         //玩家和队友伤害
         if (collision.gameObject.tag == "Enemy")
         {
- 
+
             if (collision.gameObject.GetComponent<Enemy>() != null && DamageToEnemy)
             {
 
@@ -83,11 +88,11 @@ public class Strike : MonoBehaviour
 
                 collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
-               
+
 
             }
 
-            
+
         }
 
 
@@ -125,5 +130,7 @@ public class Strike : MonoBehaviour
 
 
     }
+
+
 
 }

@@ -43,10 +43,11 @@ public class SaveSlotUI : MonoBehaviour
     public Image Ponytail;
     [Header("武器小图标切换")]
     public Image Weapon_Icon;
-    public Sprite Sword, Arrow, Staff; 
+    public Sprite Sword, Arrow, Staff;
+    public Image Level_Icon;
 
     [Header("存档数值本身")]
-    PlayerSaveData Data;
+    public PlayerSaveData Data;//大家需要通过UIManager找你
 
     [Header("高亮用UI")]
     public GameObject highlightFrame;
@@ -116,9 +117,54 @@ public class SaveSlotUI : MonoBehaviour
                 Weapon_Icon.sprite = Staff;
                 break;
         }
+        switch (Data.level)
+        {
+            case 1:
+            case 2:
+            case 3:
+                Level_Icon.sprite = database.LevelSprites[0];
+                break;
+            case 4:
+            case 5:
+            case 6:
+                Level_Icon.sprite = database.LevelSprites[1];
+                break;
+            case 7:
+            case 8:
+            case 9:
+                Level_Icon.sprite = database.LevelSprites[2];
+                break;
+            case 10:
+            case 11:
+            case 12:
+                Level_Icon.sprite = database.LevelSprites[3];
+                break;
+            case 13:
+            case 14:
+            case 15:
+                Level_Icon.sprite = database.LevelSprites[4];
+                break;
+            case 16:
+            case 17:
+            case 18:
+                Level_Icon.sprite = database.LevelSprites[5];
+                break;
+            case 19:
+            case 20:
+            case 21:
+                Level_Icon.sprite = database.LevelSprites[6];
+                break;
+            case 22:
+            case 23:
+            case 24:
+            default:
+                Level_Icon.sprite = database.LevelSprites[7];
+                break;
+        }
 
         highlightFrame.SetActive(false); // 初始隐藏
     }//导入皮肤
+
 
     public void UpdateExpBar(int curAmount, int maxAmount)
     {

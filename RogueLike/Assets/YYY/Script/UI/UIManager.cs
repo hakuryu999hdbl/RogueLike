@@ -270,7 +270,22 @@ public class UIManager : MonoBehaviour
             bodyIndex = player.YYY_bodyIndex,
             legsIndex = player.YYY_legsIndex,
             hatIndex = player.YYY_hatIndex,
-            weaponIndex = player.weaponIndex
+            weaponIndex = player.weaponIndex,
+
+            level = 1,
+            exp = 0,
+            maxHP = 1000,
+            meleeDamage = 100,
+            shootDamage = 100,
+            spellDamage = 100,
+
+            weaponAtk = 10,
+            armorDef = 10,
+            stockingDef = 10,
+
+
+
+
         };
 
         SaveManager.Save(data); // ✅ 保存新名字存档
@@ -281,7 +296,7 @@ public class UIManager : MonoBehaviour
 
         RefreshSaveSlots();//每次单独更新名称也需要刷新存档界面
 
-    }// 玩家输入新名字，调用此函数
+    }// 玩家输入新名字，调用此函数（将当前玩家身上的值重新带入更改名字的存档）
 
     public void OnConfirm()
     {
@@ -323,7 +338,7 @@ public class UIManager : MonoBehaviour
 
                 player.isInputBlocked = true;//切断玩家的方向攻击等输入
 
-
+                RefreshSaveSlots();//只有在打开存档菜单时更新
             }
             else
             {
@@ -334,7 +349,7 @@ public class UIManager : MonoBehaviour
 
                 player.isInputBlocked = false;//恢复玩家的方向攻击等输入
 
-
+                player.currentSaveName = currentSelectedSlot.Data.characterName;//开始游戏时，将这个存档名称带入Player
             }
 
             isPause = !isPause;
