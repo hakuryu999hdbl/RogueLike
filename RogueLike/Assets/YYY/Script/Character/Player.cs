@@ -121,7 +121,7 @@ public class Player : MonoBehaviour
 
 
         //近战武器赋值
-        strike.Damage = -data.meleeDamage;
+        strike.Damage = -data.meleeDamage-data.weaponAtk;
         switch (weaponIndex) 
         {
             case 0:
@@ -218,15 +218,33 @@ public class Player : MonoBehaviour
 
 
         data.level = 1;
-        data.exp = Random.Range(0, 1000);
+        data.exp = 0;
         data.maxHP = 1000;
-        data.meleeDamage = 100;
-        data.shootDamage = 100;
-        data.spellDamage = 100;
+        data.meleeDamage = Random.Range(50, 100);
+        data.shootDamage = Random.Range(50, 100);
+        data.spellDamage = Random.Range(50, 100);
 
-        data.weaponAtk = Random.Range(100, 200);
-        data.armorDef = Random.Range(10, 50);
-        data.stockingDef = Random.Range(5, 25);
+        switch (YYY_bodyIndex) 
+        {
+            case 10:
+                data.weaponAtk = 100;
+                data.armorDef = 30;
+                data.stockingDef = 20;
+                break;
+            case 11:
+                data.weaponAtk = 50;
+                data.armorDef = 10;
+                data.stockingDef = 10;
+                break;
+            case 12:
+                data.weaponAtk = 200;
+                data.armorDef = 15;
+                data.stockingDef = 10;
+                break;
+        }
+   
+      
+       
 
         SaveManager.Save(data);
 
@@ -1372,7 +1390,7 @@ public class Player : MonoBehaviour
         // 只有在暴击率大于等于 60% 时，才可能暴击
         bool willCrit = ((float)currentCritical / (float)maxCritical) >= 0.6f;
 
-        s.Init(-ShootDamage, -SpellDamage, willCrit, attackPressTime, special, direction, Shooting.BulletOwnerType.Friend);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
+        s.Init(-ShootDamage-CurrentWeaponPower, -SpellDamage - CurrentWeaponPower, willCrit, attackPressTime, special, direction, Shooting.BulletOwnerType.Friend);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
 
     }//射击子弹
 

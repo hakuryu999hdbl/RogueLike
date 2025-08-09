@@ -199,17 +199,17 @@ public class UIManager : MonoBehaviour
 
 
 
-    public void OnHairLeft() { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1); }
-    public void OnHairRight() { ChangeSkin(ref player.YYY_headIndex, 1, 13, +1); }
+    public void OnHairLeft() { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1); CreatNewcurrentIndex =1;UpdateHighlight();}
+    public void OnHairRight() { ChangeSkin(ref player.YYY_headIndex, 1, 13, +1); CreatNewcurrentIndex = 1; UpdateHighlight(); }
 
-    public void OnEyesLeft() { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, -1); }
-    public void OnEyesRight() { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, +1); }
+    public void OnEyesLeft() { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, -1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
+    public void OnEyesRight() { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, +1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
 
-    public void OnRaceLeft() { ChangeSkin(ref player.YYY_hatIndex, 1, 4, -1); }
-    public void OnRaceRight() { ChangeSkin(ref player.YYY_hatIndex, 1, 4, +1); }
+    public void OnRaceLeft() { ChangeSkin(ref player.YYY_hatIndex, 1, 4, -1); CreatNewcurrentIndex = 3; UpdateHighlight(); }
+    public void OnRaceRight() { ChangeSkin(ref player.YYY_hatIndex, 1, 4, +1); CreatNewcurrentIndex = 3; UpdateHighlight(); }
 
-    public void OnClassLeft() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, -1); player.PlayNormalAttack(); }
-    public void OnClassRight() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1); player.PlayNormalAttack(); }
+    public void OnClassLeft() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, -1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
+    public void OnClassRight() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
     void ChangeSkin(ref int index, int min, int max, int delta)
     {
         index += delta;
@@ -275,18 +275,39 @@ public class UIManager : MonoBehaviour
             level = 1,
             exp = 0,
             maxHP = 1000,
-            meleeDamage = 100,
-            shootDamage = 100,
-            spellDamage = 100,
+            meleeDamage = UnityEngine.Random.Range(50, 100),
+            shootDamage = UnityEngine.Random.Range(50, 100),
+            spellDamage = UnityEngine.Random.Range(50, 100),
 
-            weaponAtk = 10,
-            armorDef = 10,
-            stockingDef = 10,
+
+            weaponAtk = 0,
+            armorDef = 0,
+            stockingDef = 0,
 
 
 
 
         };
+
+        //武器还是得分开，法术武器伤害最高，其次近战武器，其次远程武器
+        switch (data.bodyIndex)
+        {
+            case 10:
+                data.weaponAtk = 100;
+                data.armorDef = 30;
+                data.stockingDef = 20;
+                break;
+            case 11:
+                data.weaponAtk = 50;
+                data.armorDef = 10;
+                data.stockingDef = 10;
+                break;
+            case 12:
+                data.weaponAtk = 200;
+                data.armorDef = 15;
+                data.stockingDef = 10;
+                break;
+        }
 
         SaveManager.Save(data); // ✅ 保存新名字存档
         SaveManager.DeleteSave(oldName); // 🗑️ 删除旧存档
@@ -315,6 +336,9 @@ public class UIManager : MonoBehaviour
         //再度把捏人的检索回到名字
         CreatNewcurrentIndex = 0;
         UpdateHighlight();
+
+        //重新恢复上下可移动
+        isInputing = false;
     }//玩家点击Ok
 
 
@@ -807,6 +831,9 @@ public class UIManager : MonoBehaviour
     private float inputCooldown2 = 0.2f;
     private float lastInputTime2 = -999f;
 
+    //处于打字的时候不能上下移动
+    public bool isInputing = false;
+
     private void OnMove(InputAction.CallbackContext ctx)
     {
 
@@ -817,7 +844,7 @@ public class UIManager : MonoBehaviour
         lastInputTime2 = Time.time;
         #endregion
 
-        if (player.isInputBlocked)
+        if (player.isInputBlocked&&!isInputing)
         {
             Vector2 dir = ctx.ReadValue<Vector2>();
 
@@ -1045,6 +1072,17 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public void OnChangeName() 
+    {
+        isInputing = true;
+        CreatNewcurrentIndex = 0;
+       UpdateHighlight();
+    }//打字的时候锁住上下移动
+    public void OnChangeNameOver()
+    {
+        isInputing = false;
+    }//打字的时候锁住上下移动
+
     private void OnConfirm(InputAction.CallbackContext ctx)
     {
         if (player.isInputBlocked)
@@ -1106,12 +1144,14 @@ public class UIManager : MonoBehaviour
                 {
                     //编辑名称
                     nameInputField.ActivateInputField(); // ✅ 激活输入框并进入编辑
+
                 }
                 if (CreatNewcurrentIndex == 5)
                 {
                     //点 OK
                     okButton.onClick.Invoke();
                     AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
+                    isInputing = false;
                 }
             }
 
