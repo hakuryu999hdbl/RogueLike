@@ -1404,7 +1404,7 @@ public class Enemy : MonoBehaviour
             if (wasInAir) // 刚刚落地的那一帧
             {
                 frameEvents._Effect_falldown();// 播放落地音效等逻辑
-                Knockdown();
+                Knockdown();//落地一帧触发
             }
 
 
@@ -1706,7 +1706,7 @@ public class Enemy : MonoBehaviour
             {
                 if (Random.Range(0, 2) == 0)
                 {
-                    Knockdown();
+                    Knockdown();//普通攻击随机击倒
                 }
                 else
                 {
@@ -1828,18 +1828,18 @@ public class Enemy : MonoBehaviour
     public GameObject Assassinate;//暗杀
     public void CritialAttack()
     {
-
-        //Knockdown();
+        if (IsGrounded()) { Knockdown(); }//敌人必须站在地上才能被暴击击倒
+       
 
 
 
         Time.timeScale = 0;
 
-        //显示暴击
-        Critial.SetActive(true);
+        
+        Critial.SetActive(true);//显示暴击
 
-        //暴击清零
-        player.ChangeCritical(-player.maxCritical);
+
+        player.ChangeCritical(-player.maxCritical);//暴击清零
 
     }//暴击
 
