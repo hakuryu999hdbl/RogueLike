@@ -46,6 +46,22 @@ public static class SaveManager
         }
     }//删除指定名称的存档(各个存档SaveSlotUI来决定)
 
+    public static void DeleteAllSaves()
+    {
+        string saveFolder = Application.persistentDataPath + "/Saves/";
+
+        if (Directory.Exists(saveFolder))
+        {
+            Directory.Delete(saveFolder, true); // true 表示递归删除整个文件夹
+            Debug.Log("所有存档已删除！");
+        }
+        else
+        {
+            Debug.Log("未找到存档文件夹：" + saveFolder);
+        }
+    }//删除所有存档
+
+
     public static List<string> GetAllSaveNames()
     {
         string dir = Application.persistentDataPath;

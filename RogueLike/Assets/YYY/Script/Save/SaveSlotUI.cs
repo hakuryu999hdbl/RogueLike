@@ -33,6 +33,8 @@ public class SaveSlotUI : MonoBehaviour
     public int ClothesID;
     public int StockingID;
 
+    public int ProfessionID;//职业
+
     public Image Hat;
     public Image Hair;
     public Image Eyes;
@@ -73,6 +75,8 @@ public class SaveSlotUI : MonoBehaviour
         ClothesID = Data.bodyIndex;
         StockingID = Data.legsIndex;
 
+        ProfessionID = Data.professionIndex;//读取职业
+
         nameText.text = Data.characterName;
         timeText.text = Data.lastSavedTime;
 
@@ -105,15 +109,15 @@ public class SaveSlotUI : MonoBehaviour
         CurrentStockingDefence.text = Data.stockingDef.ToString();
 
 
-        switch (ClothesID) 
+        switch (ProfessionID) 
         {
-            case 10:
+            case 0:
                 Weapon_Icon.sprite = Sword;
                 break;
-            case 11:
+            case 1:
                 Weapon_Icon.sprite = Arrow;
                 break;
-            case 12:
+            case 2:
                 Weapon_Icon.sprite = Staff;
                 break;
         }
@@ -180,7 +184,7 @@ public class SaveSlotUI : MonoBehaviour
         public static readonly Dictionary<int, string[][]> WeaponNames = new Dictionary<int, string[][]>()
     {
         {
-            10, new string[][] // 近战武器
+            0, new string[][] // 近战武器
             {
                 new string[] { "", "鉄の剣", "ブロードソード", "長柄両刃斧", "長槍", "長柄斧", "氷結の剣", "黒鉄の刺剣", "溶岩の剣", "雷を引く剣", "古代の大剣" }, // 日
                 new string[] { "", "铁剑", "阔剑", "长柄双刃斧", "长枪", "长柄斧", "冻结剑", "黑铁刺剑", "熔岩剑", "引雷剑", "古重剑" }, // 简
@@ -190,7 +194,7 @@ public class SaveSlotUI : MonoBehaviour
             }
         },
         {
-            11, new string[][] // 射击武器
+            1, new string[][] // 射击武器
             {
                 new string[] { "", "軽弩", "重弩", "複合弩", "火縄複合銃", "火縄短銃", "火縄長銃", "火縄黄銅銃", "火縄長銃", "火縄長銃", "火縄長銃" },
                 new string[] { "", "轻弩", "重弩", "复合弩", "火绳复合枪", "火绳短枪", "火绳长枪", "火绳黄铜枪", "火绳长枪", "火绳长枪", "火绳长枪" },
@@ -200,7 +204,7 @@ public class SaveSlotUI : MonoBehaviour
             }
         },
         {
-            12, new string[][] // 法杖类
+            2, new string[][] // 法杖类
             {
                 new string[] { "", "黄木の杖", "ハーピーの杖", "ルビーの杖", "サファイアの杖", "トパーズの杖", "氷の杖", "アメジストの杖", "エメラルドの杖", "雷の杖", "古代の杖" },
                 new string[] { "", "黄木短杖", "鹰身短杖", "红宝石短杖", "蓝宝石短杖", "黄玉短杖", "冰冻法杖", "紫水晶法杖", "翡翠法杖", "雷霆法杖", "古木法杖" },
@@ -213,7 +217,7 @@ public class SaveSlotUI : MonoBehaviour
     }
     public string GetWeaponName(int language)
     {
-        if (WeaponNameDatabase.WeaponNames.TryGetValue(ClothesID, out string[][] langTable))
+        if (WeaponNameDatabase.WeaponNames.TryGetValue(ProfessionID, out string[][] langTable))
         {
             if (language >= 0 && language < langTable.Length)
             {
@@ -228,7 +232,25 @@ public class SaveSlotUI : MonoBehaviour
 
     public string GetClothesName(int language)
     {
-        int index = ClothesID - 10;
+        //目前衣服还没有做全,暂时用这个方法转换为对应的编号
+        int index = 0;
+        switch (ClothesID)
+        {
+            case 1:
+                index = 3;
+                break;
+            case 10:
+                index = 0;
+                break;
+            case 11:
+                index = 1;
+                break;
+            case 12:
+                index = 2;
+                break;
+        }
+
+
         if (index >= 0 && index < EquipmentNameDatabase.ClothesNames[language].Length)
             return EquipmentNameDatabase.ClothesNames[language][index + 1];
 
@@ -237,7 +259,26 @@ public class SaveSlotUI : MonoBehaviour
 
     public string GetStockingName(int language)
     {
-        int index = StockingID - 10;
+        //目前衣服还没有做全,暂时用这个方法转换为对应的编号
+        int index = 0;
+        switch (StockingID)
+        {
+            case 1:
+                index = 3;
+                break;
+            case 10:
+                index = 0;
+                break;
+            case 11:
+                index = 1;
+                break;
+            case 12:
+                index = 2;
+                break;
+        }
+
+
+
         if (index >= 0 && index < EquipmentNameDatabase.StockingNames[language].Length)
             return EquipmentNameDatabase.StockingNames[language][index + 1];
 
@@ -247,20 +288,20 @@ public class SaveSlotUI : MonoBehaviour
     {
         public static readonly string[][] ClothesNames = new string[][]
         {
-        new string[] { "", "女性用鎧", "盗賊の軽装", "魔法学院制服" }, // 日
-        new string[] { "", "女式盔甲", "盗贼便服", "魔法院制服" },     // 简
-        new string[] { "", "女式盔甲", "盜賊便服", "魔法院制服" },     // 繁
-        new string[] { "", "Women's Armor", "Rogue Outfit", "Mage Academy Uniform" }, // 英
-        new string[] { "", "여성용 갑옷", "도적 복장", "마법학교 교복" }  // 韩
+        new string[] { "", "女性用鎧", "盗賊の軽装", "魔法学院制服", "暗殺マント" },
+        new string[] { "", "女式盔甲", "盗贼便服", "魔法院制服", "刺客斗篷" },
+        new string[] { "", "女式盔甲", "盜賊便服", "魔法院制服", "刺客斗篷" },
+        new string[] { "", "Women's Armor", "Rogue Outfit", "Academy Uniform", "Assn. Cloak" },
+        new string[] { "", "여성용 갑옷", "도적 복장", "마법학교 교복", "암살망토" }
         };
 
         public static readonly string[][] StockingNames = new string[][]
         {
-        new string[] { "", "ストッキングアーマー", "黒いロングソックスブーツ", "黒いレースのガーターソックス" },
-        new string[] { "", "丝袜腿甲", "黑色长袜靴", "黑色蕾丝吊带袜" },
-        new string[] { "", "絲襪腿甲", "黑色長襪靴", "黑色蕾絲吊帶襪" },
-        new string[] { "", "Stocking Leg Armor", "Black Long Sock Boots", "Black Lace Garter Stockings" },
-        new string[] { "", "스타킹 레그 아머", "검은색 롱삭스 부츠", "검은색 레이스 가터 스타킹" }
+        new string[] { "", "ストッキング腿铠", "ソックスブーツ", "ガーターソックス", "ニーブーツ" },
+        new string[] { "", "丝袜腿甲", "黑色长袜靴", "蕾丝吊带袜", "过膝袜短靴" },
+        new string[] { "", "絲襪腿甲", "黑色長襪靴", "蕾絲吊帶襪", "過膝襪短靴" },
+        new string[] { "", "Leg Armor", "Long Boots", "Garter Stockings", "Knee Boots" },
+        new string[] { "", "스타킹 레그 아머", "검은색 롱삭스 부츠", "검은색 레이스 가터 스타킹", "하이부츠" }
         };
     }
 

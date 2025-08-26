@@ -86,6 +86,7 @@ public class Player : MonoBehaviour
 
         // 应用武器
         this.weaponIndex = data.weaponIndex;
+        this.CurrentProfession = data.professionIndex;
 
         // 根据这些数据设置皮肤
         SetSkin(); // 你已有的方法（或自己写个用这些 Index 设置皮肤的方法）
@@ -195,18 +196,62 @@ public class Player : MonoBehaviour
 
     public void _CreateNewSkin()
     {
-        SetRandomSkin();
-        SaveCurrent();
+
+        // 判断是否已有名为“露娜”的存档（任一语言版本）
+        if (!HasLunaSave())
+        {
+            // 没有的话，自动创建露娜角色
+            SetLuna_Skin();
+            RandomNewSave(true);
+
+        }
+        else
+        {
+            // 已有露娜 → 正常随机创建
+            SetRandomSkin();
+            SaveCurrent();
+        }    
+
     }//新增皮肤临时随机
 
-    public void RandomNewSave() 
+    public void RandomNewSave(bool isLuna=false) //当玩家生成第一个角色默认Luna
     {
         // 如果还没有命名，则生成
 
         PlayerSaveData data = new PlayerSaveData();
 
         List<string> allSaves = SaveManager.GetAllSaveNames();  // 获取已有存档名
-        string newName = NameGenerator.GenerateUniqueName(allSaves);
+        string newName;
+
+        if (isLuna)
+        {
+            switch (PlayerPrefs.GetInt("language", 0))
+            {
+                case 0: // Japanese
+                    newName = "ルナ";
+                    break;
+                case 1: // Simplified Chinese
+                    newName = "露娜";
+                    break;
+                case 2: // Traditional Chinese
+                    newName = "露娜";
+                    break;
+                case 3: // English
+                    newName = "Luna";
+                    break;
+                case 4: // Korean
+                    newName = "루나";
+                    break;
+                default:
+                    newName = "Luna"; // fallback
+                    break;
+            }
+        }//当玩家生成第一个角色默认Luna
+        else 
+        {
+            newName = NameGenerator.GenerateUniqueName(allSaves);
+        }
+
         data.characterName = newName; // ✅ 记得设置进去！
 
         data.headIndex = this.YYY_headIndex;
@@ -216,6 +261,9 @@ public class Player : MonoBehaviour
         data.hatIndex = this.YYY_hatIndex;
         data.weaponIndex = this.weaponIndex;
 
+        data.professionIndex = this.CurrentProfession;
+
+
 
         data.level = 1;
         data.exp = 0;
@@ -224,23 +272,24 @@ public class Player : MonoBehaviour
         data.shootDamage = Random.Range(50, 100);
         data.spellDamage = Random.Range(50, 100);
 
-        switch (YYY_bodyIndex) 
+        switch (CurrentProfession) 
         {
-            case 10:
+            case 0:
                 data.weaponAtk = 100;
                 data.armorDef = 30;
                 data.stockingDef = 20;
                 break;
-            case 11:
+            case 1:
                 data.weaponAtk = 50;
                 data.armorDef = 10;
                 data.stockingDef = 10;
                 break;
-            case 12:
+            case 2:
                 data.weaponAtk = 200;
                 data.armorDef = 15;
                 data.stockingDef = 10;
                 break;
+
         }
    
       
@@ -256,7 +305,7 @@ public class Player : MonoBehaviour
 
         if (string.IsNullOrEmpty(currentSaveName))
         {
-            RandomNewSave();
+            RandomNewSave();//把这个数据代入
 
         }
         else
@@ -271,6 +320,8 @@ public class Player : MonoBehaviour
             data.legsIndex = this.YYY_legsIndex;
             data.hatIndex = this.YYY_hatIndex;
             data.weaponIndex = this.weaponIndex;
+
+            data.professionIndex = this.CurrentProfession;
 
             SaveManager.Save(data);
         }
@@ -352,10 +403,51 @@ public class Player : MonoBehaviour
         this.YYY_legsIndex = 1;
         this.YYY_hatIndex = 1;
         this.weaponIndex = 1;
+        CurrentProfession = 0;
 
         SetSkin();
     }//清除皮肤
 
+
+    public void SetLuna_Skin() 
+    {
+        //设置主角（指定皮肤与名字）
+        this.YYY_headIndex = 11;
+        this.YYY_eyesIndex = 2;
+        this.YYY_bodyIndex = 1;
+        this.YYY_legsIndex = 1;
+        this.YYY_hatIndex = 3;
+        this.weaponIndex = 1;
+
+        CurrentProfession = 0;
+
+
+        Man_headIndex = Random.Range(1, 6);
+        Man_bodyIndex = 2;
+        Man_hatIndex = Random.Range(1, 3);
+
+        Girl_headIndex = Random.Range(1, 14);  // 1~13
+        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+        Girl_bodyIndex = Random.Range(10, 13);
+        Girl_legsIndex = Random.Range(10, 13);
+        Girl_hatIndex = Random.Range(1, 14);
+
+      
+
+        SetSkin();
+    }
+    private bool HasLunaSave()
+    {
+        List<string> lunaNames = new List<string> { "ルナ", "露娜", "Luna", "루나" };
+
+        foreach (string name in lunaNames)
+        {
+            if (SaveManager.HasSave(name))
+                return true;
+        }
+
+        return false;
+    }
     #endregion
 
 
@@ -724,20 +816,7 @@ public class Player : MonoBehaviour
 
     public void _ClothesToClass()
     {
-
-        //目前暂时以上衣区别职业
-        switch (YYY_bodyIndex)
-        {
-            case 10:
-                ChangeType(0);
-                break;
-            case 11:
-                ChangeType(1);
-                break;
-            case 12:
-                ChangeType(2);
-                break;
-        }
+        ChangeType(CurrentProfession);
 
     }//临时根据玩家的衣服来确定职业
 
@@ -807,7 +886,7 @@ public class Player : MonoBehaviour
 
         YYY_headIndex = Random.Range(1, 14);  // 1~13
         YYY_eyesIndex = Random.Range(1, 14);  // 1~13
-        YYY_bodyIndex = Random.Range(10, 13);
+        YYY_bodyIndex = Random.Range(10, 13);CurrentProfession = YYY_bodyIndex - 10;//暂时先这么做，以后有新衣服……不一定，一开始可能就是这三套
         YYY_legsIndex = Random.Range(10, 13);
         YYY_hatIndex = Random.Range(1, 5);
 
@@ -1415,6 +1494,7 @@ public class Player : MonoBehaviour
     #region
     [Header("武器系统")]
     public int CurrentWeapon;
+    public int CurrentProfession;//0战士 1射手 2法师
     //0无武器
     //1铁剑  2阔剑  3长柄双刃斧  4长枪   5长柄斧   6冻结剑   7黑铁刺剑  8熔岩剑  9引雷剑  10古重剑
     //101轻弩   102重弩   103复合弩   104火绳复合枪  105火绳短枪   106火绳长枪   107火绳黄铜枪
@@ -1422,7 +1502,7 @@ public class Player : MonoBehaviour
 
     public void CheckWeapon()
     {
-
+        Debug.Log("设置武器信息");
         if (visionType == PlayerType.ShortRangePlayer) { CurrentWeapon = weaponIndex; }//实装战士武器
         if (visionType == PlayerType.LongRangePlayer && !isMage) { CurrentWeapon = weaponIndex + 100; }//实装射手武器
         if (visionType == PlayerType.LongRangePlayer && isMage) { CurrentWeapon = weaponIndex + 200; }//实装法师武器

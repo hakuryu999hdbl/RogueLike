@@ -26,6 +26,8 @@ public class PlayerSaveData
     public int shootDamage;
     public int spellDamage;
 
+    public int professionIndex;  // 0=战士，1=射手，2=法师
+
     public int weaponAtk;
     public int armorDef;
     public int stockingDef;

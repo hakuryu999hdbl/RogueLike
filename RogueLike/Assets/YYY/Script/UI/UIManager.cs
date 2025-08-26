@@ -199,7 +199,7 @@ public class UIManager : MonoBehaviour
 
 
 
-    public void OnHairLeft() { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1); CreatNewcurrentIndex =1;UpdateHighlight();}
+    public void OnHairLeft() { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1); CreatNewcurrentIndex = 1; UpdateHighlight(); }
     public void OnHairRight() { ChangeSkin(ref player.YYY_headIndex, 1, 13, +1); CreatNewcurrentIndex = 1; UpdateHighlight(); }
 
     public void OnEyesLeft() { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, -1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
@@ -216,15 +216,32 @@ public class UIManager : MonoBehaviour
         if (index < min) index = max;
         if (index > max) index = min;
 
+
+        switch (player.YYY_bodyIndex)
+        {
+            case 1:
+            case 10:
+                player.CurrentProfession = 0;
+                break;
+            case 11:
+                player.CurrentProfession = 1;
+                break;
+            case 12:
+                player.CurrentProfession = 2;
+                break;
+        }
+
+        player._ClothesToClass();//临时让衣服改变职业
+
+
         player.SetSkin();         // 更新角色外观
         UpdateUI();               // 更新文字
         player.SaveCurrent();     // 存一份当前皮肤到缓存/存档
 
+
         RefreshSaveSlots();//刷新存档界面
 
-
-
-        player._ClothesToClass();//临时让衣服改变职业
+       
 
 
 
@@ -272,6 +289,8 @@ public class UIManager : MonoBehaviour
             hatIndex = player.YYY_hatIndex,
             weaponIndex = player.weaponIndex,
 
+            professionIndex = player.CurrentProfession,
+
             level = 1,
             exp = 0,
             maxHP = 1000,
@@ -290,19 +309,19 @@ public class UIManager : MonoBehaviour
         };
 
         //武器还是得分开，法术武器伤害最高，其次近战武器，其次远程武器
-        switch (data.bodyIndex)
+        switch (data.professionIndex)
         {
-            case 10:
+            case 0:
                 data.weaponAtk = 100;
                 data.armorDef = 30;
                 data.stockingDef = 20;
                 break;
-            case 11:
+            case 1:
                 data.weaponAtk = 50;
                 data.armorDef = 10;
                 data.stockingDef = 10;
                 break;
-            case 12:
+            case 2:
                 data.weaponAtk = 200;
                 data.armorDef = 15;
                 data.stockingDef = 10;
@@ -354,7 +373,7 @@ public class UIManager : MonoBehaviour
         {
             if (!isPause)
             {
-                MainCamera.SetInteger("View",0);
+                MainCamera.SetInteger("View", 0);
                 Common_All.SetActive(false);
                 ShowSaveCavansAnim.gameObject.SetActive(true);
                 ShowSaveCavansAnim.SetBool("Track", true);
@@ -631,6 +650,12 @@ public class UIManager : MonoBehaviour
         PlayerPrefs.DeleteAll();
         Debug.Log("删除存档");
 
+
+        //删除C盘所有角色存档
+        SaveManager.DeleteAllSaves();
+
+
+
         ReLoadScene();
 
     }//删除存档
@@ -844,7 +869,7 @@ public class UIManager : MonoBehaviour
         lastInputTime2 = Time.time;
         #endregion
 
-        if (player.isInputBlocked&&!isInputing)
+        if (player.isInputBlocked && !isInputing)
         {
             Vector2 dir = ctx.ReadValue<Vector2>();
 
@@ -1072,11 +1097,11 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void OnChangeName() 
+    public void OnChangeName()
     {
         isInputing = true;
         CreatNewcurrentIndex = 0;
-       UpdateHighlight();
+        UpdateHighlight();
     }//打字的时候锁住上下移动
     public void OnChangeNameOver()
     {
@@ -1187,7 +1212,7 @@ public class UIManager : MonoBehaviour
         }
 
 
-    }
+    }//键盘J    xbox手柄B      ps手柄O
 
     private void OnCancel(InputAction.CallbackContext ctx)
     {
@@ -1231,7 +1256,7 @@ public class UIManager : MonoBehaviour
             }
         }
 
-    }
+    }//键盘K      xbox手柄A       ps手柄X
 
     private void OnDelete(InputAction.CallbackContext ctx)
     {
@@ -1246,7 +1271,7 @@ public class UIManager : MonoBehaviour
 
         }
 
-    }
+    }//键盘Space    xbox手柄左肩键       ps手柄左肩键
     private void OnPause(InputAction.CallbackContext ctx)
     {
 
@@ -1259,7 +1284,7 @@ public class UIManager : MonoBehaviour
 
 
         AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
-    }
+    }//键盘ESC      xbox手柄——        ps手柄opt
 
 
     #endregion
@@ -1393,7 +1418,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateExperienceBar(int curAmount, int maxAmount)
     {
-        ExperienceBar.fillAmount = (float)curAmount / (float)maxAmount;  
+        ExperienceBar.fillAmount = (float)curAmount / (float)maxAmount;
     }
 
     #endregion
