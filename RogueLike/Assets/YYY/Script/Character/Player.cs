@@ -888,7 +888,27 @@ public class Player : MonoBehaviour
         YYY_eyesIndex = Random.Range(1, 14);  // 1~13
         YYY_bodyIndex = Random.Range(10, 13);CurrentProfession = YYY_bodyIndex - 10;//暂时先这么做，以后有新衣服……不一定，一开始可能就是这三套
         YYY_legsIndex = Random.Range(10, 13);
-        YYY_hatIndex = Random.Range(1, 5);
+        //随机兔族
+        if (Random.Range(0, 2) == 0)
+        {
+            if (YYY_headIndex<=4&& YYY_headIndex>=1){ YYY_hatIndex = 4; }
+            else if(YYY_headIndex==11|| YYY_headIndex == 12)
+            {
+                YYY_hatIndex = 10;
+            }
+            else
+            {
+                YYY_hatIndex = YYY_headIndex;
+            }
+        }
+        else 
+        {
+            YYY_hatIndex = Random.Range(1,4);
+        }
+
+        
+
+        
 
         Man_headIndex = Random.Range(1, 6);
         Man_bodyIndex = 2;
@@ -898,7 +918,23 @@ public class Player : MonoBehaviour
         Girl_eyesIndex = Random.Range(1, 14);  // 1~13
         Girl_bodyIndex = Random.Range(10, 13);
         Girl_legsIndex = Random.Range(10, 13);
-        Girl_hatIndex = Random.Range(1, 14);
+        //随机兔族
+        if (Random.Range(0, 2) == 0)
+        {
+            if (Girl_headIndex <= 4 && Girl_headIndex >= 1) { Girl_hatIndex = 4; }
+            else if (Girl_headIndex == 11 || Girl_headIndex == 12)
+            {
+                Girl_hatIndex = 10;
+            }
+            else
+            {
+                Girl_hatIndex = Girl_headIndex;
+            }
+        }
+        else
+        {
+            Girl_hatIndex = Random.Range(1, 4);
+        }
 
         weaponIndex = Random.Range(1, 11);
 

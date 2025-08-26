@@ -861,6 +861,7 @@ MonoBehaviour:
   nearbyEnemies: []
   CanShoot: 1
   CurrentWeapon: 0
+  CurrentProfession: 0
   ExitEffect: {fileID: 1879320141703733576}
   exitEffect: {fileID: 8537834203657899116}
   MagicFormationAnim: {fileID: 2066202482}
@@ -22310,6 +22311,7 @@ MonoBehaviour:
   eyesLabel: {fileID: 860039569}
   raceLabel: {fileID: 1191799487}
   classLabel: {fileID: 839921214}
+  raceOptionIndex: 0
   _Player: {fileID: 65564740}
   player: {fileID: 65564741}
   saveSlotPrefab: {fileID: 2159344244829513006, guid: 079daff5d4d35664fb980dcddfa25c0e, type: 3}

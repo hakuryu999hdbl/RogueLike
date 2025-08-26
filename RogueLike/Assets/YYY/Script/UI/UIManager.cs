@@ -197,20 +197,79 @@ public class UIManager : MonoBehaviour
     public Text raceLabel;
     public Text classLabel;
 
+    #region
+    // 6个可选种族（UI上循环的那一项）
+    public enum RaceOption { Human = 0, Elf1 = 1, Elf2 = 2, Rabbit = 3, Demon1 = 4, Demon2 = 5 }
+    // 当前 UI 的种族游标（0~5）
+    [SerializeField] private int raceOptionIndex = 0;
+    private int GetRabbitHatFromHead(int headIndex)
+    {
+        // 你的规则：
+        // head 1~4,10,13 -> hat 4
+        // head 5 -> hat 5
+        // head 6 -> hat 6
+        // head 7 -> hat 7
+        // head 8 -> hat 8
+        // head 9 -> hat 9
+        // head 11,12 -> hat 10
 
+        if ((headIndex >= 1 && headIndex <= 4) || headIndex == 10 || headIndex == 13) return 4;
+        if (headIndex == 5) return 5;
+        if (headIndex == 6) return 6;
+        if (headIndex == 7) return 7;
+        if (headIndex == 8) return 8;
+        if (headIndex == 9) return 9;
+        if (headIndex == 11 || headIndex == 12) return 10;
 
-    public void OnHairLeft() { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1); CreatNewcurrentIndex = 1; UpdateHighlight(); }
-    public void OnHairRight() { ChangeSkin(ref player.YYY_headIndex, 1, 13, +1); CreatNewcurrentIndex = 1; UpdateHighlight(); }
+        // 兜底：如果出现未定义的 head，先归到最常用的 4
+        return 4;
+    }//兔族耳朵设置
+    private void ApplyRaceSelection()
+    {
+        switch ((RaceOption)raceOptionIndex)
+        {
+            case RaceOption.Human: player.YYY_hatIndex = 1; break;
+            case RaceOption.Elf1: player.YYY_hatIndex = 2; break;
+            case RaceOption.Elf2: player.YYY_hatIndex = 3; break;
+            case RaceOption.Rabbit: player.YYY_hatIndex = GetRabbitHatFromHead(player.YYY_headIndex); break;
+            case RaceOption.Demon1: player.YYY_hatIndex = 11; break;
+            case RaceOption.Demon2: player.YYY_hatIndex = 12; break;
+        }
+    }//种族选项控制Hat
+    #endregion
+
+    public void OnHairLeft() { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1, isHead: true); CreatNewcurrentIndex = 1; UpdateHighlight(); }
+    public void OnHairRight() { ChangeSkin(ref player.YYY_headIndex, 1, 13, +1, isHead: true); CreatNewcurrentIndex = 1; UpdateHighlight(); }
 
     public void OnEyesLeft() { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, -1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
     public void OnEyesRight() { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, +1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
 
-    public void OnRaceLeft() { ChangeSkin(ref player.YYY_hatIndex, 1, 4, -1); CreatNewcurrentIndex = 3; UpdateHighlight(); }
-    public void OnRaceRight() { ChangeSkin(ref player.YYY_hatIndex, 1, 4, +1); CreatNewcurrentIndex = 3; UpdateHighlight(); }
+    public void OnRaceLeft()
+    {
+        //ChangeSkin(ref player.YYY_hatIndex, 1, 4, -1);
+
+        raceOptionIndex++; if (raceOptionIndex > 5){ raceOptionIndex = 0; }if (raceOptionIndex < 0) { raceOptionIndex = 5; }
+
+        ApplyRaceSelection();
+        AfterAnySelectionChanged();
+
+        CreatNewcurrentIndex = 3; UpdateHighlight();
+    }
+    public void OnRaceRight()
+    {
+        //ChangeSkin(ref player.YYY_hatIndex, 1, 4, +1); 
+
+        raceOptionIndex--; if (raceOptionIndex > 5) { raceOptionIndex = 5; }if (raceOptionIndex < 0) { raceOptionIndex = 0; }
+
+        ApplyRaceSelection();
+        AfterAnySelectionChanged();
+
+        CreatNewcurrentIndex = 3; UpdateHighlight(); 
+    }
 
     public void OnClassLeft() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, -1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
     public void OnClassRight() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
-    void ChangeSkin(ref int index, int min, int max, int delta)
+    void ChangeSkin(ref int index, int min, int max, int delta, bool isHead = false)
     {
         index += delta;
         if (index < min) index = max;
@@ -234,29 +293,132 @@ public class UIManager : MonoBehaviour
         player._ClothesToClass();//临时让衣服改变职业
 
 
-        player.SetSkin();         // 更新角色外观
-        UpdateUI();               // 更新文字
-        player.SaveCurrent();     // 存一份当前皮肤到缓存/存档
+        // 如果这次改的是“头发”且当前种族=兔族，则根据最新 headIndex 重算 hatIndex
+        if (isHead && (RaceOption)raceOptionIndex == RaceOption.Rabbit)
+        {
+            player.YYY_hatIndex = GetRabbitHatFromHead(player.YYY_headIndex);
+        }
 
-
-        RefreshSaveSlots();//刷新存档界面
-
-       
-
-
+        AfterAnySelectionChanged();
 
     }//捏人界面玩家点击单个皮肤选项左右之后
 
+ 
+    private void AfterAnySelectionChanged()
+    {
+        player.SetSkin();     // 更新外观
+        UpdateUI();           // 刷UI文字
+        player.SaveCurrent(); // 存当前
+        RefreshSaveSlots();   // 刷存档列表
+    }   // 一个小的合流函数，避免重复：统一做刷新/保存
+
+    private void DetectRaceOptionFromHat()
+    {
+        int h = player.YYY_hatIndex;
+        if (h == 0) raceOptionIndex = (int)RaceOption.Human;
+        else if (h == 1) raceOptionIndex = (int)RaceOption.Elf1;
+        else if (h == 2) raceOptionIndex = (int)RaceOption.Elf2;
+        else if (h >= 4 && h <= 10) raceOptionIndex = (int)RaceOption.Rabbit;
+        else if (h == 11) raceOptionIndex = (int)RaceOption.Demon1;
+        else if (h == 12) raceOptionIndex = (int)RaceOption.Demon2;
+        else raceOptionIndex = (int)RaceOption.Human; // 兜底
+    }//初始化进页面时，请根据 player.YYY_hatIndex 反推一次 raceOptionIndex，避免显示错位：
+
+
+    #region
     void UpdateUI()
     {
         nameInputField.text = player.currentSaveName;
 
-        hairLabel.text = $"Hair_{player.YYY_headIndex}";
-        eyesLabel.text = $"Eyes_{player.YYY_eyesIndex}";
-        raceLabel.text = $"Race_{player.YYY_hatIndex}";
-        classLabel.text = $"Class_{player.YYY_bodyIndex}";
+        //hairLabel.text = $"Hair_{player.YYY_headIndex}";
+        //eyesLabel.text = $"Eyes_{player.YYY_eyesIndex}";
+        //raceLabel.text = $"Race_{player.YYY_hatIndex}";
+        //classLabel.text = $"Class_{player.YYY_bodyIndex}";
+
+        hairLabel.text = $"{LHair()}_{player.YYY_headIndex}";
+        eyesLabel.text = $"{LEyes()}_{player.YYY_eyesIndex}";
+
+
+        // 只在这里把 hatIndex → race 文案
+        int ro = RaceOptionFromHat(player.YYY_hatIndex);
+        raceOptionIndex = ro; // 保持 UI 内部一致（可要可不要）
+        raceLabel.text = $"{LRace()}_{LRaceName(ro)}";
+        //raceLabel.text = $"{LRace()}_{LRaceName(raceOptionIndex)}";
+
+
+
+        classLabel.text = $"{LClass()}_{LClassName(player.CurrentProfession)}";
+
     }//捏人界面UI显示
 
+    // 语言：0 日语 1 简中 2 繁中 3 英语 4 韩语
+    private int Lang => PlayerPrefs.GetInt("language", 1);
+
+    private static readonly string[,] LABELS = new string[,]
+    {
+    //        Hair     Eyes     Race      Class  
+    /*JP*/ { "髪型",   "瞳",     "種族",    "職業"},
+    /*CN*/ { "头发",   "眼睛",   "种族",    "职业" },
+    /*TC*/ { "頭髮",   "眼睛",   "種族",    "職業" },
+    /*EN*/ { "Hair",   "Eyes",   "Race",    "Class" },
+    /*KR*/ { "머리",   "눈",     "종족",    "직업" }
+    };
+
+    private static readonly string[,] RACE_NAMES = new string[,]
+    {
+    //           Human      Elf1        Elf2        Rabbit      Demon1      Demon2
+    /*JP*/ { "人間",      "エルフA",  "エルフB",  "ラビット", "魔族A",    "魔族B" },
+    /*CN*/ { "人类",      "精灵1",    "精灵2",    "兔族",      "魔族1",    "魔族2" },
+    /*TC*/ { "人類",      "精靈1",    "精靈2",    "兔族",      "魔族1",    "魔族2" },
+    /*EN*/ { "Human",     "Elf I",     "Elf II",    "Rabbit",    "Demon I",   "Demon II" },
+    /*KR*/ { "인간",      "엘프1",     "엘프2",     "토끼족",     "마족1",     "마족2" }
+    };
+
+    private static readonly string[,] CLASS_NAMES = new string[,]
+    {
+    //            Warrior    Archer     Mage
+    /*JP*/ { "戦士",      "弓手",     "魔法使い" },
+    /*CN*/ { "战士",      "射手",     "法师" },
+    /*TC*/ { "戰士",      "射手",     "法師" },
+    /*EN*/ { "Warrior",   "Archer",   "Mage" },
+    /*KR*/ { "전사",      "궁수",     "마법사" }
+    };
+
+    private string LHair() => LABELS[Lang, 0];
+    private string LEyes() => LABELS[Lang, 1];
+    private string LRace() => LABELS[Lang, 2];
+    private string LClass() => LABELS[Lang, 3];
+
+    private string LRaceName(int idx) => RACE_NAMES[Lang, idx];
+    private string LClassName(int idx) => CLASS_NAMES[Lang, idx];
+
+    // 0..5 ：Human, Elf1, Elf2, Rabbit, Demon1, Demon2
+    private int RaceOptionFromHat(int hat)
+    {
+        // —— 1 基版本（你当前描述）——
+        if (hat == 1) return 0;                 // Human
+        if (hat == 2) return 1;                 // Elf1
+        if (hat == 3) return 2;                 // Elf2
+        if (hat >= 4 && hat <= 10) return 3;    // Rabbit
+        if (hat == 11) return 4;                // Demon1
+        if (hat == 12) return 5;                // Demon2
+
+        // 兜底：回到 Human
+        return 0;
+
+        /* —— 如果你的资源是 0=人类（0 基），请改用下面这段 —— 
+        if (hat == 0) return 0;                 // Human
+        if (hat == 1) return 1;                 // Elf1
+        if (hat == 2) return 2;                 // Elf2
+        if (hat >= 4 && hat <= 10) return 3;    // Rabbit
+        if (hat == 11) return 4;                // Demon1
+        if (hat == 12) return 5;                // Demon2
+        return 0;
+        */
+    }
+
+
+    #endregion
 
 
     public void OnConfirmNameInput()
@@ -457,6 +619,22 @@ public class UIManager : MonoBehaviour
     public void CreateNewSave()
     {
         player._CreateNewSkin();
+
+
+
+        #region[兔族耳朵]
+        DetectRaceOptionFromHat();//新建角色的时候根据耳朵反推
+
+        // 如果是兔族，确保 hatIndex 与 headIndex 一致（修正旧档）
+        if ((RaceOption)raceOptionIndex == RaceOption.Rabbit)
+            player.YYY_hatIndex = GetRabbitHatFromHead(player.YYY_headIndex);
+
+        raceOptionIndex = RaceOptionFromHat(player.YYY_hatIndex); // 只同步“显示所用”的索引
+        UpdateUI();
+
+        #endregion
+
+
         RefreshSaveSlots();
 
         //显示捏人界面，隐藏存档界面

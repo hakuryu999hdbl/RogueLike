@@ -81,7 +81,6 @@ public class SaveSlotUI : MonoBehaviour
         timeText.text = Data.lastSavedTime;
 
 
-
         Hat.sprite = database.HatSprites[data.hatIndex - 1];
         Hair.sprite = database.HairSprites[data.headIndex - 1];
         Eyes.sprite = database.EyesSprites[data.eyesIndex - 1];
