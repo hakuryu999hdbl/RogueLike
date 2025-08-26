@@ -197,79 +197,104 @@ public class UIManager : MonoBehaviour
     public Text raceLabel;
     public Text classLabel;
 
-    #region
-    // 6个可选种族（UI上循环的那一项）
-    public enum RaceOption { Human = 0, Elf1 = 1, Elf2 = 2, Rabbit = 3, Demon1 = 4, Demon2 = 5 }
-    // 当前 UI 的种族游标（0~5）
-    [SerializeField] private int raceOptionIndex = 0;
-    private int GetRabbitHatFromHead(int headIndex)
+    public Text IntroduceOfRace;//介绍文本
+
+    #region 耳朵与种族绑定
+    public enum RaceOption
     {
-        // 你的规则：
-        // head 1~4,10,13 -> hat 4
-        // head 5 -> hat 5
-        // head 6 -> hat 6
-        // head 7 -> hat 7
-        // head 8 -> hat 8
-        // head 9 -> hat 9
-        // head 11,12 -> hat 10
+        Human = 0,      // 人类
+        Elf = 1,        // 精灵
+        HighElf = 2,    // 高等精灵
+        RabbitBlack = 3,// 北方兔族（黑）
+        RabbitWhite = 4,// 南方兔族（白）
+        Demon = 6,      // 魔族
+        HighDemon = 5   // 高等魔族
+    }
 
-        if ((headIndex >= 1 && headIndex <= 4) || headIndex == 10 || headIndex == 13) return 4;
-        if (headIndex == 5) return 5;
-        if (headIndex == 6) return 6;
-        if (headIndex == 7) return 7;
-        if (headIndex == 8) return 8;
-        if (headIndex == 9) return 9;
-        if (headIndex == 11 || headIndex == 12) return 10;
+    [SerializeField] private int raceOptionIndex = 0; // 0..6
 
-        // 兜底：如果出现未定义的 head，先归到最常用的 4
-        return 4;
-    }//兔族耳朵设置
-    private void ApplyRaceSelection()
+    private void ApplyRaceSelectionSimple()
     {
         switch ((RaceOption)raceOptionIndex)
         {
-            case RaceOption.Human: player.YYY_hatIndex = 1; break;
-            case RaceOption.Elf1: player.YYY_hatIndex = 2; break;
-            case RaceOption.Elf2: player.YYY_hatIndex = 3; break;
-            case RaceOption.Rabbit: player.YYY_hatIndex = GetRabbitHatFromHead(player.YYY_headIndex); break;
-            case RaceOption.Demon1: player.YYY_hatIndex = 11; break;
-            case RaceOption.Demon2: player.YYY_hatIndex = 12; break;
+            case RaceOption.Human: player.YYY_hatIndex = 1; IntroduceOfRace.text = RACE_DESC[Lang, 0]; break;
+            case RaceOption.Elf: player.YYY_hatIndex = 2; IntroduceOfRace.text = RACE_DESC[Lang, 1]; break;
+            case RaceOption.HighElf: player.YYY_hatIndex = 3; IntroduceOfRace.text = RACE_DESC[Lang, 2]; break;
+            case RaceOption.RabbitBlack: player.YYY_hatIndex = 4; IntroduceOfRace.text = RACE_DESC[Lang, 3]; break; // 黑色兔耳
+            case RaceOption.RabbitWhite: player.YYY_hatIndex = 10; IntroduceOfRace.text = RACE_DESC[Lang, 4]; break; // 白色兔耳
+            case RaceOption.Demon: player.YYY_hatIndex = 11; IntroduceOfRace.text = RACE_DESC[Lang, 5]; break;
+            case RaceOption.HighDemon: player.YYY_hatIndex = 12; IntroduceOfRace.text = RACE_DESC[Lang, 6]; break;
         }
-    }//种族选项控制Hat
+    }
     #endregion
 
-    public void OnHairLeft() { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1, isHead: true); CreatNewcurrentIndex = 1; UpdateHighlight(); }
-    public void OnHairRight() { ChangeSkin(ref player.YYY_headIndex, 1, 13, +1, isHead: true); CreatNewcurrentIndex = 1; UpdateHighlight(); }
 
-    public void OnEyesLeft() { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, -1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
-    public void OnEyesRight() { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, +1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
+
+
+
+
+
+
+
+
+
+
+    public void OnHairLeft() 
+    {
+        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1); CreatNewcurrentIndex = 1; UpdateHighlight(); } 
+    }
+    public void OnHairRight() 
+    { 
+        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_headIndex, 1, 13, +1); CreatNewcurrentIndex = 1; UpdateHighlight(); }
+    }
+
+    public void OnEyesLeft()
+    {
+        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, -1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
+    }
+    public void OnEyesRight()
+    {
+        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, +1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
+    }
 
     public void OnRaceLeft()
     {
         //ChangeSkin(ref player.YYY_hatIndex, 1, 4, -1);
+        if (IsLuna(player.currentSaveName) == false)
+        {
+            raceOptionIndex++; if (raceOptionIndex > 6) { raceOptionIndex = 0; }
+            if (raceOptionIndex < 0) { raceOptionIndex = 6; }
 
-        raceOptionIndex++; if (raceOptionIndex > 5){ raceOptionIndex = 0; }if (raceOptionIndex < 0) { raceOptionIndex = 5; }
+            ApplyRaceSelectionSimple();
+            AfterAnySelectionChanged();
 
-        ApplyRaceSelection();
-        AfterAnySelectionChanged();
-
-        CreatNewcurrentIndex = 3; UpdateHighlight();
+            CreatNewcurrentIndex = 3; UpdateHighlight();
+        }
     }
     public void OnRaceRight()
     {
         //ChangeSkin(ref player.YYY_hatIndex, 1, 4, +1); 
+        if (IsLuna(player.currentSaveName) == false)
+        {
+            raceOptionIndex--; if (raceOptionIndex > 6) { raceOptionIndex = 0; }
+            if (raceOptionIndex < 0) { raceOptionIndex = 6; }
 
-        raceOptionIndex--; if (raceOptionIndex > 5) { raceOptionIndex = 5; }if (raceOptionIndex < 0) { raceOptionIndex = 0; }
+            ApplyRaceSelectionSimple();
+            AfterAnySelectionChanged();
 
-        ApplyRaceSelection();
-        AfterAnySelectionChanged();
-
-        CreatNewcurrentIndex = 3; UpdateHighlight(); 
+            CreatNewcurrentIndex = 3; UpdateHighlight();
+        }
     }
 
-    public void OnClassLeft() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, -1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
-    public void OnClassRight() { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
-    void ChangeSkin(ref int index, int min, int max, int delta, bool isHead = false)
+    public void OnClassLeft()
+    {
+        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, -1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
+    }
+    public void OnClassRight()
+    {
+        if (IsLuna(player.currentSaveName)==false) { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
+    }
+    void ChangeSkin(ref int index, int min, int max, int delta)
     {
         index += delta;
         if (index < min) index = max;
@@ -292,40 +317,38 @@ public class UIManager : MonoBehaviour
 
         player._ClothesToClass();//临时让衣服改变职业
 
-
-        // 如果这次改的是“头发”且当前种族=兔族，则根据最新 headIndex 重算 hatIndex
-        if (isHead && (RaceOption)raceOptionIndex == RaceOption.Rabbit)
-        {
-            player.YYY_hatIndex = GetRabbitHatFromHead(player.YYY_headIndex);
-        }
-
         AfterAnySelectionChanged();
 
     }//捏人界面玩家点击单个皮肤选项左右之后
 
- 
-    private void AfterAnySelectionChanged()
+    public void AfterAnySelectionChanged()
     {
         player.SetSkin();     // 更新外观
         UpdateUI();           // 刷UI文字
         player.SaveCurrent(); // 存当前
         RefreshSaveSlots();   // 刷存档列表
-    }   // 一个小的合流函数，避免重复：统一做刷新/保存
+    }
 
-    private void DetectRaceOptionFromHat()
+    #region 捏人界面启动多语言
+
+    private int RaceOptionFromHat_Simple(int hat)
     {
-        int h = player.YYY_hatIndex;
-        if (h == 0) raceOptionIndex = (int)RaceOption.Human;
-        else if (h == 1) raceOptionIndex = (int)RaceOption.Elf1;
-        else if (h == 2) raceOptionIndex = (int)RaceOption.Elf2;
-        else if (h >= 4 && h <= 10) raceOptionIndex = (int)RaceOption.Rabbit;
-        else if (h == 11) raceOptionIndex = (int)RaceOption.Demon1;
-        else if (h == 12) raceOptionIndex = (int)RaceOption.Demon2;
-        else raceOptionIndex = (int)RaceOption.Human; // 兜底
-    }//初始化进页面时，请根据 player.YYY_hatIndex 反推一次 raceOptionIndex，避免显示错位：
+        switch (hat)
+        {
+            case 1: return (int)RaceOption.Human;
+            case 2: return (int)RaceOption.Elf;
+            case 3: return (int)RaceOption.HighElf;
+            case 4: return (int)RaceOption.RabbitBlack;
+            case 10: return (int)RaceOption.RabbitWhite;
+            case 11: return (int)RaceOption.Demon;
+            case 12: return (int)RaceOption.HighDemon;
+            // 兼容舊檔：5..9 以前的兔族耳，統一歸為黑兔
+            default:
+                if (hat >= 5 && hat <= 9) return (int)RaceOption.RabbitBlack;
+                return (int)RaceOption.Human;
+        }
+    }
 
-
-    #region
     void UpdateUI()
     {
         nameInputField.text = player.currentSaveName;
@@ -338,40 +361,37 @@ public class UIManager : MonoBehaviour
         hairLabel.text = $"{LHair()}_{player.YYY_headIndex}";
         eyesLabel.text = $"{LEyes()}_{player.YYY_eyesIndex}";
 
-
-        // 只在这里把 hatIndex → race 文案
-        int ro = RaceOptionFromHat(player.YYY_hatIndex);
-        raceOptionIndex = ro; // 保持 UI 内部一致（可要可不要）
-        raceLabel.text = $"{LRace()}_{LRaceName(ro)}";
+        int ro = RaceOptionFromHat_Simple(player.YYY_hatIndex);
+        raceOptionIndex = ro; // 保持一致
+        raceLabel.text = $"{LRaceName(ro)}";
         //raceLabel.text = $"{LRace()}_{LRaceName(raceOptionIndex)}";
 
-
-
-        classLabel.text = $"{LClass()}_{LClassName(player.CurrentProfession)}";
+        classLabel.text = $"{LClassName(player.CurrentProfession)}";
 
     }//捏人界面UI显示
 
     // 语言：0 日语 1 简中 2 繁中 3 英语 4 韩语
-    private int Lang => PlayerPrefs.GetInt("language", 1);
+    private int Lang => PlayerPrefs.GetInt("language");
 
     private static readonly string[,] LABELS = new string[,]
     {
-    //        Hair     Eyes     Race      Class  
-    /*JP*/ { "髪型",   "瞳",     "種族",    "職業"},
-    /*CN*/ { "头发",   "眼睛",   "种族",    "职业" },
-    /*TC*/ { "頭髮",   "眼睛",   "種族",    "職業" },
-    /*EN*/ { "Hair",   "Eyes",   "Race",    "Class" },
-    /*KR*/ { "머리",   "눈",     "종족",    "직업" }
+    //        Hair     Eyes  
+    /*JP*/ { "髪型",   "瞳"},
+    /*CN*/ { "头发",   "眼睛"},
+    /*TC*/ { "頭髮",   "眼睛" },
+    /*EN*/ { "Hair",   "Eyes"},
+    /*KR*/ { "머리",   "눈" }
     };
 
+    // 语言：0 日 1 简中 2 繁中 3 英 4 韩
     private static readonly string[,] RACE_NAMES = new string[,]
     {
-    //           Human      Elf1        Elf2        Rabbit      Demon1      Demon2
-    /*JP*/ { "人間",      "エルフA",  "エルフB",  "ラビット", "魔族A",    "魔族B" },
-    /*CN*/ { "人类",      "精灵1",    "精灵2",    "兔族",      "魔族1",    "魔族2" },
-    /*TC*/ { "人類",      "精靈1",    "精靈2",    "兔族",      "魔族1",    "魔族2" },
-    /*EN*/ { "Human",     "Elf I",     "Elf II",    "Rabbit",    "Demon I",   "Demon II" },
-    /*KR*/ { "인간",      "엘프1",     "엘프2",     "토끼족",     "마족1",     "마족2" }
+    // Human,     Elf,      HighElf,            RabbitBlack,              RabbitWhite,               Demon,     HighDemon
+    { "人間",    "エルフ",  "ハイエルフ",        "北方ラビット",     "南方ラビット",      "魔族",     "上位魔族" }, // JP
+    { "人类",    "精灵",    "高等精灵",          "北方兔族",         "南方兔族",          "魔族",     "高等魔族" }, // CN
+    { "人類",    "精靈",    "高等精靈",          "北方兔族",         "南方兔族",          "魔族",     "高等魔族" }, // TC
+    { "Human",   "Elf",     "High Elf",         "Northern Rabbit","Southern Rabbit", "Demon",   "High Demon" }, // EN
+    { "인간",    "엘프",    "하이 엘프",         "북부 토끼족",        "남부 토끼족",         "마족",     "상위 마족" }, // KR
     };
 
     private static readonly string[,] CLASS_NAMES = new string[,]
@@ -384,45 +404,85 @@ public class UIManager : MonoBehaviour
     /*KR*/ { "전사",      "궁수",     "마법사" }
     };
 
+
+    #region  种族介绍提示
+    // 7个种族顺序：Human, Elf, HighElf, RabbitBlack, RabbitWhite, Demon, HighDemon
+    private static readonly string[,] RACE_DESC = new string[,]
+    {
+        { // JP
+            "大陸で最も好戦的な種族で、各地を征服し他種族を隷属させてきた。体力と近接攻撃に優れる。",
+            "射撃と魔法に長ける種族。森の城邦が滅ぼされて以降、人間に奴隷として監禁され、市場価格は中庸。",
+            "エルフの中でも稀少で、奴隷市場でも上物。強力な魔法適性を持ち、エルフ固有の術を行使できる。",
+            "兎族は市場に数が多いが価格は並。身軽だが体力は低く、回避と突進攻撃を得意とする。",
+            "人間が草原を征服して以降、兎族は大きく繁殖。温和な気質で身軽、体力は低いが回避と射撃に長ける。",
+            "深淵をルーツにもつ混血。闇と炎に親和し、近接と魔法に優れる。魔族化で生命吸収の能力を得る。",
+            "魔族の純血上位。強力な儀式と魔界召喚を操る。魔族化で生命吸収の能力を得る。"
+        },
+        { // CN(简体)
+            "整片大陆上最好战的种族，四处征服和奴役其他种族。她们在生命值与近战攻击上有优势。",
+            "擅长射击与法术的种族，在森林中的城邦被摧毁后她们被人类奴役监禁，性奴市场上的价格适中。",
+            "精灵中的珍稀品种，也是性奴市场上的上等货。具有强大的法术天赋，她们会释放精灵族独有法术。",
+            "兔族在性奴市场上数量巨大，但是价格一般。她们身手敏捷但生命值低下，擅长回避伤害和冲刺攻击。",
+            "在人类征服草原后兔族大量繁衍，她们天性温顺，身手敏捷，生命值低下但是擅长回避伤害和射击。",
+            "源于深渊的混血，亲和黑暗与火焰。她们对于近战攻击与法术伤害有优势，魔族化后可以拥有生命汲取能力。",
+            "魔族中的纯血上位者，掌握强力仪式与魔界生物的召唤。魔族化后可以拥有生命汲取能力。"
+        },
+        { // TC(繁體)
+            "整片大陸上最尚武的種族，四處征服並奴役其他種族。她們在生命值與近戰攻擊上有優勢。",
+            "擅長射擊與法術的種族，森林城邦被摧毀後被人類奴役監禁，性奴市場上的價格中等。",
+            "精靈中的稀有品種，也是性奴市場上的上乘貨。擁有強大的法術天賦，能施放精靈族特有法術。",
+            "兔族在性奴市場數量龐大，但價格普通。身手敏捷但生命值偏低，擅長回避傷害與衝刺攻擊。",
+            "在人類征服草原後繁衍甚多。天性溫順、身手敏捷，生命值偏低但擅長回避傷害與射擊。",
+            "源於深淵的混血，親和黑暗與火焰。近戰與法術皆有優勢，魔族化後可獲得生命汲取能力。",
+            "魔族中的純血上位者，精通強力儀式與魔界召喚。魔族化後可獲得生命汲取能力。"
+        },
+        { // EN
+            "The most warlike people on the continent, conquering and enslaving others. Strong HP and melee power.",
+            "Skilled with ranged weapons and magic. After their forest city-states fell, they were enslaved by humans; mid-tier price on the slave market.",
+            "A rare strain among elves and a premium on the slave market. Exceptional arcane talent; can cast elf-exclusive spells.",
+            "Numerous on the market at an average price. Agile but low HP; excels at evasion and dash attacks.",
+            "Multiplied after humans conquered the plains. Gentle by nature, agile, low HP yet good at evasion and shooting.",
+            "Hybrids born of the abyss, attuned to darkness and fire. Strong in melee and spells; demonic form grants life-steal.",
+            "Pure-blooded elites of demonkind, wielding potent rituals and infernal summons. Demonic form grants life-steal."
+        },
+        { // KR
+            "대륙에서 가장 호전적인 종족. 곳곳을 정복하고 타 종족을 노예화했다. 체력과 근접 공격에 강하다.",
+            "사격과 마법에 능한 종족. 숲의 도시국가가 멸망한 뒤 인간에게 노예로 감금되었고, 노예 시장 가격은 중간대.",
+            "엘프 중 희귀한 품종으로, 노예 시장의 상급 품. 강력한 마법 재능을 지녀 엘프 고유의 주문을 쓸 수 있다.",
+            "토끼족은 시장에 수가 많지만 가격은 보통. 민첩하나 체력이 낮고, 회피와 돌진 공격에 능하다.",
+            "인간이 초원을 정복한 뒤 크게 번성. 온순한 기질에 민첩하고, 체력은 낮지만 회피와 사격에 능하다.",
+            "심연에서 비롯된 혼혈. 어둠과 불에 친화적이며 근접과 마법이 모두 강하다. 마족화 시 생명 흡수 능력을 얻는다.",
+            "마족의 순혈 상위층. 강력한 의식과 마계 소환을 다룬다. 마족화 시 생명 흡수 능력을 얻는다."
+        }
+    };
+    private static readonly string[] LUNA_LOCK = new string[]
+  {
+        "このキャラクターは外見・衣装・種族などを変更できません。",
+        "此角色无法更换外貌、服装、种族等。",
+        "此角色無法更換外貌、服裝、種族等。",
+        "This character’s appearance, outfit, and race cannot be changed.",
+        "이 캐릭터는 외형·의상·종족 등을 변경할 수 없습니다。"
+  };
+    // 由 hatIndex 反推 7个种族的 UI 索引（你当前的简化规则）
+    #endregion
+
+
+
     private string LHair() => LABELS[Lang, 0];
     private string LEyes() => LABELS[Lang, 1];
-    private string LRace() => LABELS[Lang, 2];
-    private string LClass() => LABELS[Lang, 3];
+
 
     private string LRaceName(int idx) => RACE_NAMES[Lang, idx];
     private string LClassName(int idx) => CLASS_NAMES[Lang, idx];
-
-    // 0..5 ：Human, Elf1, Elf2, Rabbit, Demon1, Demon2
-    private int RaceOptionFromHat(int hat)
-    {
-        // —— 1 基版本（你当前描述）——
-        if (hat == 1) return 0;                 // Human
-        if (hat == 2) return 1;                 // Elf1
-        if (hat == 3) return 2;                 // Elf2
-        if (hat >= 4 && hat <= 10) return 3;    // Rabbit
-        if (hat == 11) return 4;                // Demon1
-        if (hat == 12) return 5;                // Demon2
-
-        // 兜底：回到 Human
-        return 0;
-
-        /* —— 如果你的资源是 0=人类（0 基），请改用下面这段 —— 
-        if (hat == 0) return 0;                 // Human
-        if (hat == 1) return 1;                 // Elf1
-        if (hat == 2) return 2;                 // Elf2
-        if (hat >= 4 && hat <= 10) return 3;    // Rabbit
-        if (hat == 11) return 4;                // Demon1
-        if (hat == 12) return 5;                // Demon2
-        return 0;
-        */
-    }
-
 
     #endregion
 
 
     public void OnConfirmNameInput()
     {
+        if (player.currentSaveName== "ルナ"|| player.currentSaveName == "露娜"||player.currentSaveName == "Luna" || player.currentSaveName == "루나") { return; }
+
+
         string newName = nameInputField.text.Trim();
 
         if (string.IsNullOrEmpty(newName))
@@ -616,24 +676,28 @@ public class UIManager : MonoBehaviour
 
     }//读取，显示存档
 
+    #region 当前选中的是不是露娜
+    private static readonly string[] LunaNames = { "ルナ", "露娜", "Luna", "루나" };
+    private bool IsLuna(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return false;
+        name = name.Trim();
+        foreach (var n in LunaNames)
+            if (string.Equals(name, n, StringComparison.OrdinalIgnoreCase))
+                return true;
+        return false;
+    }
+    #endregion
+
     public void CreateNewSave()
     {
         player._CreateNewSkin();
 
-
-
-        #region[兔族耳朵]
-        DetectRaceOptionFromHat();//新建角色的时候根据耳朵反推
-
-        // 如果是兔族，确保 hatIndex 与 headIndex 一致（修正旧档）
-        if ((RaceOption)raceOptionIndex == RaceOption.Rabbit)
-            player.YYY_hatIndex = GetRabbitHatFromHead(player.YYY_headIndex);
-
-        raceOptionIndex = RaceOptionFromHat(player.YYY_hatIndex); // 只同步“显示所用”的索引
+        #region 种族选项需要根据耳朵来设置
+        raceOptionIndex = RaceOptionFromHat_Simple(player.YYY_hatIndex);
+        if (IsLuna(player.currentSaveName)) { IntroduceOfRace.text = LUNA_LOCK[Lang]; } else { ApplyRaceSelectionSimple(); }//预先设置提示词
         UpdateUI();
-
         #endregion
-
 
         RefreshSaveSlots();
 
