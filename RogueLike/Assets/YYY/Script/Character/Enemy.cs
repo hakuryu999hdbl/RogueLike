@@ -530,6 +530,23 @@ public class Enemy : MonoBehaviour
         }//敌人捕获玩家
     }
 
+    public void ReadyToSayThankYou() 
+    {
+        Invoke("SayThankYou", 0.2f);
+    }
+
+    void SayThankYou() 
+    {
+        
+        if (Random.Range(0, 2) == 0)
+        {
+            frameEvents._01_Word_ThankYou_1();
+        }
+        else
+        {
+            frameEvents._01_Word_ThankYou_2();
+        }
+    }//谢谢声（让产生的队友说）
 
     #endregion
 

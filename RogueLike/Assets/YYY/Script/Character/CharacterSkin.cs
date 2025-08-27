@@ -29,13 +29,13 @@ public class CharacterSkin : MonoBehaviour
 
     public void ShowCurrentAll
         (
-           int _YYY_headIndex, int _YYY_eyesIndex, int _YYY_bodyIndex,int _YYY_legsIndex,int _YYY_hatIndex,
+           int _YYY_headIndex, int _YYY_eyesIndex, int _YYY_bodyIndex, int _YYY_legsIndex, int _YYY_hatIndex,
            int _Man_headIndex, int _Man_bodyIndex, int _Man_hatIndex,
            int _Girl_headIndex, int _Girl_eyesIndex, int _Girl_bodyIndex, int _Girl_legsIndex, int _Girl_hatIndex,
            int _weaponIndex
         )
     {
-        
+
         if (_YYY_headIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Head/YYY_Head_color{_YYY_headIndex}")); }
         if (_YYY_eyesIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Eyes/YYY_Eyes_color{_YYY_eyesIndex}")); }
         if (_YYY_bodyIndex != 0) { blendSkin.AddSkin(skeletonAnimation.Skeleton.Data.FindSkin($"YYY/Body/YYY_Body_color{_YYY_bodyIndex}")); }
@@ -86,21 +86,22 @@ public class CharacterSkin : MonoBehaviour
 
     public void AttackWarn()
     {
-        if (player != null&&!PlayerBattleCry)
+        if (Random.Range(0, 3) == 0)
         {
-            player.BattleCryVoice();
-            PlayerBattleCry = true;
-        }
+            if (player != null && !PlayerBattleCry)
+            {
+                player.BattleCryVoice();
+                PlayerBattleCry = true;
+            }
 
 
-        if (enemy != null)
-        {
+            if (enemy != null)
+            {
 
-            enemy.BattleCryVoice();
+                enemy.BattleCryVoice();
 
-        }
-
-
+            }
+        }//攻击喊声不要太频繁
 
     } //攻击开始无法移动
 
@@ -110,13 +111,13 @@ public class CharacterSkin : MonoBehaviour
         if (player != null)
         {
             //法杖只能蓄力远程攻击，法杖近程肉搏调用近战伤害无武器
-            if (player.isMage&&player.currentCritical<50)
+            if (player.isMage && player.currentCritical < 50)
             {
                 if (player.isDie == false) { player.attack_Collider.SetActive(true); }//我方和敌方被击倒期间无法发出攻击碰撞体
                 player.AttackVoice();
                 Invoke("HideAttack", 0.2f);
             }
-            else 
+            else
             {
                 player.ShootBullet();
             }

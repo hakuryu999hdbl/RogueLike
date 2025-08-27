@@ -5,7 +5,7 @@ using UnityEngine;
 public class RBQ : MonoBehaviour
 {
     [Header("主动触发声音")]
-    public FrameEvents frameEvents;
+    public FrameEvents frameEvents;//这个和Spine上面区分开来，防止声音叠住
 
     [Header("寻找RoomGenerator")]
     RoomGenerator _RoomGenerator;//寻找RoomGenerator
@@ -29,7 +29,7 @@ public class RBQ : MonoBehaviour
         _RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
 
 
-        RBQState = Random.Range(1, 3);
+        RBQState = Random.Range(1, 2);
 
         // 随机动画
         if (RBQState == 1)
@@ -50,6 +50,8 @@ public class RBQ : MonoBehaviour
 
             }
 
+            //循环叫声
+            InvokeRepeating("Gasping_Long", 1f, 58f);
         }
         else
         {
@@ -65,7 +67,16 @@ public class RBQ : MonoBehaviour
 
         //随机皮肤
         SetRandomSkin();
+
+
+
     }
+
+    void Gasping_Long() 
+    {
+        //循环叫声
+        frameEvents._02_Connection_Gasping_Long_0();
+    }//优先级高128→28
 
     void ApplyFacingRotation()
     {
@@ -129,6 +140,10 @@ public class RBQ : MonoBehaviour
                 }
 
 
+                //停止播放
+                frameEvents.audioS.Stop();
+                CancelInvoke(nameof(Gasping_Long));
+
             }
             else if (RBQState == 0)
             {
@@ -144,6 +159,8 @@ public class RBQ : MonoBehaviour
                 enemy.ConvertToFriend();
 
 
+
+                enemy.ReadyToSayThankYou();//谢谢声（让产生的队友说）
 
 
                 //生成刑架
@@ -166,6 +183,9 @@ public class RBQ : MonoBehaviour
           
         }
     }
+
+
+ 
 
     private IEnumerator DelayedApplySkin(Enemy enemy)
     {

@@ -198,8 +198,8 @@ public class FrameEvents : MonoBehaviour
 
     public void _01_Word_Aaaa() { audioS.PlayOneShot(AudioManager.Audio_01_Word_Aaaa); }
     public void _01_Word_Cannot() { audioS.PlayOneShot(AudioManager.Audio_01_Word_Cannot); }
-    public void _01_Word_ThankYou_1() { audioS.PlayOneShot(AudioManager.Audio_01_Word_ThankYou_1); }
-    public void _01_Word_ThankYou_2() { audioS.PlayOneShot(AudioManager.Audio_01_Word_ThankYou_2); }
+    public void _01_Word_ThankYou_1() { audioS.PlayOneShot(AudioManager.Audio_01_Word_ThankYou_1); Debug.Log("谢谢"); }
+    public void _01_Word_ThankYou_2() { audioS.PlayOneShot(AudioManager.Audio_01_Word_ThankYou_2); Debug.Log("谢谢"); }
 
     public void _01_Word_No_1() { audioS.PlayOneShot(AudioManager.Audio_01_Word_No_1); }
     public void _01_Word_No_2() { audioS.PlayOneShot(AudioManager.Audio_01_Word_No_2); }
@@ -261,7 +261,7 @@ public class FrameEvents : MonoBehaviour
     public void _04_Scream_Weak_4() { audioS.PlayOneShot(AudioManager.Audio_04_Scream_Weak_4); }
     public void _04_Scream_Weak_5() { audioS.PlayOneShot(AudioManager.Audio_04_Scream_Weak_5); }
     //------------淫叫
-    public void _02_Connection_Gasping_Long_0() { audioS.PlayOneShot(AudioManager.Audio_02_Connection_Gasping_Long_0); }
+    public void _02_Connection_Gasping_Long_0() { audioS.PlayOneShot(AudioManager.Audio_02_Connection_Gasping_Long_0); Debug.Log("叫声"); }
     public void _02_Connection_Gasping_0() { audioS.PlayOneShot(AudioManager.Audio_02_Connection_Gasping_0); }
     public void _02_Connection_Gasping_1() { audioS.PlayOneShot(AudioManager.Audio_02_Connection_Gasping_1); }
     public void _02_Connection_Gasping_2() { audioS.PlayOneShot(AudioManager.Audio_02_Connection_Gasping_2); }
