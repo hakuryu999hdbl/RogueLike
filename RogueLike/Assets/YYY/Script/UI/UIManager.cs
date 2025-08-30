@@ -61,7 +61,7 @@ public class UIManager : MonoBehaviour
     }//重刷场景
 
     [Header("主菜单界面层级")]
-    public int CurrentChooseList = 0;// -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中
+    public int CurrentChooseList = 0;//-2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中
     public int CurrentMode = 0;//0 进入CG界面  1捏人/进入游戏
     public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
     public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
@@ -582,7 +582,6 @@ public class UIManager : MonoBehaviour
         isInputing = false;
     }//玩家点击Ok
 
-
     public void OpenCloseMenu()
     {
         if (CurrentMode == 0)
@@ -773,6 +772,7 @@ public class UIManager : MonoBehaviour
     [Header("删除存档")]
     public GameObject MakeSureDeleteCurrentSave;
 
+
     public void DeleteCurrentSelection()
     {
         if (saveSlots.Count == 0) return;
@@ -885,7 +885,20 @@ public class UIManager : MonoBehaviour
     /// 语言设置，声音设置
     /// </summary>
     #region
+    [Header("删除全存档")]
+    public GameObject MakeSureDeleteCurrentSave_All;
 
+    public void TryDelete_All()
+    {
+        MakeSureDeleteCurrentSave_All.SetActive(true);
+        CurrentChooseList = -2;//弹出确认删除存档框
+    }
+
+    public void CancelDelete_All() 
+    {
+        MakeSureDeleteCurrentSave_All.SetActive(false);
+        CurrentChooseList = 3;//返回设置界面
+    }
 
     public void ReStart_DeleteAll()
     {
@@ -1052,29 +1065,33 @@ public class UIManager : MonoBehaviour
     /// </summary>
     #region
     [SerializeField] private InputActionAsset inputActions;
-    private InputAction moveAction;
-    private InputAction confirmAction;
-    private InputAction cancelAction;
-    private InputAction deleteAction;
-    private InputAction pauseAction;
+    private InputAction moveAction;//十字键
+    private InputAction confirmAction;//J键
+    private InputAction cancelAction;//K键
+    private InputAction createAction;//Space键
+    private InputAction deleteAction;//E键
+    private InputAction pauseAction;//Esc键
 
     private void OnEnable()
     {
         moveAction = inputActions.FindAction("Move");
-        confirmAction = inputActions.FindAction("Attack");  // 或者用名为 "Submit"
-        cancelAction = inputActions.FindAction("Dodge");    // 或者用名为 "Cancel"
-        deleteAction = inputActions.FindAction("Run");    // 或者用名为 "Delete"
+        confirmAction = inputActions.FindAction("Attack"); 
+        cancelAction = inputActions.FindAction("Dodge");
+        createAction = inputActions.FindAction("Run");
+        deleteAction = inputActions.FindAction("Interact");  
         pauseAction = inputActions.FindAction("Pause");
 
         moveAction.performed += OnMove;
         confirmAction.started += OnConfirm;
         cancelAction.started += OnCancel;
+        createAction.started += OnCreate;
         deleteAction.started += OnDelete;
         pauseAction.started += OnPause;
 
         moveAction.Enable();
         confirmAction.Enable();
         cancelAction.Enable();
+        createAction.Enable();
         deleteAction.Enable();
         pauseAction.Enable();
     }
@@ -1084,12 +1101,14 @@ public class UIManager : MonoBehaviour
         moveAction.performed -= OnMove;
         confirmAction.started -= OnConfirm;
         cancelAction.started -= OnCancel;
+        createAction.started -= OnCreate;
         deleteAction.started -= OnDelete;
         pauseAction.started -= OnPause;
 
         moveAction.Disable();
         confirmAction.Disable();
         cancelAction.Disable();
+        createAction.Disable();
         deleteAction.Disable();
         pauseAction.Disable();
     }
@@ -1356,6 +1375,13 @@ public class UIManager : MonoBehaviour
         {
             // 可选：进入下一级菜单、确认开始游戏等
 
+
+            //确认删除全部存档界面
+            if (CurrentChooseList == -2)
+            {
+                ReStart_DeleteAll();//删除存档重刷场景
+            }
+
             //确认删除界面
             if (CurrentChooseList == -1)
             {
@@ -1396,7 +1422,9 @@ public class UIManager : MonoBehaviour
 
                 if (CurrentMode == 1)
                 {
-                    CreateNewSave();//新建角色
+                    //CreateNewSave();//新建角色
+
+                    OpenCloseMenu();
                 }
 
 
@@ -1429,11 +1457,10 @@ public class UIManager : MonoBehaviour
                 {
 
                     case 2:
-                        //ToSettingPage();
                         Invoke("ToLanguagePage", 0.1f);//进入设置界面
                         break;
                     case 3:
-                        ReStart_DeleteAll();//删除存档重刷场景
+                        Invoke("TryDelete_All", 0.1f);//进入确认删除全部存档界面
                         break;
                 }
 
@@ -1462,10 +1489,16 @@ public class UIManager : MonoBehaviour
         {
             // 可选：退出菜单、返回上一级等
 
+            //确认删除全部存档界面
+            if (CurrentChooseList == -2)
+            {
+                Invoke("CancelDelete_All", 0.1f);
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+
             //确认删除界面
             if (CurrentChooseList == -1)
             {
-                //CancelDelete();//取消删除
                 Invoke("CancelDelete", 0.1f);
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
@@ -1500,6 +1533,20 @@ public class UIManager : MonoBehaviour
 
     }//键盘K      xbox手柄A       ps手柄X
 
+    private void OnCreate(InputAction.CallbackContext ctx)
+    {
+        if (player.isInputBlocked)
+        {
+            // 可选：删除存档
+            if (CurrentChooseList == 2)
+            {
+                CreateNewSave();//新建角色
+            }
+            AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
+        }
+
+    }//键盘Space    xbox手柄左肩键       ps手柄左肩键
+
     private void OnDelete(InputAction.CallbackContext ctx)
     {
         if (player.isInputBlocked)
@@ -1513,7 +1560,7 @@ public class UIManager : MonoBehaviour
 
         }
 
-    }//键盘Space    xbox手柄左肩键       ps手柄左肩键
+    }//键盘E    xbox手柄X       ps手柄□
     private void OnPause(InputAction.CallbackContext ctx)
     {
 
