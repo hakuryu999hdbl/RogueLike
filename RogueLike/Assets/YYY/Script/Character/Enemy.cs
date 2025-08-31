@@ -93,6 +93,10 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
+
+
+
+
         if (!isDie)
         {
 
@@ -110,6 +114,28 @@ public class Enemy : MonoBehaviour
 
             AntiOverlapping.SetActive(true);//站起后无法被穿过
             //rbody.simulated = true;
+
+            if (isBurning) 
+            {
+                BurnTimer += Time.deltaTime;
+
+                if (BurnTimer>=0.2f) 
+                {
+                    currentHealth = Mathf.Clamp(currentHealth - 10, 0, maxHealth);
+                    UpdateHealthBar(currentHealth, maxHealth);
+
+                    //显示伤害
+                    HudText.HUD(-10);
+
+                    BurnTimer = 0;
+
+                    if (currentHealth <= 0)
+                    {
+                        Die();
+                    }
+                }
+            }//持续灼烧伤害
+
         }
         else
         {
@@ -1560,8 +1586,11 @@ public class Enemy : MonoBehaviour
     public GameObject SparkEffect;//火星特效
     public GameObject GateEffect;//传送门特效
     public GameObject Palsy_Effect;//闪电特效
+    public GameObject ThunderEffect;//麻痹特效
     public GameObject Frozen_Effect;//冻结特效
     public GameObject IceEffect;//冰特效
+    public GameObject Burning_Effect;//灼烧特效
+    public GameObject FireEffect;//烧特效
     public GameObject ProtectiveCoverEffect;//防护罩特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
@@ -1576,7 +1605,7 @@ public class Enemy : MonoBehaviour
 
 
 
-    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式  0无  1剑击特效  2闪电特效  3冻结
+    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式  0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物
     {
 
         if (!isScreaming && !isRape && IsGrounded() )//冷却中与捕获中不会被伤到,在空中也不会被伤到
@@ -1631,6 +1660,9 @@ public class Enemy : MonoBehaviour
 
             }
 
+
+
+
             //伤害类型
             switch (TypeOfAttack)
             {
@@ -1638,7 +1670,14 @@ public class Enemy : MonoBehaviour
                     Strike_Effect.SetActive(true);//剑伤害
                     break;
                 case 2:
-                    Palsy_Effect.SetActive(true);//雷电伤害
+                    if (Random.Range(0, 3) == 0)
+                    {
+                        Palsy(1);//麻痹伤害
+                    }
+                    else
+                    {
+                        Palsy_Effect.SetActive(true);//雷电伤害
+                    }
                     break;
                 case 3:
                     if (Random.Range(0, 3) == 0)
@@ -1652,6 +1691,28 @@ public class Enemy : MonoBehaviour
                         GameObject EffectPrefabs = Instantiate(IceEffect, spawnPosition_2, transform.rotation);
                         Destroy(EffectPrefabs, 0.5f);
                     }
+                    break;
+                case 4:
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Burning(Random.Range(1,8));//灼烧伤害
+                    }
+                    else
+                    {
+                        Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+                        Vector3 spawnPosition_2 = transform.position + offset_2;
+                        GameObject EffectPrefabs = Instantiate(FireEffect, spawnPosition_2, transform.rotation);
+                        Destroy(EffectPrefabs, 0.5f);
+                    }
+
+                    break;
+
+                case 5:
+                    if (amount >= 0)
+                    {
+                        amount = 0;
+                    }
+
                     break;
             }
 
@@ -1941,6 +2002,39 @@ public class Enemy : MonoBehaviour
     /// 异常状态
     /// </summary>
     #region
+    public void Recover()//死亡，自我恢复，麻痹恢复调用
+    {
+
+        aiPath.canMove = true;
+
+        // 恢复物理移动
+        rbody.constraints = RigidbodyConstraints2D.None;
+        rbody.constraints = RigidbodyConstraints2D.FreezeRotation; // 恢复默认状态（通常冻结旋转即可）
+
+        Frozen_Effect.SetActive(false);//去除冻结特效
+
+        anim.speed = 1f; // 恢复到原来的时间缩放值，解除冻结
+
+
+
+        Burning_Effect.SetActive(false);//去除灼烧特效
+        isBurning = false;
+
+    }
+
+    //————————————————————麻痹
+
+    public void Palsy(int Timer)
+    {
+        ThunderEffect.SetActive(true);
+
+        Invoke("ThunderDamager", Timer);
+    }
+    void ThunderDamager()
+    {
+        ChangeHealth(Random.Range(100,500), 2);
+        ThunderEffect.SetActive(false);
+    }
     //————————————————————冻结
 
     public void Freeze(int Timer)
@@ -1960,24 +2054,18 @@ public class Enemy : MonoBehaviour
 
         Invoke("Recover", Timer);
     }
-    public void Recover()//死亡，自我恢复，麻痹恢复调用
+  
+    //————————————————————灼烧
+    public bool isBurning = false;
+    float BurnTimer;
+    public void Burning(int Timer)
     {
+        Burning_Effect.SetActive(true);
 
-        aiPath.canMove = true;
+        isBurning = true;
 
-        // 恢复物理移动
-        rbody.constraints = RigidbodyConstraints2D.None;
-        rbody.constraints = RigidbodyConstraints2D.FreezeRotation; // 恢复默认状态（通常冻结旋转即可）
-
-
-        Frozen_Effect.SetActive(false);//去除冻结特效
-
-        anim.speed = 1f; // 恢复到原来的时间缩放值，解除冻结
-
-
+        Invoke("Recover", Timer);
     }
-
-
     #endregion
     /// <summary>
     /// 阵营转换

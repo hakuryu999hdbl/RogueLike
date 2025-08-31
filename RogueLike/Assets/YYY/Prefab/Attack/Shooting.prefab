@@ -928,6 +928,8 @@ MonoBehaviour:
   chargeTime: 0
   ownerType: 0
   speed: 60
+  Damage: -100
+  PrefabsDamage: -300
   lifetime: 1
   specialBullet: 0
   Bullet: {fileID: 798902050261924457}

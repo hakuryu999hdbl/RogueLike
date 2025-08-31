@@ -145,7 +145,7 @@ public class WallMap : MonoBehaviour
 
     public void SetEnemy()
     {
-        int enemyToSpawn = Random.Range(1,4);
+        int enemyToSpawn = Random.Range(2,7);
         for (int i = 0; i < enemyToSpawn; i++)
         {
             // 随机选一个出生点

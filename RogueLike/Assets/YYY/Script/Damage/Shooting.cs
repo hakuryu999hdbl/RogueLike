@@ -22,6 +22,8 @@ public class Shooting : MonoBehaviour
         chargeTime = charge;
         SetSpecialBullet(specialType);
 
+        Debug.Log("最初蓄力时间" + chargeTime);
+
         baseDamage = Damage; // 保存原始值
         appliedDamage = baseDamage + Random.Range(-50, 50); // 例如±10范围
 
@@ -39,6 +41,7 @@ public class Shooting : MonoBehaviour
         //Debug.Log("子弹最终伤害" + appliedDamage + "子弹基础伤害" + baseDamage + "传送伤害" +Damage);
 
         SetDirection(dir, owner);
+
 
     }//初始化随机伤害
 
@@ -116,7 +119,7 @@ public class Shooting : MonoBehaviour
                 Flame.SetActive(true);
                 CurrentBulletEffect = BlastEffect;
                 speed = 20f;
-
+                TypeOfAttack = 4;//火伤
                 lifetime = 5f;
                 break;
             case 4:
@@ -131,6 +134,7 @@ public class Shooting : MonoBehaviour
                 Poison.SetActive(true);
                 CurrentBulletEffect = PoisonEffect;
                 speed = 30f;
+                TypeOfAttack = 5;//毒物
 
                 lifetime = 5f;
                 break;
@@ -176,7 +180,7 @@ public class Shooting : MonoBehaviour
                     other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);
                     break;
 
-                //火球，雷球，毒球
+                //火球，雷球
                 case 2:
                 case 3:
                     GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
@@ -187,14 +191,17 @@ public class Shooting : MonoBehaviour
                     Destroy(EffectPrefabs, 0.5f);
 
                     break;
+
+                //毒球
                 case 5:
                     GameObject EffectPrefabs2 = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
                     var s2 = EffectPrefabs2.transform.Find("Attack_Collider").GetComponent<Spell>();
                     s2.DamageToEnemy = true;
-                    s2.Init(PrefabsDamage, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
+                    s2.Init(PrefabsDamage/20, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
+                    //持续性伤害过强大幅削减
 
-                    Destroy(EffectPrefabs2, 1f);
-
+                    Destroy(EffectPrefabs2, chargeTime);//蓄力越久留存越久
+                    Debug.Log("蓄力时间" + chargeTime);
                     break;
 
             }
@@ -233,15 +240,19 @@ public class Shooting : MonoBehaviour
                     Destroy(EffectPrefabs, 0.5f);
 
                     break;
+
+                // 毒球
                 case 5:
                     GameObject EffectPrefabs2 = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
                     var s2 = EffectPrefabs2.transform.Find("Attack_Collider").GetComponent<Spell>();
                     s2.DamageToPlayer = true;
                     s2.DamageToFriend = true;
-                    s2.Init(PrefabsDamage, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
+                    s2.Init(PrefabsDamage/20, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
+                    //持续性伤害过强大幅削减
 
 
-                    Destroy(EffectPrefabs2, 1f);
+                    Destroy(EffectPrefabs2, chargeTime);//蓄力越久留存越久
+                    Debug.Log("蓄力时间" + chargeTime);
 
                     break;
 
@@ -270,7 +281,7 @@ public class Shooting : MonoBehaviour
             switch (specialBullet)
             {
                 case 5:
-                    Destroy(EffectPrefabs, 1f);
+                    Destroy(EffectPrefabs, chargeTime);//蓄力越久留存越久
                     break;
                 default:
                     Destroy(EffectPrefabs, 0.5f);

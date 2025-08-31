@@ -51,86 +51,177 @@ public class Spell : MonoBehaviour
         isCritial = false;
     }//隐藏时清除
 
+
+    [Header("是否是持续性伤害")]
+    public bool isStayDamage = false;
+
+    //单次伤害
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //敌人
-        if (collision.gameObject.tag == "Player")
+        if (!isStayDamage)
         {
-            if (collision.gameObject.GetComponent<Player>() != null && DamageToPlayer)
+
+            //敌人
+            if (collision.gameObject.tag == "Player")
             {
+                if (collision.gameObject.GetComponent<Player>() != null && DamageToPlayer)
+                {
 
 
-                collision.gameObject.GetComponent<Player>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+                    collision.gameObject.GetComponent<Player>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
 
+                }
             }
-        }
-        if (collision.gameObject.tag == "Attack")
-        {
-            if (collision.gameObject.GetComponent<Dodge_Range>() != null && DamageToPlayer)
+            if (collision.gameObject.tag == "Attack")
             {
+                if (collision.gameObject.GetComponent<Dodge_Range>() != null && DamageToPlayer)
+                {
 
-                collision.gameObject.GetComponent<Dodge_Range>().Dodge();//直接触发闪避
+                    collision.gameObject.GetComponent<Dodge_Range>().Dodge();//直接触发闪避
 
-            }
-        }
-
-
-
-        //玩家和队友伤害
-        if (collision.gameObject.tag == "Enemy")
-        {
-
-            if (collision.gameObject.GetComponent<Enemy>() != null && DamageToEnemy)
-            {
-
-                if (isCritial) { collision.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
-
-                collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
-
-
-
+                }
             }
 
 
-        }
 
-
-        //敌人
-        if (collision.gameObject.tag == "Friend")
-        {
-
-            if (collision.gameObject.GetComponent<Enemy>() != null && DamageToFriend)
+            //玩家和队友伤害
+            if (collision.gameObject.tag == "Enemy")
             {
 
+                if (collision.gameObject.GetComponent<Enemy>() != null && DamageToEnemy)
+                {
+
+                    if (isCritial) { collision.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
+
+                    collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
 
-                collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
+                }
 
 
             }
 
 
-        }
-
-        //障碍物
-        if (collision.gameObject.tag == "obstacle")
-        {
-
-            if (collision.gameObject.GetComponent<Plant>() != null)
+            //敌人
+            if (collision.gameObject.tag == "Friend")
             {
 
-                collision.gameObject.GetComponent<Plant>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+                if (collision.gameObject.GetComponent<Enemy>() != null && DamageToFriend)
+                {
+
+
+
+                    collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
+
+
+                }
+
 
             }
 
+            //障碍物
+            if (collision.gameObject.tag == "obstacle")
+            {
+
+                if (collision.gameObject.GetComponent<Plant>() != null)
+                {
+
+                    collision.gameObject.GetComponent<Plant>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
+                }
+
+
+            }
 
         }
-
-
     }
 
+    //持续性伤害
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (isStayDamage)
+        {
+
+            //敌人
+            if (collision.gameObject.tag == "Player")
+            {
+                if (collision.gameObject.GetComponent<Player>() != null && DamageToPlayer)
+                {
 
 
+                    collision.gameObject.GetComponent<Player>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
+
+                }
+            }
+            if (collision.gameObject.tag == "Attack")
+            {
+                if (collision.gameObject.GetComponent<Dodge_Range>() != null && DamageToPlayer)
+                {
+
+                    collision.gameObject.GetComponent<Dodge_Range>().Dodge();//直接触发闪避
+
+                }
+            }
+
+
+
+            //玩家和队友伤害
+            if (collision.gameObject.tag == "Enemy")
+            {
+
+                if (collision.gameObject.GetComponent<Enemy>() != null && DamageToEnemy)
+                {
+
+
+                    //持续性伤害不能有暴击
+
+                    collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
+
+
+                }
+
+
+            }
+
+
+            //敌人
+            if (collision.gameObject.tag == "Friend")
+            {
+
+                if (collision.gameObject.GetComponent<Enemy>() != null && DamageToFriend)
+                {
+
+
+
+                    collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
+
+
+                }
+
+
+            }
+
+            //障碍物
+            if (collision.gameObject.tag == "obstacle")
+            {
+
+                if (collision.gameObject.GetComponent<Plant>() != null)
+                {
+
+                    collision.gameObject.GetComponent<Plant>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
+                }
+
+
+            }
+
+        }
+
+    }
 }

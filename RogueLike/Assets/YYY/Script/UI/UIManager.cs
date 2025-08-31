@@ -707,6 +707,10 @@ public class UIManager : MonoBehaviour
         UpdateUI();//更新捏人界面UI
 
         CurrentChooseList = 1;//进入捏人界面
+
+
+        nameInputField.ActivateInputField(); // ✅ 激活输入框并进入编辑
+
     }//点击【＋】就会随机存档
 
     public void RefreshSaveSlots()//新增存档，新增存档时更换名字，新增存档时更换皮肤，删除存档
@@ -1358,15 +1362,24 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public GameObject HideGameObjectWhenChangeName;
+    public GameObject Prompt_Enter;
     public void OnChangeName()
     {
         isInputing = true;
         CreatNewcurrentIndex = 0;
         UpdateHighlight();
+
+        HideGameObjectWhenChangeName.SetActive(false);
+        Prompt_Enter.SetActive(true);
     }//打字的时候锁住上下移动
     public void OnChangeNameOver()
     {
         isInputing = false;
+
+        HideGameObjectWhenChangeName.SetActive(true);
+        Prompt_Enter.SetActive(false);
+
     }//打字的时候锁住上下移动
 
     private void OnConfirm(InputAction.CallbackContext ctx)
@@ -1439,7 +1452,7 @@ public class UIManager : MonoBehaviour
                 {
                     //编辑名称
                     nameInputField.ActivateInputField(); // ✅ 激活输入框并进入编辑
-
+                    OnChangeName();//这个时候就需要遮住了
                 }
                 if (CreatNewcurrentIndex == 5)
                 {

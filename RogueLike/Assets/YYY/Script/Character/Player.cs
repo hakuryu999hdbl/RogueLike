@@ -132,7 +132,6 @@ public class Player : MonoBehaviour
             case 4:
             case 5:
             case 7:
-            case 8:
             case 10:
                 strike.TypeOfAttack = 1;//剑伤
                 break;
@@ -140,6 +139,11 @@ public class Player : MonoBehaviour
             case 6:
                 strike.TypeOfAttack = 3;//冻结
                 break;
+
+            case 8:
+                strike.TypeOfAttack = 4;//火伤
+                break;
+
             case 9:
                 strike.TypeOfAttack = 2;//闪电
                 break;
@@ -464,6 +468,35 @@ public class Player : MonoBehaviour
             {
                 WeaponDrawn();//持械切换
             }
+
+            if (isBurning)
+            {
+                BurnTimer += Time.deltaTime;
+
+                if (BurnTimer >= 0.2f)
+                {
+                    currentHealth = Mathf.Clamp(currentHealth - 10, 0, maxHealth);
+                    UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
+
+                    //显示伤害
+                    HudText.HUD(-10);
+
+                    BurnTimer = 0;
+
+                    if (currentHealth <= 0)
+                    {
+                        isDie = true;
+
+                        anim.Play(GetAnimPrefix() + "Default_Die_2");
+
+                        Critical.SetActive(false);
+
+                        UIManager.instance.Ending_UI();
+
+                        return;
+                    }
+                }
+            }//持续灼烧伤害
 
         }
         else
@@ -1017,6 +1050,8 @@ public class Player : MonoBehaviour
                     PlayChargeAttack(); // 蓄力攻击
                 }
 
+                Save_attackPressTime = attackPressTime;//暂时存一下，为了远程射击子弹记录蓄力时间
+
                 attackPressTime = 0;
 
                 attackTriggered = true;
@@ -1030,6 +1065,8 @@ public class Player : MonoBehaviour
 
 
     }
+
+
 
     void CheckAttack()
     {
@@ -1221,11 +1258,12 @@ public class Player : MonoBehaviour
 
     }
 
-
+    float Save_attackPressTime;//不知道什么原因，远程蓄力传过去是0
     private void PlayChargeAttack()
     {
         TryCrit(); // 改用新方法触发暴击
         strike.chargeTime = attackPressTime; // 把蓄力时间传过去（蓄力那段时间也能成攻击力 能加上去）
+        Debug.Log("近战玩家阶段最初蓄力时间" + attackPressTime);
         PlayNormalAttack();
 
     }//蓄力攻击
@@ -1477,7 +1515,11 @@ public class Player : MonoBehaviour
         // 只有在暴击率大于等于 60% 时，才可能暴击
         bool willCrit = ((float)currentCritical / (float)maxCritical) >= 0.6f;
 
-        s.Init(-ShootDamage-CurrentWeaponPower, -SpellDamage - CurrentWeaponPower, willCrit, attackPressTime, special, direction, Shooting.BulletOwnerType.Friend);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
+        Debug.Log("远程玩家阶段最初蓄力时间" + Save_attackPressTime);//为什么这里不用attackPressTime，因为传过去一直都是0，没有办法只能记录一下再传记录的
+
+        s.Init(-ShootDamage-CurrentWeaponPower, -SpellDamage - CurrentWeaponPower, willCrit, Save_attackPressTime, special, direction, Shooting.BulletOwnerType.Friend);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
+
+    
 
     }//射击子弹
 
@@ -2183,8 +2225,11 @@ public class Player : MonoBehaviour
     public GameObject SparkEffect;//火星特效
     public GameObject GateEffect;//传送门特效
     public GameObject Palsy_Effect;//闪电特效
+    public GameObject ThunderEffect;//麻痹特效
     public GameObject Frozen_Effect;//冻结特效
     public GameObject IceEffect;//冰特效
+    public GameObject Burning_Effect;//灼烧特效
+    public GameObject FireEffect;//烧特效
     public GameObject ProtectiveCoverEffect;//防护罩特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
@@ -2202,7 +2247,7 @@ public class Player : MonoBehaviour
     [Header("暴击")]
     public GameObject Critial;
 
-    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 0无  1剑击特效  2闪电特效  3冻结
+    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物
     {
         if (!isScreaming && currentHealth > 0 && !isDie)//冷却不受击，死亡后不受击，倒地不受击，(所有攻击都无法canMove)攻击中不受击
         {
@@ -2328,7 +2373,14 @@ public class Player : MonoBehaviour
                     Strike_Effect.SetActive(true);//剑伤害
                     break;
                 case 2:
-                    Palsy_Effect.SetActive(true);//雷电伤害
+                    if (Random.Range(0, 3) == 0)
+                    {
+                        Palsy(1);//麻痹伤害
+                    }
+                    else
+                    {
+                        Palsy_Effect.SetActive(true);//雷电伤害
+                    }
                     break;
                 case 3:
                     if (Random.Range(0,3)==0) 
@@ -2343,6 +2395,28 @@ public class Player : MonoBehaviour
                         Destroy(EffectPrefabs, 0.5f);
                     }
                    
+                    break;
+                case 4:
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Burning(Random.Range(1, 8));//灼烧伤害
+                    }
+                    else
+                    {
+                        Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+                        Vector3 spawnPosition_2 = transform.position + offset_2;
+                        GameObject EffectPrefabs = Instantiate(FireEffect, spawnPosition_2, transform.rotation);
+                        Destroy(EffectPrefabs, 0.5f);
+                    }
+
+                    break;
+
+                case 5:
+                    if (amount >= 0)
+                    {
+                        amount = 0;
+                    }
+
                     break;
             }
 
@@ -2652,6 +2726,35 @@ public class Player : MonoBehaviour
     /// 异常状态
     /// </summary>
     #region
+ 
+    public void Recover()//死亡，自我恢复，麻痹恢复调用
+    {
+
+        isFrozen = false;
+        isBurning = false;
+
+
+        Frozen_Effect.SetActive(false);//去除冻结特效
+        Burning_Effect.SetActive(false);//去除灼烧特效
+
+        anim.speed = 1f; // 恢复到原来的时间缩放值，解除冻结
+
+
+    }
+    //————————————————————麻痹
+
+    public void Palsy(int Timer)
+    {
+        ThunderEffect.SetActive(true);
+
+        Invoke("ThunderDamager", Timer);
+    }
+    void ThunderDamager() 
+    {
+        ChangeHealth(-Random.Range(100, 500), 2);
+        ThunderEffect.SetActive(false);
+    }
+
     //————————————————————冻结
     public bool isFrozen = false;
     public void Freeze(int Timer)
@@ -2667,18 +2770,19 @@ public class Player : MonoBehaviour
 
         Invoke("Recover", Timer);
     }
-    public void Recover()//死亡，自我恢复，麻痹恢复调用
-    {
 
-        isFrozen = false;
+    //————————————————————灼烧
+    public bool isBurning = false;
+    float BurnTimer;
 
-        Frozen_Effect.SetActive(false);//去除冻结特效
+    public void Burning(int Timer)
+    {   
+        Burning_Effect.SetActive(true);
 
-        anim.speed = 1f; // 恢复到原来的时间缩放值，解除冻结
+        isBurning = true;
 
-
+        Invoke("Recover", Timer);
     }
-
 
     #endregion
 }
