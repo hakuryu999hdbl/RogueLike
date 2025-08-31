@@ -1646,13 +1646,14 @@ public class Enemy : MonoBehaviour
                         return;
                     }
 
-                 
+
                 }
 
                 //防护检测
                 amount += CurrentArmorDefence;
                 amount += CurrentStockingDefence;
 
+                //一直发生防御超过攻击回血情况
                 if (amount >= 0)
                 {
                     amount = 0;
@@ -1708,17 +1709,18 @@ public class Enemy : MonoBehaviour
                     break;
 
                 case 5:
+
+                    //毒特效
                     if (amount >= 0)
                     {
                         amount = 0;
                     }
-
                     break;
             }
 
 
             //敌人受伤玩家获取经验
-            player.ChangeExperience(100);
+            player.ChangeExperience(10);
 
 
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
@@ -2032,7 +2034,7 @@ public class Enemy : MonoBehaviour
     }
     void ThunderDamager()
     {
-        ChangeHealth(Random.Range(100,500), 2);
+        ChangeHealth(-Random.Range(100,500), 2);
         ThunderEffect.SetActive(false);
     }
     //————————————————————冻结

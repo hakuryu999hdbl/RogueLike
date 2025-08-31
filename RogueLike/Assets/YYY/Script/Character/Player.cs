@@ -122,7 +122,15 @@ public class Player : MonoBehaviour
 
 
         //近战武器赋值
-        strike.Damage = -data.meleeDamage-data.weaponAtk;
+        if (CurrentProfession == 0)
+        {
+            strike.Damage = -data.meleeDamage - data.weaponAtk;
+        }
+        else 
+        {
+            strike.Damage = -data.meleeDamage;
+        }
+
         switch (weaponIndex) 
         {
             case 0:
@@ -2060,6 +2068,8 @@ public class Player : MonoBehaviour
 
     private InputAction DodgeAction;
 
+    private InputAction InteractAction;
+
     public bool isInputBlocked = true;//在捏人界面暂时切断玩家的输入
 
     private void RegisterHandle()
@@ -2068,6 +2078,8 @@ public class Player : MonoBehaviour
         runAction = inputActions.FindAction("Run");
         AttackAction = inputActions.FindAction("Attack");
         DodgeAction = inputActions.FindAction("Dodge");
+        InteractAction = inputActions.FindAction("Interact");
+
 
         // 订阅输入事件
         runAction.started += OnRunStarted;
@@ -2081,7 +2093,9 @@ public class Player : MonoBehaviour
         DodgeAction.started += OnDodgeStarted;
         DodgeAction.canceled += OnDodgeCanceled;
 
-
+        // 订阅输入事件
+        InteractAction.started += OnInteractStarted;
+        InteractAction.canceled += OnInteractCanceled;
     }
     private void OnRunStarted(InputAction.CallbackContext context)
     {
@@ -2136,6 +2150,25 @@ public class Player : MonoBehaviour
         if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             Dodge_Cancel();
+        }
+
+    }
+
+    private void OnInteractStarted(InputAction.CallbackContext context)
+    {
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
+        {
+            isInteracting = true;
+        }
+
+    }
+    private void OnInteractCanceled(InputAction.CallbackContext context)
+    {
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
+        {
+            isInteracting = false;
         }
 
     }
@@ -2203,6 +2236,24 @@ public class Player : MonoBehaviour
         }
     }
 
+    public bool isInteracting = false;//持续按下交互键
+    //手机端触发
+    public void ButtonSetInteract()
+    {
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
+        {
+            isInteracting = true;
+        }
+    }
+    public void ButtonSetInteractOver()
+    {
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
+        {
+            isInteracting = false;
+        }
+    }
     #endregion
 
 
@@ -2412,6 +2463,8 @@ public class Player : MonoBehaviour
                     break;
 
                 case 5:
+
+                    //毒特效
                     if (amount >= 0)
                     {
                         amount = 0;

@@ -1084,6 +1084,7 @@ MonoBehaviour:
   isRunning: 0
   isAttacking: 0
   isDodging: 0
+  isInteracting: 0
   Strike_Effect: {fileID: 1405070530}
   BloodEffect: {fileID: 1622069723160390679, guid: 3cbb102f876966040a9c79278e3e6a63, type: 3}
   SparkEffect: {fileID: 2207997070603813379, guid: 51939f55e60e0c048870cdae777ccb4d, type: 3}
@@ -11942,8 +11943,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 340, y: 0}
-  m_SizeDelta: {x: -730, y: -90}
+  m_AnchoredPosition: {x: 194.99998, y: 0}
+  m_SizeDelta: {x: -590, y: -90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &665530983
 MonoBehaviour:

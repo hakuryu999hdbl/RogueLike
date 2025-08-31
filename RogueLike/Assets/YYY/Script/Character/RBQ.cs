@@ -29,7 +29,7 @@ public class RBQ : MonoBehaviour
         _RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
 
 
-        RBQState = Random.Range(1, 2);
+        RBQState = Random.Range(1, 3);
 
         // 随机动画
         if (RBQState == 1)
@@ -107,23 +107,25 @@ public class RBQ : MonoBehaviour
     [Header("出生点WallMap")]
     public WallMap wallmap;
 
+    [Header("出生点WallMap")]
+    public GameObject Prompt;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
 
         if (other.CompareTag("Player"))
         {
-            if (RBQState==1)
+            if (RBQState == 1)
             {
                 //出现敌人,停止拷问，冲向玩家
                 GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
                 Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
                 enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
-                enemy.CanChangeSkin=false;
+                enemy.CanChangeSkin = false;
                 StartCoroutine(DelayedApplySkin(enemy));
                 enemy.ChangeClass(1);
 
-                
+
 
                 RBQState = 0;
 
@@ -145,47 +147,77 @@ public class RBQ : MonoBehaviour
                 CancelInvoke(nameof(Gasping_Long));
 
             }
-            else if (RBQState == 0)
+
+
+            if (RBQState == 0) 
             {
-                //奖励一个队友
-                GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
-                Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
-                enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
-                enemy.CanChangeSkin = false;
-                StartCoroutine(DelayedApplySkin(enemy));
-                enemy.ChangeClass(0);
-
-
-                enemy.ConvertToFriend();
-
-
-
-                enemy.ReadyToSayThankYou();//谢谢声（让产生的队友说）
-
-
-                //生成刑架
-                switch (CurrentRapeType)
-                {
-                    case 1:
-                        GameObject TortureDevice = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
-                        TortureDevice.GetComponent<Plant>().SetImage(0);
-                        break;
-
-                }
-
-
-
-                // 消失自己(如果销毁的太快就容易传不进去)
-                Destroy(gameObject,0.2f);
+                Prompt.SetActive(true);
             }
-           
-
           
         }
     }
 
 
- 
+    private void OnTriggerExit2D(Collider2D other) 
+    {
+        if (other.CompareTag("Player")) 
+        {
+            if (RBQState == 0)
+            {
+                Prompt.SetActive(false);
+            }
+        }
+    }
+
+
+    bool InteractOneTime = false;
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            if (RBQState == 0 && other.GetComponent<Player>().isInteracting)//点击交互键
+            {
+                if (!InteractOneTime)
+                {
+                    //奖励一个队友
+                    GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
+                    Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
+                    enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
+                    enemy.CanChangeSkin = false;
+                    StartCoroutine(DelayedApplySkin(enemy));
+                    enemy.ChangeClass(0);
+
+
+                    enemy.ConvertToFriend();
+
+
+
+                    enemy.ReadyToSayThankYou();//谢谢声（让产生的队友说）
+
+
+                    //生成刑架
+                    switch (CurrentRapeType)
+                    {
+                        case 1:
+                            GameObject TortureDevice = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
+                            TortureDevice.GetComponent<Plant>().SetImage(0);
+                            break;
+
+                    }
+
+
+
+                    // 消失自己(如果销毁的太快就容易传不进去)
+                    Destroy(gameObject, 0.2f);
+
+                    InteractOneTime = true;//只触发一次
+                }
+
+                
+            }
+        }
+    }
+
 
     private IEnumerator DelayedApplySkin(Enemy enemy)
     {
