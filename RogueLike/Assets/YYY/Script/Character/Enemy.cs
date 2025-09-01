@@ -68,7 +68,7 @@ public class Enemy : MonoBehaviour
                 // 随机从 Enum 中选择一个值
                 Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
 
-                //Class = EnemyClass.Succubus;
+                Class = EnemyClass.Succubus;
                 //Class = EnemyClass.Girl;
                 //Class = EnemyClass.Man;
 

@@ -483,8 +483,8 @@ public class Player : MonoBehaviour
         //设置主角（指定皮肤与名字）
         this.YYY_headIndex = 11;
         this.YYY_eyesIndex = 2;
-        this.YYY_bodyIndex = 1;
-        this.YYY_legsIndex = 1;
+        this.YYY_bodyIndex = 2;
+        this.YYY_legsIndex = 2;
         this.YYY_hatIndex = 3;
         this.weaponIndex = 1;
 

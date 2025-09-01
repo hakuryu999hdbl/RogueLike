@@ -31,7 +31,7 @@ public class RBQ : MonoBehaviour
         _RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
 
 
-        RBQState = Random.Range(1, 3);
+        RBQState = Random.Range(2, 3);
 
         // 随机动画
         if (RBQState == 1)
@@ -110,7 +110,8 @@ public class RBQ : MonoBehaviour
     public WallMap wallmap;
 
     [Header("出生点WallMap")]
-    public GameObject Prompt;
+    public GameObject Prompt_Save;
+    public GameObject Prompt_Take;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -184,7 +185,12 @@ public class RBQ : MonoBehaviour
         {
             if (RBQState == 0)
             {
-                Prompt.SetActive(false);
+                Prompt_Save.SetActive(false);
+            }
+
+            if (RBQState == 2)
+            {
+                Prompt_Take.SetActive(false);
             }
         }
     }
@@ -235,12 +241,51 @@ public class RBQ : MonoBehaviour
 
                 
             }
+
+
+            if (RBQState == 2 && other.GetComponent<Player>().isInteracting)//点击交互键
+            {
+                if (!InteractOneTime) 
+                {
+                    //剥去衣物和丝袜给玩家
+                    other.GetComponent<Player>().YYY_bodyIndex = this.YYY_bodyIndex;
+                    other.GetComponent<Player>().YYY_legsIndex = this.YYY_legsIndex;
+                    other.GetComponent<Player>().SetSkin();
+                    other.GetComponent<Player>().SaveCurrent();
+
+
+                    //RBQ上尸体显示裸体
+                    YYY_bodyIndex = 1;
+                    YYY_legsIndex = 1;
+                    SetSkin();
+
+                    Debug.Log("剥去衣物和丝袜给玩家");
+
+                    other.GetComponent<Player>().frameEvents._SE_Clothes();
+
+                    InteractOneTime = true;
+
+                }
+                   
+            }
+
+            if (!InteractOneTime) 
+            {
+
+                if (RBQState == 0)
+                {
+                    Prompt_Save.SetActive(true);
+                }
+
+                if (RBQState == 2)
+                {
+                    Prompt_Take.SetActive(true);
+                }
+            }
+
         }
 
-        if (RBQState == 0)
-        {
-            Prompt.SetActive(true);
-        }
+    
     }
 
 
