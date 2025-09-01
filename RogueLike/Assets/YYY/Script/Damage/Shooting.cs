@@ -197,7 +197,7 @@ public class Shooting : MonoBehaviour
                     GameObject EffectPrefabs2 = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
                     var s2 = EffectPrefabs2.transform.Find("Attack_Collider").GetComponent<Spell>();
                     s2.DamageToEnemy = true;
-                    s2.Init(PrefabsDamage/15, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
+                    s2.Init(PrefabsDamage/5, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
                     //持续性伤害过强大幅削减
 
                     Destroy(EffectPrefabs2, chargeTime);//蓄力越久留存越久
@@ -247,8 +247,8 @@ public class Shooting : MonoBehaviour
                     var s2 = EffectPrefabs2.transform.Find("Attack_Collider").GetComponent<Spell>();
                     s2.DamageToPlayer = true;
                     s2.DamageToFriend = true;
-                    s2.Init(PrefabsDamage/15, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
-                    //持续性伤害过强大幅削减
+                    s2.Init(PrefabsDamage/5, TypeOfAttack, isCritial,2);// ← 直接把算好的值传进去
+                    //持续性伤害过强大幅削减(敌人因为没有chargetime，所以默认2秒)
 
 
                     Destroy(EffectPrefabs2, chargeTime);//蓄力越久留存越久

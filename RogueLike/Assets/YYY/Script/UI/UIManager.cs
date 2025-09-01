@@ -56,6 +56,8 @@ public class UIManager : MonoBehaviour
 
     public void ReLoadScene()
     {
+        Time.timeScale = 1;
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Loading.SetActive(true);
     }//重刷场景
@@ -195,6 +197,23 @@ public class UIManager : MonoBehaviour
     #region
     [Header("各类菜单")]
     public bool isPause = true;//一开始就Menu界面
+    public GameObject PauseMenu;
+
+    public void PauseGame() 
+    {
+        Time.timeScale = 0;
+        PauseMenu.SetActive(true);
+
+        player.isInputBlocked = true;//切断玩家的方向攻击等输入
+    }
+    public void ContinueGame()
+    {
+        Time.timeScale = 1;
+        PauseMenu.SetActive(false);
+
+        player.isInputBlocked = false;//恢复玩家的方向攻击等输入
+    }
+
     public Animator MainCamera;//控制摄像机拉近远离
     public Animator ShowSaveCavansAnim;//黑幕显示背景
 
@@ -593,6 +612,9 @@ public class UIManager : MonoBehaviour
         isInputing = false;
     }//玩家点击Ok
 
+    [Header("告知RoomGenerator产生队友")]
+    public RoomGenerator _RoomGenerator;
+
     public void OpenCloseMenu()
     {
         if (CurrentMode == 0)
@@ -603,36 +625,56 @@ public class UIManager : MonoBehaviour
 
         if (CurrentMode == 1)
         {
-            if (!isPause)
+            if (SaveManager.CountSaves() > 0) // 没有任何存档无法开始
             {
-                MainCamera.SetInteger("View", 0);
-                Common_All.SetActive(false);
-                ShowSaveCavansAnim.gameObject.SetActive(true);
-                ShowSaveCavansAnim.SetBool("Track", true);
+
+                if (!isPause)
+                {
+                    // MainCamera.SetInteger("View", 0);
+                    // Common_All.SetActive(false);
+                    // ShowSaveCavansAnim.gameObject.SetActive(true);
+                    // ShowSaveCavansAnim.SetBool("Track", true);
+                    //
+                    //
+                    //player.isInputBlocked = true;//切断玩家的方向攻击等输入
+                    //
+                    // RefreshSaveSlots();//只有在打开存档菜单时更新
+
+                    PauseGame();
+                }
+                else
+                {
 
 
-                player.isInputBlocked = true;//切断玩家的方向攻击等输入
 
-                RefreshSaveSlots();//只有在打开存档菜单时更新
+                    MainCamera.SetInteger("View", 2);
+                    Common_All.SetActive(true);
+                    ShowSaveCavansAnim.gameObject.SetActive(false);
+                    ShowSaveCavansAnim.SetBool("Track", false);
+
+                    player.isInputBlocked = false;//恢复玩家的方向攻击等输入
+
+                    player.currentSaveName = currentSelectedSlot.Data.characterName;//开始游戏时，将这个存档名称带入Player
+
+
+                    _RoomGenerator.SetAllFriends();
+                }
+
+                //isPause = !isPause;
+
+                isPause = false;
             }
             else
             {
-                MainCamera.SetInteger("View", 2);
-                Common_All.SetActive(true);
-                ShowSaveCavansAnim.gameObject.SetActive(false);
-                ShowSaveCavansAnim.SetBool("Track", false);
-
-                player.isInputBlocked = false;//恢复玩家的方向攻击等输入
-
-                player.currentSaveName = currentSelectedSlot.Data.characterName;//开始游戏时，将这个存档名称带入Player
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Reba);
             }
 
-            isPause = !isPause;
+
         }
 
 
 
-    }
+    }//从存档界面进入游戏界面(如果没有存档无法这么做)，再从游戏界面进入存档界面
 
     public void To_CGScence()
     {
@@ -645,6 +687,8 @@ public class UIManager : MonoBehaviour
 
 
     #endregion
+
+
 
     /// <summary>
     /// 存档显示
@@ -923,7 +967,6 @@ public class UIManager : MonoBehaviour
 
         //删除C盘所有角色存档
         SaveManager.DeleteAllSaves();
-
 
 
         ReLoadScene();
@@ -1399,6 +1442,14 @@ public class UIManager : MonoBehaviour
         {
             // 可选：进入下一级菜单、确认开始游戏等
 
+            //只要暂停菜单显示，攻击键按下就是触发这里
+            if (PauseMenu.activeInHierarchy) 
+            {
+                ReLoadScene();
+
+                return;
+            }
+
 
             //确认删除全部存档界面
             if (CurrentChooseList == -2)
@@ -1527,6 +1578,16 @@ public class UIManager : MonoBehaviour
         if (player.isInputBlocked)
         {
             // 可选：退出菜单、返回上一级等
+
+            //只要暂停菜单显示，闪避键按下就是触发这里
+            if (PauseMenu.activeInHierarchy)
+            {
+                ContinueGame();
+
+                return;
+            }
+
+
 
             //确认删除全部存档界面
             if (CurrentChooseList == -2)

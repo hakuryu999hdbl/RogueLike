@@ -128,7 +128,8 @@ public class Player : MonoBehaviour
         }
         else 
         {
-            strike.Damage = -data.meleeDamage;
+            //法师近战攻击力急剧缩减
+            strike.Damage = -data.meleeDamage / 5;
         }
 
         switch (weaponIndex) 
@@ -208,6 +209,9 @@ public class Player : MonoBehaviour
 
     public void _CreateNewSkin()
     {
+        // 永远以露娜为首个候选，然后靠 GetNextAvailableName 去重
+        //SetLuna_Skin();
+        //RandomNewSave(true); // true = 以（本地化）露娜为 baseName，必要时自动加 _2/_3
 
         // 判断是否已有名为“露娜”的存档（任一语言版本）
         if (!HasLunaSave())
@@ -215,7 +219,7 @@ public class Player : MonoBehaviour
             // 没有的话，自动创建露娜角色
             SetLuna_Skin();
             RandomNewSave(true);
-
+       
         }
         else
         {
@@ -232,37 +236,64 @@ public class Player : MonoBehaviour
 
         PlayerSaveData data = new PlayerSaveData();
 
-        List<string> allSaves = SaveManager.GetAllSaveNames();  // 获取已有存档名
-        string newName;
+        //List<string> allSaves = SaveManager.GetAllSaveNames();  // 获取已有存档名
+        //string newName;
+        //
+        //if (isLuna)
+        //{
+        //    switch (PlayerPrefs.GetInt("language", 0))
+        //    {
+        //        case 0: // Japanese
+        //            newName = "ルナ";
+        //            break;
+        //        case 1: // Simplified Chinese
+        //            newName = "露娜";
+        //            break;
+        //        case 2: // Traditional Chinese
+        //            newName = "露娜";
+        //            break;
+        //        case 3: // English
+        //            newName = "Luna";
+        //            break;
+        //        case 4: // Korean
+        //            newName = "루나";
+        //            break;
+        //        default:
+        //            newName = "Luna"; // fallback
+        //            break;
+        //    }
+        //}//当玩家生成第一个角色默认Luna
+        //else 
+        //{
+        //    newName = NameGenerator.GenerateUniqueName(allSaves);
+        //}
 
+
+        string baseName;
         if (isLuna)
         {
             switch (PlayerPrefs.GetInt("language", 0))
             {
-                case 0: // Japanese
-                    newName = "ルナ";
-                    break;
-                case 1: // Simplified Chinese
-                    newName = "露娜";
-                    break;
-                case 2: // Traditional Chinese
-                    newName = "露娜";
-                    break;
-                case 3: // English
-                    newName = "Luna";
-                    break;
-                case 4: // Korean
-                    newName = "루나";
-                    break;
-                default:
-                    newName = "Luna"; // fallback
-                    break;
+                case 0: baseName = "ルナ"; break;           // JP
+                case 1: baseName = "露娜"; break;           // CN-S
+                case 2: baseName = "露娜"; break;           // CN-T
+                case 3: baseName = "Luna"; break;           // EN
+                case 4: baseName = "루나"; break;           // KR
+                default: baseName = "Luna"; break;
             }
-        }//当玩家生成第一个角色默认Luna
-        else 
-        {
-            newName = NameGenerator.GenerateUniqueName(allSaves);
         }
+        else
+        {
+            // 用你原来的语言规则生成“基础名”
+            baseName = NameGenerator.GenerateNameByLanguage();
+        }
+
+        // ✅ 关键：统一通过 SaveManager 生成不重名的最终名
+        string newName = SaveManager.GetNextAvailableName(baseName);
+        data.characterName = newName;
+
+
+
 
         data.characterName = newName; // ✅ 记得设置进去！
 
@@ -315,30 +346,56 @@ public class Player : MonoBehaviour
     public void SaveCurrent()
     {
 
+        // if (string.IsNullOrEmpty(currentSaveName))
+        // {
+        //     RandomNewSave();//把这个数据代入
+        //
+        // }
+        // else
+        // {
+        //
+        //     // 处于捏人界面中，已有命名，覆盖当前
+        //     PlayerSaveData data = SaveManager.Load(currentSaveName);
+        //
+        //     data.headIndex = this.YYY_headIndex;
+        //     data.eyesIndex = this.YYY_eyesIndex;
+        //     data.bodyIndex = this.YYY_bodyIndex;
+        //     data.legsIndex = this.YYY_legsIndex;
+        //     data.hatIndex = this.YYY_hatIndex;
+        //     data.weaponIndex = this.weaponIndex;
+        //
+        //     data.professionIndex = this.CurrentProfession;
+        //
+        //     SaveManager.Save(data);
+        // }
+
         if (string.IsNullOrEmpty(currentSaveName))
         {
-            RandomNewSave();//把这个数据代入
-
+            RandomNewSave(); // 会自动去重
+            return;
         }
-        else
+
+        var data = SaveManager.Load(currentSaveName);
+        if (data == null)
         {
-
-            // 处于捏人界面中，已有命名，覆盖当前
-            PlayerSaveData data = SaveManager.Load(currentSaveName);
-
-            data.headIndex = this.YYY_headIndex;
-            data.eyesIndex = this.YYY_eyesIndex;
-            data.bodyIndex = this.YYY_bodyIndex;
-            data.legsIndex = this.YYY_legsIndex;
-            data.hatIndex = this.YYY_hatIndex;
-            data.weaponIndex = this.weaponIndex;
-
-            data.professionIndex = this.CurrentProfession;
-
-            SaveManager.Save(data);
+            // 这个名字还没存过，就按这个名字创建，但仍做一次去重保险
+            data = new PlayerSaveData();
+            data.characterName = SaveManager.GetNextAvailableName(currentSaveName);
         }
 
+        // …把当前面板的各项 index/数值回填到 data…
 
+        data.headIndex = this.YYY_headIndex;
+        data.eyesIndex = this.YYY_eyesIndex;
+        data.bodyIndex = this.YYY_bodyIndex;
+        data.legsIndex = this.YYY_legsIndex;
+        data.hatIndex = this.YYY_hatIndex;
+        data.weaponIndex = this.weaponIndex;
+
+        data.professionIndex = this.CurrentProfession;
+
+        SaveManager.Save(data);
+        currentSaveName = data.characterName; // 以防上面发生了 _2/_3
 
     }//记录当前皮肤并新建随机名称存档
 
@@ -369,22 +426,22 @@ public class Player : MonoBehaviour
         static readonly string[] KR_First = { "지", "수", "하", "예", "소", "채", "은", "유", "민", "서" };
         static readonly string[] KR_Last = { "은", "아", "림", "빈", "진", "연", "희", "원", "지", "경" };
 
-        public static string GenerateUniqueName(List<string> existingNames)
-        {
-            string baseName = GenerateNameByLanguage();
-            string finalName = baseName;
-            int index = 1;
+       // public static string GenerateUniqueName(List<string> existingNames)
+       // {
+       //     string baseName = GenerateNameByLanguage();
+       //     string finalName = baseName;
+       //     int index = 1;
+       //
+       //     while (existingNames.Contains(finalName))
+       //     {
+       //         finalName = $"{baseName}_{index}";
+       //         index++;
+       //     }
+       //
+       //     return finalName;
+       // }
 
-            while (existingNames.Contains(finalName))
-            {
-                finalName = $"{baseName}_{index}";
-                index++;
-            }
-
-            return finalName;
-        }
-
-        private static string GenerateNameByLanguage()
+        public static string GenerateNameByLanguage()
         {
             int lang = PlayerPrefs.GetInt("language", 0); // 0日语 1简中 2繁中 3英文 4韩文
 

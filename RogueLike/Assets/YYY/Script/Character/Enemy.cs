@@ -58,25 +58,28 @@ public class Enemy : MonoBehaviour
 
 
 
-
-        //随机皮肤
-        if (CanChangeSkin)
+        if (currentSaveName == "")
         {
-            SetRandomSkin();
-            // 随机从 Enum 中选择一个值
-            Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
 
-            //Class = EnemyClass.Succubus;
-            //Class = EnemyClass.Girl;
-            //Class = EnemyClass.Man;
-
-            if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
+            //随机皮肤
+            if (CanChangeSkin)
             {
-                isMage = true;
-            }//一部分远程女射手变成女法师
+                SetRandomSkin();
+                // 随机从 Enum 中选择一个值
+                Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
 
-        }
+                //Class = EnemyClass.Succubus;
+                //Class = EnemyClass.Girl;
+                //Class = EnemyClass.Man;
 
+                if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
+                {
+                    isMage = true;
+
+                }//一部分远程女射手变成女法师
+
+            }
+        }//如果已经赋值了队友，那么不随机
 
         anim.Play(GetAnimPrefix() + "Default_Idle");
 
@@ -87,9 +90,92 @@ public class Enemy : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 存读档
+    /// </summary>
+    #region
+
+    [Header("当前操纵的存档名称")]
+    public string currentSaveName; // 当前操作的存档名
+    public Text Name;
+    public void ApplySaveData(PlayerSaveData data)
+    {
+        // 应用皮肤信息
+        this.YYY_headIndex = data.headIndex;
+        this.YYY_eyesIndex = data.eyesIndex;
+        this.YYY_bodyIndex = data.bodyIndex;
+        this.YYY_legsIndex = data.legsIndex;
+        this.YYY_hatIndex = data.hatIndex;
+
+        // 应用武器
+        this.weaponIndex = data.weaponIndex;
+        this.CurrentProfession = data.professionIndex;
+
+        // 根据这些数据设置皮肤
+        SetSkin(); // 你已有的方法（或自己写个用这些 Index 设置皮肤的方法）
 
 
+        //数值赋予
+        this.maxHealth = data.maxHP;
+        currentHealth = maxHealth;
+        UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
 
+        //记录当前名称
+        currentSaveName = data.characterName;
+        Name.text = currentSaveName;
+
+        //涉及升级储存，所以保持正数，只有在需要攻击伤害的时候变成复数
+        MeleeDamage = data.meleeDamage;
+        ShootDamage = data.shootDamage;
+        SpellDamage = data.spellDamage;
+
+        CurrentWeaponPower = data.weaponAtk;
+        CurrentArmorDefence = data.armorDef;
+        CurrentStockingDefence = data.stockingDef;
+
+
+        //近战武器赋值
+        if (CurrentProfession == 0)
+        {
+            strike.Damage = -data.meleeDamage - data.weaponAtk;
+        }
+        else
+        {
+
+            //法师近战攻击力急剧缩减
+            strike.Damage = -data.meleeDamage / 5;
+        }
+
+        switch (weaponIndex)
+        {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 7:
+            case 10:
+                strike.TypeOfAttack = 1;//剑伤
+                break;
+
+            case 6:
+                strike.TypeOfAttack = 3;//冻结
+                break;
+
+            case 8:
+                strike.TypeOfAttack = 4;//火伤
+                break;
+
+            case 9:
+                strike.TypeOfAttack = 2;//闪电
+                break;
+        }
+
+
+    }//存档形式赋值皮肤数值
+
+    #endregion
 
     void FixedUpdate()
     {
@@ -115,11 +201,11 @@ public class Enemy : MonoBehaviour
             AntiOverlapping.SetActive(true);//站起后无法被穿过
             //rbody.simulated = true;
 
-            if (isBurning) 
+            if (isBurning)
             {
                 BurnTimer += Time.deltaTime;
 
-                if (BurnTimer>=0.2f) 
+                if (BurnTimer >= 0.2f)
                 {
                     currentHealth = Mathf.Clamp(currentHealth - 10, 0, maxHealth);
                     UpdateHealthBar(currentHealth, maxHealth);
@@ -166,40 +252,40 @@ public class Enemy : MonoBehaviour
 
         }
 
-       
+
 
         // 每帧更新剑物体的旋转
         Strike_Effect.transform.Rotate(0, 0, 100 * Time.deltaTime);
 
 
         //当这些动画在播放的时候玩家不能移动
-       // AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+        // AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
 
-       // if (
-       //     state.IsName(GetAnimPrefix() + "Attack_1") ||
-       //     state.IsName(GetAnimPrefix() + "Attack_2") ||
-       //     state.IsName(GetAnimPrefix() + "Attack_3") ||
-       //     state.IsName(GetAnimPrefix() + "Attack_4") ||
-       //     state.IsName(GetAnimPrefix() + "Shoot_1") ||
-       //     state.IsName(GetAnimPrefix() + "Spell_1") ||
-       //     state.IsName(GetAnimPrefix() + "Spell_2") ||
-       //
-       //     state.IsName(GetAnimPrefix() + "Strike_Block") ||
-       //     state.IsName(GetAnimPrefix() + "Shoot_Block") ||
-       //
-       //     state.IsName(GetAnimPrefix() + "Default_Die") ||
-       //     state.IsName(GetAnimPrefix() + "Default_Die_2") ||
-       //     state.IsName(GetAnimPrefix() + "Default_GetUp") ||
-       //     state.IsName(GetAnimPrefix() + "Default_Hurt")
-       //     )
-       // {
-       //     aiPath.canMove = false;
-       //
-       // }
-       // else
-       // {
-       //     aiPath.canMove = true;
-       // }
+        // if (
+        //     state.IsName(GetAnimPrefix() + "Attack_1") ||
+        //     state.IsName(GetAnimPrefix() + "Attack_2") ||
+        //     state.IsName(GetAnimPrefix() + "Attack_3") ||
+        //     state.IsName(GetAnimPrefix() + "Attack_4") ||
+        //     state.IsName(GetAnimPrefix() + "Shoot_1") ||
+        //     state.IsName(GetAnimPrefix() + "Spell_1") ||
+        //     state.IsName(GetAnimPrefix() + "Spell_2") ||
+        //
+        //     state.IsName(GetAnimPrefix() + "Strike_Block") ||
+        //     state.IsName(GetAnimPrefix() + "Shoot_Block") ||
+        //
+        //     state.IsName(GetAnimPrefix() + "Default_Die") ||
+        //     state.IsName(GetAnimPrefix() + "Default_Die_2") ||
+        //     state.IsName(GetAnimPrefix() + "Default_GetUp") ||
+        //     state.IsName(GetAnimPrefix() + "Default_Hurt")
+        //     )
+        // {
+        //     aiPath.canMove = false;
+        //
+        // }
+        // else
+        // {
+        //     aiPath.canMove = true;
+        // }
 
 
         //不知道什么原因，敌人滑跪可能是这个强制可移动产生的原因
@@ -474,7 +560,7 @@ public class Enemy : MonoBehaviour
                     isRape = true;
                     //anim.Play("RBQ_Punish_Rape");
 
-                    switch (Random.Range(1,9))
+                    switch (Random.Range(1, 9))
                     {
                         case 1:
                             anim.Play("CG/CG_OnanismFront_1");
@@ -556,14 +642,14 @@ public class Enemy : MonoBehaviour
         }//敌人捕获玩家
     }
 
-    public void ReadyToSayThankYou() 
+    public void ReadyToSayThankYou()
     {
         Invoke("SayThankYou", 0.2f);
     }
 
-    void SayThankYou() 
+    void SayThankYou()
     {
-        
+
         if (Random.Range(0, 2) == 0)
         {
             frameEvents._01_Word_ThankYou_1();
@@ -1089,45 +1175,45 @@ public class Enemy : MonoBehaviour
                 frameEvents._Man_attack();//男性
                 break;
 
-            //case 2:
-            //case 3:
-            //    switch (Random.Range(0, 2))
-            //    {
-            //        case 0:
-            //            frameEvents._Zombie_Summon_1();
-            //            break;
-            //        case 1:
-            //            frameEvents._Zombie_Summon_2();
-            //            break;
-            //    }//感染者 变异体
-            //    break;
-            //case 4:
-            //    switch (Random.Range(0, 2))
-            //    {
-            //        case 0:
-            //            frameEvents._Orangutan_Summon_1();
-            //            break;
-            //        case 1:
-            //            frameEvents._Orangutan_Attack_1();
-            //            break;
-            //    }//肉翅蜂
-            //    break;
-            //case 5:
-            //case 6:
-            //case 7:
-            //    switch (Random.Range(0, 3))
-            //    {
-            //        case 0:
-            //            frameEvents._monster_Summon_01();
-            //            break;
-            //        case 1:
-            //            frameEvents._monster_Summon_02();
-            //            break;
-            //        case 2:
-            //            frameEvents._Shrike_Summon_Attack();
-            //            break;
-            //    }//肉袋 淫毒肉炮
-            //    break;
+                //case 2:
+                //case 3:
+                //    switch (Random.Range(0, 2))
+                //    {
+                //        case 0:
+                //            frameEvents._Zombie_Summon_1();
+                //            break;
+                //        case 1:
+                //            frameEvents._Zombie_Summon_2();
+                //            break;
+                //    }//感染者 变异体
+                //    break;
+                //case 4:
+                //    switch (Random.Range(0, 2))
+                //    {
+                //        case 0:
+                //            frameEvents._Orangutan_Summon_1();
+                //            break;
+                //        case 1:
+                //            frameEvents._Orangutan_Attack_1();
+                //            break;
+                //    }//肉翅蜂
+                //    break;
+                //case 5:
+                //case 6:
+                //case 7:
+                //    switch (Random.Range(0, 3))
+                //    {
+                //        case 0:
+                //            frameEvents._monster_Summon_01();
+                //            break;
+                //        case 1:
+                //            frameEvents._monster_Summon_02();
+                //            break;
+                //        case 2:
+                //            frameEvents._Shrike_Summon_Attack();
+                //            break;
+                //    }//肉袋 淫毒肉炮
+                //    break;
         }
     }//近战攻击发出的叫声
 
@@ -1265,6 +1351,8 @@ public class Enemy : MonoBehaviour
     #region
     [Header("武器系统")]
     public int CurrentWeapon;
+    public int CurrentProfession;//0战士 1射手 2法师
+
     //0无武器
     //1铁剑  2阔剑  3长柄双刃斧  4长枪   5长柄斧   6冻结剑   7黑铁刺剑  8熔岩剑  9引雷剑  10古重剑
     //101轻弩   102重弩   103复合弩   104火绳复合枪  105火绳短枪   106火绳长枪   107火绳黄铜枪
@@ -1355,13 +1443,13 @@ public class Enemy : MonoBehaviour
     }
 
     [Header("基础与武器装备结合后数值")]
-     int MeleeDamage =100;
-     int ShootDamage = 100;
-     int SpellDamage = 100;
+    int MeleeDamage = 100;
+    int ShootDamage = 100;
+    int SpellDamage = 100;
 
-     int CurrentWeaponPower = 10;    // 武器攻击值
-     int CurrentArmorDefence = 10;      // 衣服防御值
-     int CurrentStockingDefence = 10;   // 丝袜防御值
+    int CurrentWeaponPower = 10;    // 武器攻击值
+    int CurrentArmorDefence = 10;      // 衣服防御值
+    int CurrentStockingDefence = 10;   // 丝袜防御值
     #endregion
 
 
@@ -1608,7 +1696,7 @@ public class Enemy : MonoBehaviour
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式  0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物
     {
 
-        if (!isScreaming && !isRape && IsGrounded() )//冷却中与捕获中不会被伤到,在空中也不会被伤到
+        if (!isScreaming && !isRape && IsGrounded())//冷却中与捕获中不会被伤到,在空中也不会被伤到
         {
 
 
@@ -1653,15 +1741,27 @@ public class Enemy : MonoBehaviour
                 amount += CurrentArmorDefence;
                 amount += CurrentStockingDefence;
 
-                //一直发生防御超过攻击回血情况
-                if (amount >= 0)
-                {
-                    amount = 0;
-                }
+                
 
             }
+            //else 
+            //{
+            //    //回血在这里
+            //    currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+            //    UpdateHealthBar(currentHealth, maxHealth);
+            //
+            //    //显示伤害
+            //    HudText.HUD(amount);
+            //
+            //    return;
+            //
+            //}
 
-
+            //一直发生防御超过攻击回血情况
+            if (amount >= 0)
+            {
+                amount = 0;
+            }
 
 
             //伤害类型
@@ -1696,7 +1796,7 @@ public class Enemy : MonoBehaviour
                 case 4:
                     if (Random.Range(0, 2) == 0)
                     {
-                        Burning(Random.Range(1,8));//灼烧伤害
+                        Burning(Random.Range(1, 8));//灼烧伤害
                     }
                     else
                     {
@@ -1719,8 +1819,7 @@ public class Enemy : MonoBehaviour
             }
 
 
-            //敌人受伤玩家获取经验
-            player.ChangeExperience(10);
+          
 
 
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
@@ -1790,7 +1889,7 @@ public class Enemy : MonoBehaviour
 
             //击倒再站起(和暴击结合)
 
-            if( !isDie && currentHealth > 0)
+            if (!isDie && currentHealth > 0)
             {
                 if (Random.Range(0, 2) == 0)
                 {
@@ -1819,7 +1918,7 @@ public class Enemy : MonoBehaviour
                     Invoke("ReSetAttack", 0.5f);//防止动画回不去
                 }
             }
-            
+
         }
 
 
@@ -1917,13 +2016,13 @@ public class Enemy : MonoBehaviour
     public void CritialAttack()
     {
         if (IsGrounded()) { Knockdown(); }//敌人必须站在地上才能被暴击击倒
-       
+
 
 
 
         Time.timeScale = 0;
 
-        
+
         Critial.SetActive(true);//显示暴击
 
 
@@ -1951,10 +2050,14 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
+        //敌人受伤玩家获取经验
+        player.ChangeExperience(100);
+
         isDie = true;
         anim.Play(GetAnimPrefix() + "Default_Die_2");//防止倒下又起来,搞了第二死亡
 
         Invoke("Disappear", 1f);
+
     }//死亡
 
 
@@ -2000,6 +2103,8 @@ public class Enemy : MonoBehaviour
 
     #endregion
 
+
+
     /// <summary>
     /// 异常状态
     /// </summary>
@@ -2034,7 +2139,7 @@ public class Enemy : MonoBehaviour
     }
     void ThunderDamager()
     {
-        ChangeHealth(-Random.Range(100,500), 2);
+        ChangeHealth(-Random.Range(100, 500), 2);
         ThunderEffect.SetActive(false);
     }
     //————————————————————冻结
@@ -2056,7 +2161,7 @@ public class Enemy : MonoBehaviour
 
         Invoke("Recover", Timer);
     }
-  
+
     //————————————————————灼烧
     public bool isBurning = false;
     float BurnTimer;
@@ -2069,6 +2174,8 @@ public class Enemy : MonoBehaviour
         Invoke("Recover", Timer);
     }
     #endregion
+
+
     /// <summary>
     /// 阵营转换
     /// </summary>

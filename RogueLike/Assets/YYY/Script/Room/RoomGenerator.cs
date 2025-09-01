@@ -126,6 +126,9 @@ public class RoomGenerator : MonoBehaviour
 
 
         SetFog(Random.Range(0,4));
+
+
+       
     }
 
 
@@ -564,5 +567,48 @@ public class RoomGenerator : MonoBehaviour
     #endregion
 
 
+    /// <summary>
+    /// 基于所有存档（排除当前操纵的存档）批量生成队友并应用数据
+    /// </summary>
+    #region
+    public void SetAllFriends()
+    {
+        //（排除当前操纵的存档）批量生成队友
+        SpawnFriendsFromOtherSaves(_Player.GetComponent<Player>().currentSaveName);
+    }
+    public void SpawnFriendsFromOtherSaves(string currentPlayerName)
+    {
+        var others = SaveManager.LoadAllSavesExcept(currentPlayerName);
+        if (others == null || others.Count == 0)
+        {
+            Debug.Log("[SpawnFriendsFromOtherSaves] 没有可用的其他存档。");
+            return;
+        }
+
+        foreach (var data in others)
+        {
+            // 1) 生成实体
+            GameObject newGO = Instantiate(Enemy, transform.position, Quaternion.identity);
+
+            // 2) 取到内部的 Enemy 组件
+            Enemy enemy = newGO.transform.Find("Enemy").GetComponent<Enemy>();
+            if (enemy == null)
+            {
+                Debug.LogError("生成的对象上找不到 Enemy 组件（路径 'Enemy'）。");
+                Destroy(newGO);
+                continue;
+            }
+
+            // 3) 转为友军
+            enemy.ConvertToFriend();
+
+            // 4) 套用该存档数据（皮肤/数值/武器 等）
+            enemy.ApplySaveData(data);
+
+            // 5) 放到合适的跟随/分组位置
+            ChangeTargetPlace(newGO, -1);
+        }
+    }
+    #endregion
 }
 

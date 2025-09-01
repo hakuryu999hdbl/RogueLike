@@ -16,7 +16,9 @@ public class RBQ : MonoBehaviour
     public Animator anim;//接入Spine动画机
     private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle", "RBQ_Torture_CutDown" };
 
-    public int RBQState = 0;//0单人拘束 1双人拷问中  2尸体
+    public int RBQState = 0;//0单人拘束 1双人拷问中  2尸体 
+    bool isCreateEnemy = false;//是否产生过敌人
+
     public int CurrentRapeType=0;//1吊缚抽打 2后入奸
     public GameObject Torture_Rack;//刑架
 
@@ -115,7 +117,7 @@ public class RBQ : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            if (RBQState == 1)
+            if (RBQState == 1&&! isCreateEnemy)
             {
                 //出现敌人,停止拷问，冲向玩家
                 GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
@@ -127,8 +129,8 @@ public class RBQ : MonoBehaviour
 
 
 
-                RBQState = 0;
-
+                //RBQState = 0;
+             
 
                 switch (CurrentRapeType)
                 {
@@ -146,15 +148,33 @@ public class RBQ : MonoBehaviour
                 frameEvents.audioS.Stop();
                 CancelInvoke(nameof(Gasping_Long));
 
+
+                // 监听敌人状态（把原来立刻 RBQState=0 的代码删掉）
+                if (_waitEnemyRoutine != null) StopCoroutine(_waitEnemyRoutine);
+                _waitEnemyRoutine = StartCoroutine(WaitEnemyGoneThenReset(enemy));
+
+                isCreateEnemy = true;
             }
 
 
-            if (RBQState == 0) 
-            {
-                Prompt.SetActive(true);
-            }
+          
           
         }
+    }
+    private Coroutine _waitEnemyRoutine;
+    private IEnumerator WaitEnemyGoneThenReset(Enemy enemy)
+    {
+        // 等待敌人“死亡/销毁/失活”
+        yield return new WaitUntil(() =>
+            enemy == null ||                      // 已销毁（Destroy）
+            !enemy.gameObject.activeInHierarchy ||// 被 SetActive(false)（对象池回收）
+            (enemy.currentHealth<=0)    // 如果你有死亡标记接口/字段
+        );
+
+        RBQState = 0;
+
+        // 这里需要的话可播放恢复动画/解锁等
+        // anim.Play("RBQ_Idle");
     }
 
 
@@ -216,6 +236,11 @@ public class RBQ : MonoBehaviour
                 
             }
         }
+
+        if (RBQState == 0)
+        {
+            Prompt.SetActive(true);
+        }
     }
 
 
@@ -231,6 +256,8 @@ public class RBQ : MonoBehaviour
         );
     }
     #endregion
+
+
     /// <summary>
     /// 皮肤
     /// </summary>
