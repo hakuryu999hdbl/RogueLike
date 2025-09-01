@@ -419,7 +419,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.60868573, y: -115.9212}
+  m_AnchoredPosition: {x: 0.60868573, y: -115.4}
   m_SizeDelta: {x: 100.2792, y: 205.3578}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2957570388380913734
@@ -1062,6 +1062,7 @@ MonoBehaviour:
   WeaponID: 0
   ClothesID: 0
   StockingID: 0
+  ProfessionID: 0
   Hat: {fileID: 5023897144595835153}
   Hair: {fileID: 4714316704030807598}
   Eyes: {fileID: 7608948864950466302}
@@ -1075,15 +1076,6 @@ MonoBehaviour:
   Arrow: {fileID: 21300000, guid: 4db5a1a6ee7ba8c45a7d43c359709f82, type: 3}
   Staff: {fileID: 21300000, guid: 4aa7673219dcb8b4983f730d1a0eefbf, type: 3}
   Level_Icon: {fileID: 1893194244139262850}
-  Level_IconList:
-  - {fileID: 21300000, guid: 0a3602f4c58a03c4f8a3b63257b5d82d, type: 3}
-  - {fileID: 21300000, guid: 46b56763333b50a4ead9303de52d4c45, type: 3}
-  - {fileID: 21300000, guid: 87344d59bdb49d441a48870bf3dad03a, type: 3}
-  - {fileID: 21300000, guid: 21f83f44ef2a3d94d811db99b31e3c41, type: 3}
-  - {fileID: 21300000, guid: fa73c757081ba8e4d93f6c3688fee230, type: 3}
-  - {fileID: 21300000, guid: ec2d8891d742b68469c7b5af26dadf5e, type: 3}
-  - {fileID: 21300000, guid: a412483327952834d86ca856b04608f7, type: 3}
-  - {fileID: 21300000, guid: 5e0e0c7e1a040e74d9ae6ee4ab74b34f, type: 3}
   Data:
     characterName: 
     eyesIndex: 0
@@ -1098,6 +1090,7 @@ MonoBehaviour:
     meleeDamage: 0
     shootDamage: 0
     spellDamage: 0
+    professionIndex: 0
     weaponAtk: 0
     armorDef: 0
     stockingDef: 0

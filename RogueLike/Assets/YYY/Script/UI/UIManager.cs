@@ -119,11 +119,19 @@ public class UIManager : MonoBehaviour
         {
             //CG鉴赏
             player.anim.Play("Girl_Broken_Idle");
+
+            //钮按下后绿色选中也会过去
+            HomePagecurrentIndex = 1;
+            UpdateHomePage_Highlight();
         }
         else
         {
             //主界面
             player.anim.Play("Girl_Default_Idle");
+
+            //钮按下后绿色选中也会过去
+            HomePagecurrentIndex = 0;
+            UpdateHomePage_Highlight();
         }
 
     }
@@ -146,6 +154,9 @@ public class UIManager : MonoBehaviour
         SettingCavans.SetActive(true);
         LanguageCavans.SetActive(false);
         CurrentChooseList = 3;
+
+        HomePagecurrentIndex = 2;
+        UpdateHomePage_Highlight();
     }
 
     public void ToLanguagePage()
@@ -1144,14 +1155,14 @@ public class UIManager : MonoBehaviour
                 // 当前菜单项内的上下切换
                 if (dir.y > 0.5f)
                 {
-                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex - 1, 0, 4);
+                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex - 1, 0, 9);
                     UpdateHomePage_Highlight();
 
 
                 }
                 else if (dir.y < -0.5f)
                 {
-                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex + 1, 0, 4);
+                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex + 1, 0, 9);
                     UpdateHomePage_Highlight();
 
 
@@ -1419,6 +1430,21 @@ public class UIManager : MonoBehaviour
                     case 3:
                         ExitGame();
                         break;
+                    case 4:
+                        OpenURL_Ci_en();
+                        break;
+                    case 5:
+                        OpenURL_Patreon();
+                        break;
+                    case 6:
+                        OpenURL_Steam();
+                        break;
+                    case 7:
+                        OpenURL_Discord();
+                        break;
+                    case 8:
+                        OpenURL_YYY();
+                        break;
                 }
 
                 AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
@@ -1595,34 +1621,66 @@ public class UIManager : MonoBehaviour
     /// 跳转网页/退出游戏
     /// </summary>
     #region
-    public void OpenURL_Patreon()
-    {
-        Application.OpenURL("https://www.patreon.com/c/NEKOUJI/posts");
-    }
-
-    public void OpenURL_Discord()
-    {
-        Application.OpenURL("https://discord.com/channels/1342112706274267249/1342112706274267252");
-    }
-
-    public void OpenURL_Steam()
-    {
-        Application.OpenURL("https://store.steampowered.com/");
-    }
-
-
-    public void OpenURL_YYY()
-    {
-        Application.OpenURL("https://x.com/Detective_ye");
-    }
-
     public void ExitGame()
     {
+        //钮按下后绿色选中也会过去
+        HomePagecurrentIndex = 3;
+        UpdateHomePage_Highlight();
+
         Debug.Log("Exiting game...");
 
         Application.Quit();
     }
 
+
+    public void OpenURL_Ci_en()
+    {
+        Application.OpenURL("https://ci-en.dlsite.com/creator/16247");
+
+
+        //钮按下后绿色选中也会过去
+        HomePagecurrentIndex = 4;
+        UpdateHomePage_Highlight();
+    }
+
+    public void OpenURL_Patreon()
+    {
+        Application.OpenURL("https://www.patreon.com/c/FTGirl");
+
+        //钮按下后绿色选中也会过去
+        HomePagecurrentIndex = 5;
+        UpdateHomePage_Highlight();
+    }
+    public void OpenURL_Steam()
+    {
+        Application.OpenURL("https://store.steampowered.com/search/?developer=FT%20Girl%20Studio");
+
+        //钮按下后绿色选中也会过去
+        HomePagecurrentIndex = 6;
+        UpdateHomePage_Highlight();
+    }
+
+    public void OpenURL_Discord()
+    {
+        Application.OpenURL("https://discord.gg/xZ3uafRm");
+
+        //钮按下后绿色选中也会过去
+        HomePagecurrentIndex = 7;
+        UpdateHomePage_Highlight();
+    }
+
+  
+
+    public void OpenURL_YYY()
+    {
+        Application.OpenURL("https://x.com/Detective_ye");
+
+        //钮按下后绿色选中也会过去
+        HomePagecurrentIndex = 8;
+        UpdateHomePage_Highlight();
+    }
+
+ 
     #endregion
 
 
