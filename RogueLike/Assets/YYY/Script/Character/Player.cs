@@ -394,6 +394,20 @@ public class Player : MonoBehaviour
 
         data.professionIndex = this.CurrentProfession;
 
+
+
+        data.meleeDamage = MeleeDamage;
+        data.shootDamage = ShootDamage;
+        data.spellDamage = SpellDamage;
+
+        data.weaponAtk = CurrentWeaponPower;
+        data.armorDef = CurrentArmorDefence;
+        data.stockingDef = CurrentStockingDefence;
+
+        data.maxHP= maxHealth;
+        data.level= Level;
+        data.exp= currentExperience;
+
         SaveManager.Save(data);
         currentSaveName = data.characterName; // 以防上面发生了 _2/_3
 

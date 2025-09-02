@@ -62,12 +62,7 @@ public static class SaveManager
     }//删除所有存档
 
 
-    //public static List<string> GetAllSaveNames()
-    //{
-    //    string dir = Application.persistentDataPath;
-    //    string[] files = Directory.GetFiles(dir, "*.json");
-    //    return files.Select(Path.GetFileNameWithoutExtension).ToList();
-    //}// 取名时获取已有存档名
+
 
     public static bool HasSave(string characterName)
     {
@@ -88,21 +83,6 @@ public static class SaveManager
     /// </summary>
     public static List<string> GetAllSaveNames()
     {
-        // if (!Directory.Exists(saveFolder)) return new List<string>();
-        //
-        // // 只匹配 save_*.json
-        // string[] files = Directory.GetFiles(saveFolder, "save_*.json");
-        // var names = new List<string>(files.Length);
-        //
-        // foreach (var f in files)
-        // {
-        //     string fileName = Path.GetFileNameWithoutExtension(f); // e.g. "save_Alice"
-        //     if (fileName.StartsWith("save_"))
-        //     {
-        //         names.Add(fileName.Substring("save_".Length)); // -> "Alice"
-        //     }
-        // }
-        // return names;
 
         var result = new List<string>();
         if (!Directory.Exists(saveFolder)) return result;

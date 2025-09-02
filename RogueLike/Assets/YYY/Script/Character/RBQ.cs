@@ -31,7 +31,7 @@ public class RBQ : MonoBehaviour
         _RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
 
 
-        RBQState = Random.Range(2, 3);
+        RBQState = Random.Range(1, 3);
 
         // 随机动画
         if (RBQState == 1)
@@ -57,8 +57,10 @@ public class RBQ : MonoBehaviour
         }
         else
         {
-            int rand = Random.Range(0, tortureAnimations.Length);
-            anim.Play(tortureAnimations[rand]);
+            //int rand = Random.Range(0, tortureAnimations.Length);
+            //anim.Play(tortureAnimations[rand]);
+
+            anim.Play("RBQ_Display_Idle_Front");
         }
 
 
@@ -248,10 +250,20 @@ public class RBQ : MonoBehaviour
                 if (!InteractOneTime) 
                 {
                     //剥去衣物和丝袜给玩家
-                    other.GetComponent<Player>().YYY_bodyIndex = this.YYY_bodyIndex;
-                    other.GetComponent<Player>().YYY_legsIndex = this.YYY_legsIndex;
-                    other.GetComponent<Player>().SetSkin();
-                    other.GetComponent<Player>().SaveCurrent();
+                    Player _Player = other.GetComponent<Player>();
+                    _Player.YYY_bodyIndex = this.YYY_bodyIndex;
+                    _Player.YYY_legsIndex = this.YYY_legsIndex;
+                    _Player.SetSkin();
+
+
+                    int ArmorDef = _Player.CurrentArmorDefence;
+                    int StockingDef = _Player.CurrentStockingDefence;
+                    ArmorDef += Random.Range(1, 10);
+                    StockingDef += Random.Range(1, 10);
+                    _Player.CurrentArmorDefence = ArmorDef;
+                    _Player.CurrentStockingDefence = StockingDef;
+
+                    _Player.SaveCurrent();
 
 
                     //RBQ上尸体显示裸体
@@ -265,6 +277,7 @@ public class RBQ : MonoBehaviour
 
                     InteractOneTime = true;
 
+                    Prompt_Take.SetActive(false);
                 }
                    
             }

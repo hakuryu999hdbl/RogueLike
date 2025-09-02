@@ -68,15 +68,30 @@ public class Enemy : MonoBehaviour
                 // 随机从 Enum 中选择一个值
                 Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
 
-                Class = EnemyClass.Succubus;
+                //Class = EnemyClass.Succubus;
                 //Class = EnemyClass.Girl;
                 //Class = EnemyClass.Man;
+                //Class = EnemyClass.Monster;
+                //Class = EnemyClass.Tentacle_Monster;
+                Class = EnemyClass.Tentacle_Bug;
+
 
                 if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
                 {
                     isMage = true;
 
                 }//一部分远程女射手变成女法师
+
+
+                if (Class == EnemyClass.Monster||Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug) 
+                {
+
+                    visionType = EnemyType.ShortRangeEnemy;
+                    attackCooldown = 1f;
+                    enemyVision.circleCollider2D.radius = 1.5f;
+
+                }//这部分怪物只能近战
+
 
             }
         }//如果已经赋值了队友，那么不随机
@@ -695,6 +710,9 @@ public class Enemy : MonoBehaviour
         Girl,
         Man,
         Succubus,
+        Monster,
+        Tentacle_Monster,
+        Tentacle_Bug,
     }
     public void ChangeClass(int c)
     {
@@ -708,6 +726,15 @@ public class Enemy : MonoBehaviour
                 break;
             case 2:
                 Class = EnemyClass.Succubus;
+                break;
+            case 3:
+                Class = EnemyClass.Monster;
+                break;
+            case 4:
+                Class = EnemyClass.Tentacle_Monster;
+                break;
+            case 5:
+                Class = EnemyClass.Tentacle_Bug;
                 break;
         }
     }
@@ -724,6 +751,13 @@ public class Enemy : MonoBehaviour
                 return "Man_";
             case EnemyClass.Succubus:
                 return "Succubus_";
+            case EnemyClass.Monster:
+                return "Monster_";
+            case EnemyClass.Tentacle_Monster:
+                return "Tentacle_Monster_";
+            case EnemyClass.Tentacle_Bug:
+                return "Tentacle_Bug_";
+
             // 未来扩展：Tentacle, Demon 等
             default:
                 return "";
@@ -800,7 +834,7 @@ public class Enemy : MonoBehaviour
     {
         if (currentHealth > 0)
         {
-            if (Class == EnemyClass.Succubus) { anim.Play(GetAnimPrefix() + "Default_Idle"); return; }//只有魔族需要更改
+            if (Class == EnemyClass.Succubus|| Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug) { anim.Play(GetAnimPrefix() + "Default_Idle"); return; }//只有魔族和变异体需要更改
 
             switch (visionType)
             {
@@ -1066,42 +1100,59 @@ public class Enemy : MonoBehaviour
         //队友使用玩家的攻击动画
         if (tag == "Friend")
         {
-
-            switch (Random.Range(1, 5))
+            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug)
             {
-                case 1:
-                    anim.Play(GetAnimPrefix() + "Attack_1", 0, 0);
-                    break;
-                case 2:
-                    anim.Play(GetAnimPrefix() + "Attack_2", 0, 0);
-                    break;
-                case 3:
-                    anim.Play(GetAnimPrefix() + "Attack_3", 0, 0);
-                    break;
-                case 4:
-                    anim.Play(GetAnimPrefix() + "Attack_4", 0, 0);
-                    break;
+                anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
             }
+            else
+            {
+                switch (Random.Range(1, 5))
+                {
+                    case 1:
+                        anim.Play(GetAnimPrefix() + "Attack_1", 0, 0);
+                        break;
+                    case 2:
+                        anim.Play(GetAnimPrefix() + "Attack_2", 0, 0);
+                        break;
+                    case 3:
+                        anim.Play(GetAnimPrefix() + "Attack_3", 0, 0);
+                        break;
+                    case 4:
+                        anim.Play(GetAnimPrefix() + "Attack_4", 0, 0);
+                        break;
+                }
+            }
+            
 
 
         }
         else
         {
-            switch (Random.Range(1, 5))
+
+            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug) 
             {
-                case 1:
-                    anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
-                    break;
-                case 2:
-                    anim.Play(GetAnimPrefix() + "attack_2", 0, 0);
-                    break;
-                case 3:
-                    anim.Play(GetAnimPrefix() + "attack_3", 0, 0);
-                    break;
-                case 4:
-                    anim.Play(GetAnimPrefix() + "attack_4", 0, 0);
-                    break;
+                anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
             }
+            else
+            {
+                switch (Random.Range(1, 5))
+                {
+                    case 1:
+                        anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
+                        break;
+                    case 2:
+                        anim.Play(GetAnimPrefix() + "attack_2", 0, 0);
+                        break;
+                    case 3:
+                        anim.Play(GetAnimPrefix() + "attack_3", 0, 0);
+                        break;
+                    case 4:
+                        anim.Play(GetAnimPrefix() + "attack_4", 0, 0);
+                        break;
+                }
+            }
+
+           
         }
 
 
@@ -1175,29 +1226,33 @@ public class Enemy : MonoBehaviour
                 frameEvents._Man_attack();//男性
                 break;
 
-                //case 2:
-                //case 3:
-                //    switch (Random.Range(0, 2))
-                //    {
-                //        case 0:
-                //            frameEvents._Zombie_Summon_1();
-                //            break;
-                //        case 1:
-                //            frameEvents._Zombie_Summon_2();
-                //            break;
-                //    }//感染者 变异体
-                //    break;
-                //case 4:
-                //    switch (Random.Range(0, 2))
-                //    {
-                //        case 0:
-                //            frameEvents._Orangutan_Summon_1();
-                //            break;
-                //        case 1:
-                //            frameEvents._Orangutan_Attack_1();
-                //            break;
-                //    }//肉翅蜂
-                //    break;
+            case EnemyClass.Monster:
+            case EnemyClass.Tentacle_Monster:
+                switch (Random.Range(0, 2))
+                {
+                    case 0:
+                        frameEvents._Zombie_Summon_1();
+                        break;
+                    case 1:
+                        frameEvents._Zombie_Summon_2();
+                        break;
+                }//感染者 变异体
+                break;
+
+            case EnemyClass.Tentacle_Bug:
+                switch (Random.Range(0, 2))
+                {
+                    case 0:
+                        frameEvents._Orangutan_Summon_1();
+                        break;
+                    case 1:
+                        frameEvents._Orangutan_Attack_1();
+                        break;
+                }//肉翅蜂
+                break;
+
+
+             
                 //case 5:
                 //case 6:
                 //case 7:
