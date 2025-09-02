@@ -107,6 +107,31 @@ public class SaveSlotUI : MonoBehaviour
         CurrentArmorDefence.text = Data.armorDef.ToString();
         CurrentStockingDefence.text = Data.stockingDef.ToString();
 
+        // 新增颜色：
+        HealthText.color = HealthColor(Data.maxHP);
+
+        MeleeDamage.color = AttackColor(Data.meleeDamage);
+        ShootDamage.color =AttackColor(Data.shootDamage);
+        SpellDamage.color = AttackColor(Data.spellDamage);
+
+        // 武器：名称 + 数值 同色
+        {
+            var c = WeaponColor(Data.weaponAtk);
+            ApplyPairColor(CurrentWeapon, CurrentWeaponPower, c);
+        }
+
+        // 衣服：名称 + 防御 同色
+        {
+            var c = ArmorLikeColor(Data.armorDef);
+            ApplyPairColor(CurrentArmor, CurrentArmorDefence, c);
+        }
+
+        // 丝袜：名称 + 防御 同色
+        {
+            var c = ArmorLikeColor(Data.stockingDef);
+            ApplyPairColor(CurrentStocking, CurrentStockingDefence, c);
+        }
+
 
         switch (ProfessionID) 
         {
@@ -303,6 +328,73 @@ public class SaveSlotUI : MonoBehaviour
         new string[] { "", "스타킹 레그 아머", "검은색 롱삭스 부츠", "검은색 레이스 가터 스타킹", "하이부츠" }
         };
     }
+
+
+
+    #region 数值颜色
+    // 可按需换成你的项目色值
+    static readonly Color WHITE = Color.white;
+    static readonly Color GREEN = new Color32(46, 204, 113, 255);
+    static readonly Color BLUE = new Color32(52, 152, 219, 255);
+    static readonly Color PURPLE = new Color32(155, 89, 182, 255);
+    static readonly Color GOLD = new Color32(255, 215, 0, 255); // #FFD700
+    static readonly Color RED = new Color32(231, 76, 60, 255);
+
+    static Color PickColor(int v, (int maxExclusive, Color c)[] rules, Color overflow)
+    {
+        for (int i = 0; i < rules.Length; i++)
+            if (v < rules[i].maxExclusive) return rules[i].c;
+        return overflow; // X 红
+    }
+
+    public static void ApplyPairColor(Text nameText, Text valueText, Color c)
+    {
+        if (nameText) nameText.color = c;
+        if (valueText) valueText.color = c;
+    }
+
+    // —— 阈值规则（严格按你提供的区间顺序）——
+    public static Color HealthColor(int hp)
+    {
+        var rules = new (int, Color)[] {
+            (1500, WHITE), (2000, GREEN), (5000, BLUE),
+            (8000, PURPLE), (10000, GOLD),
+        };
+        return PickColor(hp, rules, RED);
+    }
+
+    // 近战 / 射击 / 法术
+    public static Color AttackColor(int atk)
+    {
+        var rules = new (int, Color)[] {
+            (100, WHITE), (200, BLUE), (500, GREEN),
+            (800, PURPLE), (1000, GOLD),
+        };
+        return PickColor(atk, rules, RED);
+    }
+
+    // 武器（名称与攻击值同色）
+    public static Color WeaponColor(int wp)
+    {
+        var rules = new (int, Color)[] {
+            (300, WHITE), (500, GREEN), (800, BLUE),
+            (1000, PURPLE), (1500, GOLD),
+        };
+        return PickColor(wp, rules, RED);
+    }
+
+    // 衣服/丝袜（名称与防御值同色）
+    public static Color ArmorLikeColor(int def)
+    {
+        var rules = new (int, Color)[] {
+            (50, WHITE), (100, BLUE), (200, GREEN),
+            (500, PURPLE), (800, GOLD),
+        };
+        return PickColor(def, rules, RED);
+    }
+
+
+    #endregion
 
     #endregion
 

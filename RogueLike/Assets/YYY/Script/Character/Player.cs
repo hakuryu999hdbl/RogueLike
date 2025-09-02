@@ -125,6 +125,8 @@ public class Player : MonoBehaviour
         if (CurrentProfession == 0)
         {
             strike.Damage = -data.meleeDamage - data.weaponAtk;
+
+            SetStrikeTypeOfAttack();
         }
         else 
         {
@@ -132,31 +134,7 @@ public class Player : MonoBehaviour
             strike.Damage = -data.meleeDamage / 5;
         }
 
-        switch (weaponIndex) 
-        {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 7:
-            case 10:
-                strike.TypeOfAttack = 1;//剑伤
-                break;
-
-            case 6:
-                strike.TypeOfAttack = 3;//冻结
-                break;
-
-            case 8:
-                strike.TypeOfAttack = 4;//火伤
-                break;
-
-            case 9:
-                strike.TypeOfAttack = 2;//闪电
-                break;
-        }
+     
 
         //升级需求
         switch (data.level)
@@ -205,7 +183,34 @@ public class Player : MonoBehaviour
         }
 
     }//存档形式赋值皮肤数值
+    void SetStrikeTypeOfAttack()
+    {
+        switch (weaponIndex)
+        {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 7:
+            case 10:
+                strike.TypeOfAttack = 1;//剑伤
+                break;
 
+            case 6:
+                strike.TypeOfAttack = 3;//冻结
+                break;
+
+            case 8:
+                strike.TypeOfAttack = 4;//火伤
+                break;
+
+            case 9:
+                strike.TypeOfAttack = 2;//闪电
+                break;
+        }
+    }
 
     public void _CreateNewSkin()
     {
@@ -235,39 +240,6 @@ public class Player : MonoBehaviour
         // 如果还没有命名，则生成
 
         PlayerSaveData data = new PlayerSaveData();
-
-        //List<string> allSaves = SaveManager.GetAllSaveNames();  // 获取已有存档名
-        //string newName;
-        //
-        //if (isLuna)
-        //{
-        //    switch (PlayerPrefs.GetInt("language", 0))
-        //    {
-        //        case 0: // Japanese
-        //            newName = "ルナ";
-        //            break;
-        //        case 1: // Simplified Chinese
-        //            newName = "露娜";
-        //            break;
-        //        case 2: // Traditional Chinese
-        //            newName = "露娜";
-        //            break;
-        //        case 3: // English
-        //            newName = "Luna";
-        //            break;
-        //        case 4: // Korean
-        //            newName = "루나";
-        //            break;
-        //        default:
-        //            newName = "Luna"; // fallback
-        //            break;
-        //    }
-        //}//当玩家生成第一个角色默认Luna
-        //else 
-        //{
-        //    newName = NameGenerator.GenerateUniqueName(allSaves);
-        //}
-
 
         string baseName;
         if (isLuna)
@@ -346,29 +318,6 @@ public class Player : MonoBehaviour
     public void SaveCurrent()
     {
 
-        // if (string.IsNullOrEmpty(currentSaveName))
-        // {
-        //     RandomNewSave();//把这个数据代入
-        //
-        // }
-        // else
-        // {
-        //
-        //     // 处于捏人界面中，已有命名，覆盖当前
-        //     PlayerSaveData data = SaveManager.Load(currentSaveName);
-        //
-        //     data.headIndex = this.YYY_headIndex;
-        //     data.eyesIndex = this.YYY_eyesIndex;
-        //     data.bodyIndex = this.YYY_bodyIndex;
-        //     data.legsIndex = this.YYY_legsIndex;
-        //     data.hatIndex = this.YYY_hatIndex;
-        //     data.weaponIndex = this.weaponIndex;
-        //
-        //     data.professionIndex = this.CurrentProfession;
-        //
-        //     SaveManager.Save(data);
-        // }
-
         if (string.IsNullOrEmpty(currentSaveName))
         {
             RandomNewSave(); // 会自动去重
@@ -440,20 +389,6 @@ public class Player : MonoBehaviour
         static readonly string[] KR_First = { "지", "수", "하", "예", "소", "채", "은", "유", "민", "서" };
         static readonly string[] KR_Last = { "은", "아", "림", "빈", "진", "연", "희", "원", "지", "경" };
 
-       // public static string GenerateUniqueName(List<string> existingNames)
-       // {
-       //     string baseName = GenerateNameByLanguage();
-       //     string finalName = baseName;
-       //     int index = 1;
-       //
-       //     while (existingNames.Contains(finalName))
-       //     {
-       //         finalName = $"{baseName}_{index}";
-       //         index++;
-       //     }
-       //
-       //     return finalName;
-       // }
 
         public static string GenerateNameByLanguage()
         {
@@ -1631,8 +1566,10 @@ public class Player : MonoBehaviour
 
     public void CheckWeapon()
     {
+        //ChangeType(CurrentProfession);//首先根据职业
+
         Debug.Log("设置武器信息");
-        if (visionType == PlayerType.ShortRangePlayer) { CurrentWeapon = weaponIndex; }//实装战士武器
+        if (visionType == PlayerType.ShortRangePlayer) { CurrentWeapon = weaponIndex; SetStrikeTypeOfAttack(); }//实装战士武器
         if (visionType == PlayerType.LongRangePlayer && !isMage) { CurrentWeapon = weaponIndex + 100; }//实装射手武器
         if (visionType == PlayerType.LongRangePlayer && isMage) { CurrentWeapon = weaponIndex + 200; }//实装法师武器
 
@@ -1978,7 +1915,7 @@ public class Player : MonoBehaviour
         {
             return;//防止连续闪避
         }
-
+       
 
         if (currentStrength > 50) // 确保不在连续闪避状态
         {
@@ -2002,6 +1939,8 @@ public class Player : MonoBehaviour
 
 
             //anim.SetTrigger("Dodge");
+
+           
         }
         else
         {
@@ -2027,7 +1966,7 @@ public class Player : MonoBehaviour
     {
         isOutOfStrength = false;
     }
-
+ 
 
     IEnumerator Dodge(Vector2 direction, float dodgeSpeed, float dodgeDistance)
     {
@@ -2096,6 +2035,11 @@ public class Player : MonoBehaviour
 
     public void DodgeEnemyAttack()
     {
+        if (isDodgeCoolDown)
+        {
+            return;//闪避冷却1秒
+        }
+
         // 音效
         frameEvents._Attack_katana_draw();
 
@@ -2109,8 +2053,17 @@ public class Player : MonoBehaviour
 
         ChangeCritical(maxCritical);//充满暴击率
 
+        //给与触发的冷却
+        isDodgeCoolDown = true;
+        Invoke("ChangeDodgeCoolDown", 1.5f);
+
     }
 
+    bool isDodgeCoolDown = false;//闪避触发冷却
+    void ChangeDodgeCoolDown()
+    {
+        isDodgeCoolDown = false;
+    }
 
     void DodgeEnemyAttackOver()
     {
@@ -2497,7 +2450,7 @@ public class Player : MonoBehaviour
                 case 2:
                     if (Random.Range(0, 3) == 0)
                     {
-                        Palsy(1);//麻痹伤害
+                        Palsy(3);//麻痹伤害(太短在冷却内不受伤)
                     }
                     else
                     {
@@ -2521,7 +2474,7 @@ public class Player : MonoBehaviour
                 case 4:
                     if (Random.Range(0, 2) == 0)
                     {
-                        Burning(Random.Range(1, 8));//灼烧伤害
+                        Burning(Random.Range(1, 8),false);//灼烧伤害
                     }
                     else
                     {
@@ -2540,7 +2493,7 @@ public class Player : MonoBehaviour
                     {
                         amount = 0;
                     }
-
+                    Burning(Random.Range(1, 8), true);//中毒伤害
                     break;
             }
 
@@ -2796,7 +2749,7 @@ public class Player : MonoBehaviour
 
             data.level = Level;
 
-
+            data.exp = 0;//存档里的当前经验值也要清零
             currentExperience = 0;
             UIManager.instance.UpdateExperienceBar(currentExperience, maxExperience);      
 
@@ -2899,9 +2852,10 @@ public class Player : MonoBehaviour
     public bool isBurning = false;
     float BurnTimer;
 
-    public void Burning(int Timer)
-    {   
-        Burning_Effect.SetActive(true);
+    public void Burning(int Timer,bool isPoison)
+    {
+        if (!isPoison) { Burning_Effect.SetActive(true); }
+       
 
         isBurning = true;
 

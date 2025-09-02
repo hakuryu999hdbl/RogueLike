@@ -35,11 +35,79 @@ public class Enemy : MonoBehaviour
 
 
 
-        // 随机从 Enum 中选择一个值
-        visionType = (EnemyType)Random.Range(0, System.Enum.GetValues(typeof(EnemyType)).Length);
 
-        //visionType = EnemyType.LongRangeEnemy;
-        //visionType = EnemyType.ShortRangeEnemy;
+
+        if (currentSaveName == "")
+        {
+            // 随机从 Enum 中选择一个值
+            //visionType = (EnemyType)Random.Range(0, System.Enum.GetValues(typeof(EnemyType)).Length);
+
+            //visionType = EnemyType.LongRangeEnemy;
+            //visionType = EnemyType.ShortRangeEnemy;
+
+            CurrentProfession = Random.Range(0, 2);//把CurrentProfession绑进去(法师只有女性可当)
+          
+
+           
+
+
+            //随机皮肤
+            if (CanChangeSkin)
+            {
+                SetRandomSkin();
+                // 随机从 Enum 中选择一个值
+                Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
+
+                //Class = EnemyClass.Succubus;
+                //Class = EnemyClass.Girl;
+                //Class = EnemyClass.Man;
+                //Class = EnemyClass.Monster;
+                //Class = EnemyClass.Tentacle_Monster;
+                //Class = EnemyClass.Tentacle_Bug;
+                //Class = EnemyClass.Tentacle_Bag;
+                //Class = EnemyClass.Tentacle_HermitCrab;
+
+                if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
+                {
+                    CurrentProfession = 2;
+
+                }//一部分远程女射手变成女法师
+
+
+                if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug)
+                {
+
+                    CurrentProfession = 0;
+
+
+                }//这部分怪物只能近战
+
+                if (Class == EnemyClass.Tentacle_Bug)
+                {
+
+                    strike.TypeOfAttack = 2;//闪电
+
+                }//肉翅虫具有麻痹效果
+
+
+
+
+                ChangeType(CurrentProfession);//把CurrentProfession绑进去
+                SetAttackRange();
+
+            }
+        }//如果已经赋值了队友，那么不随机
+
+        anim.Play(GetAnimPrefix() + "Default_Idle");
+
+
+        GateEffect.SetActive(true);//传送门特效
+
+
+    }
+
+    void SetAttackRange() 
+    {
 
 
         //不同敌人攻击范围不一样
@@ -56,54 +124,7 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-
-
-        if (currentSaveName == "")
-        {
-
-            //随机皮肤
-            if (CanChangeSkin)
-            {
-                SetRandomSkin();
-                // 随机从 Enum 中选择一个值
-                Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
-
-                //Class = EnemyClass.Succubus;
-                //Class = EnemyClass.Girl;
-                //Class = EnemyClass.Man;
-                //Class = EnemyClass.Monster;
-                //Class = EnemyClass.Tentacle_Monster;
-                Class = EnemyClass.Tentacle_Bug;
-
-
-                if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
-                {
-                    isMage = true;
-
-                }//一部分远程女射手变成女法师
-
-
-                if (Class == EnemyClass.Monster||Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug) 
-                {
-
-                    visionType = EnemyType.ShortRangeEnemy;
-                    attackCooldown = 1f;
-                    enemyVision.circleCollider2D.radius = 1.5f;
-
-                }//这部分怪物只能近战
-
-
-            }
-        }//如果已经赋值了队友，那么不随机
-
-        anim.Play(GetAnimPrefix() + "Default_Idle");
-
-
-        GateEffect.SetActive(true);//传送门特效
-
-
-    }
-
+    }//两条通路设立范围，一条是随机出来的敌人/队友，一条是读取存档的队友
 
     /// <summary>
     /// 存读档
@@ -126,9 +147,12 @@ public class Enemy : MonoBehaviour
         this.weaponIndex = data.weaponIndex;
         this.CurrentProfession = data.professionIndex;
 
+        ChangeType(CurrentProfession);//首先根据职业
+
         // 根据这些数据设置皮肤
         SetSkin(); // 你已有的方法（或自己写个用这些 Index 设置皮肤的方法）
 
+        SetAttackRange();
 
         //数值赋予
         this.maxHealth = data.maxHP;
@@ -153,6 +177,10 @@ public class Enemy : MonoBehaviour
         if (CurrentProfession == 0)
         {
             strike.Damage = -data.meleeDamage - data.weaponAtk;
+
+
+            SetStrikeTypeOfAttack();//根据近战武器赋予特殊近战伤害
+
         }
         else
         {
@@ -161,6 +189,12 @@ public class Enemy : MonoBehaviour
             strike.Damage = -data.meleeDamage / 5;
         }
 
+
+
+    }//存档形式赋值皮肤数值
+
+    void SetStrikeTypeOfAttack()
+    {
         switch (weaponIndex)
         {
             case 0:
@@ -186,9 +220,8 @@ public class Enemy : MonoBehaviour
                 strike.TypeOfAttack = 2;//闪电
                 break;
         }
+    }
 
-
-    }//存档形式赋值皮肤数值
 
     #endregion
 
@@ -713,6 +746,8 @@ public class Enemy : MonoBehaviour
         Monster,
         Tentacle_Monster,
         Tentacle_Bug,
+        Tentacle_Bag,
+        Tentacle_HermitCrab,
     }
     public void ChangeClass(int c)
     {
@@ -736,6 +771,12 @@ public class Enemy : MonoBehaviour
             case 5:
                 Class = EnemyClass.Tentacle_Bug;
                 break;
+            case 6:
+                Class = EnemyClass.Tentacle_Bag;
+                break;
+            case 7:
+                Class = EnemyClass.Tentacle_HermitCrab;
+                break;
         }
     }
 
@@ -757,6 +798,10 @@ public class Enemy : MonoBehaviour
                 return "Tentacle_Monster_";
             case EnemyClass.Tentacle_Bug:
                 return "Tentacle_Bug_";
+            case EnemyClass.Tentacle_Bag:
+                return "Tentacle_Bag_";
+            case EnemyClass.Tentacle_HermitCrab:
+                return "Tentacle_HermitCrab_";
 
             // 未来扩展：Tentacle, Demon 等
             default:
@@ -834,7 +879,7 @@ public class Enemy : MonoBehaviour
     {
         if (currentHealth > 0)
         {
-            if (Class == EnemyClass.Succubus|| Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug) { anim.Play(GetAnimPrefix() + "Default_Idle"); return; }//只有魔族和变异体需要更改
+            if (Class == EnemyClass.Succubus || Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab) { anim.Play(GetAnimPrefix() + "Default_Idle"); return; }//只有魔族和变异体需要更改
 
             switch (visionType)
             {
@@ -1100,7 +1145,7 @@ public class Enemy : MonoBehaviour
         //队友使用玩家的攻击动画
         if (tag == "Friend")
         {
-            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug)
+            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab)
             {
                 anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
             }
@@ -1122,14 +1167,14 @@ public class Enemy : MonoBehaviour
                         break;
                 }
             }
-            
+
 
 
         }
         else
         {
 
-            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug) 
+            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab)
             {
                 anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
             }
@@ -1152,7 +1197,7 @@ public class Enemy : MonoBehaviour
                 }
             }
 
-           
+
         }
 
 
@@ -1251,24 +1296,21 @@ public class Enemy : MonoBehaviour
                 }//肉翅蜂
                 break;
 
-
-             
-                //case 5:
-                //case 6:
-                //case 7:
-                //    switch (Random.Range(0, 3))
-                //    {
-                //        case 0:
-                //            frameEvents._monster_Summon_01();
-                //            break;
-                //        case 1:
-                //            frameEvents._monster_Summon_02();
-                //            break;
-                //        case 2:
-                //            frameEvents._Shrike_Summon_Attack();
-                //            break;
-                //    }//肉袋 淫毒肉炮
-                //    break;
+            case EnemyClass.Tentacle_Bag:
+            case EnemyClass.Tentacle_HermitCrab:
+                switch (Random.Range(0, 3))
+                {
+                    case 0:
+                        frameEvents._monster_Summon_01();
+                        break;
+                    case 1:
+                        frameEvents._monster_Summon_02();
+                        break;
+                    case 2:
+                        frameEvents._Shrike_Summon_Attack();
+                        break;
+                }//肉袋 淫毒肉炮              
+                break;
         }
     }//近战攻击发出的叫声
 
@@ -1360,13 +1402,20 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
+        //根据种族不同特殊远程攻击
+        if (Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab)
+        {
+            special = 5;//剧毒法球
+        }
+
+
         if (tag == "Friend")
         {
-            s.Init(-ShootDamage, -SpellDamage, false, 0, special, dir, Shooting.BulletOwnerType.Friend);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
+            s.Init(-ShootDamage, -SpellDamage, false, 0.2f, special, dir, Shooting.BulletOwnerType.Friend);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
         }
         else
         {
-            s.Init(-ShootDamage, -SpellDamage, false, 0, special, dir, Shooting.BulletOwnerType.Enemy);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
+            s.Init(-ShootDamage, -SpellDamage, false, 0.2f, special, dir, Shooting.BulletOwnerType.Enemy);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
         }
     }
 
@@ -1415,8 +1464,9 @@ public class Enemy : MonoBehaviour
 
     public void CheckWeapon()
     {
+        //ChangeType(CurrentProfession);//首先根据职业
 
-        if (visionType == EnemyType.ShortRangeEnemy) { CurrentWeapon = weaponIndex; }//实装战士武器
+        if (visionType == EnemyType.ShortRangeEnemy) { CurrentWeapon = weaponIndex; SetStrikeTypeOfAttack(); }//实装战士武器
         if (visionType == EnemyType.LongRangeEnemy && !isMage) { CurrentWeapon = weaponIndex + 100; }//实装射手武器
         if (visionType == EnemyType.LongRangeEnemy && isMage) { CurrentWeapon = weaponIndex + 200; }//实装法师武器
 
@@ -1796,7 +1846,7 @@ public class Enemy : MonoBehaviour
                 amount += CurrentArmorDefence;
                 amount += CurrentStockingDefence;
 
-                
+
 
             }
             //else 
@@ -1851,7 +1901,7 @@ public class Enemy : MonoBehaviour
                 case 4:
                     if (Random.Range(0, 2) == 0)
                     {
-                        Burning(Random.Range(1, 8));//灼烧伤害
+                        Burning(Random.Range(1, 8),false);//灼烧伤害
                     }
                     else
                     {
@@ -1870,11 +1920,12 @@ public class Enemy : MonoBehaviour
                     {
                         amount = 0;
                     }
+                    Burning(Random.Range(1, 8), true);//中毒伤害
                     break;
             }
 
 
-          
+
 
 
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
@@ -2220,9 +2271,10 @@ public class Enemy : MonoBehaviour
     //————————————————————灼烧
     public bool isBurning = false;
     float BurnTimer;
-    public void Burning(int Timer)
+    public void Burning(int Timer, bool isPoison)
     {
-        Burning_Effect.SetActive(true);
+        if (!isPoison) { Burning_Effect.SetActive(true); }
+
 
         isBurning = true;
 
