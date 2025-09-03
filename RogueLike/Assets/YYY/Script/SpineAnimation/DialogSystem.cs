@@ -33,9 +33,7 @@ public class DialogSystem : MonoBehaviour
                   Story_35, Story_36, Story_37, Story_38, Story_39, Story_40,
                   Story_41, Story_42, Story_43, Story_44, Story_45, Story_46, Story_47, Story_48, Story_49,
                   Story_50, Story_51, Story_52, Story_53, Story_54, Story_55, Story_56, Story_57, Story_58, Story_59, Story_60, Story_61, Story_62, Story_63, Story_64,
-                  Story_65, Story_66, Story_67, Story_68, Story_69, Story_70, Story_71, Story_72, Story_73, Story_74, Story_75, Story_76, Story_77,
-                  Story_78, Story_79, Story_80, Story_81, Story_82, Story_83, Story_84,
-                  Story_85, Story_86, Story_87, Story_88, Story_89, Story_90;
+                  Story_65, Story_66, Story_67, Story_68, Story_69, Story_70;
 
 
     private void OnEnable()
@@ -72,8 +70,6 @@ public class DialogSystem : MonoBehaviour
         switch (PlayerPrefs.GetInt("language"))
         {
             case 0:
-                textAssets.Add(999, Resources.Load<TextAsset>("TXT_Japanese/J_AI_Animation_Start"));
-
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Japanese/J_Story_1"));
                 textAssets.Add(1002, Resources.Load<TextAsset>("TXT_Japanese/J_Story_2"));
                 textAssets.Add(1003, Resources.Load<TextAsset>("TXT_Japanese/J_Story_3"));
@@ -83,23 +79,48 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(1007, Resources.Load<TextAsset>("TXT_Japanese/J_Story_7"));
                 textAssets.Add(1008, Resources.Load<TextAsset>("TXT_Japanese/J_Story_8"));
                 textAssets.Add(1009, Resources.Load<TextAsset>("TXT_Japanese/J_Story_9"));
+                textAssets.Add(1010, Resources.Load<TextAsset>("TXT_Japanese/J_Story_10"));
+                textAssets.Add(1011, Resources.Load<TextAsset>("TXT_Japanese/J_Story_11"));
+                textAssets.Add(1012, Resources.Load<TextAsset>("TXT_Japanese/J_Story_12"));
+                textAssets.Add(1013, Resources.Load<TextAsset>("TXT_Japanese/J_Story_13"));
                 break;
+
+
             case 1:
-                textAssets.Add(999, Resources.Load<TextAsset>("TXT_Chinese/C_AI_Animation_Start"));
-
-                textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Chinese/C_Story_1"));
-                textAssets.Add(1002, Resources.Load<TextAsset>("TXT_Chinese/C_Story_2"));
-                textAssets.Add(1003, Resources.Load<TextAsset>("TXT_Chinese/C_Story_3"));
-                textAssets.Add(1004, Resources.Load<TextAsset>("TXT_Chinese/C_Story_4"));
-                textAssets.Add(1005, Resources.Load<TextAsset>("TXT_Chinese/C_Story_5"));
-                textAssets.Add(1006, Resources.Load<TextAsset>("TXT_Chinese/C_Story_6"));
-                textAssets.Add(1007, Resources.Load<TextAsset>("TXT_Chinese/C_Story_7"));
-                textAssets.Add(1008, Resources.Load<TextAsset>("TXT_Chinese/C_Story_8"));
-                textAssets.Add(1009, Resources.Load<TextAsset>("TXT_Chinese/C_Story_9"));
+                textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_1"));
+                textAssets.Add(1002, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_2"));
+                textAssets.Add(1003, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_3"));
+                textAssets.Add(1004, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_4"));
+                textAssets.Add(1005, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_5"));
+                textAssets.Add(1006, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_6"));
+                textAssets.Add(1007, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_7"));
+                textAssets.Add(1008, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_8"));
+                textAssets.Add(1009, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_9"));
+                textAssets.Add(1010, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_10"));
+                textAssets.Add(1011, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_11"));
+                textAssets.Add(1012, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_12"));
+                textAssets.Add(1013, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_13"));
                 break;
-            case 2:
-                textAssets.Add(999, Resources.Load<TextAsset>("TXT_English/E_AI_Animation_Start"));
 
+
+            case 2:
+                textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_1"));
+                textAssets.Add(1002, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_2"));
+                textAssets.Add(1003, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_3"));
+                textAssets.Add(1004, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_4"));
+                textAssets.Add(1005, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_5"));
+                textAssets.Add(1006, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_6"));
+                textAssets.Add(1007, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_7"));
+                textAssets.Add(1008, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_8"));
+                textAssets.Add(1009, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_9"));
+                textAssets.Add(1010, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_10"));
+                textAssets.Add(1011, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_11"));
+                textAssets.Add(1012, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_12"));
+                textAssets.Add(1013, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_13"));
+                break;
+
+
+            case 3:
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_English/E_Story_1"));
                 textAssets.Add(1002, Resources.Load<TextAsset>("TXT_English/E_Story_2"));
                 textAssets.Add(1003, Resources.Load<TextAsset>("TXT_English/E_Story_3"));
@@ -109,7 +130,29 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(1007, Resources.Load<TextAsset>("TXT_English/E_Story_7"));
                 textAssets.Add(1008, Resources.Load<TextAsset>("TXT_English/E_Story_8"));
                 textAssets.Add(1009, Resources.Load<TextAsset>("TXT_English/E_Story_9"));
+                textAssets.Add(1010, Resources.Load<TextAsset>("TXT_English/E_Story_10"));
+                textAssets.Add(1011, Resources.Load<TextAsset>("TXT_English/E_Story_11"));
+                textAssets.Add(1012, Resources.Load<TextAsset>("TXT_English/E_Story_12"));
+                textAssets.Add(1013, Resources.Load<TextAsset>("TXT_English/E_Story_13"));
                 break;
+
+
+            case 4:
+                textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Korean/K_Story_1"));
+                textAssets.Add(1002, Resources.Load<TextAsset>("TXT_Korean/K_Story_2"));
+                textAssets.Add(1003, Resources.Load<TextAsset>("TXT_Korean/K_Story_3"));
+                textAssets.Add(1004, Resources.Load<TextAsset>("TXT_Korean/K_Story_4"));
+                textAssets.Add(1005, Resources.Load<TextAsset>("TXT_Korean/K_Story_5"));
+                textAssets.Add(1006, Resources.Load<TextAsset>("TXT_Korean/K_Story_6"));
+                textAssets.Add(1007, Resources.Load<TextAsset>("TXT_Korean/K_Story_7"));
+                textAssets.Add(1008, Resources.Load<TextAsset>("TXT_Korean/K_Story_8"));
+                textAssets.Add(1009, Resources.Load<TextAsset>("TXT_Korean/K_Story_9"));
+                textAssets.Add(1010, Resources.Load<TextAsset>("TXT_Korean/K_Story_10"));
+                textAssets.Add(1011, Resources.Load<TextAsset>("TXT_Korean/K_Story_11"));
+                textAssets.Add(1012, Resources.Load<TextAsset>("TXT_Korean/K_Story_12"));
+                textAssets.Add(1013, Resources.Load<TextAsset>("TXT_Korean/K_Story_13"));
+                break;
+
         }
 
       
@@ -170,12 +213,13 @@ public class DialogSystem : MonoBehaviour
         }
     }
 
-    [Header("结局动画中有没有邻过奖")]
-    public bool isTakePrize = false;
 
 
     IEnumerator SetTextUI()
     {
+
+        AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
+
         if (index >= textList.Count)
         {
             Debug.LogWarning("index 超出 textList 范围");
@@ -247,25 +291,12 @@ public class DialogSystem : MonoBehaviour
 
 
 
-            //case "Over":
-            //    ChangeStory();//通常对话结束
-            //    index++;
-            //    break;
-            //
-            //
-            //case "ReStart":
-            //    //Spine_FrameEvents.ReStart();//教程结束回主菜单
-            //    index++;
-            //    break;
-
-         
 
 
-            //case "CleanStage":
-            //    CleanStage();//通关重置
-            //    index++;
-            //    break;
-               
+
+
+
+
 
 
             case "Story_00":
@@ -623,106 +654,6 @@ public class DialogSystem : MonoBehaviour
                 text.color = Color.white;
                 index++;
                 break;
-            case "Story_71":
-                BG_Image.sprite = Story_71;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_72":
-                BG_Image.sprite = Story_72;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_73":
-                BG_Image.sprite = Story_73;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_74":
-                BG_Image.sprite = Story_74;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_75":
-                BG_Image.sprite = Story_75;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_76":
-                BG_Image.sprite = Story_76;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_77":
-                BG_Image.sprite = Story_77;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_78":
-                BG_Image.sprite = Story_78;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_79":
-                BG_Image.sprite = Story_79;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_80":
-                BG_Image.sprite = Story_80;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_81":
-                BG_Image.sprite = Story_81;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_82":
-                BG_Image.sprite = Story_82;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_83":
-                BG_Image.sprite = Story_83;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_84":
-                BG_Image.sprite = Story_84;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_85":
-                BG_Image.sprite = Story_85;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_86":
-                BG_Image.sprite = Story_86;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_87":
-                BG_Image.sprite = Story_87;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_88":
-                BG_Image.sprite = Story_88;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_89":
-                BG_Image.sprite = Story_89;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_90":
-                BG_Image.sprite = Story_90;
-                text.color = Color.white;
-                index++;
-                break;
         }
 
 
@@ -738,6 +669,9 @@ public class DialogSystem : MonoBehaviour
         cancelTyping = false;
         textFinished = true;
         index++;
+
+
+        
     }
 
 
