@@ -2340,7 +2340,9 @@ public class Player : MonoBehaviour
             }//闪避伤害
             if (amount < 0)
             {
-               
+
+
+                Attack_Cancel();//只要受伤就松手蓄力
 
                 if (!isDie && canMove)//处于攻击状态下无法防御
                 {

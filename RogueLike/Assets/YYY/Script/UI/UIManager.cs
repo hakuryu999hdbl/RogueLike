@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
 
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_OnanismFront_1"));//0未解锁  1解锁
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_OnanismSide_1"));//0未解锁  1解锁
+
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_InsultSide_1"));//0未解锁  1解锁
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_GagSide_1"));//0未解锁  1解锁
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_FistingFront_1"));//0未解锁  1解锁
@@ -29,14 +30,85 @@ public class UIManager : MonoBehaviour
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_AssaultFront_1"));//0未解锁  1解锁
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_AssaultSide_1"));//0未解锁  1解锁
 
+
+
+
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleBagFront_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleBugSide_1"));//0未解锁  1解锁
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleFront_1"));//0未解锁  1解锁
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleHermitCrabFront_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleHermitCrabSide_1"));//0未解锁  1解锁
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleLeechSide_1"));//0未解锁  1解锁
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleMonsterFront_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_MonsterSide_1"));//0未解锁  1解锁
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleWallFront_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleWallSide_1"));//0未解锁  1解锁
+
+
+
+
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_Hogtie_1"));//0未解锁  1解锁
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_HangSide_4"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_HangSide_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_HangFront_1"));//0未解锁  1解锁
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_HangDown_4"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_HangDown_1"));//0未解锁  1解锁
+
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_FeraSide_1"));//0未解锁  1解锁
+
+
+
+
+        //PlayerPrefs.SetInt("CG_OnanismFront_1", 1);
+        //PlayerPrefs.SetInt("CG_OnanismSide_1", 1);
+        //
         //PlayerPrefs.SetInt("CG_InsultSide_1", 1);
+        //PlayerPrefs.SetInt("CG_GagSide_1", 1);
+        //PlayerPrefs.SetInt("CG_FistingFront_1", 1);
+        //
         //PlayerPrefs.SetInt("CG_RapeFront_1", 1);
         //PlayerPrefs.SetInt("CG_RapeSide_1", 1);
-
+        //PlayerPrefs.SetInt("CG_AssaultFront_1", 1);
+        //PlayerPrefs.SetInt("CG_AssaultSide_1", 1);
+        //
         //PlayerPrefs.SetInt("CG_TentacleBagFront_1", 1);
         //PlayerPrefs.SetInt("CG_TentacleBugSide_1", 1);
-        //PlayerPrefs.SetInt("CG_TentacleWallFront_1", 1);
+        //
         //PlayerPrefs.SetInt("CG_TentacleFront_1", 1);
+        //
+        //PlayerPrefs.SetInt("CG_TentacleHermitCrabFront_1", 1);
+        //PlayerPrefs.SetInt("CG_TentacleHermitCrabSide_1", 1);
+        //
+        //PlayerPrefs.SetInt("CG_TentacleLeechSide_1", 1);
+        //
+        //PlayerPrefs.SetInt("CG_TentacleMonsterFront_1", 1);
+        //PlayerPrefs.SetInt("CG_MonsterSide_1", 1);
+        //
+        //PlayerPrefs.SetInt("CG_TentacleWallFront_1", 1);
+        //PlayerPrefs.SetInt("CG_TentacleWallSide_1", 1);
+        //
+        //
+        //
+        //PlayerPrefs.SetInt("CG_Hogtie_1", 1);
+        //
+        //PlayerPrefs.SetInt("CG_HangSide_4", 1);
+        //PlayerPrefs.SetInt("CG_HangSide_1", 1);
+        //PlayerPrefs.SetInt("CG_HangFront_1", 1);
+        //
+        //PlayerPrefs.SetInt("CG_HangDown_4", 1);
+        //PlayerPrefs.SetInt("CG_HangDown_1", 1);
+        //
+        //PlayerPrefs.SetInt("CG_FeraSide_1", 1);
+
     }
     /// <summary>
     /// 主菜单
@@ -63,17 +135,20 @@ public class UIManager : MonoBehaviour
     }//重刷场景
 
     [Header("主菜单界面层级")]
-    public int CurrentChooseList = 0;//-2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中
+    public int CurrentChooseList = 0;//-2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择
     public int CurrentMode = 0;//0 进入CG界面  1捏人/进入游戏
     public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
     public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
     public int SettingPagecurrentIndex = 0;//0 BGM  1 SE  2 语言  3 删除存档
     public int LanguagePagecurrentIndex = 0;//0 日语 1中文 2繁中 3英语 4韩语
+    public int ModePagecurrentIndex = 0;//0 故事模式 1角斗场模式 2地下城模式
 
     [SerializeField] private GameObject[] HomePage_highlightObjs; // 主页高亮显示
     [SerializeField] private GameObject[] highlightObjs; // 捏人界面高亮显示
     [SerializeField] private GameObject[] SettingPage_highlightObjs; // 设置高亮显示
     [SerializeField] private GameObject[] LanguagePage_highlightObjs; // 设置高亮显示
+    [SerializeField] private GameObject[] ModePage_highlightObjs; // 设置高亮显示
+
 
     private void UpdateHighlight()
     {
@@ -103,6 +178,34 @@ public class UIManager : MonoBehaviour
         {
             LanguagePage_highlightObjs[i].SetActive(i == LanguagePagecurrentIndex);
         }
+    }
+
+    private void UpdateModePage_Highlight()
+    {
+        for (int i = 0; i < ModePage_highlightObjs.Length; i++)
+        {
+            ModePage_highlightObjs[i].SetActive(i == ModePagecurrentIndex);
+        }
+
+        switch (ModePagecurrentIndex) 
+        {
+            case 0:
+                Text_Story.SetActive(true);
+                Text_OneToOne.SetActive(false);
+                Text_Dungeon.SetActive(false);
+                break;
+            case 1:
+                Text_Story.SetActive(false);
+                Text_OneToOne.SetActive(true);
+                Text_Dungeon.SetActive(false);
+                break;
+            case 2:
+                Text_Story.SetActive(false);
+                Text_OneToOne.SetActive(false);
+                Text_Dungeon.SetActive(true);
+                break;
+        }
+
     }
 
     [SerializeField] private Button HairLeft, HairRight;
@@ -141,14 +244,37 @@ public class UIManager : MonoBehaviour
 
     public void ToSavePage()
     {
-
+        ModeCavans.SetActive(false);
         HomePageCavans.SetActive(false);
         CGCavans.SetActive(false);
         CurrentChooseList = 2;
 
     }
 
+    public GameObject Text_Story, Text_OneToOne, Text_Dungeon;
 
+    public void ToStoryStage() 
+    {
+        ToSavePageButton(1);//开始游戏进入存档界面
+
+        //钮按下后绿色选中也会过去
+        ModePagecurrentIndex = 0;
+        UpdateModePage_Highlight();
+    }
+    public void ToOneToOneStage() 
+    {
+        ToSavePageButton(1);//开始游戏进入存档界面
+        //钮按下后绿色选中也会过去
+        ModePagecurrentIndex = 1;
+        UpdateModePage_Highlight();
+    }
+    public void ToDungeonStage()
+    {
+        ToSavePageButton(1);//开始游戏进入存档界面
+        //钮按下后绿色选中也会过去
+        ModePagecurrentIndex = 2;
+        UpdateModePage_Highlight();
+    }
 
 
     public void ToSettingPage()
@@ -170,6 +296,7 @@ public class UIManager : MonoBehaviour
     {
         HomePageCavans.SetActive(true);
         SettingCavans.SetActive(false);
+        ModeCavans.SetActive(false);
         CurrentChooseList = 0;
     }
 
@@ -187,6 +314,12 @@ public class UIManager : MonoBehaviour
 
         player.frameEvents.audioS.Stop();
         player.anim.Play("Girl_Broken_Idle");
+    }
+
+    public void ToModePage() 
+    {
+        ModeCavans.SetActive(true);
+        CurrentChooseList = 7;
     }
 
     #endregion
@@ -217,7 +350,7 @@ public class UIManager : MonoBehaviour
     public Animator MainCamera;//控制摄像机拉近远离
     public Animator ShowSaveCavansAnim;//黑幕显示背景
 
-    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面
+    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans,ModeCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面
 
     [Header("捏人界面UI")]
     public InputField nameInputField; // 绑定在 Inspector 里
@@ -1406,7 +1539,41 @@ public class UIManager : MonoBehaviour
 
                     MoveSelection(1);
                 }
+
+                // 当前菜单项内的左右切换
+                if (dir.x > 0.5f)
+                {
+                    MoveSelection(9);
+
+
+                }
+                else if (dir.x < -0.5f)
+                {
+                    MoveSelection(-9);
+
+                }
             }
+
+            //游戏模式界面
+            if (CurrentChooseList == 7)
+            {
+                // 当前菜单项内的左右切换
+                if (dir.x > 0.5f)
+                {
+                    ModePagecurrentIndex = Mathf.Clamp(ModePagecurrentIndex +1, 0, 2);
+                    UpdateModePage_Highlight();
+
+
+                }
+                else if (dir.x < -0.5f)
+                {
+                    ModePagecurrentIndex = Mathf.Clamp(ModePagecurrentIndex - 1, 0, 2);
+                    UpdateModePage_Highlight();
+
+
+                }
+            }
+
 
             AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
         }
@@ -1469,13 +1636,12 @@ public class UIManager : MonoBehaviour
                 switch (HomePagecurrentIndex)
                 {
                     case 0:
-                        ToSavePageButton(1);//开始游戏进入存档界面
+                        Invoke("ToModePage", 0.1f);//进入游戏模式界面
                         break;
                     case 1:
                         ToSavePageButton(0);//开始游戏进入存档界面(CG)
                         break;
                     case 2:
-                        //ToSettingPage();
                         Invoke("ToSettingPage", 0.1f);//进入设置界面
                         break;
                     case 3:
@@ -1568,6 +1734,25 @@ public class UIManager : MonoBehaviour
             {
                 cgButtons[CGcurrentIndex].PlayCG();
             }
+
+            //游戏模式选择界面
+            if (CurrentChooseList == 7)
+            {
+                switch (ModePagecurrentIndex)
+                {
+                    case 0:
+                        ToStoryStage();       
+                        break;
+                    case 1:
+                        ToOneToOneStage();
+                        break;
+                    case 2:
+                        ToDungeonStage();
+                        break;
+                }
+
+                AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
+            }
         }
 
 
@@ -1604,7 +1789,7 @@ public class UIManager : MonoBehaviour
             }
 
             //存档界面//设置界面
-            if (CurrentChooseList == 2 || CurrentChooseList == 3)
+            if (CurrentChooseList == 2 || CurrentChooseList == 3 || CurrentChooseList == 7)
             {
                 ToHomePage();
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
@@ -1629,6 +1814,10 @@ public class UIManager : MonoBehaviour
                 Invoke("ToCGPage", 0.1f);//开始游戏进入存档界面(CG)
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
+
+
+
+
         }
 
     }//键盘K      xbox手柄A       ps手柄X
