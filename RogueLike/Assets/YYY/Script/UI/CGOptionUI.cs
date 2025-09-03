@@ -26,4 +26,12 @@ public class CGOptionUI : MonoBehaviour
 
         UIManager.instance.To_CGScence();
     }
+
+    public void PlayAVG() 
+    {
+        Debug.Log("播放【AVG】" + cgKey);
+        UIManager.instance.PlayAVG(cgKey);
+
+        UIManager.instance.To_AVGScene();
+    }
 }

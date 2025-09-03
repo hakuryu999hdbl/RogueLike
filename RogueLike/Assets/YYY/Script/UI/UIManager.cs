@@ -65,10 +65,22 @@ public class UIManager : MonoBehaviour
 
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_FeraSide_1"));//0未解锁  1解锁
 
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_01"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_02"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_03"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_04"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_05"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_06"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_07"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_08"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_09"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_10"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_11"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_12"));//0未解锁  1解锁
+        //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_13"));//0未解锁  1解锁
 
 
-
-        //PlayerPrefs.SetInt("CG_OnanismFront_1", 1);
+        PlayerPrefs.SetInt("CG_OnanismFront_1", 1);//目前保持第一个CG永远在
         //PlayerPrefs.SetInt("CG_OnanismSide_1", 1);
         //
         //PlayerPrefs.SetInt("CG_InsultSide_1", 1);
@@ -109,6 +121,21 @@ public class UIManager : MonoBehaviour
         //
         //PlayerPrefs.SetInt("CG_FeraSide_1", 1);
 
+
+        PlayerPrefs.SetInt("Chapter_01", 1);//目前保持第一章永远在
+        //PlayerPrefs.SetInt("Chapter_02", 1);
+        //PlayerPrefs.SetInt("Chapter_03", 1);
+        //PlayerPrefs.SetInt("Chapter_04", 1);
+        //PlayerPrefs.SetInt("Chapter_05", 1);
+        //PlayerPrefs.SetInt("Chapter_06", 1);
+        //PlayerPrefs.SetInt("Chapter_07", 1);
+        //PlayerPrefs.SetInt("Chapter_08", 1);
+        //PlayerPrefs.SetInt("Chapter_09", 1);
+        //PlayerPrefs.SetInt("Chapter_10", 1);
+        //PlayerPrefs.SetInt("Chapter_11", 1);
+        //PlayerPrefs.SetInt("Chapter_12", 1);
+        //PlayerPrefs.SetInt("Chapter_13", 1);
+
     }
     /// <summary>
     /// 主菜单
@@ -135,7 +162,7 @@ public class UIManager : MonoBehaviour
     }//重刷场景
 
     [Header("主菜单界面层级")]
-    public int CurrentChooseList = 0;//-2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择
+    public int CurrentChooseList = 0;//-2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面
     public int CurrentMode = 0;//0 进入CG界面  1捏人/进入游戏
     public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
     public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
@@ -146,8 +173,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject[] HomePage_highlightObjs; // 主页高亮显示
     [SerializeField] private GameObject[] highlightObjs; // 捏人界面高亮显示
     [SerializeField] private GameObject[] SettingPage_highlightObjs; // 设置高亮显示
-    [SerializeField] private GameObject[] LanguagePage_highlightObjs; // 设置高亮显示
-    [SerializeField] private GameObject[] ModePage_highlightObjs; // 设置高亮显示
+    [SerializeField] private GameObject[] LanguagePage_highlightObjs; // 语言设置高亮显示
+    [SerializeField] private GameObject[] ModePage_highlightObjs; // 游戏模式设置高亮显示
 
 
     private void UpdateHighlight()
@@ -255,7 +282,7 @@ public class UIManager : MonoBehaviour
 
     public void ToStoryStage() 
     {
-        ToSavePageButton(1);//开始游戏进入存档界面
+        Invoke("ToChapterPage", 0.1f);
 
         //钮按下后绿色选中也会过去
         ModePagecurrentIndex = 0;
@@ -276,6 +303,11 @@ public class UIManager : MonoBehaviour
         UpdateModePage_Highlight();
     }
 
+    public void ToChapterPage() 
+    {
+        ChapterCavans.SetActive(true);
+        CurrentChooseList = 8;
+    }
 
     public void ToSettingPage()
     {
@@ -319,8 +351,12 @@ public class UIManager : MonoBehaviour
     public void ToModePage() 
     {
         ModeCavans.SetActive(true);
+        ChapterCavans.SetActive(false);
         CurrentChooseList = 7;
     }
+
+
+
 
     #endregion
 
@@ -350,7 +386,7 @@ public class UIManager : MonoBehaviour
     public Animator MainCamera;//控制摄像机拉近远离
     public Animator ShowSaveCavansAnim;//黑幕显示背景
 
-    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans,ModeCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面
+    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans,ModeCavans, ChapterCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面
 
     [Header("捏人界面UI")]
     public InputField nameInputField; // 绑定在 Inspector 里
@@ -818,6 +854,11 @@ public class UIManager : MonoBehaviour
         MainCamera.SetInteger("View", 1);
     }
 
+    public void To_AVGScene() 
+    {
+        //CurrentChooseList = 9;
+    }
+
 
     #endregion
 
@@ -838,7 +879,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         CGUnclockStart();//检测CG解锁
-
+        ChapterUnclockStart();//检测Chapter解锁
 
 
         string folder = Application.persistentDataPath + "/Saves/";
@@ -1205,6 +1246,14 @@ public class UIManager : MonoBehaviour
 
     public void PlayPlayerCG(string CGName)
     {
+        // 先把当前选中改成这次点的按钮
+        int idx = cgButtons.FindIndex(b => b.unlocked && b.cgKey == CGName);
+        if (idx >= 0)
+        {
+            CGcurrentIndex = idx;
+            UpdateHighlight_CG();
+        }
+
         player.ForCGRandomEnemySkin();
         player.frameEvents.audioS.Stop();
 
@@ -1213,43 +1262,127 @@ public class UIManager : MonoBehaviour
         {
             player.anim.Play("CG/" + CGName);
         }
-
-        //switch (CGName)
-        //{
-        //    case "CG_OnanismFront_1":
-        //        player.anim.Play("CG/CG_OnanismFront_1");
-        //        break;
-        //    case "CG_OnanismSide_1":
-        //        player.anim.Play("CG/CG_OnanismSide_1");
-        //        break;
-        //
-        //
-        //    case "CG_InsultSide_1":
-        //        player.anim.Play("CG/CG_InsultSide_1");
-        //        break;
-        //    case "CG_GagSide_1":
-        //        player.anim.Play("CG/CG_GagSide_1");
-        //        break;
-        //    case "CG_FistingFront_1":
-        //        player.anim.Play("CG/CG_FistingFront_1");
-        //        break;
-        //
-        //    case "CG_RapeFront_1":
-        //        player.anim.Play("CG/CG_RapeFront_1");
-        //        break;
-        //    case "CG_RapeSide_1":
-        //        player.anim.Play("CG/CG_RapeSide_1");
-        //        break;
-        //    case "CG_AssaultFront_1":
-        //        player.anim.Play("CG/CG_AssaultFront_1");
-        //        break;
-        //    case "CG_AssaultSide_1":
-        //        player.anim.Play("CG/CG_AssaultSide_1");
-        //        break;
-        //}
     }
 
     #endregion
+
+    /// <summary>
+    /// Chapter界面选中
+    /// </summary>
+    #region
+    public List<CGOptionUI> chapterButtons = new List<CGOptionUI>();
+    int ChapterCurrentIndex = 0;
+
+    void ChapterUnclockStart()
+    {
+        foreach (var btn in chapterButtons)
+        {
+            btn.SetUnlockedFromPrefs();
+        }
+
+        // 查找第一个已解锁的
+        for (int i = 0; i < chapterButtons.Count; i++)
+        {
+            if (chapterButtons[i].unlocked)
+            {
+                currentIndex = i;
+                break;
+            }
+        }
+        UpdateHighlight();
+    }//开始检测CG解锁数
+    void MoveSelection_2(int direction)
+    {
+        // 取消旧高亮
+        chapterButtons[ChapterCurrentIndex].SetHighlight(false);
+
+        // 循环查找下一个已解锁的项
+        int max = chapterButtons.Count;
+        for (int i = 1; i < max; i++)
+        {
+            int newIndex = (ChapterCurrentIndex + direction * i + max) % max;
+            if (chapterButtons[newIndex].unlocked)
+            {
+                ChapterCurrentIndex = newIndex;
+                break;
+            }
+        }
+
+        // 更新高亮
+        UpdateHighlight_Chapter();
+    }//切换当前选中
+
+    void UpdateHighlight_Chapter()
+    {
+        for (int i = 0; i < chapterButtons.Count; i++)
+        {
+            chapterButtons[i].SetHighlight(i == ChapterCurrentIndex);
+        }
+    }
+
+    public void PlayAVG(string ChapterName)
+    {
+        // 先把当前选中改成这次点的按钮
+        int idx = chapterButtons.FindIndex(b => b.unlocked && b.cgKey == ChapterName);
+        if (idx >= 0)
+        {
+            ChapterCurrentIndex = idx;
+            UpdateHighlight_Chapter();
+        }
+
+
+        switch (ChapterName) 
+        {
+            case "Chapter_01":
+
+                break;
+            case "Chapter_02":
+
+                break;
+            case "Chapter_03":
+
+                break;
+            case "Chapter_04":
+
+                break;
+            case "Chapter_05":
+
+                break;
+            case "Chapter_06":
+
+                break;
+            case "Chapter_07":
+
+                break;
+            case "Chapter_08":
+
+                break;
+            case "Chapter_09":
+
+                break;
+            case "Chapter_10":
+
+                break;
+            case "Chapter_11":
+
+                break;
+            case "Chapter_12":
+
+                break;
+            case "Chapter_13":
+
+                break;
+        }
+
+
+        
+        
+        
+        
+    }
+    #endregion
+
+
 
     /// <summary>
     /// 菜单层面多端输入
@@ -1574,6 +1707,34 @@ public class UIManager : MonoBehaviour
                 }
             }
 
+            //Chapter界面
+            if (CurrentChooseList == 8)
+            {
+                // 当前菜单项内的上下切换
+                if (dir.y > 0.5f)
+                {
+                    MoveSelection_2(-1);
+
+                }
+                else if (dir.y < -0.5f)
+                {
+
+                    MoveSelection_2(1);
+                }
+
+                // 当前菜单项内的左右切换
+                if (dir.x > 0.5f)
+                {
+                    MoveSelection_2(6);
+
+
+                }
+                else if (dir.x < -0.5f)
+                {
+                    MoveSelection_2(-6);
+
+                }
+            }
 
             AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
         }
@@ -1753,6 +1914,12 @@ public class UIManager : MonoBehaviour
 
                 AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
             }
+
+            //Chapter界面
+            if (CurrentChooseList == 8)
+            {
+                chapterButtons[ChapterCurrentIndex].PlayAVG();
+            }
         }
 
 
@@ -1788,7 +1955,7 @@ public class UIManager : MonoBehaviour
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
-            //存档界面//设置界面
+            //存档界面//设置界面//Mode游戏模式界面
             if (CurrentChooseList == 2 || CurrentChooseList == 3 || CurrentChooseList == 7)
             {
                 ToHomePage();
@@ -1815,7 +1982,12 @@ public class UIManager : MonoBehaviour
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
-
+            //Chapter章节界面
+            if (CurrentChooseList == 8)
+            {
+                ToModePage();
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
 
 
         }
@@ -1866,6 +2038,8 @@ public class UIManager : MonoBehaviour
 
 
     #endregion
+
+
 
     /// <summary>
     /// 跳转网页/退出游戏
