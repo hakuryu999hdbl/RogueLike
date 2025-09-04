@@ -20,6 +20,7 @@ public class DialogSystem : MonoBehaviour
 
     [Header("动画控制器")]
     public int animation_number;
+    public Animator Background;
 
     [Header("对话，背景，角色")]
     public GameObject TextButton;
@@ -213,7 +214,7 @@ public class DialogSystem : MonoBehaviour
         }
     }
 
-
+    string Prompt;
 
     IEnumerator SetTextUI()
     {
@@ -228,6 +229,13 @@ public class DialogSystem : MonoBehaviour
 
         textFinished = false;
         textLabel.text = "";
+
+        #region
+        if (Prompt!= textList[index].Trim()) { Background.SetTrigger("FadeIn"); yield return new WaitForSeconds(0.3f); }
+
+        Prompt = textList[index].Trim();
+      
+        #endregion
 
         //判断一整行的字符是
         Text text = textLabel;
@@ -292,8 +300,14 @@ public class DialogSystem : MonoBehaviour
 
 
 
-
-
+           //case "FadeIn":
+           //    Background.SetTrigger("FadeIn");
+           //    index++;
+           //    break;
+           //case "FadeOut":
+           //    Background.SetTrigger("FadeOut");
+           //    index++;
+           //    break;
 
 
 
@@ -678,10 +692,10 @@ public class DialogSystem : MonoBehaviour
     //快进按钮触发在这里
     public void ChangeStory()
     {
-        
-       
-      
+        gameObject.SetActive(false);
+        UIManager.instance.ToSavePageButton(1);
 
+        AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
 
     }
 

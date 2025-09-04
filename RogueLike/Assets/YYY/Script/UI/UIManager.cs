@@ -329,6 +329,7 @@ public class UIManager : MonoBehaviour
         HomePageCavans.SetActive(true);
         SettingCavans.SetActive(false);
         ModeCavans.SetActive(false);
+        ChapterCavans.SetActive(false);
         CurrentChooseList = 0;
     }
 
@@ -355,8 +356,19 @@ public class UIManager : MonoBehaviour
         CurrentChooseList = 7;
     }
 
+    public void To_AVGScene()
+    {
+        CurrentChooseList = 9;
+        AVGCavans.SetActive(true);
 
-
+        HomePageCavans.SetActive(false);
+        ModeCavans.SetActive(false);
+        ChapterCavans.SetActive(false);
+    }
+    void Delay_AVG_ShowText() 
+    {
+        dialogSystem.ShowText();
+    }
 
     #endregion
 
@@ -386,8 +398,8 @@ public class UIManager : MonoBehaviour
     public Animator MainCamera;//控制摄像机拉近远离
     public Animator ShowSaveCavansAnim;//黑幕显示背景
 
-    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans,ModeCavans, ChapterCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面
-
+    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans,ModeCavans, ChapterCavans,AVGCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面
+    public DialogSystem dialogSystem;
     [Header("捏人界面UI")]
     public InputField nameInputField; // 绑定在 Inspector 里
 
@@ -854,10 +866,7 @@ public class UIManager : MonoBehaviour
         MainCamera.SetInteger("View", 1);
     }
 
-    public void To_AVGScene() 
-    {
-        //CurrentChooseList = 9;
-    }
+  
 
 
     #endregion
@@ -1920,6 +1929,12 @@ public class UIManager : MonoBehaviour
             {
                 chapterButtons[ChapterCurrentIndex].PlayAVG();
             }
+
+            //AVG章节界面
+            if (CurrentChooseList == 9)
+            {
+                Invoke("Delay_AVG_ShowText",0.1f);
+            }
         }
 
 
@@ -1989,6 +2004,11 @@ public class UIManager : MonoBehaviour
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
+            //AVG章节界面
+            if (CurrentChooseList == 9)
+            {
+                dialogSystem.ChangeStory();    
+            }
 
         }
 
