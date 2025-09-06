@@ -230,11 +230,21 @@ public class DialogSystem : MonoBehaviour
         textFinished = false;
         textLabel.text = "";
 
-        #region
-        if (Prompt!= textList[index].Trim()) { Background.SetTrigger("FadeIn"); yield return new WaitForSeconds(0.3f); }
+        string nextLine = textList[index].Trim();
 
-        Prompt = textList[index].Trim();
-      
+
+        #region  当前提示词与后提示词不同 展示淡入动画
+        // 只有是 Story 类型才触发
+        if (nextLine.StartsWith("Story_") && Prompt != null)
+        {
+            if (Prompt != nextLine && Prompt.StartsWith("Story_"))//台词颜色不触发淡入特效
+            {
+                Background.SetTrigger("FadeIn");
+                yield return new WaitForSeconds(0.3f);
+            }
+        }
+        Prompt = nextLine;
+
         #endregion
 
         //判断一整行的字符是
@@ -257,7 +267,7 @@ public class DialogSystem : MonoBehaviour
             //    break;
 
             case "MAN":
-                text.color = new Color(0.0f, 0.68f, 0.93f, 1.0f);//蓝色(市民群众)
+                text.color = new Color(0.0f, 0.68f, 0.93f, 1.0f);//蓝色(市民群众士兵)
                 index++;
                 break;
             case "DarkRed":

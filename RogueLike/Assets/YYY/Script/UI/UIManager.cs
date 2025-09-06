@@ -1343,43 +1343,43 @@ public class UIManager : MonoBehaviour
         switch (ChapterName) 
         {
             case "Chapter_01":
-
+                dialogSystem.animation_number = 1001;
                 break;
             case "Chapter_02":
-
+                dialogSystem.animation_number = 1002;
                 break;
             case "Chapter_03":
-
+                dialogSystem.animation_number = 1003;
                 break;
             case "Chapter_04":
-
+                dialogSystem.animation_number = 1004;
                 break;
             case "Chapter_05":
-
+                dialogSystem.animation_number = 1005;
                 break;
             case "Chapter_06":
-
+                dialogSystem.animation_number = 1006;
                 break;
             case "Chapter_07":
-
+                dialogSystem.animation_number = 1007;
                 break;
             case "Chapter_08":
-
+                dialogSystem.animation_number = 1008;
                 break;
             case "Chapter_09":
-
+                dialogSystem.animation_number = 1009;
                 break;
             case "Chapter_10":
-
+                dialogSystem.animation_number = 1010;
                 break;
             case "Chapter_11":
-
+                dialogSystem.animation_number = 1011;
                 break;
             case "Chapter_12":
-
+                dialogSystem.animation_number = 1012;
                 break;
             case "Chapter_13":
-
+                dialogSystem.animation_number = 1013;
                 break;
         }
 
