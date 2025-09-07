@@ -1754,7 +1754,7 @@ public class UIManager : MonoBehaviour
     }
 
     public GameObject HideGameObjectWhenChangeName;
-    public GameObject Prompt_Enter;
+    public GameObject Prompt_Enter,Ok_Name;
     public void OnChangeName()
     {
         isInputing = true;
@@ -1763,6 +1763,7 @@ public class UIManager : MonoBehaviour
 
         HideGameObjectWhenChangeName.SetActive(false);
         Prompt_Enter.SetActive(true);
+        Ok_Name.SetActive(true);
     }//打字的时候锁住上下移动
     public void OnChangeNameOver()
     {
@@ -1770,6 +1771,7 @@ public class UIManager : MonoBehaviour
 
         HideGameObjectWhenChangeName.SetActive(true);
         Prompt_Enter.SetActive(false);
+        Ok_Name.SetActive(false);
 
     }//打字的时候锁住上下移动
 

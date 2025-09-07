@@ -243,7 +243,9 @@ public class DialogSystem : MonoBehaviour
                 yield return new WaitForSeconds(0.3f);
             }
         }
-        Prompt = nextLine;
+
+        if (nextLine.StartsWith("Story_")) { Prompt = nextLine; }
+       
 
         #endregion
 
@@ -270,30 +272,35 @@ public class DialogSystem : MonoBehaviour
                 text.color = new Color(0.0f, 0.68f, 0.93f, 1.0f);//蓝色(市民群众士兵)
                 index++;
                 break;
+            case "Gray":
+                text.color = new Color(0.7f, 0.75f, 0.8f, 1.0f); // 亮灰色(露娜)
+                index++;
+                break;
             case "DarkRed":
-                text.color = new Color(0.8f, 0.2f, 0.2f, 1.0f); // 深红色(梦魔)（女特工）
+                //text.color = new Color(0.8f, 0.2f, 0.2f, 1.0f); // 深红色
+                text.color = new Color(1.0f, 0.2f, 0.5f, 1.0f); //浅红色(王女）
                 index++;
                 break;
-            case "LightRed":
-                text.color = new Color(1.0f, 0.2f, 0.5f, 1.0f); //浅红色(菲西莉亚)
+            case "LightBlue":
+                text.color = new Color(0.68f, 0.85f, 0.9f, 1.0f); // 浅蓝色（皇太子）
                 index++;
                 break;
+            case "Yellow":
+                text.color = new Color(1.0f, 1.0f, 0.0f, 1.0f); // 黄色（宰相/皇帝）
+                index++;
+                break;
+
             case "Green":
                 text.color = new Color(0.0f, 1.0f, 0.0f, 1.0f); // 绿色（魔族女干部）
                 index++;
                 break;
-            case "LightBlue":
-                text.color = new Color(0.68f, 0.85f, 0.9f, 1.0f); // 浅蓝色（艾莉丝）
-                index++;
-                break;
+
             case "Gold":
                 text.color = new Color(1.0f, 0.84f, 0.0f, 1.0f); // 金色（叛变战姬大队长）
                 index++;
                 break;
-            case "Yellow":
-                text.color = new Color(1.0f, 1.0f, 0.0f, 1.0f); // 黄色（莱拉）
-                index++;
-                break;
+
+
             case "Orange":
                 text.color = new Color(1.0f, 0.5f, 0.0f, 1.0f); // 橙色(播种母体)
                 index++;
@@ -302,10 +309,7 @@ public class DialogSystem : MonoBehaviour
                 text.color = new Color(0.7f, 0.3f, 0.7f, 1.0f); // 紫色 (女记者)
                 index++;
                 break;
-            case "Gray":
-                text.color = new Color(0.7f, 0.75f, 0.8f, 1.0f); // 亮灰色(牧者)（政府特工）(研究员)
-                index++;
-                break;
+       
 
 
 
