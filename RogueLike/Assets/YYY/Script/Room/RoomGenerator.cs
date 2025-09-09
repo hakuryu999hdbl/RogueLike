@@ -395,7 +395,7 @@ public class RoomGenerator : MonoBehaviour
     public float offsetRange = 2.0f;
 
 
-    public void ChangeTargetPlace(GameObject MoveTarget, int WhichRoom)//0 玩家当前房间  1距离玩家最远房间  2除了玩家之外的随机房间  3随机找一个房间
+    public void ChangeTargetPlace(GameObject MoveTarget, int WhichRoom)//-2玩家一模一样位置 -1玩家位置附近 0 玩家当前房间  1距离玩家最远房间  2除了玩家之外的随机房间  3随机找一个房间
     {
 
 

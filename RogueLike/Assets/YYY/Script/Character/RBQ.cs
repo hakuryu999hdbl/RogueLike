@@ -16,7 +16,7 @@ public class RBQ : MonoBehaviour
     public Animator anim;//接入Spine动画机
     private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle", "RBQ_Torture_CutDown" };
 
-    public int RBQState = 0;//0单人拘束 1双人拷问中  2尸体 
+    public int RBQState = 0;//0单人拘束 1双人拷问中  2尸体  3肉货
     bool isCreateEnemy = false;//是否产生过敌人
 
     public int CurrentRapeType=0;//1吊缚抽打 2后入奸
@@ -30,39 +30,44 @@ public class RBQ : MonoBehaviour
         //寻找RoomGenerator
         _RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
 
+        if (RBQState==0) { RBQState = Random.Range(1, 3); }//如果一开始没有赋值，那么随机
 
-        RBQState = Random.Range(1, 3);
 
         // 随机动画
-        if (RBQState == 1)
+        switch (RBQState)
         {
-            //string animName = punishAnims[Random.Range(0, punishAnims.Length)];
-            //anim.Play(animName);
+            case 1:
+                //被拷问
+                //string animName = punishAnims[Random.Range(0, punishAnims.Length)];
+                //anim.Play(animName);
 
-            CurrentRapeType = Random.Range(1, 3);
+                CurrentRapeType = Random.Range(1, 3);
 
-            switch (CurrentRapeType) 
-            {
-                case 1:
-                    anim.Play("RBQ_Punish_Hang");
-                    break;
-                case 2:
-                    anim.Play("RBQ_Punish_Rape");
-                    break;
+                switch (CurrentRapeType)
+                {
+                    case 1:
+                        anim.Play("RBQ_Punish_Hang");
+                        break;
+                    case 2:
+                        anim.Play("RBQ_Punish_Rape");
+                        break;
 
-            }
+                }
 
-            //循环叫声
-            InvokeRepeating("Gasping_Long", 1f, 58f);
+                //循环叫声
+                InvokeRepeating("Gasping_Long", 1f, 58f);
+                break;
+            case 2:
+                //尸体
+                int rand = Random.Range(0, tortureAnimations.Length);
+                anim.Play(tortureAnimations[rand]);
+                break;
+            case 3:
+                //商店肉货
+                anim.Play("RBQ_Display_Idle_Front");
+                break;
         }
-        else
-        {
-            //int rand = Random.Range(0, tortureAnimations.Length);
-            //anim.Play(tortureAnimations[rand]);
-
-            anim.Play("RBQ_Display_Idle_Front");
-        }
-
+       
 
 
         // 根据方向旋转（可选，或控制朝向动画片段）
@@ -72,8 +77,8 @@ public class RBQ : MonoBehaviour
         //随机皮肤
         SetRandomSkin();
 
-
-
+        //商店随机武器
+        GenerateRandomWeapons();
     }
 
     void Gasping_Long() 
@@ -104,6 +109,9 @@ public class RBQ : MonoBehaviour
         anim.SetFloat("InputX", inputX);
         anim.SetFloat("InputY", inputY);
     }
+
+
+
     /// <summary>
     /// 触发点
     /// </summary>
@@ -190,7 +198,7 @@ public class RBQ : MonoBehaviour
                 Prompt_Save.SetActive(false);
             }
 
-            if (RBQState == 2)
+            if (RBQState == 3)
             {
                 Prompt_Take.SetActive(false);
             }
@@ -245,7 +253,7 @@ public class RBQ : MonoBehaviour
             }
 
 
-            if (RBQState == 2 && other.GetComponent<Player>().isInteracting)//点击交互键
+            if (RBQState == 3 && other.GetComponent<Player>().isInteracting)//点击交互键
             {
                 if (!InteractOneTime) 
                 {
@@ -278,6 +286,35 @@ public class RBQ : MonoBehaviour
                     InteractOneTime = true;
 
                     Prompt_Take.SetActive(false);
+
+
+
+
+                    // 给玩家武器（如有）
+                    if (SwordIndex > 0)
+                    {
+                        _Player.PickupWeapon(SwordIndex,0); // 你可以创建一个处理函数
+                        SwordIndex = 0;
+                        Weapon_Sword.sprite = null;
+                        Weapon_Sword.gameObject.SetActive(false);
+                    }
+                    else if (PistolIndex > 0)
+                    {
+                        _Player.PickupWeapon(PistolIndex,1);
+                        PistolIndex = 0;
+                        Weapon_Pistol.sprite = null;
+                        Weapon_Pistol.gameObject.SetActive(false);
+                    }
+                    else if (StaffIndex > 0)
+                    {
+                        _Player.PickupWeapon(StaffIndex,2);
+                        StaffIndex = 0;
+                        Weapon_Staff.sprite = null;
+                        Weapon_Staff.gameObject.SetActive(false);
+                    }
+
+
+
                 }
                    
             }
@@ -290,7 +327,7 @@ public class RBQ : MonoBehaviour
                     Prompt_Save.SetActive(true);
                 }
 
-                if (RBQState == 2)
+                if (RBQState == 3)
                 {
                     Prompt_Take.SetActive(true);
                 }
@@ -440,6 +477,39 @@ public class RBQ : MonoBehaviour
 
 
 
+    }
+
+    #endregion
+
+
+    /// <summary>
+    /// 商店属性
+    /// </summary>
+    #region
+    public SpriteRenderer Weapon_Sword;
+    public SpriteRenderer Weapon_Pistol;
+    public SpriteRenderer Weapon_Staff;
+
+    public int SwordIndex;
+    public int PistolIndex;
+    public int StaffIndex;
+
+    public SkinPartsDatabase database;
+    public void GenerateRandomWeapons()
+    {
+        // 以一定概率生成每种武器（例如70%概率生成）
+        SwordIndex = Random.value < 0.7f ? Random.Range(1, database.SwordSprites.Length + 1) : 0;
+        PistolIndex = Random.value < 0.7f ? Random.Range(1, database.PistolSprites.Length + 1) : 0;
+        StaffIndex = Random.value < 0.7f ? Random.Range(1, database.StaffSprites.Length + 1) : 0;
+
+        Weapon_Sword.sprite = SwordIndex > 0 ? database.SwordSprites[SwordIndex - 1] : null;
+        Weapon_Sword.gameObject.SetActive(SwordIndex > 0);
+
+        Weapon_Pistol.sprite = PistolIndex > 0 ? database.PistolSprites[PistolIndex - 1] : null;
+        Weapon_Pistol.gameObject.SetActive(PistolIndex > 0);
+
+        Weapon_Staff.sprite = StaffIndex > 0 ? database.StaffSprites[StaffIndex - 1] : null;
+        Weapon_Staff.gameObject.SetActive(StaffIndex > 0);
     }
 
     #endregion

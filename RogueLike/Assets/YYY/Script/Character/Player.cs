@@ -837,7 +837,7 @@ public class Player : MonoBehaviour
             visionType = PlayerType.ShortRangePlayer;
         }
 
-        AnimSetWeapon();
+        AnimSetWeapon();//切换武器
     }//【武器切换】备用
 
 
@@ -1559,8 +1559,8 @@ public class Player : MonoBehaviour
     public int CurrentWeapon;
     public int CurrentProfession;//0战士 1射手 2法师
     //0无武器
-    //1铁剑  2阔剑  3长柄双刃斧  4长枪   5长柄斧   6冻结剑   7黑铁刺剑  8熔岩剑  9引雷剑  10古重剑
-    //101轻弩   102重弩   103复合弩   104火绳复合枪  105火绳短枪   106火绳长枪   107火绳黄铜枪
+    //1匕首 2阔剑  3长柄双刃斧  4长枪   5长柄斧   6冻结剑   7黑铁刺剑  8熔岩剑  9引雷剑  10古重剑
+    //101轻弩   102重弩   103复合弩   104火绳复合枪  105火绳短枪   106火绳长枪   107燧发枪  108刺刀火枪  109火绳黄铜枪  109 110镶银火枪   
     //201黄木短杖  202鹰身短杖   203红宝石短杖    204蓝宝石短杖   205黄玉短杖   206冰冻法杖  207紫水晶法杖  208翡翠法杖  209雷霆法杖  210古木法杖
 
     public void CheckWeapon()
@@ -1659,6 +1659,21 @@ public class Player : MonoBehaviour
     public int CurrentWeaponPower;    // 武器攻击值
     public int CurrentArmorDefence;      // 衣服防御值
     public int CurrentStockingDefence;   // 丝袜防御值
+
+
+    public void PickupWeapon(int weaponID,int ChangeProfession)//0战士 1射手 2法师
+    {
+
+        weaponIndex = weaponID;
+
+        CurrentProfession = ChangeProfession;
+        _ClothesToClass();// ChangeType(ChangeProfession);
+
+        SetSkin();
+        SaveCurrent();
+
+    }//商店购买
+
     #endregion
 
     /// <summary>

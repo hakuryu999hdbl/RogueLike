@@ -55,7 +55,7 @@ public class WallMap : MonoBehaviour
 
 
     /// <summary>
-    /// 玩家进入离开
+    /// 玩家进入离开/房间上锁解锁
     /// </summary>
     #region
     bool PlayerInRoom = false;
@@ -128,6 +128,9 @@ public class WallMap : MonoBehaviour
         {
             gate.Open(); // 设为打开动画
         }
+
+        SetShop();//在房间中央设置商店
+
     }
 
 
@@ -194,6 +197,13 @@ public class WallMap : MonoBehaviour
 
 
     }
+
+    public void SetShop() 
+    {
+        Instantiate(_RoomGenerator.RBQ, transform.position, Quaternion.identity);
+  
+    }
+
     public void CheckEnemyList()
     {
         EnemyCount--;
@@ -207,19 +217,6 @@ public class WallMap : MonoBehaviour
            // _RoomGenerator.SetFriend();
         }
 
-        // 移除所有 null（已被销毁的敌人）
-        // enemyList.RemoveAll(IsUnityObjectMissing);
-
-        //if (enemyList.Count == 0)
-        //{
-        //    isClean = true;
-        //    UnLockRoom();
-        //    Debug.Log("房间清理干净");
-        //}
-    }
-    private bool IsUnityObjectMissing(GameObject obj)
-    {
-        return obj == null || obj == default;
     }
     #endregion
 
