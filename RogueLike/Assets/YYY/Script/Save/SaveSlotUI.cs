@@ -210,21 +210,21 @@ public class SaveSlotUI : MonoBehaviour
         {
             0, new string[][] // 近战武器
             {
-                new string[] { "", "鉄の剣", "ブロードソード", "長柄両刃斧", "長槍", "長柄斧", "氷結の剣", "黒鉄の刺剣", "溶岩の剣", "雷を引く剣", "古代の大剣" }, // 日
-                new string[] { "", "铁剑", "阔剑", "长柄双刃斧", "长枪", "长柄斧", "冻结剑", "黑铁刺剑", "熔岩剑", "引雷剑", "古重剑" }, // 简
-                new string[] { "", "鐵劍", "闊劍", "長柄雙刃斧", "長槍", "長柄斧", "凍結劍", "黑鐵刺劍", "熔岩劍", "引雷劍", "古重劍" }, // 繁
-                new string[] { "", "Iron Sword", "Broad Sword", "Double Axe", "Spear", "Poleaxe", "Frost Sword", "Black Iron Rapier", "Lava Blade", "Thunderblade", "Ancient Greatsword" }, // 英
-                new string[] { "", "철검", "브로드소드", "장병 도끼", "장창", "폴액스", "동결의 검", "흑철 레이피어", "용암검", "번개를 부르는 검", "고대 대검" } // 韩
+                new string[] { "", "ダガー", "ブロードソード", "長柄両刃斧", "長槍", "長柄斧", "氷結の剣", "黒鉄の刺剣", "溶岩の剣", "雷を引く剣", "古代の大剣" }, // 日
+                new string[] { "", "匕首", "阔剑", "长柄双刃斧", "长枪", "长柄斧", "冻结剑", "黑铁刺剑", "熔岩剑", "引雷剑", "古重剑" }, // 简
+                new string[] { "", "匕首", "闊劍", "長柄雙刃斧", "長槍", "長柄斧", "凍結劍", "黑鐵刺劍", "熔岩劍", "引雷劍", "古重劍" }, // 繁
+                new string[] { "", "Dagger", "Broad Sword", "Double Axe", "Spear", "Poleaxe", "Frost Sword", "Black Iron Rapier", "Lava Blade", "Thunderblade", "Ancient Greatsword" }, // 英
+                new string[] { "", "단검", "브로드소드", "장병 도끼", "장창", "폴액스", "동결의 검", "흑철 레이피어", "용암검", "번개를 부르는 검", "고대 대검" } // 韩
             }
         },
         {
             1, new string[][] // 射击武器
             {
-                new string[] { "", "軽弩", "重弩", "複合弩", "火縄複合銃", "火縄短銃", "火縄長銃", "火縄黄銅銃", "火縄長銃", "火縄長銃", "火縄長銃" },
-                new string[] { "", "轻弩", "重弩", "复合弩", "火绳复合枪", "火绳短枪", "火绳长枪", "火绳黄铜枪", "火绳长枪", "火绳长枪", "火绳长枪" },
-                new string[] { "", "輕弩", "重弩", "複合弩", "火繩複合槍", "火繩短槍", "火繩長槍", "火繩黃銅槍", "火繩長槍", "火繩長槍", "火繩長槍" },
-                new string[] { "", "Light Crossbow", "Heavy Crossbow", "Compound Bow", "Matchlock Rifle", "Short Matchlock", "Long Matchlock", "Brass Matchlock", "Long Matchlock", "Long Matchlock", "Long Matchlock" },
-                new string[] { "", "경궁", "중궁", "복합궁", "화승총", "단화승총", "장화승총", "황동 화승총", "장화승총", "장화승총", "장화승총" }
+                new string[] { "", "軽弩", "重弩", "複合弩", "火縄複合銃", "火縄短銃", "火縄長銃", "フリントロック銃", "バヨネット銃", "火縄黄銅銃", "銀象嵌銃" },
+                new string[] { "", "轻弩", "重弩", "复合弩", "火绳复合枪", "火绳短枪", "火绳长枪", "燧发枪", "刺刀火枪", "火绳黄铜枪", "镶银火枪" },
+                new string[] { "", "輕弩", "重弩", "複合弩", "火繩複合槍", "火繩短槍", "火繩長槍", "燧發槍", "刺刀火槍", "火繩黃銅槍", "鑲銀火槍" },
+                new string[] { "", "Light Crossbow", "Heavy Crossbow", "Compound Bow", "Matchlock Rifle", "Short Matchlock", "Long Matchlock", "Flintlock", "Bayonet Musket", "Brass Matchlock", "Silver-Inlaid Musket" },
+                new string[] { "", "경궁", "중궁", "복합궁", "화승총", "단화승총", "장화승총", "화승총", "총검총", "황동 화승총", "은장총" }
             }
         },
         {

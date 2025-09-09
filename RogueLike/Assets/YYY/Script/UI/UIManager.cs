@@ -18,6 +18,11 @@ public class UIManager : MonoBehaviour
 
         //Debug.Log("目前存档里的语言" + PlayerPrefs.GetInt("language"));//0 日语 1中文 2繁中 3英语 4韩语
 
+        Debug.Log("目前存档里的钱币" + PlayerPrefs.GetInt("Money"));
+        ChangeMoney(0);
+
+
+
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_OnanismFront_1"));//0未解锁  1解锁
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_OnanismSide_1"));//0未解锁  1解锁
 
@@ -928,6 +933,9 @@ public class UIManager : MonoBehaviour
 
     public void CreateNewSave()
     {
+
+        player.currentSaveName = null;   // ← 防止 SaveCurrent 误把老档当“当前档”
+
         player._CreateNewSkin();
 
         #region 种族选项需要根据耳朵来设置
@@ -1019,6 +1027,9 @@ public class UIManager : MonoBehaviour
     {
         if (saveSlots.Count == 0) return;
 
+        // 加钱（用你的 ChangeMoney；若不在同脚本，换成 UIManager.instance.ChangeMoney(...))
+        ChangeMoney(pendingDeletePrice);
+
         currentSelectedSlot.DeleteCurrentSave();
 
         Invoke("CancelDelete", 0.1f);//目前暂时这么做，以防确定按太快直接跳到捏人界面
@@ -1031,10 +1042,24 @@ public class UIManager : MonoBehaviour
         CurrentChooseList = 2;//返回存档界面
     }
 
+    int pendingDeletePrice;//当前奴隶估价
+    string pendingDeleteName;//当前性奴名字
+    public Text ConfirmText; // 弹窗里的文本
     public void TryDelete()
     {
         MakeSureDeleteCurrentSave.SetActive(true);
         CurrentChooseList = -1;//弹出确认删除存档框
+
+
+        //更改提示，是否出售这个性奴？你会获得XX金钱
+        PlayerSaveData data = SaveManager.Load(currentSelectedSlot.Data.characterName);
+        pendingDeleteName = currentSelectedSlot.Data.characterName;
+        pendingDeletePrice = SlavePricing.CalcPrice(data);
+
+        int lang = PlayerPrefs.GetInt("language", 1);
+        if (ConfirmText != null)
+            ConfirmText.text = SellTexts.Build(lang, pendingDeleteName, pendingDeletePrice);
+
     }
 
     //////////////////////高亮显示//////////////////////////////////
@@ -2230,5 +2255,31 @@ public class UIManager : MonoBehaviour
     #endregion
 
 
+    /// <summary>
+    /// 商店与更改金币位置
+    /// </summary>
+    #region
+    [Header("商店与金币")]
+    public Text MoneyText;
+    public void ChangeMoney(int amount) 
+    {
+        // 取当前值
+        int currentMoney = PlayerPrefs.GetInt("Money", 0);
 
+        // 修改
+        currentMoney += amount;
+        if (currentMoney < 0) currentMoney = 0;   // 防止出现负数
+
+        // 存回 PlayerPrefs
+        PlayerPrefs.SetInt("Money", currentMoney);
+        PlayerPrefs.Save();
+
+        // 更新 UI
+        if (MoneyText != null)
+            MoneyText.text = currentMoney.ToString();
+
+        Debug.Log("目前存档里的钱币: " + currentMoney);
+    }
+
+    #endregion
 }

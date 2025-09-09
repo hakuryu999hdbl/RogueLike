@@ -214,9 +214,8 @@ public class Player : MonoBehaviour
 
     public void _CreateNewSkin()
     {
-        // 永远以露娜为首个候选，然后靠 GetNextAvailableName 去重
-        //SetLuna_Skin();
-        //RandomNewSave(true); // true = 以（本地化）露娜为 baseName，必要时自动加 _2/_3
+        // 关键：清空旧名字，防止任何“沿用当前档名”的覆盖
+        currentSaveName = null;
 
         // 判断是否已有名为“露娜”的存档（任一语言版本）
         if (!HasLunaSave())
@@ -931,32 +930,32 @@ public class Player : MonoBehaviour
 
 
 
-        YYY_headIndex = Random.Range(1, 14);  // 1~13
+        YYY_headIndex = Random.Range(1, 13);  // 除去皇女
         YYY_eyesIndex = Random.Range(1, 14);  // 1~13
-        YYY_bodyIndex = Random.Range(10, 13);CurrentProfession = YYY_bodyIndex - 10;//暂时先这么做，以后有新衣服……不一定，一开始可能就是这三套
-        YYY_legsIndex = Random.Range(10, 13);
+        YYY_bodyIndex = Random.Range(10, 13);CurrentProfession = YYY_bodyIndex - 10;//剑士射手法师
+        YYY_legsIndex = Random.Range(10, 13);//剑士射手法师
 
         int[] YYY_pool = { 1, 2, 3, 4, 10, 11, 12 };
-        Girl_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];
+        YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
 
 
 
 
 
-        Man_headIndex = Random.Range(1, 6);
-        Man_bodyIndex = 2;
-        Man_hatIndex = Random.Range(1, 3);
+        Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
+        Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
+        Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
 
-        Girl_headIndex = Random.Range(1, 14);  // 1~13
+        Girl_headIndex = Random.Range(1, 13);  // 除去皇女
         Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = Random.Range(10, 13);
-        Girl_legsIndex = Random.Range(10, 13);
+        Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
+        Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
 
-        int[] Girl_pool = { 1, 2, 3, 4, 10, 11, 12 };
+        int[] Girl_pool = { 1, 2, 3, 4, 10, 11, 12 };//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
         Girl_hatIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];
 
-        weaponIndex = Random.Range(1, 11);
-
+        //weaponIndex = Random.Range(1, 11);
+        weaponIndex =1;//初始武器为匕首/轻弩/黄木短杖
 
         SetSkin();
     }

@@ -361,28 +361,28 @@ public class RBQ : MonoBehaviour
 
 
 
-        YYY_headIndex = Random.Range(1, 14);  // 1~13
+        YYY_headIndex = Random.Range(1, 13);  // 除去皇女
         YYY_eyesIndex = Random.Range(1, 14);  // 1~13
-        YYY_bodyIndex = Random.Range(10, 13);
-        YYY_legsIndex = Random.Range(10, 13);
+        YYY_bodyIndex = Random.Range(10, 13); //CurrentProfession = YYY_bodyIndex - 10;//注意这个地方的敌人的职业也不能轻易更改！
+        YYY_legsIndex = Random.Range(10, 13);//剑士射手法师
 
         int[] YYY_pool = { 1, 2, 3, 4, 10, 11, 12 };
-        Girl_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];
+        YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
 
 
 
 
 
-        Man_headIndex = Random.Range(1, 6);
-        Man_bodyIndex = 2;
-        Man_hatIndex = Random.Range(1, 3);
+        Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
+        Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
+        Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
 
-        Girl_headIndex = Random.Range(1, 14);  // 1~13
+        Girl_headIndex = Random.Range(1, 13);  // 除去皇女
         Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = Random.Range(10, 13);
-        Girl_legsIndex = Random.Range(10, 13);
+        Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
+        Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
 
-        int[] Girl_pool = { 1, 2, 3, 4, 10, 11, 12 };
+        int[] Girl_pool = { 1, 2, 3, 4, 10, 11, 12 };//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
         Girl_hatIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];
 
         weaponIndex = Random.Range(1, 11);
