@@ -261,6 +261,9 @@ public class SaveSlotUI : MonoBehaviour
         switch (ClothesID)
         {
             case 1:
+                index = 4;
+                break;
+            case 2:
                 index = 3;
                 break;
             case 10:
@@ -288,6 +291,9 @@ public class SaveSlotUI : MonoBehaviour
         switch (StockingID)
         {
             case 1:
+                index = 4;
+                break;
+            case 2:
                 index = 3;
                 break;
             case 10:
@@ -312,20 +318,20 @@ public class SaveSlotUI : MonoBehaviour
     {
         public static readonly string[][] ClothesNames = new string[][]
         {
-        new string[] { "", "女性用鎧", "盗賊の軽装", "魔法学院制服", "暗殺マント" },
-        new string[] { "", "女式盔甲", "盗贼便服", "魔法院制服", "刺客斗篷" },
-        new string[] { "", "女式盔甲", "盜賊便服", "魔法院制服", "刺客斗篷" },
-        new string[] { "", "Women's Armor", "Rogue Outfit", "Academy Uniform", "Assn. Cloak" },
-        new string[] { "", "여성용 갑옷", "도적 복장", "마법학교 교복", "암살망토" }
+        new string[] { "", "女性用鎧", "盗賊の軽装", "魔法学院制服", "暗殺マント", "なし" },
+        new string[] { "", "女式盔甲", "盗贼便服", "魔法院制服", "刺客斗篷", "无" },
+        new string[] { "", "女式盔甲", "盜賊便服", "魔法院制服", "刺客斗篷", "無" },
+        new string[] { "", "Women's Armor", "Rogue Outfit", "Academy Uniform", "Assn. Cloak", "None" },
+        new string[] { "", "여성용 갑옷", "도적 복장", "마법학교 교복", "암살망토", "없음" }
         };
 
         public static readonly string[][] StockingNames = new string[][]
         {
-        new string[] { "", "ストッキング腿铠", "ソックスブーツ", "ガーターソックス", "ニーブーツ" },
-        new string[] { "", "丝袜腿甲", "黑色长袜靴", "蕾丝吊带袜", "过膝袜短靴" },
-        new string[] { "", "絲襪腿甲", "黑色長襪靴", "蕾絲吊帶襪", "過膝襪短靴" },
-        new string[] { "", "Leg Armor", "Long Boots", "Garter Stockings", "Knee Boots" },
-        new string[] { "", "스타킹 레그 아머", "검은색 롱삭스 부츠", "검은색 레이스 가터 스타킹", "하이부츠" }
+        new string[] { "", "ストッキング腿铠", "ソックスブーツ", "ガーターソックス", "ニーブーツ", "なし" },
+        new string[] { "", "丝袜腿甲", "黑色长袜靴", "蕾丝吊带袜", "过膝袜短靴", "无" },
+        new string[] { "", "絲襪腿甲", "黑色長襪靴", "蕾絲吊帶襪", "過膝襪短靴", "無" },
+        new string[] { "", "Leg Armor", "Long Boots", "Garter Stockings", "Knee Boots", "None" },
+        new string[] { "", "스타킹 레그 아머", "검은색 롱삭스 부츠", "검은색 레이스 가터 스타킹", "하이부츠", "없음" }
         };
     }
 

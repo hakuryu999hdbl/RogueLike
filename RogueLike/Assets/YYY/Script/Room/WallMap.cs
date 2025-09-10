@@ -200,8 +200,9 @@ public class WallMap : MonoBehaviour
 
     public void SetShop() 
     {
-        Instantiate(_RoomGenerator.RBQ, transform.position, Quaternion.identity);
-  
+        GameObject NewEnemy = Instantiate(_RoomGenerator.RBQ, transform.position, Quaternion.identity);
+        NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;
+        NewEnemy.GetComponentInChildren<RBQ>().RBQState = 3;
     }
 
     public void CheckEnemyList()

@@ -371,6 +371,9 @@ public class Enemy : MonoBehaviour
     bool MakeSureEnemy = false;
     float MakeSureEnemyTimer = 0;
 
+
+
+
     private void BaseMove()
     {
 
@@ -439,7 +442,16 @@ public class Enemy : MonoBehaviour
                             //玩家在队友旁边，队友站着不动
                             moveSpeed = 0;
                             aiPath.maxSpeed = 0.01f;
+
+
+ 
+
                         }
+
+
+
+
+
 
 
                     }
@@ -2022,6 +2034,25 @@ public class Enemy : MonoBehaviour
                     //受伤动画
                     anim.Play(GetAnimPrefix() + "Default_Hurt");
                     Invoke("ReSetAttack", 0.5f);//防止动画回不去
+
+
+                    //一定几率打掉衣服丝袜（暂时别）
+                    //if (Random.Range(0, 3) == 0)
+                    //{
+                    //    CurrentArmorDefence = 0;
+                    //    YYY_bodyIndex = 1; SetSkin();
+                    //    //SaveCurrent();
+                    //
+                    //    frameEvents._Effect_tear1();
+                    //}
+                    //if (Random.Range(0, 3) == 0)
+                    //{
+                    //    CurrentStockingDefence = 0;
+                    //    YYY_legsIndex = 1; SetSkin();
+                    //    //SaveCurrent();
+                    //
+                    //    frameEvents._Effect_tear1();
+                    //}
                 }
             }
 

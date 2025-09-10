@@ -2527,7 +2527,7 @@ public class Player : MonoBehaviour
             isScreaming = true;
 
 
-
+           
 
 
 
@@ -2623,6 +2623,25 @@ public class Player : MonoBehaviour
                     //受伤动画
                     anim.Play(GetAnimPrefix() + "Default_Hurt");
                     //Invoke("ReSetAttack", 0.5f);//防止动画回不去(这个在被击倒/站起流程后)
+
+
+                    //一定几率打掉衣服丝袜
+                    if (Random.Range(0, 3) == 0)
+                    {
+                        CurrentArmorDefence = 0;
+                        YYY_bodyIndex = 1; SetSkin();
+                        SaveCurrent();
+
+                        frameEvents._Effect_tear1();
+                    }
+                    if (Random.Range(0, 3) == 0)
+                    {
+                        CurrentStockingDefence = 0;
+                        YYY_legsIndex =1; SetSkin();
+                        SaveCurrent();
+
+                        frameEvents._Effect_tear1();
+                    }
                 }
             }
            
@@ -2781,21 +2800,36 @@ public class Player : MonoBehaviour
                 default:
                 case 0:
                     //升级奖励：增大最大体力值和生命值(回满状态)
-                    data.maxHP = maxHealth + 100;        
+                    data.maxHP = maxHealth + Random.Range(50, 100);        
                     break;
                 case 1:
                     //升级奖励：增大近战伤害
-                    data.meleeDamage = MeleeDamage + 10;
+                    data.meleeDamage = MeleeDamage + Random.Range(1, 10);
                     break;
                 case 2:
                     //升级奖励：增大远程伤害
-                    data.shootDamage = ShootDamage + 10;
+                    data.shootDamage = ShootDamage + Random.Range(1, 10);
                     break;
                 case 3:
                     //升级奖励：增大法术伤害
-                    data.spellDamage = SpellDamage + 10;
+                    data.spellDamage = SpellDamage + Random.Range(1, 10);
                     break;
             }
+
+            //当前职业的固定增加
+            switch (CurrentProfession) 
+            {
+                case 0:
+                    data.meleeDamage = MeleeDamage + 10;
+                    break;
+                case 1:
+                    data.shootDamage = ShootDamage + 10;
+                    break;
+                case 2:
+                    data.shootDamage = ShootDamage + 10;
+                    break;
+            }
+
 
             //升级后生命值回满
            

@@ -800,7 +800,7 @@ public class UIManager : MonoBehaviour
 
     [Header("告知RoomGenerator产生队友")]
     public RoomGenerator _RoomGenerator;
-
+    bool isCreateFriend = false;
     public void OpenCloseMenu()
     {
         if (CurrentMode == 0)
@@ -816,17 +816,17 @@ public class UIManager : MonoBehaviour
 
                 if (!isPause)
                 {
-                    // MainCamera.SetInteger("View", 0);
-                    // Common_All.SetActive(false);
-                    // ShowSaveCavansAnim.gameObject.SetActive(true);
-                    // ShowSaveCavansAnim.SetBool("Track", true);
-                    //
-                    //
-                    //player.isInputBlocked = true;//切断玩家的方向攻击等输入
-                    //
-                    // RefreshSaveSlots();//只有在打开存档菜单时更新
+                     MainCamera.SetInteger("View", 0);
+                     Common_All.SetActive(false);
+                     ShowSaveCavansAnim.gameObject.SetActive(true);
+                     ShowSaveCavansAnim.SetBool("Track", true);
+                    
+                    
+                     player.isInputBlocked = true;//切断玩家的方向攻击等输入
+                    
+                     RefreshSaveSlots();//只有在打开存档菜单时更新
 
-                    PauseGame();
+                    //PauseGame();
                 }
                 else
                 {
@@ -843,12 +843,14 @@ public class UIManager : MonoBehaviour
                     player.currentSaveName = currentSelectedSlot.Data.characterName;//开始游戏时，将这个存档名称带入Player
 
 
-                    _RoomGenerator.SetAllFriends();
+                    //只能生成一次队友
+                    if (!isCreateFriend){ _RoomGenerator.SetAllFriends(); isCreateFriend = true; }
+
                 }
 
-                //isPause = !isPause;
+                isPause = !isPause;
 
-                isPause = false;
+                //isPause = false;
             }
             else
             {
@@ -2261,6 +2263,7 @@ public class UIManager : MonoBehaviour
     #region
     [Header("商店与金币")]
     public Text MoneyText;
+    public Text MoneyText_2;
     public void ChangeMoney(int amount) 
     {
         // 取当前值
@@ -2275,8 +2278,8 @@ public class UIManager : MonoBehaviour
         PlayerPrefs.Save();
 
         // 更新 UI
-        if (MoneyText != null)
-            MoneyText.text = currentMoney.ToString();
+        MoneyText.text = currentMoney.ToString();
+        MoneyText_2.text = currentMoney.ToString();
 
         Debug.Log("目前存档里的钱币: " + currentMoney);
     }
