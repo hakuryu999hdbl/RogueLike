@@ -74,6 +74,12 @@ public class WallMap : MonoBehaviour
             Invoke("PlayerInThisRoomToRoomGenerator", 0.1f);
         }
 
+        if (other.CompareTag("Friend")|| other.CompareTag("Enemy"))
+        {
+            other.GetComponent<Enemy>().wallmap = this;
+            //Debug.Log("敌人队友读取wallmap");
+        }//队友敌人立刻读取当下WallMap最新信息
+
 
     }//玩家进入显示房间小地图
     private void OnTriggerExit2D(Collider2D other)
@@ -167,7 +173,7 @@ public class WallMap : MonoBehaviour
             Enemy enemyScript = NewEnemy.GetComponentInChildren<Enemy>();
             if (enemyScript != null)
             {
-                enemyScript.wallmap = this;//告诉自己生成的Enemy出生WallMap
+                //enemyScript.wallmap = this;//告诉自己生成的Enemy出生WallMap
                 EnemyCount++; // 每生成一个就记一次
             }
         } 
@@ -192,7 +198,7 @@ public class WallMap : MonoBehaviour
             Vector3 spawnPosition = spawnPoint.position + (Vector3)offset;
             //告诉自己生成的RBQ出生WallMap
             GameObject NewEnemy = Instantiate(_RoomGenerator.RBQ, spawnPosition, Quaternion.identity);
-            NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;
+            //NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;//RBQ需要知道wallMap是因为自己生下的Enemy需要知道
         }
 
 
@@ -201,7 +207,7 @@ public class WallMap : MonoBehaviour
     public void SetShop() 
     {
         GameObject NewEnemy = Instantiate(_RoomGenerator.RBQ, transform.position, Quaternion.identity);
-        NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;
+        //NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;//RBQ需要知道wallMap是因为自己生下的Enemy需要知道
         NewEnemy.GetComponentInChildren<RBQ>().RBQState = 3;
     }
 

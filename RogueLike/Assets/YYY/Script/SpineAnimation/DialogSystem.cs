@@ -31,10 +31,7 @@ public class DialogSystem : MonoBehaviour
                   Story_11, Story_12, Story_13, Story_14, Story_15, Story_16, Story_17, Story_18, Story_19, Story_20, 
                   Story_21, Story_22, Story_23, Story_24, Story_25, Story_26, Story_27, Story_28,
                   Story_29, Story_30, Story_31, Story_32, Story_33, Story_34,
-                  Story_35, Story_36, Story_37, Story_38, Story_39, Story_40,
-                  Story_41, Story_42, Story_43, Story_44, Story_45, Story_46, Story_47, Story_48, Story_49,
-                  Story_50, Story_51, Story_52, Story_53, Story_54, Story_55, Story_56, Story_57, Story_58, Story_59, Story_60, Story_61, Story_62, Story_63, Story_64,
-                  Story_65, Story_66, Story_67, Story_68, Story_69, Story_70;
+                  Story_35, Story_36, Story_37;
 
 
     private void OnEnable()
@@ -517,171 +514,6 @@ public class DialogSystem : MonoBehaviour
                 text.color = Color.white;
                 index++;
                 break;
-            case "Story_38":
-                BG_Image.sprite = Story_38;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_39":
-                BG_Image.sprite = Story_39;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_40":
-                BG_Image.sprite = Story_40;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_41":
-                BG_Image.sprite = Story_41;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_42":
-                BG_Image.sprite = Story_42;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_43":
-                BG_Image.sprite = Story_43;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_44":
-                BG_Image.sprite = Story_44;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_45":
-                BG_Image.sprite = Story_45;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_46":
-                BG_Image.sprite = Story_46;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_47":
-                BG_Image.sprite = Story_47;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_48":
-                BG_Image.sprite = Story_48;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_49":
-                BG_Image.sprite = Story_49;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_50":
-                BG_Image.sprite = Story_50;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_51":
-                BG_Image.sprite = Story_51;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_52":
-                BG_Image.sprite = Story_52;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_53":
-                BG_Image.sprite = Story_53;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_54":
-                BG_Image.sprite = Story_54;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_55":
-                BG_Image.sprite = Story_55;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_56":
-                BG_Image.sprite = Story_56;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_57":
-                BG_Image.sprite = Story_57;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_58":
-                BG_Image.sprite = Story_58;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_59":
-                BG_Image.sprite = Story_59;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_60":
-                BG_Image.sprite = Story_60;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_61":
-                BG_Image.sprite = Story_61;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_62":
-                BG_Image.sprite = Story_62;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_63":
-                BG_Image.sprite = Story_63;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_64":
-                BG_Image.sprite = Story_64;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_65":
-                BG_Image.sprite = Story_65;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_66":
-                BG_Image.sprite = Story_66;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_67":
-                BG_Image.sprite = Story_67;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_68":
-                BG_Image.sprite = Story_68;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_69":
-                BG_Image.sprite = Story_69;
-                text.color = Color.white;
-                index++;
-                break;
-            case "Story_70":
-                BG_Image.sprite = Story_70;
-                text.color = Color.white;
-                index++;
-                break;
         }
 
 
@@ -706,11 +538,56 @@ public class DialogSystem : MonoBehaviour
     //快进按钮触发在这里
     public void ChangeStory()
     {
-        gameObject.SetActive(false);
-        UIManager.instance.ToSavePageButton(1);
+        //gameObject.SetActive(false);
+        //UIManager.instance.ToSavePageButton(1);
 
         AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
 
+
+        switch (animation_number)
+        {
+            case 1001:
+                GameFlowData.nextScene = "Story_01";
+                break;
+            case 1002:
+                GameFlowData.nextScene = "Story_02";
+                break;
+            case 1003:
+                GameFlowData.nextScene = "Story_03";
+                break;
+            case 1004:
+                GameFlowData.nextScene = "Story_04";
+                break;
+            case 1005:
+                GameFlowData.nextScene = "Story_05";
+                break;
+            case 1006:
+                GameFlowData.nextScene = "Story_06";
+                break;
+            case 1007:
+                GameFlowData.nextScene = "Story_07";
+                break;
+            case 1008:
+                GameFlowData.nextScene = "Story_08";
+                break;
+            case 1009:
+                GameFlowData.nextScene = "Story_09";
+                break;
+            case 1010:
+                GameFlowData.nextScene = "Story_10";
+                break;
+            case 1011:
+                GameFlowData.nextScene = "Story_11";
+                break;
+            case 1012:
+                GameFlowData.nextScene = "Story_12";
+                break;
+            case 1013:
+                //GameFlowData.nextScene = "Menu";
+                break;
+        }
+
+        UIManager.instance.ReLoadScene();
     }
 
 

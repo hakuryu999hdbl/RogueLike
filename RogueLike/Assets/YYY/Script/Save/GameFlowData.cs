@@ -4,7 +4,25 @@ using UnityEngine;
 
 public class GameFlowData : MonoBehaviour
 {
-    public static string nextScene = null;     //【CG】进入CG处刑场景   【Menu】进入菜单场景    【AVG】进入AVG场景
+    public static string nextScene = null;
+
+    //【Menu】进入菜单场景 【CG】进入CG处刑场景
+
+    //【Story_01】进入剧情关卡1
+    //【Story_02】进入剧情关卡2
+    //【Story_03】进入剧情关卡3
+    //【Story_04】进入剧情关卡4
+    //【Story_05】进入剧情关卡5
+    //【Story_06】进入剧情关卡6
+    //【Story_07】进入剧情关卡7
+    //【Story_08】进入剧情关卡8
+    //【Story_09】进入剧情关卡9
+    //【Story_10】进入剧情关卡10
+    //【Story_11】进入剧情关卡11
+    //【Story_12】进入剧情关卡12
+
+    //【Arena】进入角斗场模式  
+    //【Dungeon】进入地下城模式  
 }
 public static class SlavePricing
 {

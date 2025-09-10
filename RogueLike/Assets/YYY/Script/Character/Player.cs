@@ -737,8 +737,8 @@ public class Player : MonoBehaviour
                 break;
         }
 
-        //武器（尤其是远程）更新
-        CheckWeapon();
+        
+        CheckWeapon();//武器（尤其是远程）更新
 
     }
     public PlayerClass Class;
@@ -855,7 +855,7 @@ public class Player : MonoBehaviour
             else { anim.SetInteger("Weapon", 2); }
         }
 
-        CheckWeapon();
+        CheckWeapon();//动画器内设置武器信息
     }//设置武器
 
 
@@ -1008,7 +1008,7 @@ public class Player : MonoBehaviour
             );
 
 
-        CheckWeapon();
+        CheckWeapon();//更新皮肤后更新武器
     }
 
     #endregion
@@ -1671,6 +1671,10 @@ public class Player : MonoBehaviour
 
         SetSkin();
         SaveCurrent();
+
+        //立刻赋予Strike
+        PlayerSaveData data = SaveManager.Load(currentSaveName);
+        ApplySaveData(data);
 
     }//商店购买
 
@@ -2834,7 +2838,7 @@ public class Player : MonoBehaviour
             //升级后生命值回满
            
 
-            ApplySaveData(data);//将更新后的值重新带入
+            ApplySaveData(data);//升级将更新后的值重新带入
         }
 
 

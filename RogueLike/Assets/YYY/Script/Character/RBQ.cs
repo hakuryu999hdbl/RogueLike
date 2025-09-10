@@ -144,7 +144,7 @@ public class RBQ : MonoBehaviour
                 //出现敌人,停止拷问，冲向玩家
                 GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
                 Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
-                enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
+                //enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
                 enemy.CanChangeSkin = false;
                 StartCoroutine(DelayedApplySkin(enemy));
                 enemy.ChangeClass(1);
@@ -237,7 +237,7 @@ public class RBQ : MonoBehaviour
                     //奖励一个队友
                     GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
                     Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
-                    enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
+                    //enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
                     enemy.CanChangeSkin = false;
                     StartCoroutine(DelayedApplySkin(enemy));
                     enemy.ChangeClass(0);
@@ -484,7 +484,7 @@ public class RBQ : MonoBehaviour
                                 //奖励一个队友
                                 GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
                                 Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
-                                enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
+                                //enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
                                 enemy.CanChangeSkin = false;
                                 StartCoroutine(DelayedApplySkin(enemy));
                                 enemy.ChangeClass(0);

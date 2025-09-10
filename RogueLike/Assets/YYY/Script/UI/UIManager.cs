@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
 
         //Debug.Log("目前存档里的语言" + PlayerPrefs.GetInt("language"));//0 日语 1中文 2繁中 3英语 4韩语
 
-        Debug.Log("目前存档里的钱币" + PlayerPrefs.GetInt("Money"));
+        //Debug.Log("目前存档里的钱币" + PlayerPrefs.GetInt("Money"));
         ChangeMoney(0);
 
 
@@ -141,6 +141,82 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("Chapter_12", 1);
         //PlayerPrefs.SetInt("Chapter_13", 1);
 
+        switch (GameFlowData.nextScene)
+        {
+            case "Story_03":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 1;//典狱长Boss战
+                break;
+            case "Story_05":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 1;//王女Boss战
+                break;
+            case "Story_08":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 1;//宰相Boss战
+                break;
+            case "Story_10":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 1;//王女与皇太子Boss战
+                break;
+            case "Story_12":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 1;//皇帝Boss战
+                break;
+
+
+            case "Story_01":
+            case "Story_02":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 4;
+                break;
+            case "Story_04":
+            case "Story_06":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 5;
+                break;
+            case "Story_07":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 6;
+                break;
+            case "Story_09":
+            case "Story_11":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 7;
+                break;
+
+
+            case "Arena":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 1;
+                break;
+            case "Dungeon":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 7;
+                break;
+
+            case "CG":
+                ToSavePageButton(0);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 1;
+                break;
+
+            default:
+                break;
+        }
+
+        GameFlowData.nextScene = "";//清理
     }
     /// <summary>
     /// 主菜单
@@ -162,9 +238,15 @@ public class UIManager : MonoBehaviour
     {
         Time.timeScale = 1;
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Invoke("DelayReLoadScene",1f);
         Loading.SetActive(true);
     }//重刷场景
+
+    void DelayReLoadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
 
     [Header("主菜单界面层级")]
     public int CurrentChooseList = 0;//-2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面
@@ -219,7 +301,7 @@ public class UIManager : MonoBehaviour
             ModePage_highlightObjs[i].SetActive(i == ModePagecurrentIndex);
         }
 
-        switch (ModePagecurrentIndex) 
+        switch (ModePagecurrentIndex)
         {
             case 0:
                 Text_Story.SetActive(true);
@@ -255,7 +337,7 @@ public class UIManager : MonoBehaviour
         if (CurrentMode == 0)
         {
             //CG鉴赏
-            player.anim.Play("Girl_Broken_Idle");
+            Invoke("DelayPlayerPose", 0.2f);
 
             //钮按下后绿色选中也会过去
             HomePagecurrentIndex = 1;
@@ -285,7 +367,7 @@ public class UIManager : MonoBehaviour
 
     public GameObject Text_Story, Text_OneToOne, Text_Dungeon;
 
-    public void ToStoryStage() 
+    public void ToStoryStage()
     {
         Invoke("ToChapterPage", 0.1f);
 
@@ -293,22 +375,48 @@ public class UIManager : MonoBehaviour
         ModePagecurrentIndex = 0;
         UpdateModePage_Highlight();
     }
-    public void ToOneToOneStage() 
+    public void ToOneToOneStage()
     {
-        ToSavePageButton(1);//开始游戏进入存档界面
-        //钮按下后绿色选中也会过去
-        ModePagecurrentIndex = 1;
-        UpdateModePage_Highlight();
+        GameFlowData.nextScene = "Arena";
+        ReLoadScene();
+
+        //  ToSavePageButton(1);//开始游戏进入存档界面
+        //  //钮按下后绿色选中也会过去
+        //  ModePagecurrentIndex = 1;
+        //  UpdateModePage_Highlight();
     }
     public void ToDungeonStage()
     {
-        ToSavePageButton(1);//开始游戏进入存档界面
-        //钮按下后绿色选中也会过去
-        ModePagecurrentIndex = 2;
-        UpdateModePage_Highlight();
+        GameFlowData.nextScene = "Dungeon";
+        ReLoadScene();
+
+        //  ToSavePageButton(1);//开始游戏进入存档界面
+        //  //钮按下后绿色选中也会过去
+        //  ModePagecurrentIndex = 2;
+        //  UpdateModePage_Highlight();
     }
 
-    public void ToChapterPage() 
+    public void SavePageToHomePage() 
+    {
+        //ToHomePage();
+
+        ReLoadScene();
+
+        //PauseGame();
+
+        
+
+    }//这个是存档界面在按下退出的时候产生路径[不确定怎么弄专门设置的]
+    public void HomePageToCGPage() 
+    {
+        GameFlowData.nextScene = "CG";
+        ReLoadScene();
+
+        //ToSavePageButton(0);
+
+    }//这个是主界面在去CG界面的时候产生路径[不确定怎么弄专门设置的]
+    void DelayPlayerPose() { player.anim.Play("Girl_Broken_Idle"); }//UIManager里的Awake太早来不及触发
+    public void ToChapterPage()
     {
         ChapterCavans.SetActive(true);
         CurrentChooseList = 8;
@@ -354,7 +462,7 @@ public class UIManager : MonoBehaviour
         player.anim.Play("Girl_Broken_Idle");
     }
 
-    public void ToModePage() 
+    public void ToModePage()
     {
         ModeCavans.SetActive(true);
         ChapterCavans.SetActive(false);
@@ -370,7 +478,7 @@ public class UIManager : MonoBehaviour
         ModeCavans.SetActive(false);
         ChapterCavans.SetActive(false);
     }
-    void Delay_AVG_ShowText() 
+    void Delay_AVG_ShowText()
     {
         dialogSystem.ShowText();
     }
@@ -385,7 +493,7 @@ public class UIManager : MonoBehaviour
     public bool isPause = true;//一开始就Menu界面
     public GameObject PauseMenu;
 
-    public void PauseGame() 
+    public void PauseGame()
     {
         Time.timeScale = 0;
         PauseMenu.SetActive(true);
@@ -403,7 +511,7 @@ public class UIManager : MonoBehaviour
     public Animator MainCamera;//控制摄像机拉近远离
     public Animator ShowSaveCavansAnim;//黑幕显示背景
 
-    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans,ModeCavans, ChapterCavans,AVGCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面
+    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans, ModeCavans, ChapterCavans, AVGCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面
     public DialogSystem dialogSystem;
     [Header("捏人界面UI")]
     public InputField nameInputField; // 绑定在 Inspector 里
@@ -455,12 +563,12 @@ public class UIManager : MonoBehaviour
 
 
 
-    public void OnHairLeft() 
+    public void OnHairLeft()
     {
-        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1); CreatNewcurrentIndex = 1; UpdateHighlight(); } 
+        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1); CreatNewcurrentIndex = 1; UpdateHighlight(); }
     }
-    public void OnHairRight() 
-    { 
+    public void OnHairRight()
+    {
         if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_headIndex, 1, 13, +1); CreatNewcurrentIndex = 1; UpdateHighlight(); }
     }
 
@@ -508,7 +616,7 @@ public class UIManager : MonoBehaviour
     }
     public void OnClassRight()
     {
-        if (IsLuna(player.currentSaveName)==false) { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
+        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
     }
     void ChangeSkin(ref int index, int min, int max, int delta)
     {
@@ -696,7 +804,7 @@ public class UIManager : MonoBehaviour
 
     public void OnConfirmNameInput()
     {
-        if (player.currentSaveName== "ルナ"|| player.currentSaveName == "露娜"||player.currentSaveName == "Luna" || player.currentSaveName == "루나") { return; }
+        if (player.currentSaveName == "ルナ" || player.currentSaveName == "露娜" || player.currentSaveName == "Luna" || player.currentSaveName == "루나") { return; }
 
 
         string newName = nameInputField.text.Trim();
@@ -816,15 +924,15 @@ public class UIManager : MonoBehaviour
 
                 if (!isPause)
                 {
-                     MainCamera.SetInteger("View", 0);
-                     Common_All.SetActive(false);
-                     ShowSaveCavansAnim.gameObject.SetActive(true);
-                     ShowSaveCavansAnim.SetBool("Track", true);
-                    
-                    
-                     player.isInputBlocked = true;//切断玩家的方向攻击等输入
-                    
-                     RefreshSaveSlots();//只有在打开存档菜单时更新
+                    MainCamera.SetInteger("View", 0);
+                    Common_All.SetActive(false);
+                    ShowSaveCavansAnim.gameObject.SetActive(true);
+                    ShowSaveCavansAnim.SetBool("Track", true);
+
+
+                    player.isInputBlocked = true;//切断玩家的方向攻击等输入
+
+                    RefreshSaveSlots();//只有在打开存档菜单时更新
 
                     //PauseGame();
                 }
@@ -844,7 +952,7 @@ public class UIManager : MonoBehaviour
 
 
                     //只能生成一次队友
-                    if (!isCreateFriend){ _RoomGenerator.SetAllFriends(); isCreateFriend = true; }
+                    if (!isCreateFriend) { _RoomGenerator.SetAllFriends(); isCreateFriend = true; }
 
                 }
 
@@ -873,7 +981,7 @@ public class UIManager : MonoBehaviour
         MainCamera.SetInteger("View", 1);
     }
 
-  
+
 
 
     #endregion
@@ -1163,7 +1271,7 @@ public class UIManager : MonoBehaviour
         CurrentChooseList = -2;//弹出确认删除存档框
     }
 
-    public void CancelDelete_All() 
+    public void CancelDelete_All()
     {
         MakeSureDeleteCurrentSave_All.SetActive(false);
         CurrentChooseList = 3;//返回设置界面
@@ -1367,7 +1475,7 @@ public class UIManager : MonoBehaviour
         }
 
 
-        switch (ChapterName) 
+        switch (ChapterName)
         {
             case "Chapter_01":
                 dialogSystem.animation_number = 1001;
@@ -1411,10 +1519,10 @@ public class UIManager : MonoBehaviour
         }
 
 
-        
-        
-        
-        
+
+
+
+
     }
     #endregion
 
@@ -1435,10 +1543,10 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         moveAction = inputActions.FindAction("Move");
-        confirmAction = inputActions.FindAction("Attack"); 
+        confirmAction = inputActions.FindAction("Attack");
         cancelAction = inputActions.FindAction("Dodge");
         createAction = inputActions.FindAction("Run");
-        deleteAction = inputActions.FindAction("Interact");  
+        deleteAction = inputActions.FindAction("Interact");
         pauseAction = inputActions.FindAction("Pause");
 
         moveAction.performed += OnMove;
@@ -1729,7 +1837,7 @@ public class UIManager : MonoBehaviour
                 // 当前菜单项内的左右切换
                 if (dir.x > 0.5f)
                 {
-                    ModePagecurrentIndex = Mathf.Clamp(ModePagecurrentIndex +1, 0, 2);
+                    ModePagecurrentIndex = Mathf.Clamp(ModePagecurrentIndex + 1, 0, 2);
                     UpdateModePage_Highlight();
 
 
@@ -1781,7 +1889,7 @@ public class UIManager : MonoBehaviour
     }
 
     public GameObject HideGameObjectWhenChangeName;
-    public GameObject Prompt_Enter,Ok_Name;
+    public GameObject Prompt_Enter, Ok_Name;
     public void OnChangeName()
     {
         isInputing = true;
@@ -1809,7 +1917,7 @@ public class UIManager : MonoBehaviour
             // 可选：进入下一级菜单、确认开始游戏等
 
             //只要暂停菜单显示，攻击键按下就是触发这里
-            if (PauseMenu.activeInHierarchy) 
+            if (PauseMenu.activeInHierarchy)
             {
                 ReLoadScene();
 
@@ -1838,7 +1946,9 @@ public class UIManager : MonoBehaviour
                         Invoke("ToModePage", 0.1f);//进入游戏模式界面
                         break;
                     case 1:
-                        ToSavePageButton(0);//开始游戏进入存档界面(CG)
+                        //ToSavePageButton(0);//开始游戏进入存档界面(CG)
+
+                        HomePageToCGPage();
                         break;
                     case 2:
                         Invoke("ToSettingPage", 0.1f);//进入设置界面
@@ -1940,7 +2050,7 @@ public class UIManager : MonoBehaviour
                 switch (ModePagecurrentIndex)
                 {
                     case 0:
-                        ToStoryStage();       
+                        ToStoryStage();
                         break;
                     case 1:
                         ToOneToOneStage();
@@ -1962,7 +2072,7 @@ public class UIManager : MonoBehaviour
             //AVG章节界面
             if (CurrentChooseList == 9)
             {
-                Invoke("Delay_AVG_ShowText",0.1f);
+                Invoke("Delay_AVG_ShowText", 0.1f);
             }
         }
 
@@ -1999,8 +2109,15 @@ public class UIManager : MonoBehaviour
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
-            //存档界面//设置界面//Mode游戏模式界面
-            if (CurrentChooseList == 2 || CurrentChooseList == 3 || CurrentChooseList == 7)
+            //存档界面
+            if (CurrentChooseList == 2 )
+            {
+                SavePageToHomePage();
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+
+            //设置界面//Mode游戏模式界面
+            if (CurrentChooseList == 3 || CurrentChooseList == 7)
             {
                 ToHomePage();
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
@@ -2036,7 +2153,7 @@ public class UIManager : MonoBehaviour
             //AVG章节界面
             if (CurrentChooseList == 9)
             {
-                dialogSystem.ChangeStory();    
+                dialogSystem.ChangeStory();
             }
 
         }
@@ -2142,7 +2259,7 @@ public class UIManager : MonoBehaviour
         UpdateHomePage_Highlight();
     }
 
-  
+
 
     public void OpenURL_YYY()
     {
@@ -2153,7 +2270,7 @@ public class UIManager : MonoBehaviour
         UpdateHomePage_Highlight();
     }
 
- 
+
     #endregion
 
 
@@ -2264,7 +2381,7 @@ public class UIManager : MonoBehaviour
     [Header("商店与金币")]
     public Text MoneyText;
     public Text MoneyText_2;
-    public void ChangeMoney(int amount) 
+    public void ChangeMoney(int amount)
     {
         // 取当前值
         int currentMoney = PlayerPrefs.GetInt("Money", 0);

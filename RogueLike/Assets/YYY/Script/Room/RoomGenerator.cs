@@ -37,11 +37,6 @@ public class RoomGenerator : MonoBehaviour
     public WallType wallType;
 
 
-    //当前区域内敌情
-    public int CurrentRegionSituation;//1绿区 0白区 2黄区 3红区
-    //当前区域内执行任务
-    public int CurrentRegionMission;//0无任务 1红区歼灭 2红区袭击 3白区清剿 4黄区歼灭 5黄区袭击
-
 
 
 
@@ -54,7 +49,7 @@ public class RoomGenerator : MonoBehaviour
 
 
         //随机房间大小
-        roomNumber = Random.Range(4, 8);
+        //roomNumber = Random.Range(4, 8);
         //roomNumber = 1;
 
         ChoosePlace();
@@ -210,18 +205,9 @@ public class RoomGenerator : MonoBehaviour
     public BGM BGM;//用于红区等背景音乐
     public void PlayRegionBGM()
     {
-        switch (CurrentRegionSituation)
-        {
-            case 1:
-                BGM.AudioPlayBackgroundMusic(-1);//播放红区等背景音乐
-                break;
-            case 0:
-            case 2:
-            case 3:
-                BGM.AudioPlayChaseMusic(-1);//播放红区等背景音乐
-                break;
-        }
-
+        //BGM.AudioPlayBackgroundMusic(-1);//播放街道等背景音乐
+        BGM.AudioPlayChaseMusic(-1);//播放红区等背景音乐
+       
     }
 
     #endregion

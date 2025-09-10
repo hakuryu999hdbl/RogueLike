@@ -372,7 +372,7 @@ public class Enemy : MonoBehaviour
     float MakeSureEnemyTimer = 0;
 
 
-
+    float WaitTimer;//玩家不动等待时间
 
     private void BaseMove()
     {
@@ -444,7 +444,14 @@ public class Enemy : MonoBehaviour
                             aiPath.maxSpeed = 0.01f;
 
 
- 
+                            WaitTimer += Time.deltaTime;
+                            //玩家不处于战斗状态或者跑步状态下大家巡逻,一旦玩家跑起来大家再关掉巡逻
+                            if (WaitTimer >= 1&& player.isRunning == false)
+                            {
+                                isPatrol = true;
+                                WaitTimer = 0;
+                            }
+
 
                         }
 
@@ -516,7 +523,7 @@ public class Enemy : MonoBehaviour
                         int index = Random.Range(0, enemies.Length);
                         CurrentTarget = enemies[index];
 
-                        Debug.Log("队友索敌目标: " + CurrentTarget.name);
+                        //Debug.Log("队友索敌目标: " + CurrentTarget.name);
 
                         MakeSureEnemy = true;
                     }
@@ -553,6 +560,14 @@ public class Enemy : MonoBehaviour
             CurrentTarget = Patrol_Target;//巡逻目标
 
             AntiOverlapping.SetActive(false);//这个玩意会让敌人队友不重叠，但是巡逻的时候会贴在一起，巡逻的时候去掉
+
+
+            //队友在玩家开始跑后立刻聚集过来
+            if(tag == "Friend" && player.isRunning)
+            {
+                isPatrol = false;
+                CurrentTarget = _Player;
+            }
         }
 
         CheckJump();
