@@ -178,7 +178,9 @@ public class DialogSystem : MonoBehaviour
         {
             if (index >= textList.Count) // 添加边界检查
             {
-                gameObject.SetActive(false);
+
+                //暂时先别消失，等场景跳转完毕
+                //gameObject.SetActive(false);
                 index = 0;
 
                 ChangeStory();//结束重刷场景

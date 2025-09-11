@@ -4,6 +4,33 @@ using UnityEngine;
 
 public class WallMap : MonoBehaviour
 {
+
+    /// <summary>
+    /// 尝试与Room取得联系
+    /// </summary>
+    #region
+    Vector2Int GridPos => new Vector2Int(
+   Mathf.RoundToInt(transform.position.x / Room.CellX),
+   Mathf.RoundToInt(transform.position.y / Room.CellY)
+);
+    private Room linkedRoom;
+
+    void SetBoss()
+    {
+        // 根据自己的网格坐标找到房间
+        if (!RoomRegistry.TryGetRoom(GridPos, out linkedRoom))
+        {
+            Debug.LogWarning($"[WallMap] 找不到对应Room，Grid={GridPos} pos={transform.position}");
+        }
+
+        if (linkedRoom.roomType == Room.RoomType.Boss) 
+        {
+            Debug.Log("Boss房");
+        }
+    }
+    #endregion
+
+
     /// <summary>
     /// 房间小地图显示
     /// </summary>
@@ -13,6 +40,8 @@ public class WallMap : MonoBehaviour
 
     private void Start()
     {
+        SetBoss();
+
         _RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();//寻找RoomGenerator
 
 
@@ -176,6 +205,8 @@ public class WallMap : MonoBehaviour
                 //enemyScript.wallmap = this;//告诉自己生成的Enemy出生WallMap
                 EnemyCount++; // 每生成一个就记一次
             }
+
+            if (linkedRoom.roomType == Room.RoomType.Boss&& i == 1) { enemyScript.BecomeBoss_Selene(); }
         } 
 
 

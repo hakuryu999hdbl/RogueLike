@@ -1232,7 +1232,11 @@ public class UIManager : MonoBehaviour
         if (currentRow < totalRows - rowsVisible) { ScrollDown_Button.SetActive(true); }
         else { ScrollDown_Button.SetActive(false); }
 
-        if (saveSlotParent.childCount <= 10) { ScrollDown_Button.SetActive(false); Debug.Log("目前需要几行显示所有存档[!!!!]" + totalRows); }//存档数小于等于10也不能下翻
+        if (saveSlotParent.childCount <= 10) 
+        { 
+            ScrollDown_Button.SetActive(false); 
+            //Debug.Log("目前需要几行显示所有存档[!!!!]" + totalRows);
+        }//存档数小于等于10也不能下翻
 
     }//更新按钮
 

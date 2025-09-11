@@ -46,55 +46,68 @@ public class Enemy : MonoBehaviour
             //visionType = EnemyType.ShortRangeEnemy;
 
             CurrentProfession = Random.Range(0, 2);//把CurrentProfession绑进去(法师只有女性可当)
-          
 
-           
+
+
 
 
             //随机皮肤
             if (CanChangeSkin)
             {
-                SetRandomSkin();
-                // 随机从 Enum 中选择一个值
-                Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
 
-                //Class = EnemyClass.Succubus;
-                //Class = EnemyClass.Girl;
-                //Class = EnemyClass.Man;
-                //Class = EnemyClass.Monster;
-                //Class = EnemyClass.Tentacle_Monster;
-                //Class = EnemyClass.Tentacle_Bug;
-                //Class = EnemyClass.Tentacle_Bag;
-                //Class = EnemyClass.Tentacle_HermitCrab;
-
-                if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
+                if (BossNumber == 1)
                 {
-                    CurrentProfession = 2;
+                    BecomeBoss_Selene();
 
-                }//一部分远程女射手变成女法师
+                }
 
-
-                if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug)
+                else if (BossNumber == 0)
                 {
 
-                    CurrentProfession = 0;
-
-
-                }//这部分怪物只能近战
-
-                if (Class == EnemyClass.Tentacle_Bug)
-                {
-
-                    strike.TypeOfAttack = 2;//闪电
-
-                }//肉翅虫具有麻痹效果
 
 
 
+                    SetRandomSkin();
+                    // 随机从 Enum 中选择一个值
+                    Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
 
-                ChangeType(CurrentProfession);//把CurrentProfession绑进去
-                SetAttackRange();
+                    //Class = EnemyClass.Succubus;
+                    //Class = EnemyClass.Girl;
+                    //Class = EnemyClass.Man;
+                    //Class = EnemyClass.Monster;
+                    //Class = EnemyClass.Tentacle_Monster;
+                    //Class = EnemyClass.Tentacle_Bug;
+                    //Class = EnemyClass.Tentacle_Bag;
+                    //Class = EnemyClass.Tentacle_HermitCrab;
 
+                    if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
+                    {
+                        CurrentProfession = 2;
+
+                    }//一部分远程女射手变成女法师
+
+
+                    if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug)
+                    {
+
+                        CurrentProfession = 0;
+
+
+                    }//这部分怪物只能近战
+
+                    if (Class == EnemyClass.Tentacle_Bug)
+                    {
+
+                        strike.TypeOfAttack = 2;//闪电
+
+                    }//肉翅虫具有麻痹效果
+
+
+
+
+                    ChangeType(CurrentProfession);//把CurrentProfession绑进去
+                    SetAttackRange();
+                }
             }
         }//如果已经赋值了队友，那么不随机
 
@@ -103,10 +116,9 @@ public class Enemy : MonoBehaviour
 
         GateEffect.SetActive(true);//传送门特效
 
-
     }
 
-    void SetAttackRange() 
+    void SetAttackRange()
     {
 
 
@@ -446,7 +458,7 @@ public class Enemy : MonoBehaviour
 
                             WaitTimer += Time.deltaTime;
                             //玩家不处于战斗状态或者跑步状态下大家巡逻,一旦玩家跑起来大家再关掉巡逻
-                            if (WaitTimer >= 1&& player.isRunning == false)
+                            if (WaitTimer >= 1 && player.isRunning == false)
                             {
                                 isPatrol = true;
                                 WaitTimer = 0;
@@ -563,7 +575,7 @@ public class Enemy : MonoBehaviour
 
 
             //队友在玩家开始跑后立刻聚集过来
-            if(tag == "Friend" && player.isRunning)
+            if (tag == "Friend" && player.isRunning)
             {
                 isPatrol = false;
                 CurrentTarget = _Player;
@@ -1928,7 +1940,7 @@ public class Enemy : MonoBehaviour
                 case 4:
                     if (Random.Range(0, 2) == 0)
                     {
-                        Burning(Random.Range(1, 8),false);//灼烧伤害
+                        Burning(Random.Range(1, 8), false);//灼烧伤害
                     }
                     else
                     {
@@ -2408,8 +2420,94 @@ public class Enemy : MonoBehaviour
     #endregion
 
 
+    /// <summary>
+    /// 变成Boss
+    /// </summary>
+    #region
+
+    int BossNumber = 1;//1皇女
+    public void BecomeBoss_Morgan()
+    {
+
+    }//Boss 莫尔根侯爵
+    public void BecomeBoss_Selene()
+    {
 
 
+        YYY_headIndex = 13;  // 皇女
+        YYY_eyesIndex = 11;
+        YYY_bodyIndex = 5;
+        YYY_legsIndex = 5;
+
+        YYY_hatIndex = 1;//人类
+
+        SetSkin();
+
+        Class = EnemyClass.Girl;
+
+        CurrentProfession = 2;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+    }//Boss 赛琳娜
+
+    public void BecomeBoss_Selene_2()
+    {
+
+
+        YYY_headIndex = 13;  // 皇女
+        YYY_eyesIndex = 11;
+        YYY_bodyIndex = 5;
+        YYY_legsIndex = 5;
+
+        YYY_hatIndex = 11;//大魔族
+
+
+        SetSkin();
+
+        Class = EnemyClass.Succubus;
+
+        CurrentProfession = 2;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+
+
+    }//Boss 魔族化赛琳娜
+    public void BecomeBoss_Alexis()
+    {
+        Man_headIndex = 5;//皇子
+        Man_bodyIndex = 5;//皇子
+        Man_hatIndex = 5;//魔族角
+
+
+        SetSkin();
+
+        Class = EnemyClass.Man;
+
+        CurrentProfession = 0;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+    }//Boss 亚历克西斯
+    public void BecomeBoss_Dominus()
+    {
+        Man_headIndex = 5;//皇帝
+        Man_bodyIndex = 5;//皇帝
+        Man_hatIndex = 5;//魔族角
+
+
+        SetSkin();
+
+        Class = EnemyClass.Man;
+
+        CurrentProfession = 0;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+    }//Boss 多米纳斯
+
+    #endregion
 
 }
 
