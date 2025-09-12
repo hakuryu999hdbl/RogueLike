@@ -229,7 +229,7 @@ public class Player : MonoBehaviour
         {
             // 已有露娜 → 正常随机创建
             SetRandomSkin();
-            SaveCurrent();
+            SaveCurrent(false);// 已有露娜 → 正常随机创建
         }    
 
     }//新增皮肤临时随机
@@ -314,7 +314,7 @@ public class Player : MonoBehaviour
         currentSaveName = data.characterName;//记录当前名称
     }//这个地方和重命名存档重复
 
-    public void SaveCurrent()
+    public void SaveCurrent(bool overwriteStats = true)
     {
 
         if (string.IsNullOrEmpty(currentSaveName))
@@ -332,33 +332,36 @@ public class Player : MonoBehaviour
         }
 
         // …把当前面板的各项 index/数值回填到 data…
+        if (overwriteStats) 
+        {
+            data.headIndex = this.YYY_headIndex;
+            data.eyesIndex = this.YYY_eyesIndex;
+            data.bodyIndex = this.YYY_bodyIndex;
+            data.legsIndex = this.YYY_legsIndex;
+            data.hatIndex = this.YYY_hatIndex;
+            data.weaponIndex = this.weaponIndex;
 
-        data.headIndex = this.YYY_headIndex;
-        data.eyesIndex = this.YYY_eyesIndex;
-        data.bodyIndex = this.YYY_bodyIndex;
-        data.legsIndex = this.YYY_legsIndex;
-        data.hatIndex = this.YYY_hatIndex;
-        data.weaponIndex = this.weaponIndex;
-
-        data.professionIndex = this.CurrentProfession;
+            data.professionIndex = this.CurrentProfession;
 
 
 
-        data.meleeDamage = MeleeDamage;
-        data.shootDamage = ShootDamage;
-        data.spellDamage = SpellDamage;
+            data.meleeDamage = MeleeDamage;
+            data.shootDamage = ShootDamage;
+            data.spellDamage = SpellDamage;
 
-        data.weaponAtk = CurrentWeaponPower;
-        data.armorDef = CurrentArmorDefence;
-        data.stockingDef = CurrentStockingDefence;
+            data.weaponAtk = CurrentWeaponPower;
+            data.armorDef = CurrentArmorDefence;
+            data.stockingDef = CurrentStockingDefence;
 
-        data.maxHP= maxHealth;
-        data.level= Level;
-        data.exp= currentExperience;
+            data.maxHP = maxHealth;
+            data.level = Level;
+            data.exp = currentExperience;
+
+           
+        }
 
         SaveManager.Save(data);
         currentSaveName = data.characterName; // 以防上面发生了 _2/_3
-
     }//记录当前皮肤并新建随机名称存档
 
 
@@ -912,6 +915,14 @@ public class Player : MonoBehaviour
 
     public void SetRandomSkin()
     {
+        Level = 1;
+        currentExperience = 0;
+        maxHealth =1000;
+        MeleeDamage = Random.Range(50, 100);
+        ShootDamage = Random.Range(50, 100);
+        SpellDamage = Random.Range(50, 100);
+
+
         //YYY_headIndex = Random.Range(1, 14);  // 1~13
         //YYY_bodyIndex = Random.Range(1, 14);
         //YYY_legsIndex = Random.Range(1, 14);
@@ -1670,7 +1681,7 @@ public class Player : MonoBehaviour
         _ClothesToClass();// ChangeType(ChangeProfession);
 
         SetSkin();
-        SaveCurrent();
+        SaveCurrent();//记录切换好的武器
 
         //立刻赋予Strike
         PlayerSaveData data = SaveManager.Load(currentSaveName);
@@ -2634,7 +2645,7 @@ public class Player : MonoBehaviour
                     {
                         CurrentArmorDefence = 0;
                         YYY_bodyIndex = 1; SetSkin();
-                        SaveCurrent();
+                        SaveCurrent();//衣服被打落
 
                         frameEvents._Effect_tear1();
                     }
@@ -2642,7 +2653,7 @@ public class Player : MonoBehaviour
                     {
                         CurrentStockingDefence = 0;
                         YYY_legsIndex =1; SetSkin();
-                        SaveCurrent();
+                        SaveCurrent();//丝袜被打落
 
                         frameEvents._Effect_tear1();
                     }
