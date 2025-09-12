@@ -2425,7 +2425,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     #region
 
-    int BossNumber = 1;//1皇女
+    int BossNumber = 0;//1皇女
     public void BecomeBoss_Morgan()
     {
 
