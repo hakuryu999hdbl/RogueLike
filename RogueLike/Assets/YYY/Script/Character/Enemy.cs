@@ -2425,7 +2425,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     #region
 
-    int BossNumber = 0;//1皇女
+    public int BossNumber = 0;//1皇女
     public void BecomeBoss_Morgan()
     {
 
@@ -2440,6 +2440,8 @@ public class Enemy : MonoBehaviour
         YYY_legsIndex = 5;
 
         YYY_hatIndex = 1;//人类
+
+        weaponIndex = 10;//古木法杖
 
         SetSkin();
 
@@ -2462,6 +2464,7 @@ public class Enemy : MonoBehaviour
 
         YYY_hatIndex = 11;//大魔族
 
+        weaponIndex = 10;//古木法杖
 
         SetSkin();
 
@@ -2480,6 +2483,7 @@ public class Enemy : MonoBehaviour
         Man_bodyIndex = 5;//皇子
         Man_hatIndex = 5;//魔族角
 
+        weaponIndex = 10;//引雷剑
 
         SetSkin();
 
@@ -2496,6 +2500,7 @@ public class Enemy : MonoBehaviour
         Man_bodyIndex = 5;//皇帝
         Man_hatIndex = 5;//魔族角
 
+        weaponIndex = 10;//引雷剑
 
         SetSkin();
 

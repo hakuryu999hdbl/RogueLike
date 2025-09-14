@@ -65,23 +65,23 @@ public static class SellTexts
 }
 
 
-public static class RoomRegistry
-{
-    // 以网格坐标索引房间
-    private static readonly Dictionary<Vector2Int, Room> map = new Dictionary<Vector2Int, Room>();
-
-    public static void Register(Vector2Int gridPos, Room room)
-    {
-        map[gridPos] = room;
-    }
-
-    public static void Unregister(Vector2Int gridPos, Room room)
-    {
-        if (map.TryGetValue(gridPos, out var r) && r == room) map.Remove(gridPos);
-    }
-
-    public static bool TryGetRoom(Vector2Int gridPos, out Room room)
-    {
-        return map.TryGetValue(gridPos, out room);
-    }
-}//房间注册表【Room和WallMap建立联系】
+//public static class RoomRegistry
+//{
+//    // 以网格坐标索引房间
+//    private static readonly Dictionary<Vector2Int, Room> map = new Dictionary<Vector2Int, Room>();
+//
+//    public static void Register(Vector2Int gridPos, Room room)
+//    {
+//        map[gridPos] = room;
+//    }
+//
+//    public static void Unregister(Vector2Int gridPos, Room room)
+//    {
+//        if (map.TryGetValue(gridPos, out var r) && r == room) map.Remove(gridPos);
+//    }
+//
+//    public static bool TryGetRoom(Vector2Int gridPos, out Room room)
+//    {
+//        return map.TryGetValue(gridPos, out room);
+//    }
+//}//房间注册表【Room和WallMap建立联系】

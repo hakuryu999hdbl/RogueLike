@@ -8,27 +8,27 @@ public class WallMap : MonoBehaviour
     /// <summary>
     /// 尝试与Room取得联系
     /// </summary>
-    #region
-    Vector2Int GridPos => new Vector2Int(
-   Mathf.RoundToInt(transform.position.x / Room.CellX),
-   Mathf.RoundToInt(transform.position.y / Room.CellY)
-);
-    private Room linkedRoom;
-
-    void SetBoss()
-    {
-        // 根据自己的网格坐标找到房间
-        if (!RoomRegistry.TryGetRoom(GridPos, out linkedRoom))
-        {
-            Debug.LogWarning($"[WallMap] 找不到对应Room，Grid={GridPos} pos={transform.position}");
-        }
-
-        if (linkedRoom.roomType == Room.RoomType.Boss) 
-        {
-            Debug.Log("Boss房");
-        }
-    }
-    #endregion
+//    #region
+//    Vector2Int GridPos => new Vector2Int(
+//   Mathf.RoundToInt(transform.position.x / Room.CellX),
+//   Mathf.RoundToInt(transform.position.y / Room.CellY)
+//);
+//    private Room linkedRoom;
+//
+//    void SetBoss()
+//    {
+//        // 根据自己的网格坐标找到房间
+//        if (!RoomRegistry.TryGetRoom(GridPos, out linkedRoom))
+//        {
+//            Debug.LogWarning($"[WallMap] 找不到对应Room，Grid={GridPos} pos={transform.position}");
+//        }
+//
+//        if (linkedRoom.roomType == Room.RoomType.Boss) 
+//        {
+//            Debug.Log("Boss房");
+//        }
+//    }
+//    #endregion
 
 
     /// <summary>
@@ -40,7 +40,7 @@ public class WallMap : MonoBehaviour
 
     private void Start()
     {
-        SetBoss();
+        //SetBoss();
 
         _RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();//寻找RoomGenerator
 
@@ -206,7 +206,7 @@ public class WallMap : MonoBehaviour
                 EnemyCount++; // 每生成一个就记一次
             }
 
-            if (linkedRoom.roomType == Room.RoomType.Boss&& i == 1) { enemyScript.BecomeBoss_Selene(); }
+            //if (linkedRoom.roomType == Room.RoomType.Boss&& i == 1) { enemyScript.BecomeBoss_Selene(); }
         } 
 
 
@@ -244,18 +244,34 @@ public class WallMap : MonoBehaviour
 
     public void CheckEnemyList()
     {
-        EnemyCount--;
-        if (EnemyCount == 0)
-        {
-            isClean = 2;
-            UnLockRoom();
-            Debug.Log("房间清理干净");
+         EnemyCount--;
+         if (EnemyCount == 0)
+         {
+             isClean = 2;
+             UnLockRoom();
+             Debug.Log("房间清理干净");
+        
+             //奖励一个队友
+            // _RoomGenerator.SetFriend();
+         }
 
-            //奖励一个队友
-           // _RoomGenerator.SetFriend();
-        }
 
+        // 只要场景中还有任意带 "Enemy" 标签的激活对象，就不解锁
+
+
+        //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        //if (enemies.Length <= 0 )
+        //{
+        //
+        //    isClean = 2;
+        //    UnLockRoom();
+        //    Debug.Log("房间清理干净（全场景无 Enemy）");
+        //}
+
+        
     }
+
+
     #endregion
 
 

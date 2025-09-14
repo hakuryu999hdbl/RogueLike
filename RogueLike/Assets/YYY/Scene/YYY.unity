@@ -2234,7 +2234,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 37.543823, y: 168.7}
+  m_AnchoredPosition: {x: 37.543945, y: 168.69995}
   m_SizeDelta: {x: 75.087585, y: 75.51761}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &85933658
@@ -3416,6 +3416,7 @@ MonoBehaviour:
   AstarPath: {fileID: 249096737}
   SkyboxSample: {fileID: 1162173333}
   BGM: {fileID: 475258306}
+  Walls_CG: {fileID: 5553637100842546407, guid: 3608f1ee0386f9342b4b6824eabe2c5e, type: 3}
   _Player: {fileID: 65564740}
   offsetRange: 2
   roomPositions: []
@@ -8701,7 +8702,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 37.543823, y: 227}
+  m_AnchoredPosition: {x: 37.543945, y: 227}
   m_SizeDelta: {x: 75.087585, y: 75.51761}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &311571732
@@ -15572,7 +15573,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 37.543793, y: 102.8}
+  m_AnchoredPosition: {x: 37.5437, y: 102.80005}
   m_SizeDelta: {x: 75.087585, y: 75.51761}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &576113861
@@ -32720,7 +32721,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 37.543823, y: 289.38}
+  m_AnchoredPosition: {x: 37.543945, y: 289.38}
   m_SizeDelta: {x: 75.087585, y: 75.51761}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1250745675
@@ -37933,7 +37934,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 37.543793, y: 37.758804}
+  m_AnchoredPosition: {x: 37.5437, y: 37.75879}
   m_SizeDelta: {x: 75.087585, y: 75.51761}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1469085683

@@ -55,7 +55,7 @@ public class RoomGenerator : MonoBehaviour
         ChoosePlace();
 
         //只有一个房间的时候
-        if (roomNumber == 1) { Instantiate(B, new Vector3(0, 0, 0), Quaternion.identity); }
+        if (roomNumber == 1) { Instantiate(Walls_CG, new Vector3(0, 0, 0), Quaternion.identity); return; }
 
         for (int i = 0; i < roomNumber; i++)
         {
@@ -355,9 +355,16 @@ public class RoomGenerator : MonoBehaviour
     /// 房间实体
     /// </summary>
     #region
+    [Header("固定地图")]
+    public GameObject Walls_CG;//拷问所
+
+
     [System.Serializable]//即使没有挂MonoBehaviour可以被系统识别
     public class WallType
     {
+
+
+
         public GameObject
             singleLeft, singleRight, singleUp, singleBottom,
             doubleLU, doubleLR, doubleLB, doubleUR, doubleUB, doubleRB,

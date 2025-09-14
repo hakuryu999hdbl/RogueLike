@@ -1873,13 +1873,13 @@ public class UIManager : MonoBehaviour
                 // 当前菜单项内的左右切换
                 if (dir.x > 0.5f)
                 {
-                    MoveSelection_2(6);
+                    MoveSelection_2(7);
 
 
                 }
                 else if (dir.x < -0.5f)
                 {
-                    MoveSelection_2(-6);
+                    MoveSelection_2(-7);
 
                 }
             }
