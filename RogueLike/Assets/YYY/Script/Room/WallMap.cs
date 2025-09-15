@@ -5,31 +5,6 @@ using UnityEngine;
 public class WallMap : MonoBehaviour
 {
 
-    /// <summary>
-    /// 尝试与Room取得联系
-    /// </summary>
-//    #region
-//    Vector2Int GridPos => new Vector2Int(
-//   Mathf.RoundToInt(transform.position.x / Room.CellX),
-//   Mathf.RoundToInt(transform.position.y / Room.CellY)
-//);
-//    private Room linkedRoom;
-//
-//    void SetBoss()
-//    {
-//        // 根据自己的网格坐标找到房间
-//        if (!RoomRegistry.TryGetRoom(GridPos, out linkedRoom))
-//        {
-//            Debug.LogWarning($"[WallMap] 找不到对应Room，Grid={GridPos} pos={transform.position}");
-//        }
-//
-//        if (linkedRoom.roomType == Room.RoomType.Boss) 
-//        {
-//            Debug.Log("Boss房");
-//        }
-//    }
-//    #endregion
-
 
     /// <summary>
     /// 房间小地图显示
@@ -134,6 +109,18 @@ public class WallMap : MonoBehaviour
     public List<Gate> AllGate = new List<Gate>(); //当前房间里的所有门
 
     public int isClean = 0;//0未打开  1刷敌   2清零
+    public bool isBossRoom = false;//在Boss房里敌人不刷
+
+
+    public void OnlyLockDoor() 
+    {
+        foreach (var gate in AllGate)
+        {
+            gate.Close();  //锁上自己【门】列表的所有门，Gate脚本Gate里有门开关动画器和对应的碰撞体
+        }
+        isClean = 1;
+
+    }//在解救RBQ的时候触发一下
 
     public void LockRoom()
     {
@@ -147,10 +134,16 @@ public class WallMap : MonoBehaviour
                 gate.Close();  //锁上自己【门】列表的所有门，Gate脚本Gate里有门开关动画器和对应的碰撞体
             }
 
-            //_RoomGenerator.SetEnemy();
-            SetEnemy();
-            SetRBQ();
+            if (!isBossRoom) 
+            {
+                SetEnemy();
+                SetRBQ();
+            }
+           
             isClean = 1;
+
+            _RoomGenerator.BossIcon.SetActive(true);
+            _RoomGenerator.Stage_Information.SetActive(true);
         }
 
 
@@ -164,9 +157,18 @@ public class WallMap : MonoBehaviour
             gate.Open(); // 设为打开动画
         }
 
-        SetShop();//在房间中央设置商店
+        if (!HasShop&&!isBossRoom)
+        {
+            SetShop();//在房间中央设置商店
+
+            HasShop = true;
+        }
+       
 
     }
+    bool HasShop = false;
+
+    public bool isCanWinRoom = false;//当此房间的敌人（Boss）全部消灭，玩家获胜
 
 
     #endregion
@@ -181,7 +183,7 @@ public class WallMap : MonoBehaviour
     [Header("敌人出生点列表")]
     public List<Transform> spawnPoints = new List<Transform>();
 
-    public void SetEnemy()
+    public void SetEnemy(int EnemySkin=0)// 0随机  1男性士兵   
     {
         int enemyToSpawn = Random.Range(2,7);
         for (int i = 0; i < enemyToSpawn; i++)
@@ -202,11 +204,23 @@ public class WallMap : MonoBehaviour
             Enemy enemyScript = NewEnemy.GetComponentInChildren<Enemy>();
             if (enemyScript != null)
             {
+                switch (EnemySkin) 
+                {
+                    case 1:
+                        enemyScript.BecomeSoldier_Man = true;
+                        break;
+                    case 2:
+                        enemyScript.BecomeTentacleMonster = true;
+                        break;
+                }
+
                 //enemyScript.wallmap = this;//告诉自己生成的Enemy出生WallMap
                 EnemyCount++; // 每生成一个就记一次
             }
 
-            //if (linkedRoom.roomType == Room.RoomType.Boss&& i == 1) { enemyScript.BecomeBoss_Selene(); }
+
+
+
         } 
 
 
@@ -229,7 +243,7 @@ public class WallMap : MonoBehaviour
             Vector3 spawnPosition = spawnPoint.position + (Vector3)offset;
             //告诉自己生成的RBQ出生WallMap
             GameObject NewEnemy = Instantiate(_RoomGenerator.RBQ, spawnPosition, Quaternion.identity);
-            //NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;//RBQ需要知道wallMap是因为自己生下的Enemy需要知道
+            NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;//RBQ需要知道wallMap是因为    ⚪当Enemy生成的时候门需要重新关上        ×自己生下的Enemy需要知道
         }
 
 
@@ -244,33 +258,35 @@ public class WallMap : MonoBehaviour
 
     public void CheckEnemyList()
     {
-         EnemyCount--;
-         if (EnemyCount == 0)
-         {
-             isClean = 2;
-             UnLockRoom();
-             Debug.Log("房间清理干净");
-        
-             //奖励一个队友
-            // _RoomGenerator.SetFriend();
-         }
-
-
-        // 只要场景中还有任意带 "Enemy" 标签的激活对象，就不解锁
-
-
-        //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        //if (enemies.Length <= 0 )
-        //{
-        //
-        //    isClean = 2;
-        //    UnLockRoom();
-        //    Debug.Log("房间清理干净（全场景无 Enemy）");
-        //}
-
-        
+        // 只要场景中还有任意带 "Enemy" 标签的激活对象，就不解锁 
+        StartCoroutine(CheckEnemyNextFrame());
     }
 
+
+    private IEnumerator CheckEnemyNextFrame()
+    {
+        yield return null; // 等待一帧，等 Destroy 真正生效
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        if (enemies.Length <= 0)
+        {
+            isClean = 2;
+            UnLockRoom();
+            Debug.Log("房间清理干净（全场景无 Enemy）");
+
+
+            if (isCanWinRoom) 
+            {
+ 
+
+                _RoomGenerator.ShowResult();
+            }
+
+
+            //奖励一个队友
+            // _RoomGenerator.SetFriend();
+        }
+        Debug.Log("目前场景还剩Enemy数量" + enemies.Length);
+    }
 
     #endregion
 

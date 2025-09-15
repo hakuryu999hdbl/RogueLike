@@ -176,13 +176,12 @@ public class RBQ : MonoBehaviour
                 _waitEnemyRoutine = StartCoroutine(WaitEnemyGoneThenReset(enemy));
 
                 isCreateEnemy = true;
+
+                //立刻锁门
+                wallmap.OnlyLockDoor();
             }
 
-            if (RBQState == 0)
-            {
-                Prompt_Save.SetActive(true);
-            }
-
+           
             //if (RBQState == 3 && RBQState != 3)//商店状态下这里不要触发取下
             //{
             //    Prompt_Take.SetActive(true);
@@ -269,6 +268,12 @@ public class RBQ : MonoBehaviour
                 }
 
 
+            }
+
+
+            if (RBQState == 0)
+            {
+                Prompt_Save.SetActive(true);
             }
 
 

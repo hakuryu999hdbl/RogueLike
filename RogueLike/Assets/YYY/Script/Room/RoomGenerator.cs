@@ -43,9 +43,8 @@ public class RoomGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-      
-
+        //随机天气
+        SetFog(Random.Range(0, 4));
 
 
         //随机房间大小
@@ -55,7 +54,13 @@ public class RoomGenerator : MonoBehaviour
         ChoosePlace();
 
         //只有一个房间的时候
-        if (roomNumber == 1) { Instantiate(Walls_CG, new Vector3(0, 0, 0), Quaternion.identity); return; }
+        if (roomNumber == 1) { Instantiate(CG_InterrogationRoom, new Vector3(0, 0, 0), Quaternion.identity); return; }
+
+        if (roomNumber == 8) { Instantiate(BossRoom_Captain, new Vector3(0, 0, 0), Quaternion.identity); return; }//卫兵队长Boss房
+        if (roomNumber == 9) { Instantiate(BossRoom_Selene, new Vector3(0, 0, 0), Quaternion.identity); return; }//王女Boss房
+        if (roomNumber == 10) { Instantiate(BossRoom_Morgan, new Vector3(0, 0, 0), Quaternion.identity); return; }//宰相Boss房
+        if (roomNumber == 11) { Instantiate(BossRoom_Alexis, new Vector3(0, 0, 0), Quaternion.identity); return; }//皇太子Boss房
+        if (roomNumber == 12) { Instantiate(BossRoom_Dominus, new Vector3(0, 0, 0), Quaternion.identity); return; }//皇帝Boss房
 
         for (int i = 0; i < roomNumber; i++)
         {
@@ -120,7 +125,7 @@ public class RoomGenerator : MonoBehaviour
         //Invoke("SetFriend", 6f);
 
 
-        SetFog(Random.Range(0,4));
+        
 
 
        
@@ -197,20 +202,7 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-    /// <summary>
-    /// 区域背景音乐
-    /// </summary>
-    #region
-    [Header("区域BGM")]
-    public BGM BGM;//用于红区等背景音乐
-    public void PlayRegionBGM()
-    {
-        //BGM.AudioPlayBackgroundMusic(-1);//播放街道等背景音乐
-        BGM.AudioPlayChaseMusic(-1);//播放红区等背景音乐
-       
-    }
 
-    #endregion
 
     /// <summary>
     ///  生成房间
@@ -356,8 +348,12 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     #region
     [Header("固定地图")]
-    public GameObject Walls_CG;//拷问所
-
+    public GameObject CG_InterrogationRoom;//拷问所
+    public GameObject BossRoom_Captain;//卫兵队长Boss战
+    public GameObject BossRoom_Selene;//王女Boss战
+    public GameObject BossRoom_Morgan;//宰相Boss战
+    public GameObject BossRoom_Alexis;//魔族化王女和魔族化皇太子Boss战
+    public GameObject BossRoom_Dominus;//魔族化皇帝Boss战
 
     [System.Serializable]//即使没有挂MonoBehaviour可以被系统识别
     public class WallType
@@ -523,19 +519,22 @@ public class RoomGenerator : MonoBehaviour
 
 
     /// <summary>
-    /// 设置敌人
+    /// 设置敌人队友RBQ
     /// </summary>
     #region
-    [Header("设置敌人")]
+    [Header("设置敌人队友RBQ")]
     public GameObject Enemy;
     public GameObject RBQ;
+
+    public GameObject BossIcon;
+    public GameObject Stage_Information;
+
     //敌人列表
     //public List<GameObject> enemyList = new List<GameObject>();
 
     public void SetEnemy()
     {
 
-        //if (!Application.isMobilePlatform) return;
 
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
         //enemyList.Add(NewEnemy);
@@ -544,8 +543,6 @@ public class RoomGenerator : MonoBehaviour
     }
     public void SetFriend()
     {
-        //if (!Application.isMobilePlatform) return;
-
 
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
         //enemyList.Add(NewEnemy);
@@ -602,6 +599,79 @@ public class RoomGenerator : MonoBehaviour
             ChangeTargetPlace(newGO, -1);
         }
     }
+    #endregion
+
+
+    /// <summary>
+    /// 结算页面
+    /// </summary>
+    #region
+    [Header("结算页面")]
+    public GameObject ResultCavans;
+  
+
+    public void ShowResult() 
+    {
+       
+        MissionIcon(true);
+
+        Invoke("ResultDetail", 1f);
+
+    }//获胜端口
+
+    void ResultDetail() 
+    {
+        ResultCavans.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+
+    public Image MissionSuccess;
+    public Sprite MissionSuccess_E, MissionSuccess_J, MissionSuccess_C, MissionFailure_E, MissionFailure_J, MissionFailure_C;
+
+    public void MissionIcon(bool isWin) 
+    {
+        if (isWin)
+        {
+            switch (PlayerPrefs.GetInt("language"))
+            {
+                case 0:
+                case 2:
+                    MissionSuccess.sprite = MissionSuccess_J;
+                    break;
+                case 1:
+                    MissionSuccess.sprite = MissionSuccess_C;
+                    break;
+                case 3:
+                case 4:
+                    MissionSuccess.sprite = MissionSuccess_E;
+                    break;
+            }
+
+            AudioManager.instance.AudioPlay(AudioManager.instance.SE_Win);
+        }
+        else 
+        {
+            switch (PlayerPrefs.GetInt("language"))
+            {
+                case 0:
+                case 2:
+                    MissionSuccess.sprite = MissionFailure_J;
+                    break;
+                case 1:
+                    MissionSuccess.sprite = MissionFailure_C;
+                    break;
+                case 3:
+                case 4:
+                    MissionSuccess.sprite = MissionFailure_E;
+                    break;
+            }
+
+            AudioManager.instance.AudioPlay(AudioManager.instance.SE_Slap);
+        }
+        MissionSuccess.gameObject.SetActive(true);
+    }
+
     #endregion
 }
 

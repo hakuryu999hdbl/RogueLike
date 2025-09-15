@@ -76,9 +76,13 @@ public class FrameEvents : MonoBehaviour
     public void _SE_Water() { audioS.PlayOneShot(AudioManager.SE_Water); }
     public void _SE_Set() { audioS.PlayOneShot(AudioManager.SE_Set); }
     public void _SE_Reba() { audioS.PlayOneShot(AudioManager.SE_Reba); }
+
+    public void _SE_Reji() { audioS.PlayOneShot(AudioManager.SE_Reji); }
     public void _SE_Swing() { audioS.PlayOneShot(AudioManager.SE_Swing); }
     public void _SE_Glass() { audioS.PlayOneShot(AudioManager.SE_Glass); }
     public void _SE_Wings() { audioS.PlayOneShot(AudioManager.SE_Wings); }
+    public void _SE_Win() { audioS.PlayOneShot(AudioManager.SE_Win); }
+    public void _SE_Slap() { audioS.PlayOneShot(AudioManager.SE_Slap); }
 
     public void _Jinye_zhajin1_fast() { audioS.PlayOneShot(AudioManager.Jinye_zhajin1_fast); }
     public void _Jinye_zhajin1_middle() { audioS.PlayOneShot(AudioManager.Jinye_zhajin1_middle); }

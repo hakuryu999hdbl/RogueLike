@@ -34,14 +34,67 @@ public class Room : MonoBehaviour
     //因为看不清而增加
     public void SetStartRoom()
     {
-        //roomType = RoomType.Start;
+
         ShowColor.GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 1);
     }
     public void SetEndRoom()
     {
-        //roomType = RoomType.Boss;
+
         isBossRoom = true;
+
+        switch (GameFlowData.nextScene)
+        {
+            case "Story_03":
+                BossNumber = 1;
+                break;
+            case "Story_05":
+                BossNumber = 2;
+                break;
+            case "Story_08":
+                BossNumber = 4;
+                break;
+            case "Story_10":
+                BossNumber = 5;
+                break;
+            case "Story_12":
+                BossNumber = 6;
+                break;
+
+
+            // case "Story_01":
+            // case "Story_02":
+            //
+            //     break;
+            // case "Story_04":
+            // case "Story_06":
+            //
+            //     break;
+            // case "Story_07":
+            //
+            //     break;
+            // case "Story_09":
+            // case "Story_11":
+            //
+            //     break;
+            //
+            //
+            // case "Arena":
+            //
+            //     break;
+            // case "Dungeon":
+            //
+            //     break;
+
+            default:
+                BossNumber = 1;
+                break;
+        }
+
         
+
+
+
+
         ShowColor.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1);
     }
 
@@ -49,6 +102,7 @@ public class Room : MonoBehaviour
     [Header("生成Boss")]
     public GameObject Enemy;//生成Boss
     public bool isBossRoom = false;
+    public int BossNumber;
     private void OnTriggerEnter2D(Collider2D collision)//检测到玩家显示
     {
 
@@ -57,7 +111,16 @@ public class Room : MonoBehaviour
             // 在该点生成敌人
             GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
             Enemy enemyScript = NewEnemy.GetComponentInChildren<Enemy>();
-            enemyScript.BossNumber = 1;
+            enemyScript.BossNumber = BossNumber;
+
+            //如果亚历克西斯在场，那么赛琳娜也在场
+            if (BossNumber == 5) 
+            {
+                GameObject NewEnemy2 = Instantiate(Enemy, transform.position, Quaternion.identity);
+                Enemy enemyScript2 = NewEnemy2.GetComponentInChildren<Enemy>();
+                enemyScript2.BossNumber = 3;
+            }
+
 
         }//生成Boss
 
@@ -65,30 +128,5 @@ public class Room : MonoBehaviour
     }
 
 
-
-
-    //为了能和自己坐标一致的WallMap建立联系
-
-    // public const int CellX = 70;
-    // public const int CellY = 15;
-    //
-    // public enum RoomType { Normal, Start, Boss }
-    // public RoomType roomType = RoomType.Normal;
-    //
-    // Vector2Int GridPos => new Vector2Int(
-    //     Mathf.RoundToInt(transform.position.x / CellX),
-    //     Mathf.RoundToInt(transform.position.y / CellY)
-    // );
-    // void Start()
-    // {
-    //     RoomRegistry.Register(GridPos, this);
-    // }
-    //
-    // void OnDestroy()
-    // {
-    //     RoomRegistry.Unregister(GridPos, this);
-    // }
-
-
-
+  
 }

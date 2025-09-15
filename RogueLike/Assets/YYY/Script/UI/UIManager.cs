@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
         //Debug.Log("目前存档里的语言" + PlayerPrefs.GetInt("language"));//0 日语 1中文 2繁中 3英语 4韩语
 
         //Debug.Log("目前存档里的钱币" + PlayerPrefs.GetInt("Money"));
-        ChangeMoney(0);
+       
 
 
 
@@ -146,27 +146,27 @@ public class UIManager : MonoBehaviour
             case "Story_03":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
-                _RoomGenerator.roomNumber = 1;//典狱长Boss战
+                _RoomGenerator.roomNumber = 8;//卫兵队长Boss战
                 break;
             case "Story_05":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
-                _RoomGenerator.roomNumber = 1;//王女Boss战
+                _RoomGenerator.roomNumber = 9;//王女Boss战
                 break;
             case "Story_08":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
-                _RoomGenerator.roomNumber = 1;//宰相Boss战
+                _RoomGenerator.roomNumber = 10;//宰相Boss战
                 break;
             case "Story_10":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
-                _RoomGenerator.roomNumber = 1;//王女与皇太子Boss战
+                _RoomGenerator.roomNumber = 11;//王女与皇太子Boss战
                 break;
             case "Story_12":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
-                _RoomGenerator.roomNumber = 1;//皇帝Boss战
+                _RoomGenerator.roomNumber = 12;//皇帝Boss战
                 break;
 
 
@@ -216,7 +216,7 @@ public class UIManager : MonoBehaviour
                 break;
         }
 
-        GameFlowData.nextScene = "";//清理
+        //GameFlowData.nextScene = "";//清理
     }
     /// <summary>
     /// 主菜单
@@ -378,7 +378,7 @@ public class UIManager : MonoBehaviour
     public void ToOneToOneStage()
     {
         GameFlowData.nextScene = "Arena";
-        ReLoadScene();
+        ReLoadScene();//前往竞技场
 
         //  ToSavePageButton(1);//开始游戏进入存档界面
         //  //钮按下后绿色选中也会过去
@@ -388,7 +388,7 @@ public class UIManager : MonoBehaviour
     public void ToDungeonStage()
     {
         GameFlowData.nextScene = "Dungeon";
-        ReLoadScene();
+        ReLoadScene();//前往地下城
 
         //  ToSavePageButton(1);//开始游戏进入存档界面
         //  //钮按下后绿色选中也会过去
@@ -400,7 +400,9 @@ public class UIManager : MonoBehaviour
     {
         //ToHomePage();
 
-        ReLoadScene();
+        GameFlowData.nextScene = "";//清理
+
+        ReLoadScene();//存档页面返回主菜单
 
         //PauseGame();
 
@@ -410,7 +412,7 @@ public class UIManager : MonoBehaviour
     public void HomePageToCGPage() 
     {
         GameFlowData.nextScene = "CG";
-        ReLoadScene();
+        ReLoadScene();//前往CG页面
 
         //ToSavePageButton(0);
 
@@ -951,8 +953,13 @@ public class UIManager : MonoBehaviour
                     player.currentSaveName = currentSelectedSlot.Data.characterName;//开始游戏时，将这个存档名称带入Player
 
 
-                    //只能生成一次队友
-                    if (!isCreateFriend) { _RoomGenerator.SetAllFriends(); isCreateFriend = true; }
+                    //只能生成一次队友目前的模式中只有这两种允许队友
+                    if(GameFlowData.nextScene== "Dungeon"|| GameFlowData.nextScene == "Arena")
+                    {
+                        if (!isCreateFriend) { _RoomGenerator.SetAllFriends(); isCreateFriend = true; }
+                    }
+
+                   
 
                 }
 
@@ -1025,6 +1032,12 @@ public class UIManager : MonoBehaviour
         UpdateCurrentSelection(0);  // 初始化列表内选中第一个
 
         UpdateScrollLimits();//更新上下翻页范围
+
+        ChangeMoney(0,false);//更新钱
+
+     
+        PlayRegionBGM();   //随机背景音乐
+
 
     }//读取，显示存档
 
@@ -2385,7 +2398,7 @@ public class UIManager : MonoBehaviour
     [Header("商店与金币")]
     public Text MoneyText;
     public Text MoneyText_2;
-    public void ChangeMoney(int amount)
+    public void ChangeMoney(int amount,bool UseVoice=true)
     {
         // 取当前值
         int currentMoney = PlayerPrefs.GetInt("Money", 0);
@@ -2403,6 +2416,24 @@ public class UIManager : MonoBehaviour
         MoneyText_2.text = currentMoney.ToString();
 
         Debug.Log("目前存档里的钱币: " + currentMoney);
+
+        if (UseVoice){ AudioManager.instance.AudioPlay(AudioManager.instance.SE_Reji); }
+        
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 区域背景音乐
+    /// </summary>
+    #region
+    [Header("区域BGM")]
+    public BGM BGM;//用于红区等背景音乐
+    public void PlayRegionBGM()
+    {
+        //BGM.AudioPlayBackgroundMusic(-1);//播放街道等背景音乐
+        BGM.AudioPlayChaseMusic(-1);//播放红区等背景音乐
+
     }
 
     #endregion

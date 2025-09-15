@@ -55,59 +55,93 @@ public class Enemy : MonoBehaviour
             if (CanChangeSkin)
             {
 
-                if (BossNumber == 1)
+                switch (BossNumber)
                 {
-                    BecomeBoss_Selene();
+                    default:
+                    case 0:
 
+
+
+                        SetRandomSkin();
+                        // 随机从 Enum 中选择一个值
+                        Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
+
+                        if (BecomeSoldier_Man){ Class = EnemyClass.Man; }//召集男性士兵
+
+                        if (BecomeTentacleMonster) 
+                        {
+                            Class = EnemyClass.Tentacle_Monster;
+                        }//召集触手怪
+
+
+                        //Class = EnemyClass.Succubus;
+                        //Class = EnemyClass.Girl;
+                        //Class = EnemyClass.Man;
+                        //Class = EnemyClass.Monster;
+                        //Class = EnemyClass.Tentacle_Monster;
+                        //Class = EnemyClass.Tentacle_Bug;
+                        //Class = EnemyClass.Tentacle_Bag;
+                        //Class = EnemyClass.Tentacle_HermitCrab;
+
+                        if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
+                        {
+                            CurrentProfession = 2;
+
+                        }//一部分远程女射手变成女法师
+
+
+                        if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug)
+                        {
+
+                            CurrentProfession = 0;
+
+
+                        }//这部分怪物只能近战
+
+                        if (Class == EnemyClass.Tentacle_Bug)
+                        {
+
+                            strike.TypeOfAttack = 2;//闪电
+
+                        }//肉翅虫具有麻痹效果
+
+
+
+
+                        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+                        SetAttackRange();
+
+                        break;
+                    case 1:
+                        BecomeBoss_Captain();
+
+                        // 每隔 5 秒执行一次 Boss技能 召集士兵
+                        InvokeRepeating(nameof(BossSkill_CallSoldier), 3f, 5f);
+
+                        break;
+                    case 2:
+                        BecomeBoss_Selene();
+                        break;
+                    case 3:
+                        BecomeBoss_Selene_2();
+                        break;
+                    case 4:
+                        BecomeBoss_Morgan();
+                        break;
+                    case 5:
+                        BecomeBoss_Alexis();
+
+
+                        // 每隔 5 秒执行一次 Boss技能 召集士兵
+                        InvokeRepeating(nameof(BossSkill_CallSoldier), 3f, 5f);
+    
+
+                        break;
+                    case 6:
+                        BecomeBoss_Dominus();
+                        break;
                 }
 
-                else if (BossNumber == 0)
-                {
-
-
-
-
-                    SetRandomSkin();
-                    // 随机从 Enum 中选择一个值
-                    Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
-
-                    //Class = EnemyClass.Succubus;
-                    //Class = EnemyClass.Girl;
-                    //Class = EnemyClass.Man;
-                    //Class = EnemyClass.Monster;
-                    //Class = EnemyClass.Tentacle_Monster;
-                    //Class = EnemyClass.Tentacle_Bug;
-                    //Class = EnemyClass.Tentacle_Bag;
-                    //Class = EnemyClass.Tentacle_HermitCrab;
-
-                    if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
-                    {
-                        CurrentProfession = 2;
-
-                    }//一部分远程女射手变成女法师
-
-
-                    if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug)
-                    {
-
-                        CurrentProfession = 0;
-
-
-                    }//这部分怪物只能近战
-
-                    if (Class == EnemyClass.Tentacle_Bug)
-                    {
-
-                        strike.TypeOfAttack = 2;//闪电
-
-                    }//肉翅虫具有麻痹效果
-
-
-
-
-                    ChangeType(CurrentProfession);//把CurrentProfession绑进去
-                    SetAttackRange();
-                }
             }
         }//如果已经赋值了队友，那么不随机
 
@@ -1447,6 +1481,11 @@ public class Enemy : MonoBehaviour
             special = 5;//剧毒法球
         }
 
+        //魔族化后赛琳娜
+        if (Class == EnemyClass.Succubus) 
+        {
+            special = 5;//剧毒法球
+        }
 
         if (tag == "Friend")
         {
@@ -1862,6 +1901,52 @@ public class Enemy : MonoBehaviour
 
                 isPatrol = false;//受伤后立刻进入战斗
 
+                //Boss瞬移技能
+
+
+                if (BossNumber == 2|| BossNumber == 3)
+                {
+                    if (currentHealth <= maxHealth / 2 && Class == EnemyClass.Girl)
+                    {
+
+                        Attack_Cancel();//重置攻击
+                        BecomeBoss_Selene_2();
+
+                        BossSkillCoolDown_Timer = 2;//瞬间加快频率
+
+                        wallmap.SetEnemy(2);
+
+                    }//赛琳娜魔族化
+
+
+                    if (!BossSkillCoolDown_Move)
+                    {
+
+                        GateEffect.SetActive(true);
+                        Invoke("BossSkill_Move", 0.5f);
+                        //显示伤害
+                        HudText.HUD(0);
+
+
+                       
+
+                        //子弹类攻击会触发特殊反弹
+                        if (TypeOfAttack == 0 &&Random.Range(0,2)==0)
+                        {
+                            ShootBullet();
+                        }
+
+                        BossSkillCoolDown_Move = true;
+
+                        return;
+
+                    }
+
+                   
+                }
+
+
+
 
                 if (!isDie && currentHealth > 0 && amount != -currentHealth)
                 {
@@ -2179,6 +2264,9 @@ public class Enemy : MonoBehaviour
     public GameObject Assassinate;//暗杀
     public void CritialAttack()
     {
+
+        if (BossNumber != 0&&BossSkillCoolDown_Move!){ return; }//Boss战中，在瞬移冷却中才能被重击到
+
         if (IsGrounded()) { Knockdown(); }//敌人必须站在地上才能被暴击击倒
 
 
@@ -2222,6 +2310,9 @@ public class Enemy : MonoBehaviour
 
         Invoke("Disappear", 1f);
 
+       
+       
+
     }//死亡
 
 
@@ -2239,15 +2330,27 @@ public class Enemy : MonoBehaviour
             Time.timeScale = 1;//防止 Critial消失之前次物体已经被毁坏，然后卡住不动了
 
             //RoomGenerator.SetEnemy();
+
+
+
             if (wallmap != null)
             {
                 Debug.Log("调用 wallmap.CheckEnemyList()");
                 wallmap.CheckEnemyList();
+
+                if (BossNumber != 0)
+                {
+                    wallmap.isCanWinRoom = true;//Boss房间的敌人被消灭的时候触发
+                }
+
             }
             else
             {
                 //Debug.LogWarning("wallmap 是 null，无法调用 CheckEnemyList()");
             }
+            
+           
+
 
             OneTimeRebirth = true;
         }
@@ -2425,9 +2528,90 @@ public class Enemy : MonoBehaviour
     /// </summary>
     #region
 
-    public int BossNumber = 0;//1皇女
+    public int BossNumber = 0;//1士兵队长  2皇女  3魔族化皇女  4宰相   5魔族化皇太子   5魔族化皇帝
+
+    public void BecomeBoss_Captain()
+    {
+        YYY_headIndex = 6;  
+        YYY_eyesIndex = 6;
+        YYY_bodyIndex = 10;
+        YYY_legsIndex = 10;
+
+        YYY_hatIndex = 1;//人类
+
+        weaponIndex = 10;//古重剑
+
+        SetSkin();
+
+        Class = EnemyClass.Girl;
+
+        CurrentProfession = 0;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0:
+                Name.text = "衛兵隊長";   // 日语
+                break;
+            case 1:
+                Name.text = "卫兵队长";   // 简体中文
+                break;
+            case 2:
+                Name.text = "衛兵隊長";   // 繁体中文
+                break;
+            case 3:
+                Name.text = "Guard Captain";   // 英语
+                break;
+            case 4:
+                Name.text = "경비대장";   // 韩语
+                break;
+        }
+
+        maxHealth *= 3;
+        currentHealth = maxHealth;
+
+    }//Boss 士兵队长
+
     public void BecomeBoss_Morgan()
     {
+
+        Man_headIndex = 5;//皇子
+        Man_bodyIndex = 5;//皇子
+        Man_hatIndex = 5;//魔族角
+
+        weaponIndex = 10;//引雷剑
+
+        SetSkin();
+
+        Class = EnemyClass.Man;
+
+        CurrentProfession = 0;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0:
+                Name.text = "モルガン侯";   // 日语
+                break;
+            case 1:
+                Name.text = "莫尔根侯爵";   // 简体中文
+                break;
+            case 2:
+                Name.text = "莫爾根侯爵";   // 繁体中文
+                break;
+            case 3:
+                Name.text = "Marquis Morgan";   // 英语
+                break;
+            case 4:
+                Name.text = "모르간 후작";   // 韩语
+                break;
+        }
+
+        maxHealth *= 7;
+        currentHealth = maxHealth;
 
     }//Boss 莫尔根侯爵
     public void BecomeBoss_Selene()
@@ -2441,7 +2625,7 @@ public class Enemy : MonoBehaviour
 
         YYY_hatIndex = 1;//人类
 
-        weaponIndex = 10;//古木法杖
+        weaponIndex = 3;//红宝石短杖
 
         SetSkin();
 
@@ -2450,6 +2634,29 @@ public class Enemy : MonoBehaviour
         CurrentProfession = 2;
         ChangeType(CurrentProfession);//把CurrentProfession绑进去
         SetAttackRange();
+
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0:
+                Name.text = "セリーネ＝ヴァルドリア";   // 日语
+                break;
+            case 1:
+                Name.text = "王女赛琳娜";   // 简体中文
+                break;
+            case 2:
+                Name.text = "王女賽琳娜";   // 繁体中文
+                break;
+            case 3:
+                Name.text = "Princess Selene";   // 英语
+                break;
+            case 4:
+                Name.text = "세리네 공주";   // 韩语
+                break;
+        }
+
+
+        maxHealth *= 5;
+        currentHealth = maxHealth;
 
     }//Boss 赛琳娜
 
@@ -2464,17 +2671,37 @@ public class Enemy : MonoBehaviour
 
         YYY_hatIndex = 11;//大魔族
 
-        weaponIndex = 10;//古木法杖
+        weaponIndex = 8;//近战熔岩
 
         SetSkin();
 
         Class = EnemyClass.Succubus;
 
-        CurrentProfession = 2;
+        CurrentProfession = 0;
         ChangeType(CurrentProfession);//把CurrentProfession绑进去
         SetAttackRange();
 
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0:
+                Name.text = "セリーネ＝ヴァルドリア";   // 日语
+                break;
+            case 1:
+                Name.text = "王女赛琳娜";   // 简体中文
+                break;
+            case 2:
+                Name.text = "王女賽琳娜";   // 繁体中文
+                break;
+            case 3:
+                Name.text = "Princess Selene";   // 英语
+                break;
+            case 4:
+                Name.text = "세리네 공주";   // 韩语
+                break;
+        }
 
+        maxHealth *= 3;
+        currentHealth = maxHealth;
 
     }//Boss 魔族化赛琳娜
     public void BecomeBoss_Alexis()
@@ -2493,11 +2720,33 @@ public class Enemy : MonoBehaviour
         ChangeType(CurrentProfession);//把CurrentProfession绑进去
         SetAttackRange();
 
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0:
+                Name.text = "アレクシス＝ヴァルドリン";   // 日语
+                break;
+            case 1:
+                Name.text = "皇太子亚历克西斯";   // 简体中文
+                break;
+            case 2:
+                Name.text = "皇太子亞歷克西斯";   // 繁体中文
+                break;
+            case 3:
+                Name.text = "Crown Prince Alexis";   // 英语
+                break;
+            case 4:
+                Name.text = "알렉시스 황태자";   // 韩语
+                break;
+        }
+
+        maxHealth *= 5;
+        currentHealth = maxHealth;
+
     }//Boss 亚历克西斯
     public void BecomeBoss_Dominus()
     {
-        Man_headIndex = 5;//皇帝
-        Man_bodyIndex = 5;//皇帝
+        Man_headIndex = 6;//皇帝
+        Man_bodyIndex = 6;//皇帝
         Man_hatIndex = 5;//魔族角
 
         weaponIndex = 10;//引雷剑
@@ -2510,8 +2759,133 @@ public class Enemy : MonoBehaviour
         ChangeType(CurrentProfession);//把CurrentProfession绑进去
         SetAttackRange();
 
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0:
+                Name.text = "ドミナス＝ヴァルドリン";   // 日语
+                break;
+            case 1:
+                Name.text = "皇帝多米纳斯";   // 简体中文
+                break;
+            case 2:
+                Name.text = "皇帝多米納斯";   // 繁体中文
+                break;
+            case 3:
+                Name.text = "Emperor Dominus";   // 英语
+                break;
+            case 4:
+                Name.text = "도미누스 황제";   // 韩语
+                break;
+        }
+
+        maxHealth *= 10;
+        currentHealth = maxHealth;
+
     }//Boss 多米纳斯
 
+
+
+    //Boss技能  瞬移近  瞬移远
+    bool BossSkillCoolDown_Move = false;
+    float BossSkillCoolDown_Timer = 3f;
+    void BossSkill_Move() 
+    {
+        wallmap.ChangeTargetPlace(gameObject);
+
+        GateEffect.SetActive(false);
+        GateEffect.SetActive(true);
+        Invoke("BossSkill_Move_CoolDown", BossSkillCoolDown_Timer);
+        BossSkillCoolDown_Timer += 1;//Boss的技能启动时间逐渐增加
+
+        ShootBullet();//闪避的同时攻击
+
+        BossSkill_ChangeMagic(Random.Range(3, 6));
+    }
+    void BossSkill_Move_CoolDown()
+    {
+        BossSkillCoolDown_Move =false;
+
+        //魔族化后快速闪避快速近身
+        if (Class == EnemyClass.Succubus)
+        {
+
+
+            GateEffect.SetActive(true);
+
+            
+
+
+            RoomGenerator.ChangeTargetPlace(gameObject, -1);
+
+            //瞬移到玩家身边直接攻击
+            switch (Random.Range(1, 5))
+            {
+                case 1:
+                    anim.Play(GetAnimPrefix() + "Attack_1", 0, 0);
+                    break;
+                case 2:
+                    anim.Play(GetAnimPrefix() + "Attack_2", 0, 0);
+                    break;
+                case 3:
+                    anim.Play(GetAnimPrefix() + "Attack_3", 0, 0);
+                    break;
+                case 4:
+                    anim.Play(GetAnimPrefix() + "Attack_4", 0, 0);
+                    break;
+            }
+
+            Invoke("Attack_Cancel", 0.5f);
+            return;
+        }
+    }
+
+
+    //Boss技能  法术变换
+    void BossSkill_ChangeMagic(int MagicNumber) 
+    {
+
+        weaponIndex = MagicNumber;//3红宝石短杖 4蓝宝石短杖 5黄玉短杖
+
+        SetSkin();
+    }
+
+
+    //Boss技能  召集
+    public bool BecomeSoldier_Man = false;
+    void BossSkill_CallSoldier() 
+    {
+
+        //如果场景内敌人少于2个，再召唤一群士兵
+
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        if (enemies.Length <= 2)
+        {           
+            wallmap.SetEnemy(1);
+      
+        }
+
+ 
+    }
+
+    public bool BecomeTentacleMonster = false;
+
+    void BossSkill_CallTentacleMonster() 
+    {
+        //如果场景内敌人少于2个，再召唤一群触手怪
+
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        if (enemies.Length <= 2)
+        {
+            wallmap.SetEnemy(2);
+
+        }
+    }
+
+    void OnDestroy()
+    {
+        // Boss死亡时停止召唤
+        CancelInvoke(nameof(BossSkill_CallSoldier));
+    }
     #endregion
 
 }
