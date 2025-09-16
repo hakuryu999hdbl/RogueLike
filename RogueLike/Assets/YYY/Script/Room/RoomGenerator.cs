@@ -53,6 +53,8 @@ public class RoomGenerator : MonoBehaviour
 
         ChoosePlace();
 
+        Invoke("Scan", 0.2f);//这样因该能等到全部生成完
+
         //只有一个房间的时候
         if (roomNumber == 1) { Instantiate(CG_InterrogationRoom, new Vector3(0, 0, 0), Quaternion.identity); return; }
 
@@ -61,6 +63,8 @@ public class RoomGenerator : MonoBehaviour
         if (roomNumber == 10) { Instantiate(BossRoom_Morgan, new Vector3(0, 0, 0), Quaternion.identity); return; }//宰相Boss房
         if (roomNumber == 11) { Instantiate(BossRoom_Alexis, new Vector3(0, 0, 0), Quaternion.identity); return; }//皇太子Boss房
         if (roomNumber == 12) { Instantiate(BossRoom_Dominus, new Vector3(0, 0, 0), Quaternion.identity); return; }//皇帝Boss房
+
+        if (roomNumber == 13) { Instantiate(Room_Arena, new Vector3(0, 0, 0), Quaternion.identity); return; }//角斗场
 
         for (int i = 0; i < roomNumber; i++)
         {
@@ -105,7 +109,7 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-        Invoke("Scan", 0.1f);
+       
 
 
         Invoke("PlayRegionBGM", 0.3f);//让主菜单的音乐先行
@@ -354,6 +358,8 @@ public class RoomGenerator : MonoBehaviour
     public GameObject BossRoom_Morgan;//宰相Boss战
     public GameObject BossRoom_Alexis;//魔族化王女和魔族化皇太子Boss战
     public GameObject BossRoom_Dominus;//魔族化皇帝Boss战
+
+    public GameObject Room_Arena;//一对一角斗场
 
     [System.Serializable]//即使没有挂MonoBehaviour可以被系统识别
     public class WallType

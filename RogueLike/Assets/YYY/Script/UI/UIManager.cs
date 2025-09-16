@@ -198,7 +198,7 @@ public class UIManager : MonoBehaviour
             case "Arena":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
-                _RoomGenerator.roomNumber = 1;
+                _RoomGenerator.roomNumber = 13;
                 break;
             case "Dungeon":
                 ToSavePageButton(1);
