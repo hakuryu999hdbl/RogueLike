@@ -462,6 +462,8 @@ public class UIManager : MonoBehaviour
 
         player.frameEvents.audioS.Stop();
         player.anim.Play("Girl_Broken_Idle");
+
+        CG_BackButton.SetActive(false);//隐藏CG观赏后退按钮
     }
 
     public void ToModePage()
@@ -1223,8 +1225,8 @@ public class UIManager : MonoBehaviour
 
     void UpdateScrollLimits()
     {
-        Debug.Log("目前的存档数" + totalItems);
-        Debug.Log("目前需要几行显示所有存档" + totalRows);
+        //Debug.Log("目前的存档数" + totalItems);
+        //Debug.Log("目前需要几行显示所有存档" + totalRows);
 
         // 回到最上面
         currentRow = 0;
@@ -1355,7 +1357,7 @@ public class UIManager : MonoBehaviour
     public List<CGOptionUI> cgButtons = new List<CGOptionUI>();
     int CGcurrentIndex = 0;
 
-
+    public GameObject CG_BackButton;//处于CG观赏中后退按钮
 
     void CGUnclockStart()
     {
@@ -1423,6 +1425,8 @@ public class UIManager : MonoBehaviour
         {
             player.anim.Play("CG/" + CGName);
         }
+
+        CG_BackButton.SetActive(true);//显示CG观赏后退按钮
     }
 
     #endregion
@@ -2415,7 +2419,7 @@ public class UIManager : MonoBehaviour
         MoneyText.text = currentMoney.ToString();
         MoneyText_2.text = currentMoney.ToString();
 
-        Debug.Log("目前存档里的钱币: " + currentMoney);
+        //Debug.Log("目前存档里的钱币: " + currentMoney);
 
         if (UseVoice){ AudioManager.instance.AudioPlay(AudioManager.instance.SE_Reji); }
         

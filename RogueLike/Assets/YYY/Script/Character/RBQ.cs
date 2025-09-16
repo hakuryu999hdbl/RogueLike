@@ -25,6 +25,8 @@ public class RBQ : MonoBehaviour
 
     private float inputX, inputY;
 
+    [Header("尸体隐藏标志")]
+    public GameObject UI_Player_Icon;
 
     void Start()
     {
@@ -66,7 +68,7 @@ public class RBQ : MonoBehaviour
                 anim.Play(tortureAnimations[rand]);
 
                 Destroy(Check.gameObject);
-
+                Destroy(UI_Player_Icon.gameObject);//尸体隐藏标志
                 break;
             case 3:
                 //商店肉货

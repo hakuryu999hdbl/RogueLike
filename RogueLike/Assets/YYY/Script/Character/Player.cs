@@ -922,6 +922,11 @@ public class Player : MonoBehaviour
         ShootDamage = Random.Range(50, 100);
         SpellDamage = Random.Range(50, 100);
 
+        CurrentWeaponPower = Random.Range(50,200);
+        CurrentArmorDefence = Random.Range(10,30);
+        CurrentStockingDefence = Random.Range(10, 30);
+
+
 
         //YYY_headIndex = Random.Range(1, 14);  // 1~13
         //YYY_bodyIndex = Random.Range(1, 14);
@@ -1539,7 +1544,7 @@ public class Player : MonoBehaviour
         // 只有在暴击率大于等于 60% 时，才可能暴击
         bool willCrit = ((float)currentCritical / (float)maxCritical) >= 0.6f;
 
-        Debug.Log("远程玩家阶段最初蓄力时间" + Save_attackPressTime);//为什么这里不用attackPressTime，因为传过去一直都是0，没有办法只能记录一下再传记录的
+        //Debug.Log("远程玩家阶段最初蓄力时间" + Save_attackPressTime);//为什么这里不用attackPressTime，因为传过去一直都是0，没有办法只能记录一下再传记录的
 
         s.Init(-ShootDamage-CurrentWeaponPower, -SpellDamage - CurrentWeaponPower, willCrit, Save_attackPressTime, special, direction, Shooting.BulletOwnerType.Friend);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
 
@@ -1578,7 +1583,7 @@ public class Player : MonoBehaviour
     {
         //ChangeType(CurrentProfession);//首先根据职业
 
-        Debug.Log("设置武器信息");
+        //Debug.Log("设置武器信息");
         if (visionType == PlayerType.ShortRangePlayer) { CurrentWeapon = weaponIndex; SetStrikeTypeOfAttack(); }//实装战士武器
         if (visionType == PlayerType.LongRangePlayer && !isMage) { CurrentWeapon = weaponIndex + 100; }//实装射手武器
         if (visionType == PlayerType.LongRangePlayer && isMage) { CurrentWeapon = weaponIndex + 200; }//实装法师武器

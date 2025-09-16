@@ -22,7 +22,7 @@ public class Shooting : MonoBehaviour
         chargeTime = charge;
         SetSpecialBullet(specialType);
 
-        Debug.Log("最初蓄力时间" + chargeTime);
+        //Debug.Log("最初蓄力时间" + chargeTime);
 
         baseDamage = Damage; // 保存原始值
         appliedDamage = baseDamage + Random.Range(-50, 50); // 例如±10范围
@@ -275,7 +275,7 @@ public class Shooting : MonoBehaviour
         }
 
 
-        if (other.CompareTag("obstacle"))
+        if (other.CompareTag("obstacle")&&GameFlowData.BulletCanThroughtWall==false)
         {
             GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
             switch (specialBullet)
@@ -289,16 +289,36 @@ public class Shooting : MonoBehaviour
             }
             
 
+            Destroy(gameObject);
+        }//打到墙壁上产生火花
+
+        if (other.CompareTag("obstacle") )
+        {
+            
 
             if (other.gameObject.GetComponent<Plant>() != null)
             {
 
                 other.gameObject.GetComponent<Plant>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
+
+                //打到障碍物还是需要发出特效
+                GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
+                switch (specialBullet)
+                {
+                    case 5:
+                        Destroy(EffectPrefabs, chargeTime);//蓄力越久留存越久
+                        break;
+                    default:
+                        Destroy(EffectPrefabs, 0.5f);
+                        break;
+                }
+
+
+                Destroy(gameObject);
             }
 
-            Destroy(gameObject);
-        }//打到墙壁上产生火花
+        }//打到障碍物
     }
 
 }

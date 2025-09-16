@@ -120,6 +120,10 @@ public class WallMap : MonoBehaviour
         }
         isClean = 1;
 
+
+        GameFlowData.BulletCanThroughtWall = true;//只有在战斗的时候子弹可以穿墙
+        Debug.Log("子弹可穿墙" + GameFlowData.BulletCanThroughtWall);
+
     }//在解救RBQ的时候触发一下
 
     public void LockRoom()
@@ -144,6 +148,10 @@ public class WallMap : MonoBehaviour
 
             _RoomGenerator.BossIcon.SetActive(true);
             _RoomGenerator.Stage_Information.SetActive(true);
+
+
+            GameFlowData.BulletCanThroughtWall = true;//只有在战斗的时候子弹可以穿墙
+            Debug.Log("子弹可穿墙" + GameFlowData.BulletCanThroughtWall);
         }
 
 
@@ -163,8 +171,10 @@ public class WallMap : MonoBehaviour
 
             HasShop = true;
         }
-       
 
+
+        GameFlowData.BulletCanThroughtWall = false;//只有在战斗的时候子弹可以穿墙
+        Debug.Log("子弹不可穿墙" + GameFlowData.BulletCanThroughtWall) ;
     }
     bool HasShop = false;
 
@@ -285,7 +295,7 @@ public class WallMap : MonoBehaviour
             //奖励一个队友
             // _RoomGenerator.SetFriend();
         }
-        Debug.Log("目前场景还剩Enemy数量" + enemies.Length);
+        //Debug.Log("目前场景还剩Enemy数量" + enemies.Length);
     }
 
     #endregion
