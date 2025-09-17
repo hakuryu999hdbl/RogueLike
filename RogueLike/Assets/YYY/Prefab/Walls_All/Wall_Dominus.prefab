@@ -127,6 +127,7 @@ MonoBehaviour:
   - {fileID: 5531390679834152113}
   isClean: 0
   isBossRoom: 1
+  isCanWinRoom: 0
   EnemyCount: 0
   spawnPoints:
   - {fileID: 4260427553439568412}
@@ -5079,6 +5080,7 @@ MonoBehaviour:
   AllGate: []
   isClean: 2
   isBossRoom: 0
+  isCanWinRoom: 0
   EnemyCount: 0
   spawnPoints:
   - {fileID: 204685002542241270}
