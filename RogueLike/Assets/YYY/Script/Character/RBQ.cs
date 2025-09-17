@@ -216,6 +216,8 @@ public class RBQ : MonoBehaviour
             if (RBQState == 0)
             {
                 Prompt_Save.SetActive(false);
+
+                other.GetComponent<Player>().InteractingButton.SetActive(false);
             }
 
             //if (RBQState == 3 && RBQState!=3)//商店状态下这里不要触发取下
@@ -224,6 +226,7 @@ public class RBQ : MonoBehaviour
             //}
         }
     }
+
 
 
     bool InteractOneTime = false;
@@ -267,6 +270,9 @@ public class RBQ : MonoBehaviour
                     Destroy(gameObject, 0.2f);
 
                     InteractOneTime = true;//只触发一次
+
+
+                    other.GetComponent<Player>().InteractingButton.SetActive(false);
                 }
 
 
@@ -276,6 +282,8 @@ public class RBQ : MonoBehaviour
             if (RBQState == 0)
             {
                 Prompt_Save.SetActive(true);
+
+                other.GetComponent<Player>().InteractingButton.SetActive(true);
             }
 
 
@@ -517,6 +525,8 @@ public class RBQ : MonoBehaviour
 
                                 WeaponChangeDevice.transform.SetParent(null);//保留架子
 
+    
+
                             }
                             else
                             {
@@ -546,7 +556,7 @@ public class RBQ : MonoBehaviour
                     Prompt_Take.SetActive(false);
 
 
-
+                    other.GetComponent<Player>().InteractingButton.SetActive(false);
 
 
                 }

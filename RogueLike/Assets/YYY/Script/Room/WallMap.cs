@@ -195,7 +195,20 @@ public class WallMap : MonoBehaviour
 
     public void SetEnemy(int EnemySkin=0)// 0随机  1男性士兵   
     {
-        int enemyToSpawn = Random.Range(2,7);
+        //队友数量
+        GameObject[] friends = GameObject.FindGameObjectsWithTag("Friend");
+
+        int friendCount = friends.Length;
+
+        //上限
+        int enemyToSpawn = Random.Range(1,3);
+        enemyToSpawn += friendCount;
+        if (enemyToSpawn > 7) { enemyToSpawn = 7; }
+
+
+
+
+
         for (int i = 0; i < enemyToSpawn; i++)
         {
             // 随机选一个出生点
@@ -238,7 +251,7 @@ public class WallMap : MonoBehaviour
 
     public void SetRBQ()
     {
-        int enemyToSpawn = Mathf.Min(spawnPoints.Count, Random.Range(1, 3)); // 最多不超过可用点数量
+        int enemyToSpawn = Mathf.Min(spawnPoints.Count, Random.Range(0, 3)); // 最多不超过可用点数量
 
         for (int i = 0; i < enemyToSpawn; i++)
         {
@@ -286,14 +299,10 @@ public class WallMap : MonoBehaviour
 
             if (isCanWinRoom) 
             {
- 
-
+                //完成关卡，结算画面
                 _RoomGenerator.ShowResult();
             }
 
-
-            //奖励一个队友
-            // _RoomGenerator.SetFriend();
         }
         //Debug.Log("目前场景还剩Enemy数量" + enemies.Length);
     }

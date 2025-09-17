@@ -8,6 +8,13 @@ public class Door : MonoBehaviour
     public bool isOpen = false;
     [Header("主动触发声音")]
     public FrameEvents frameEvents;
+
+    private void OnEnable()
+    {
+        isOpen = false;//当隐藏后再出现依旧关上
+
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
       

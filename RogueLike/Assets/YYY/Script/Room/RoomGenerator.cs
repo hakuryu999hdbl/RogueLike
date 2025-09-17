@@ -109,7 +109,7 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-       
+
 
 
         Invoke("PlayRegionBGM", 0.3f);//让主菜单的音乐先行
@@ -129,10 +129,10 @@ public class RoomGenerator : MonoBehaviour
         //Invoke("SetFriend", 6f);
 
 
-        
 
 
-       
+
+
     }
 
 
@@ -212,27 +212,61 @@ public class RoomGenerator : MonoBehaviour
     ///  生成房间
     /// </summary>
     #region
+    [Header("房间类型")]
+    public int RoomType;//0监狱  1地牢
     public void ChoosePlace()
     {
-        L = wallType.singleLeft;
-        R = wallType.singleRight;
-        U = wallType.singleUp;
-        B = wallType.singleBottom;
+        switch (RoomType)
+        {
+            case 0:
+                L = wallType.singleLeft;
+                R = wallType.singleRight;
+                U = wallType.singleUp;
+                B = wallType.singleBottom;
 
-        LU = wallType.doubleLU;
-        LR = wallType.doubleLR;
-        LB = wallType.doubleLB;
+                LU = wallType.doubleLU;
+                LR = wallType.doubleLR;
+                LB = wallType.doubleLB;
 
-        UR = wallType.doubleUR;
-        UB = wallType.doubleUB;
-        RB = wallType.doubleRB;
+                UR = wallType.doubleUR;
+                UB = wallType.doubleUB;
+                RB = wallType.doubleRB;
 
-        LUR = wallType.tripleLUR;
-        LUB = wallType.tripleLUB;
-        URB = wallType.tripleURB;
-        LRB = wallType.tripleLRB;
+                LUR = wallType.tripleLUR;
+                LUB = wallType.tripleLUB;
+                URB = wallType.tripleURB;
+                LRB = wallType.tripleLRB;
 
-        LURB = wallType.fourDoors;
+                LURB = wallType.fourDoors;
+                break;
+
+            case 1:
+                L = wallType.Dungeon_singleLeft;
+                R = wallType.Dungeon_singleRight;
+                U = wallType.Dungeon_singleUp;
+                B = wallType.Dungeon_singleBottom;
+
+                LU = wallType.Dungeon_doubleLU;
+                LR = wallType.Dungeon_doubleLR;
+                LB = wallType.Dungeon_doubleLB;
+
+                UR = wallType.Dungeon_doubleUR;
+                UB = wallType.Dungeon_doubleUB;
+                RB = wallType.Dungeon_doubleRB;
+
+                LUR = wallType.Dungeon_tripleLUR;
+                LUB = wallType.Dungeon_tripleLUB;
+                URB = wallType.Dungeon_tripleURB;
+                LRB = wallType.Dungeon_tripleLRB;
+
+                LURB = wallType.Dungeon_fourDoors;
+                break;
+
+
+
+        }
+
+
     }//选择关卡
 
     public void ChangePointPos()
@@ -371,7 +405,12 @@ public class RoomGenerator : MonoBehaviour
             singleLeft, singleRight, singleUp, singleBottom,
             doubleLU, doubleLR, doubleLB, doubleUR, doubleUB, doubleRB,
             tripleLUR, tripleLUB, tripleURB, tripleLRB,
-            fourDoors;
+            fourDoors,
+
+             Dungeon_singleLeft, Dungeon_singleRight, Dungeon_singleUp, Dungeon_singleBottom,
+             Dungeon_doubleLU, Dungeon_doubleLR, Dungeon_doubleLB, Dungeon_doubleUR, Dungeon_doubleUB, Dungeon_doubleRB,
+             Dungeon_tripleLUR, Dungeon_tripleLUB, Dungeon_tripleURB, Dungeon_tripleLRB,
+             Dungeon_fourDoors;
 
     }
     #endregion
@@ -404,7 +443,7 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-        switch (WhichRoom) 
+        switch (WhichRoom)
         {
 
             case -2:
@@ -545,7 +584,7 @@ public class RoomGenerator : MonoBehaviour
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
         //enemyList.Add(NewEnemy);
 
-        ChangeTargetPlace(NewEnemy,-2);
+        ChangeTargetPlace(NewEnemy, -2);
     }
     public void SetFriend()
     {
@@ -614,29 +653,34 @@ public class RoomGenerator : MonoBehaviour
     #region
     [Header("结算页面")]
     public GameObject ResultCavans;
-  
 
-    public void ShowResult() 
+
+    public void ShowResult()
     {
-       
+
         MissionIcon(true);
 
         Invoke("ResultDetail", 1f);
 
     }//获胜端口
 
-    void ResultDetail() 
+    void ResultDetail()
     {
         ResultCavans.SetActive(true);
         Time.timeScale = 0f;
+
+        UIManager.instance.StageClean();
     }
 
 
     public Image MissionSuccess;
     public Sprite MissionSuccess_E, MissionSuccess_J, MissionSuccess_C, MissionFailure_E, MissionFailure_J, MissionFailure_C;
 
-    public void MissionIcon(bool isWin) 
+    public void MissionIcon(bool isWin)
     {
+        UIManager.instance.player.isInputBlocked = true;//切断玩家的方向攻击等输入(在跳出一瞬间切断)
+        
+
         if (isWin)
         {
             switch (PlayerPrefs.GetInt("language"))
@@ -656,7 +700,7 @@ public class RoomGenerator : MonoBehaviour
 
             AudioManager.instance.AudioPlay(AudioManager.instance.SE_Win);
         }
-        else 
+        else
         {
             switch (PlayerPrefs.GetInt("language"))
             {

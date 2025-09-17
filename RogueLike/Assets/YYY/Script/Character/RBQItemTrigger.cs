@@ -34,7 +34,7 @@ public class RBQItemTrigger : MonoBehaviour
         // 显示提示UI
         rBQ.ShowItemPrompt(itemType);
 
-
+        other.GetComponent<Player>().InteractingButton.SetActive(true);
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -45,6 +45,8 @@ public class RBQItemTrigger : MonoBehaviour
         rBQ.HidePrompt();
 
         rBQ.Prompt_Take.SetActive(false);
+
+        other.GetComponent<Player>().InteractingButton.SetActive(false);
     }
 
 

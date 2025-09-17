@@ -1851,6 +1851,8 @@ public class Player : MonoBehaviour
 
     #endregion
 
+
+
     /// <summary>
     /// 闪避系统
     /// </summary>
@@ -2295,6 +2297,7 @@ public class Player : MonoBehaviour
     }
 
     public bool isInteracting = false;//持续按下交互键
+    public GameObject InteractingButton;
     //手机端触发
     public void ButtonSetInteract()
     {

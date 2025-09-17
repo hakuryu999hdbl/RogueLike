@@ -16,10 +16,12 @@ public class UIManager : MonoBehaviour
     {
         instance = this;
 
+        Debug.Log("目前的NextScene" + GameFlowData.nextScene);
+
         //Debug.Log("目前存档里的语言" + PlayerPrefs.GetInt("language"));//0 日语 1中文 2繁中 3英语 4韩语
 
         //Debug.Log("目前存档里的钱币" + PlayerPrefs.GetInt("Money"));
-       
+
 
 
 
@@ -84,6 +86,8 @@ public class UIManager : MonoBehaviour
         //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_12"));//0未解锁  1解锁
         //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_13"));//0未解锁  1解锁
 
+        //Debug.Log("目前的游戏模式解锁状态【Arena】" + PlayerPrefs.GetInt("Chapter_Arena"));//0未解锁  1解锁
+        //Debug.Log("目前的游戏模式解锁状态【Dungeon】" + PlayerPrefs.GetInt("Chapter_Dungeon"));//0未解锁  1解锁
 
         PlayerPrefs.SetInt("CG_OnanismFront_1", 1);//目前保持第一个CG永远在
         //PlayerPrefs.SetInt("CG_OnanismSide_1", 1);
@@ -240,6 +244,9 @@ public class UIManager : MonoBehaviour
 
         Invoke("DelayReLoadScene",1f);
         Loading.SetActive(true);
+
+        GameFlowData.BulletCanThroughtWall = false;//每次场景刷新的时候这个清掉
+
     }//重刷场景
 
     void DelayReLoadScene()
@@ -377,8 +384,18 @@ public class UIManager : MonoBehaviour
     }
     public void ToOneToOneStage()
     {
-        GameFlowData.nextScene = "Arena";
-        ReLoadScene();//前往竞技场
+        if (PlayerPrefs.GetInt("Chapter_Arena")==1) 
+        {
+
+            GameFlowData.nextScene = "Arena";
+            ReLoadScene();//前往竞技场
+        }
+        else
+        {
+            AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+        }
+
+
 
         //  ToSavePageButton(1);//开始游戏进入存档界面
         //  //钮按下后绿色选中也会过去
@@ -387,8 +404,19 @@ public class UIManager : MonoBehaviour
     }
     public void ToDungeonStage()
     {
-        GameFlowData.nextScene = "Dungeon";
-        ReLoadScene();//前往地下城
+
+        if (PlayerPrefs.GetInt("Chapter_Dungeon") == 1)
+        {
+
+            GameFlowData.nextScene = "Dungeon";
+            ReLoadScene();//前往地下城
+        }
+        else
+        {
+            AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+        }
+
+       
 
         //  ToSavePageButton(1);//开始游戏进入存档界面
         //  //钮按下后绿色选中也会过去
@@ -489,6 +517,8 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+
+
     /// <summary>
     /// 捏人菜单
     /// </summary>
@@ -497,19 +527,81 @@ public class UIManager : MonoBehaviour
     public bool isPause = true;//一开始就Menu界面
     public GameObject PauseMenu;
 
+    public GameObject LockOfArena, LockOfDungeon;
+
+    public void StageClean() 
+    {
+        CurrentChooseList = 10;//进入结算页面
+
+        if (GameFlowData.nextScene == "Story_01") { PlayerPrefs.SetInt("Chapter_02", 1); }
+        if (GameFlowData.nextScene == "Story_02") { PlayerPrefs.SetInt("Chapter_03", 1); }
+        if (GameFlowData.nextScene == "Story_03") { PlayerPrefs.SetInt("Chapter_04", 1); }
+        if (GameFlowData.nextScene == "Story_04") { PlayerPrefs.SetInt("Chapter_05", 1); }
+        if (GameFlowData.nextScene == "Story_05") { PlayerPrefs.SetInt("Chapter_06", 1); }
+        if (GameFlowData.nextScene == "Story_06") { PlayerPrefs.SetInt("Chapter_07", 1); }
+        if (GameFlowData.nextScene == "Story_07") { PlayerPrefs.SetInt("Chapter_08", 1); }
+        if (GameFlowData.nextScene == "Story_08") { PlayerPrefs.SetInt("Chapter_09", 1); }
+        if (GameFlowData.nextScene == "Story_09") { PlayerPrefs.SetInt("Chapter_10", 1); }
+        if (GameFlowData.nextScene == "Story_10") { PlayerPrefs.SetInt("Chapter_11", 1); }
+        if (GameFlowData.nextScene == "Story_11") { PlayerPrefs.SetInt("Chapter_12", 1); }
+        if (GameFlowData.nextScene == "Story_12") { PlayerPrefs.SetInt("Chapter_13", 1); }
+
+        // 特殊解锁逻辑
+        if (GameFlowData.nextScene == "Chapter_05")
+        {
+            PlayerPrefs.SetInt("Chapter_Arena", 1);
+            Debug.Log("解锁竞技场模式");
+        }
+        if (GameFlowData.nextScene == "Chapter_12")
+        {
+            PlayerPrefs.SetInt("Chapter_Dungeon", 1);
+            Debug.Log("解锁地下城模式");
+        }
+    }
+
+
+    public void NextStage() 
+    {
+        if (GameFlowData.nextScene == "Story_01") { GameFlowData.nextScene = "Story_02"; }
+        if (GameFlowData.nextScene == "Story_02") { GameFlowData.nextScene = "Story_03"; }
+        if (GameFlowData.nextScene == "Story_03") { GameFlowData.nextScene = "Story_04"; }
+        if (GameFlowData.nextScene == "Story_04") { GameFlowData.nextScene = "Story_05"; }
+        if (GameFlowData.nextScene == "Story_05") { GameFlowData.nextScene = "Story_06"; }
+        if (GameFlowData.nextScene == "Story_06") { GameFlowData.nextScene = "Story_07"; }
+        if (GameFlowData.nextScene == "Story_07") { GameFlowData.nextScene = "Story_08"; }
+        if (GameFlowData.nextScene == "Story_08") { GameFlowData.nextScene = "Story_09"; }
+        if (GameFlowData.nextScene == "Story_09") { GameFlowData.nextScene = "Story_10"; }
+        if (GameFlowData.nextScene == "Story_10") { GameFlowData.nextScene = "Story_11"; }
+        if (GameFlowData.nextScene == "Story_11") { GameFlowData.nextScene = "Story_12"; }
+        if (GameFlowData.nextScene == "Story_12") { GameFlowData.nextScene = "Story_13"; }
+
+       //地下城和角斗场都是重来
+
+        ReLoadScene();
+        
+
+
+    }//通关后前往下一关卡
+
+
+
     public void PauseGame()
     {
         Time.timeScale = 0;
         PauseMenu.SetActive(true);
 
-        player.isInputBlocked = true;//切断玩家的方向攻击等输入
+
+        //目前把这个放在了存档界面，所以不用了
+        //player.isInputBlocked = true;//切断玩家的方向攻击等输入
     }
     public void ContinueGame()
     {
         Time.timeScale = 1;
         PauseMenu.SetActive(false);
 
-        player.isInputBlocked = false;//恢复玩家的方向攻击等输入
+
+        //目前把这个放在了存档界面，所以不用了
+        //player.isInputBlocked = false;//恢复玩家的方向攻击等输入
     }
 
     public Animator MainCamera;//控制摄像机拉近远离
@@ -923,11 +1015,15 @@ public class UIManager : MonoBehaviour
 
         if (CurrentMode == 1)
         {
-            if (SaveManager.CountSaves() > 0) // 没有任何存档无法开始
+            if (SaveManager.CountSaves() > 0&&GameFlowData.BulletCanThroughtWall==false) // 没有任何存档无法开始//战斗中无法开始
             {
 
                 if (!isPause)
                 {
+
+                   
+
+
                     MainCamera.SetInteger("View", 0);
                     Common_All.SetActive(false);
                     ShowSaveCavansAnim.gameObject.SetActive(true);
@@ -953,6 +1049,8 @@ public class UIManager : MonoBehaviour
                     player.isInputBlocked = false;//恢复玩家的方向攻击等输入
 
                     player.currentSaveName = currentSelectedSlot.Data.characterName;//开始游戏时，将这个存档名称带入Player
+
+
 
 
                     //只能生成一次队友目前的模式中只有这两种允许队友
@@ -1039,6 +1137,10 @@ public class UIManager : MonoBehaviour
 
      
         PlayRegionBGM();   //随机背景音乐
+
+        //地下城和角斗场模式解锁
+        if (PlayerPrefs.GetInt("Chapter_Arena")==0) { LockOfArena.SetActive(true); }
+        if (PlayerPrefs.GetInt("Chapter_Dungeon") == 0) { LockOfDungeon.SetActive(true); }
 
 
     }//读取，显示存档
@@ -1430,6 +1532,8 @@ public class UIManager : MonoBehaviour
     }
 
     #endregion
+
+
 
     /// <summary>
     /// Chapter界面选中
@@ -1940,7 +2044,9 @@ public class UIManager : MonoBehaviour
             //只要暂停菜单显示，攻击键按下就是触发这里
             if (PauseMenu.activeInHierarchy)
             {
-                ReLoadScene();
+                //ReLoadScene();
+
+                SavePageToHomePage();
 
                 return;
             }
@@ -2095,6 +2201,14 @@ public class UIManager : MonoBehaviour
             {
                 Invoke("Delay_AVG_ShowText", 0.1f);
             }
+
+
+            //结算界面
+            if (CurrentChooseList == 10)
+            {
+                NextStage();
+                AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
+            }
         }
 
 
@@ -2133,7 +2247,10 @@ public class UIManager : MonoBehaviour
             //存档界面
             if (CurrentChooseList == 2 )
             {
-                SavePageToHomePage();
+                //SavePageToHomePage();
+
+                PauseGame();
+
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
@@ -2177,6 +2294,12 @@ public class UIManager : MonoBehaviour
                 dialogSystem.ChangeStory();
             }
 
+            //结算界面
+            if (CurrentChooseList == 10)
+            {
+                SavePageToHomePage();
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
         }
 
     }//键盘K      xbox手柄A       ps手柄X
