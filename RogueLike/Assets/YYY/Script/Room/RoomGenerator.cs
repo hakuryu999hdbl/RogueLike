@@ -653,7 +653,7 @@ public class RoomGenerator : MonoBehaviour
     public GameObject BossIcon;
     public GameObject Stage_Information;
     public Text _Stage_Information;
-    public void ShowInformationOfStage(int Information)//0开始时关卡信息    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6此模式下无法打开菜单
+    public void ShowInformationOfStage(int Information)//0开始时关卡信息    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单
     {
         switch (Information) 
         {
@@ -771,7 +771,49 @@ public class RoomGenerator : MonoBehaviour
                 }
                 break;
 
-            case 6: // 此模式下无法打开菜单
+            case 6: // 移动中无法打开菜单 
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "移動中はメニューを開けません"; // 日语
+                        break;
+                    case 1:
+                        _Stage_Information.text = "移动中无法打开菜单"; // 简体
+                        break;
+                    case 2:
+                        _Stage_Information.text = "移動中無法打開選單"; // 繁体
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Cannot open menu while moving"; // 英语
+                        break;
+                    case 4:
+                        _Stage_Information.text = "이동 중에는 메뉴를 열 수 없습니다"; // 韩语
+                        break;
+                }
+                break;
+
+            case 7: //新的游戏模式解锁 
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "新しいゲームモードが解放されました"; // 日语
+                        break;
+                    case 1:
+                        _Stage_Information.text = "新的游戏模式解锁"; // 简体
+                        break;
+                    case 2:
+                        _Stage_Information.text = "新的遊戲模式解鎖"; // 繁体
+                        break;
+                    case 3:
+                        _Stage_Information.text = "New Game Mode Unlocked"; // 英语
+                        break;
+                    case 4:
+                        _Stage_Information.text = "새 게임 모드 해금"; // 韩语
+                        break;
+                }
+                break;
+
+            case 8: // 此模式下无法打开菜单
                 switch (PlayerPrefs.GetInt("language"))
                 {
                     case 0:

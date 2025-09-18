@@ -151,10 +151,54 @@ public class UIManager : MonoBehaviour
 
         switch (GameFlowData.nextScene)
         {
-          
-         
-         
-
+            case "AVG_02":
+                PlayAVG("Chapter_02");
+                To_AVGScene();
+                break;
+            case "AVG_03":
+                PlayAVG("Chapter_03");
+                To_AVGScene();
+                break;
+            case "AVG_04":
+                PlayAVG("Chapter_04");
+                To_AVGScene();
+                break;
+            case "AVG_05":
+                PlayAVG("Chapter_05");
+                To_AVGScene();
+                break;
+            case "AVG_06":
+                PlayAVG("Chapter_06");
+                To_AVGScene();
+                break;
+            case "AVG_07":
+                PlayAVG("Chapter_07");
+                To_AVGScene();
+                break;
+            case "AVG_08":
+                PlayAVG("Chapter_08");
+                To_AVGScene();
+                break;
+            case "AVG_09":
+                PlayAVG("Chapter_09");
+                To_AVGScene();
+                break;
+            case "AVG_10":
+                PlayAVG("Chapter_10");
+                To_AVGScene();
+                break;
+            case "AVG_11":
+                PlayAVG("Chapter_11");
+                To_AVGScene();
+                break;
+            case "AVG_12":
+                PlayAVG("Chapter_12");
+                To_AVGScene();
+                break;
+            case "AVG_13":
+                PlayAVG("Chapter_13");
+                To_AVGScene();
+                break;
 
             case "Story_01":
                 ToSavePageButton(1);
@@ -546,6 +590,7 @@ public class UIManager : MonoBehaviour
                 ToSavePageButton(0);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 1;
+                SavePageQuitButton.SetActive(true);//在存档界面退出按钮，只有CG界面可以显示
                 break;
 
             default:
@@ -562,6 +607,7 @@ public class UIManager : MonoBehaviour
     public GameObject Common_All;//移动血条等
     public GameObject NextButton;//播放结局动画
     public GameObject Loading;
+    public GameObject SavePageQuitButton;//在存档界面退出按钮，只有CG界面可以显示
     public void Ending_UI()
     {
         Common_All.SetActive(false);
@@ -885,33 +931,37 @@ public class UIManager : MonoBehaviour
         if (GameFlowData.nextScene == "Story_12") { PlayerPrefs.SetInt("Chapter_13", 1); }
 
         // 特殊解锁逻辑
-        if (GameFlowData.nextScene == "Chapter_05")
+        if (GameFlowData.nextScene == "Story_05")
         {
             PlayerPrefs.SetInt("Chapter_Arena", 1);
             Debug.Log("解锁竞技场模式");
+
+            _RoomGenerator.ShowInformationOfStage(7);
         }
-        if (GameFlowData.nextScene == "Chapter_12")
+        if (GameFlowData.nextScene == "Story_12")
         {
             PlayerPrefs.SetInt("Chapter_Dungeon", 1);
             Debug.Log("解锁地下城模式");
+
+            _RoomGenerator.ShowInformationOfStage(7);
         }
     }
 
 
     public void NextStage() 
     {
-        if (GameFlowData.nextScene == "Story_01") { GameFlowData.nextScene = "Story_02"; }
-        if (GameFlowData.nextScene == "Story_02") { GameFlowData.nextScene = "Story_03"; }
-        if (GameFlowData.nextScene == "Story_03") { GameFlowData.nextScene = "Story_04"; }
-        if (GameFlowData.nextScene == "Story_04") { GameFlowData.nextScene = "Story_05"; }
-        if (GameFlowData.nextScene == "Story_05") { GameFlowData.nextScene = "Story_06"; }
-        if (GameFlowData.nextScene == "Story_06") { GameFlowData.nextScene = "Story_07"; }
-        if (GameFlowData.nextScene == "Story_07") { GameFlowData.nextScene = "Story_08"; }
-        if (GameFlowData.nextScene == "Story_08") { GameFlowData.nextScene = "Story_09"; }
-        if (GameFlowData.nextScene == "Story_09") { GameFlowData.nextScene = "Story_10"; }
-        if (GameFlowData.nextScene == "Story_10") { GameFlowData.nextScene = "Story_11"; }
-        if (GameFlowData.nextScene == "Story_11") { GameFlowData.nextScene = "Story_12"; }
-        if (GameFlowData.nextScene == "Story_12") { GameFlowData.nextScene = "Story_13"; }
+        if (GameFlowData.nextScene == "Story_01") { GameFlowData.nextScene = "AVG_02"; }
+        if (GameFlowData.nextScene == "Story_02") { GameFlowData.nextScene = "AVG_03"; }
+        if (GameFlowData.nextScene == "Story_03") { GameFlowData.nextScene = "AVG_04"; }
+        if (GameFlowData.nextScene == "Story_04") { GameFlowData.nextScene = "AVG_05"; }
+        if (GameFlowData.nextScene == "Story_05") { GameFlowData.nextScene = "AVG_06"; }
+        if (GameFlowData.nextScene == "Story_06") { GameFlowData.nextScene = "AVG_07"; }
+        if (GameFlowData.nextScene == "Story_07") { GameFlowData.nextScene = "AVG_08"; }
+        if (GameFlowData.nextScene == "Story_08") { GameFlowData.nextScene = "AVG_09"; }
+        if (GameFlowData.nextScene == "Story_09") { GameFlowData.nextScene = "AVG_10"; }
+        if (GameFlowData.nextScene == "Story_10") { GameFlowData.nextScene = "AVG_11"; }
+        if (GameFlowData.nextScene == "Story_11") { GameFlowData.nextScene = "AVG_12"; }
+        if (GameFlowData.nextScene == "Story_12") { GameFlowData.nextScene = "AVG_13"; }
 
        //地下城和角斗场都是重来
 
@@ -944,9 +994,17 @@ public class UIManager : MonoBehaviour
         PauseMenu.SetActive(false);
 
 
+        Invoke("isInputBlockedFalse", 0.5f);
+      
+    }
+
+
+    void isInputBlockedFalse() 
+    {
         //目前把这个放在了存档界面，所以不用了
         player.isInputBlocked = false;//恢复玩家的方向攻击等输入
-    }
+
+    }//防止按键连续触发
 
     public Animator MainCamera;//控制摄像机拉近远离
     public Animator ShowSaveCavansAnim;//黑幕显示背景
@@ -1279,7 +1337,7 @@ public class UIManager : MonoBehaviour
 
             level = 1,
             exp = 0,
-            maxHP = 1000,
+            maxHP = UnityEngine.Random.Range(1000, 1200),
             meleeDamage = UnityEngine.Random.Range(50, 100),
             shootDamage = UnityEngine.Random.Range(50, 100),
             spellDamage = UnityEngine.Random.Range(50, 100),
@@ -1303,14 +1361,14 @@ public class UIManager : MonoBehaviour
                 data.stockingDef = 20;
                 break;
             case 1:
-                data.weaponAtk = 50;
-                data.armorDef = 10;
-                data.stockingDef = 10;
+                data.weaponAtk = 70;
+                data.armorDef = 40;
+                data.stockingDef = 40;
                 break;
             case 2:
-                data.weaponAtk = 200;
+                data.weaponAtk = 120;
                 data.armorDef = 15;
-                data.stockingDef = 10;
+                data.stockingDef = 15;
                 break;
         }
 
@@ -1326,6 +1384,7 @@ public class UIManager : MonoBehaviour
 
     public void OnConfirm()
     {
+        ApplyRaceBonus();//在点击确定的时候增加种族加成
 
         //抹去当前名称，下次捏人再度选中名称
         player.currentSaveName = null;
@@ -1344,7 +1403,53 @@ public class UIManager : MonoBehaviour
 
         //重新恢复上下可移动
         isInputing = false;
+
+
+        RefreshSaveSlots();//每次确定种族天赋后也需要刷新存档界面
+
     }//玩家点击Ok
+
+
+
+    public void ApplyRaceBonus() 
+    {
+        switch (player.YYY_hatIndex)
+        {
+            case 1:
+                player.maxHealth += 500;
+                player.MeleeDamage += 50;
+                break;
+            case 2:
+                player.maxHealth += 500;
+                player.ShootDamage += 50;
+                break;
+            case 3:
+                player.SpellDamage += 50;
+                player.MeleeDamage += 50;
+                break;
+            case 4:
+                player.MeleeDamage += 50;
+                player.ShootDamage += 50;
+                break;
+            case 10:
+                player.ShootDamage += 50;
+                player.SpellDamage += 50;
+                break;
+            case 12:
+                player.maxHealth += 500;
+                player.SpellDamage += 50;
+                break;
+            case 11:
+                player.SpellDamage += 100;
+                break;
+        }
+
+        player.SaveCurrent();//存种族加成
+
+        Debug.Log("增加种族加成");
+    }
+
+
 
     [Header("告知RoomGenerator产生队友")]
     public RoomGenerator _RoomGenerator;
@@ -1352,6 +1457,8 @@ public class UIManager : MonoBehaviour
     bool isShowTitle = false;
     public void OpenCloseMenu()
     {
+        Debug.Log("OpenCloseMenu");
+
         if (CurrentMode == 0)
         {
             //ToCGPage();//打开CG界面
@@ -2034,8 +2141,9 @@ public class UIManager : MonoBehaviour
     private InputAction createAction;//Space键
     private InputAction deleteAction;//E键
     private InputAction pauseAction;//Esc键
-    private InputAction MenuAction;//L键
+    private InputAction menuAction;//L键
 
+  
     private void OnEnable()
     {
         moveAction = inputActions.FindAction("Move");
@@ -2044,7 +2152,7 @@ public class UIManager : MonoBehaviour
         createAction = inputActions.FindAction("Run");
         deleteAction = inputActions.FindAction("Interact");
         pauseAction = inputActions.FindAction("Pause");
-        MenuAction = inputActions.FindAction("Menu");
+        menuAction = inputActions.FindAction("Menu");
 
         moveAction.performed += OnMove;
         confirmAction.started += OnConfirm;
@@ -2052,8 +2160,17 @@ public class UIManager : MonoBehaviour
         createAction.started += OnCreate;
         deleteAction.started += OnDelete;
         pauseAction.started += OnPause;
-        MenuAction.started += OnMenu;
+        menuAction.started += OnMenu;
 
+
+        // 延迟启用
+        StartCoroutine(EnableInputsWithDelay(1f));
+    }
+
+    //这里过1秒左右登录,防止玩家一上来乱按
+    private IEnumerator EnableInputsWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
 
         moveAction.Enable();
         confirmAction.Enable();
@@ -2061,7 +2178,7 @@ public class UIManager : MonoBehaviour
         createAction.Enable();
         deleteAction.Enable();
         pauseAction.Enable();
-        MenuAction.Enable();
+        menuAction.Enable();
     }
 
     private void OnDisable()
@@ -2072,7 +2189,7 @@ public class UIManager : MonoBehaviour
         createAction.started -= OnCreate;
         deleteAction.started -= OnDelete;
         pauseAction.started -= OnPause;
-        MenuAction.canceled -= OnMenu;
+        menuAction.canceled -= OnMenu;
 
         moveAction.Disable();
         confirmAction.Disable();
@@ -2080,7 +2197,7 @@ public class UIManager : MonoBehaviour
         createAction.Disable();
         deleteAction.Disable();
         pauseAction.Disable();
-        MenuAction.Disable();
+        menuAction.Disable();
     }
 
     //冷却时间
@@ -2391,9 +2508,6 @@ public class UIManager : MonoBehaviour
 
     }
 
-    //在玩家方向上有输入的时候不能打开菜单
-    public bool PlayerIsMoving=false;
-    public GameObject LockOfMenu;
 
     public GameObject HideGameObjectWhenChangeName;
     public GameObject Prompt_Enter, Ok_Name;
@@ -2606,7 +2720,7 @@ public class UIManager : MonoBehaviour
             if (CurrentChooseList == -3)
             {
                 ContinueGame();
-
+                AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
                 return;
             }
 
@@ -2629,11 +2743,17 @@ public class UIManager : MonoBehaviour
             //存档界面
             if (CurrentChooseList == 2 )
             {
-                SavePageToHomePage();
+                //只有CG界面才可以在存档界面选择退出
+                if (CurrentMode == 0)
+                {
+                    SavePageToHomePage();
+                }
+
+
 
                 //PauseGame();
 
-                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+                //AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
             //设置界面//Mode游戏模式界面
@@ -2716,42 +2836,55 @@ public class UIManager : MonoBehaviour
     }//键盘E    xbox手柄X       ps手柄□
     private void OnPause(InputAction.CallbackContext ctx)
     {
-
-
-
-        if (CurrentChooseList == -4)
+        //捏人界面
+        if (CurrentChooseList == 1)
         {
-            //只要暂停菜单显示，闪避键按下就是触发这里
-            if (PauseMenu.activeInHierarchy)
-            {
-                ContinueGame();
 
-
-            }
-            else
-            {
-                PauseGame();
-            }
+            OnChangeNameOver();
+            return;
         }
 
-       
+        //只要暂停菜单显示，闪避键按下就是触发这里
+        if (CurrentChooseList == -4)
+        {
 
-     
+            PauseGame();
+            return;
+        }
 
+        if (CurrentChooseList == -3)
+        {
 
+            ContinueGame();
+            return;
+        }
+
+        
         AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
+
+
     }//键盘ESC      xbox手柄——        ps手柄opt
+
+
+    //在玩家方向上有输入的时候不能打开菜单
+    //public bool PlayerIsMoving = false;
+    public GameObject LockOfMenu;
 
     private void OnMenu(InputAction.CallbackContext ctx) 
     {
-        if (CurrentChooseList != -3&& !PlayerIsMoving)
-        {
-            OpenCloseMenu();
-            AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
-        }
+        //if (CurrentChooseList == -4 && CurrentChooseList == 2)
+        //{
+        //     
+        //    
+        //    
+        //    
+        //    OpenCloseMenu();
+        //    AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
+        //}
+
+      
 
 
-        
     }//键盘L      xbox手柄Y        ps手柄△
 
 

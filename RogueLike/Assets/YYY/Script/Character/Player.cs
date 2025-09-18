@@ -281,7 +281,7 @@ public class Player : MonoBehaviour
 
         data.level = 1;
         data.exp = 0;
-        data.maxHP = 1000;
+        data.maxHP = Random.Range(1000, 1200);
         data.meleeDamage = Random.Range(50, 100);
         data.shootDamage = Random.Range(50, 100);
         data.spellDamage = Random.Range(50, 100);
@@ -294,14 +294,14 @@ public class Player : MonoBehaviour
                 data.stockingDef = 20;
                 break;
             case 1:
-                data.weaponAtk = 50;
-                data.armorDef = 10;
-                data.stockingDef = 10;
+                data.weaponAtk = 70;
+                data.armorDef = 40;
+                data.stockingDef = 40;
                 break;
             case 2:
-                data.weaponAtk = 200;
+                data.weaponAtk = 120;
                 data.armorDef = 15;
-                data.stockingDef = 10;
+                data.stockingDef = 15;
                 break;
 
         }
@@ -474,6 +474,15 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
 
+        //移动中菜单锁显示
+        if (speed == 0)
+        {
+            UIManager.instance.LockOfMenu.SetActive(false);
+        }
+        else
+        {
+            UIManager.instance.LockOfMenu.SetActive(true);
+        }
 
 
         if (!isDie && currentHealth > 0)//不能&&IsGrounded()
@@ -602,17 +611,10 @@ public class Player : MonoBehaviour
             inputX = input.x;
             inputY = input.y;
 
-            //将自己有没有移动这件事传输给UIManager
-            UIManager.instance.PlayerIsMoving = false;
-            UIManager.instance.LockOfMenu.SetActive(false);
+
 
         }
-        else
-        {
-            //将自己有没有移动这件事传输给UIManager
-            UIManager.instance.PlayerIsMoving = true;
-            UIManager.instance.LockOfMenu.SetActive(true);
-        }
+
 
 
         if (inputX > 0.5f)
@@ -927,14 +929,14 @@ public class Player : MonoBehaviour
     {
         Level = 1;
         currentExperience = 0;
-        maxHealth =1000;
+        maxHealth = Random.Range(1000, 1200);
         MeleeDamage = Random.Range(50, 100);
         ShootDamage = Random.Range(50, 100);
         SpellDamage = Random.Range(50, 100);
 
-        CurrentWeaponPower = Random.Range(50,200);
-        CurrentArmorDefence = Random.Range(10,30);
-        CurrentStockingDefence = Random.Range(10, 30);
+        CurrentWeaponPower = Random.Range(50,120);
+        CurrentArmorDefence = Random.Range(15,40);
+        CurrentStockingDefence = Random.Range(15, 40);
 
 
 
@@ -2254,7 +2256,21 @@ public class Player : MonoBehaviour
 
         if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
-            isMenu = true;
+
+            if (speed == 0)
+            {
+                UIManager.instance.OpenCloseMenu();
+                AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
+            }
+            else
+            {
+                UIManager.instance._RoomGenerator.ShowInformationOfStage(6);
+
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+
+           
+            //isMenu = true;
         }
 
     }
@@ -2263,7 +2279,7 @@ public class Player : MonoBehaviour
 
         if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
-            isMenu = false;
+            //isMenu = false;
         }
 
     }
@@ -2353,23 +2369,26 @@ public class Player : MonoBehaviour
     }
 
     //手机端触发
-    public bool isMenu = false;//持续按下交互键
-    public void ButtonSetMenu()
-    {
-
-        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
-        {
-            isMenu = true;
-        }
-    }
-    public void ButtonSetMenuOver()
-    {
-
-        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
-        {
-            isMenu = false;
-        }
-    }
+    //public bool isMenu = false;//持续按下交互键
+    //public void ButtonSetMenu()
+    //{
+    //
+    //    if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
+    //    {
+    //        //isMenu = true;
+    //
+    //        UIManager.instance.OpenCloseMenu();
+    //        AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
+    //    }
+    //}
+    //public void ButtonSetMenuOver()
+    //{
+    //
+    //    if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
+    //    {
+    //        //isMenu = false;
+    //    }
+    //}
     #endregion
 
 
@@ -2728,58 +2747,7 @@ public class Player : MonoBehaviour
                 }
 
 
-                //if (Random.Range(0, 2) == 0)
-                //{
-                //    Knockdown();
-                //
-                //    Critial.SetActive(true);
-                //}
-                //else
-                //{
-                //
-                //    //击飞
-                //    if (StopX < 0)
-                //        Knockback(forceX: -3f);
-                //    else if (StopX > 0)
-                //        Knockback(forceX: 3f);
-                //    else if (StopY < 0)
-                //        Knockback(forceX: 0, forceY: -3f);
-                //    else if (StopY > 0)
-                //        Knockback(forceX: 0, forceY: 3f);
-                //
-                //
-                //
-                //
-                //    //PlayJump();
-                //
-                //    //受伤动画
-                //    anim.Play(GetAnimPrefix() + "Default_Hurt");
-                //    //Invoke("ReSetAttack", 0.5f);//防止动画回不去(这个在被击倒/站起流程后)
-                //
-                //
-                //    if (currentHealth <= maxHealth / 2) 
-                //    {
-                //        //一定几率打掉衣服丝袜
-                //        if (Random.Range(0, 3) == 0)
-                //        {
-                //            CurrentArmorDefence = 0;
-                //            YYY_bodyIndex = 1; SetSkin();
-                //            SaveCurrent();//衣服被打落
-                //
-                //            frameEvents._Effect_tear1();
-                //        }
-                //        if (Random.Range(0, 3) == 0)
-                //        {
-                //            CurrentStockingDefence = 0;
-                //            YYY_legsIndex = 1; SetSkin();
-                //            SaveCurrent();//丝袜被打落
-                //
-                //            frameEvents._Effect_tear1();
-                //        }
-                //    }
-                //
-                //    
-                //}
+                
             }
            
         }
