@@ -11,6 +11,10 @@ using System.IO;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("关卡信息")]
+    public GameObject StageInformation;
+    public Text _Stage_Information;
+
     public static UIManager instance { get; private set; }
     void Awake()
     {
@@ -147,67 +151,395 @@ public class UIManager : MonoBehaviour
 
         switch (GameFlowData.nextScene)
         {
+          
+         
+         
+
+
+            case "Story_01":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 4;
+                _RoomGenerator.RoomType = 0;//Wall
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第1章 王都潜入";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第一章 潜入王都";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第一章 潛入王都";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 1 – Infiltration";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제1장 왕도 잠입";
+                        break;
+                }
+
+                break;
+
+            case "Story_02":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 5;
+
+                _RoomGenerator.RoomType = 0;//Wall
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第2章 皇太子暗殺";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第二章 刺杀皇太子";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第二章 刺殺皇太子";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 2 – Assassinate";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제2장 황태자 암살";
+                        break;
+                }
+                break;
+
+          
             case "Story_03":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 8;//卫兵队长Boss战
+               
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第3章 罠からの脱出";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第三章 逃离陷阱";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第三章 逃離陷阱";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 3 – Escape";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제3장 함정 탈출";
+                        break;
+                }
+
                 break;
+
+
+            case "Story_04":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 5;
+                _RoomGenerator.RoomType = 1;//Dungeon
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第4章 宰相暗殺";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第四章 刺杀宰相";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第四章 刺殺宰相";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 4 – Assassinate";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제4장 재상 암살";
+                        break;
+                }
+
+                break;
+
             case "Story_05":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 9;//王女Boss战
-                break;
-            case "Story_08":
-                ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
-                _RoomGenerator.roomNumber = 10;//宰相Boss战
-                break;
-            case "Story_10":
-                ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
-                _RoomGenerator.roomNumber = 11;//王女与皇太子Boss战
-                break;
-            case "Story_12":
-                ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
-                _RoomGenerator.roomNumber = 12;//皇帝Boss战
+
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第5章 思わぬ遭遇";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第五章 意外遭遇";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第五章 意外遭遇";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 5 – Encounter";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제5장 뜻밖의 조우";
+                        break;
+                }
+
                 break;
 
 
-            case "Story_01":
-            case "Story_02":
-                ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
-                _RoomGenerator.roomNumber = 4;
-                break;
-            case "Story_04":
             case "Story_06":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 5;
+                _RoomGenerator.RoomType = 1;//Dungeon
+
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第6章 敗走";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第六章 败退";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第六章 敗退";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 6 – Defeat";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제6장 패퇴";
+                        break;
+                }
+
                 break;
+
             case "Story_07":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 6;
+                _RoomGenerator.RoomType = 1;//Dungeon
+
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第7章 立て直し";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第七章 重整旗鼓";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第七章 重整旗鼓";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 7 – Regroup";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제7장 재정비";
+                        break;
+                }
+
                 break;
+
+            case "Story_08":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 10;//宰相Boss战
+
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第8章 遅れた復讐";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第八章 迟到的复仇";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第八章 遲來的復仇";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 8 – Revenge";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제8장 늦은 복수";
+                        break;
+                }
+
+                break;
+
             case "Story_09":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 7;
+                _RoomGenerator.RoomType = 1;//Dungeon
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第9章 兄妹を探して";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第九章 寻找兄妹";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第九章 尋找兄妹";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 9 – Searching";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제9장 남매를 찾아서";
+                        break;
+                }
+
+                break;
+
+            case "Story_10":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 11;//王女与皇太子Boss战
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第10章 地下決戦";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第十章 地下决战";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第十章 地下決戰";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 10 – Showdown";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제10장 지하 결전";
+                        break;
+                }
+                break;
+          
+
             case "Story_11":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 7;
+                _RoomGenerator.RoomType = 1;//Dungeon
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第11章 再びの敗北";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第十一章 再度战败";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第十一章 再度戰敗";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 11 – Defeat 2";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제11장 다시 한번 패배";
+                        break;
+                }
+
                 break;
 
+            case "Story_12":
+                ToSavePageButton(1);
+                _RoomGenerator.gameObject.SetActive(true);
+                _RoomGenerator.roomNumber = 12;//皇帝Boss战
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "第12章 皇帝";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "第十二章 皇帝";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "第十二章 皇帝";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Chapter 12 – Emperor";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제12장 황제";
+                        break;
+                }
+
+                break;
 
             case "Arena":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 13;
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "白濁アリーナ";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "白浊角斗场";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "白濁角鬥場";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "White Haze Colosseum";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "백탁 투기장";
+                        break;
+                }
+
                 break;
             case "Dungeon":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 7;
+                if (UnityEngine.Random.Range(0, 2) == 0)
+                {
+
+                    _RoomGenerator.RoomType = 0;//Wall
+                }
+                else 
+                {
+                    _RoomGenerator.RoomType = 1;//Dungeon
+                }
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "帝国調教所";
+                        break;
+                    case 1:
+                        _Stage_Information.text = "帝国调教所";
+                        break;
+                    case 2:
+                        _Stage_Information.text = "帝國調教所";
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Imperial Training Hall";
+                        break;
+                    case 4:
+                        _Stage_Information.text = "제국 조교소";
+                        break;
+                }
+
                 break;
 
             case "CG":
@@ -256,7 +588,7 @@ public class UIManager : MonoBehaviour
 
 
     [Header("主菜单界面层级")]
-    public int CurrentChooseList = 0;//-2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面
+    public int CurrentChooseList = 0;//-4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面
     public int CurrentMode = 0;//0 进入CG界面  1捏人/进入游戏
     public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
     public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
@@ -392,7 +724,10 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            //提示此模式尚未解锁
+            AudioManager.instance.AudioPlay(AudioManager.instance.SE_Reba);
+
+            _RoomGenerator.ShowInformationOfStage(4);
         }
 
 
@@ -413,7 +748,10 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            //提示此模式尚未解锁
+            AudioManager.instance.AudioPlay(AudioManager.instance.SE_Reba);
+
+            _RoomGenerator.ShowInformationOfStage(4);
         }
 
        
@@ -587,21 +925,27 @@ public class UIManager : MonoBehaviour
 
     public void PauseGame()
     {
+        CurrentChooseList =-3;
+
+
         Time.timeScale = 0;
         PauseMenu.SetActive(true);
 
 
         //目前把这个放在了存档界面，所以不用了
-        //player.isInputBlocked = true;//切断玩家的方向攻击等输入
+        player.isInputBlocked = true;//切断玩家的方向攻击等输入
     }
     public void ContinueGame()
     {
+        CurrentChooseList = -4;
+
+
         Time.timeScale = 1;
         PauseMenu.SetActive(false);
 
 
         //目前把这个放在了存档界面，所以不用了
-        //player.isInputBlocked = false;//恢复玩家的方向攻击等输入
+        player.isInputBlocked = false;//恢复玩家的方向攻击等输入
     }
 
     public Animator MainCamera;//控制摄像机拉近远离
@@ -1005,6 +1349,7 @@ public class UIManager : MonoBehaviour
     [Header("告知RoomGenerator产生队友")]
     public RoomGenerator _RoomGenerator;
     bool isCreateFriend = false;
+    bool isShowTitle = false;
     public void OpenCloseMenu()
     {
         if (CurrentMode == 0)
@@ -1015,61 +1360,86 @@ public class UIManager : MonoBehaviour
 
         if (CurrentMode == 1)
         {
-            if (SaveManager.CountSaves() > 0&&GameFlowData.BulletCanThroughtWall==false) // 没有任何存档无法开始//战斗中无法开始
+            if (SaveManager.CountSaves() > 0) // 没有任何存档无法开始
             {
-
-                if (!isPause)
+                //战斗中无法开始
+                if (GameFlowData.BulletCanThroughtWall == false)
                 {
-
-                   
-
-
-                    MainCamera.SetInteger("View", 0);
-                    Common_All.SetActive(false);
-                    ShowSaveCavansAnim.gameObject.SetActive(true);
-                    ShowSaveCavansAnim.SetBool("Track", true);
-
-
-                    player.isInputBlocked = true;//切断玩家的方向攻击等输入
-
-                    RefreshSaveSlots();//只有在打开存档菜单时更新
-
-                    //PauseGame();
-                }
-                else
-                {
-
-
-
-                    MainCamera.SetInteger("View", 2);
-                    Common_All.SetActive(true);
-                    ShowSaveCavansAnim.gameObject.SetActive(false);
-                    ShowSaveCavansAnim.SetBool("Track", false);
-
-                    player.isInputBlocked = false;//恢复玩家的方向攻击等输入
-
-                    player.currentSaveName = currentSelectedSlot.Data.characterName;//开始游戏时，将这个存档名称带入Player
-
-
-
-
-                    //只能生成一次队友目前的模式中只有这两种允许队友
-                    if(GameFlowData.nextScene== "Dungeon"|| GameFlowData.nextScene == "Arena")
+                    if (!isPause)
                     {
-                        if (!isCreateFriend) { _RoomGenerator.SetAllFriends(); isCreateFriend = true; }
+
+
+
+
+                        MainCamera.SetInteger("View", 0);
+                        Common_All.SetActive(false);
+                        ShowSaveCavansAnim.gameObject.SetActive(true);
+                        ShowSaveCavansAnim.SetBool("Track", true);
+
+
+                        player.isInputBlocked = true;//切断玩家的方向攻击等输入
+
+                        RefreshSaveSlots();//只有在打开存档菜单时更新
+
+                        CurrentChooseList = 2;
+                    }
+                    else
+                    {
+
+
+
+                        MainCamera.SetInteger("View", 2);
+                        Common_All.SetActive(true);
+                        ShowSaveCavansAnim.gameObject.SetActive(false);
+                        ShowSaveCavansAnim.SetBool("Track", false);
+
+                        player.isInputBlocked = false;//恢复玩家的方向攻击等输入
+
+                        player.currentSaveName = currentSelectedSlot.Data.characterName;//开始游戏时，将这个存档名称带入Player
+
+
+
+
+                        //只能生成一次队友目前的模式中只有这两种允许队友
+                        if (GameFlowData.nextScene == "Dungeon" || GameFlowData.nextScene == "Arena")
+                        {
+                            if (!isCreateFriend) { _RoomGenerator.SetAllFriends(); isCreateFriend = true; }
+                        }
+
+                        if (!isShowTitle)
+                        {
+
+                            StageInformation.SetActive(true);
+
+                            isShowTitle = true;
+                        }//只展示一次关卡信息
+
+
+
+                        CurrentChooseList = -4;
                     }
 
-                   
+                    isPause = !isPause;
 
+                    //isPause = false;
+                }
+                else 
+                {
+
+                    //提示战斗中无法打开菜单
+                    AudioManager.instance.AudioPlay(AudioManager.instance.SE_Reba);
+
+                    _RoomGenerator.ShowInformationOfStage(5);
                 }
 
-                isPause = !isPause;
-
-                //isPause = false;
             }
             else
             {
+
+                //提示需要创建角色
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Reba);
+
+                _RoomGenerator.ShowInformationOfStage(3);
             }
 
 
@@ -1664,6 +2034,7 @@ public class UIManager : MonoBehaviour
     private InputAction createAction;//Space键
     private InputAction deleteAction;//E键
     private InputAction pauseAction;//Esc键
+    private InputAction MenuAction;//L键
 
     private void OnEnable()
     {
@@ -1673,6 +2044,7 @@ public class UIManager : MonoBehaviour
         createAction = inputActions.FindAction("Run");
         deleteAction = inputActions.FindAction("Interact");
         pauseAction = inputActions.FindAction("Pause");
+        MenuAction = inputActions.FindAction("Menu");
 
         moveAction.performed += OnMove;
         confirmAction.started += OnConfirm;
@@ -1680,6 +2052,8 @@ public class UIManager : MonoBehaviour
         createAction.started += OnCreate;
         deleteAction.started += OnDelete;
         pauseAction.started += OnPause;
+        MenuAction.started += OnMenu;
+
 
         moveAction.Enable();
         confirmAction.Enable();
@@ -1687,6 +2061,7 @@ public class UIManager : MonoBehaviour
         createAction.Enable();
         deleteAction.Enable();
         pauseAction.Enable();
+        MenuAction.Enable();
     }
 
     private void OnDisable()
@@ -1697,6 +2072,7 @@ public class UIManager : MonoBehaviour
         createAction.started -= OnCreate;
         deleteAction.started -= OnDelete;
         pauseAction.started -= OnPause;
+        MenuAction.canceled -= OnMenu;
 
         moveAction.Disable();
         confirmAction.Disable();
@@ -1704,6 +2080,7 @@ public class UIManager : MonoBehaviour
         createAction.Disable();
         deleteAction.Disable();
         pauseAction.Disable();
+        MenuAction.Disable();
     }
 
     //冷却时间
@@ -2006,12 +2383,17 @@ public class UIManager : MonoBehaviour
             }
 
             AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
+
+
+           
+
         }
 
-
-
-
     }
+
+    //在玩家方向上有输入的时候不能打开菜单
+    public bool PlayerIsMoving=false;
+    public GameObject LockOfMenu;
 
     public GameObject HideGameObjectWhenChangeName;
     public GameObject Prompt_Enter, Ok_Name;
@@ -2042,7 +2424,7 @@ public class UIManager : MonoBehaviour
             // 可选：进入下一级菜单、确认开始游戏等
 
             //只要暂停菜单显示，攻击键按下就是触发这里
-            if (PauseMenu.activeInHierarchy)
+            if (CurrentChooseList == -3)
             {
                 //ReLoadScene();
 
@@ -2221,7 +2603,7 @@ public class UIManager : MonoBehaviour
             // 可选：退出菜单、返回上一级等
 
             //只要暂停菜单显示，闪避键按下就是触发这里
-            if (PauseMenu.activeInHierarchy)
+            if (CurrentChooseList == -3)
             {
                 ContinueGame();
 
@@ -2247,9 +2629,9 @@ public class UIManager : MonoBehaviour
             //存档界面
             if (CurrentChooseList == 2 )
             {
-                //SavePageToHomePage();
+                SavePageToHomePage();
 
-                PauseGame();
+                //PauseGame();
 
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
@@ -2336,15 +2718,41 @@ public class UIManager : MonoBehaviour
     {
 
 
-        // 可选：暂停继续游戏
-        if (CurrentChooseList == 2)
+
+        if (CurrentChooseList == -4)
         {
-            OpenCloseMenu();
+            //只要暂停菜单显示，闪避键按下就是触发这里
+            if (PauseMenu.activeInHierarchy)
+            {
+                ContinueGame();
+
+
+            }
+            else
+            {
+                PauseGame();
+            }
         }
+
+       
+
+     
 
 
         AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
     }//键盘ESC      xbox手柄——        ps手柄opt
+
+    private void OnMenu(InputAction.CallbackContext ctx) 
+    {
+        if (CurrentChooseList != -3&& !PlayerIsMoving)
+        {
+            OpenCloseMenu();
+            AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
+        }
+
+
+        
+    }//键盘L      xbox手柄Y        ps手柄△
 
 
     #endregion

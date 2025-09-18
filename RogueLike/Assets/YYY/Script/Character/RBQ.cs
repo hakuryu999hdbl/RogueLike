@@ -218,6 +218,7 @@ public class RBQ : MonoBehaviour
                 Prompt_Save.SetActive(false);
 
                 other.GetComponent<Player>().InteractingButton.SetActive(false);
+                other.GetComponent<Player>().isInteracting = false;
             }
 
             //if (RBQState == 3 && RBQState!=3)//商店状态下这里不要触发取下
@@ -273,6 +274,7 @@ public class RBQ : MonoBehaviour
 
 
                     other.GetComponent<Player>().InteractingButton.SetActive(false);
+                    other.GetComponent<Player>().isInteracting = false;
                 }
 
 
@@ -284,6 +286,7 @@ public class RBQ : MonoBehaviour
                 Prompt_Save.SetActive(true);
 
                 other.GetComponent<Player>().InteractingButton.SetActive(true);
+                other.GetComponent<Player>().isInteracting = false;
             }
 
 
@@ -561,6 +564,7 @@ public class RBQ : MonoBehaviour
                 }
 
                 other.GetComponent<Player>().InteractingButton.SetActive(false);
+                other.GetComponent<Player>().isInteracting = false;
             }
 
 

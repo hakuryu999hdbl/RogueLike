@@ -47,6 +47,7 @@ public class RBQItemTrigger : MonoBehaviour
         rBQ.Prompt_Take.SetActive(false);
 
         other.GetComponent<Player>().InteractingButton.SetActive(false);
+        other.GetComponent<Player>().isInteracting = false;
     }
 
 

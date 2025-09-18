@@ -571,8 +571,7 @@ public class RoomGenerator : MonoBehaviour
     public GameObject Enemy;
     public GameObject RBQ;
 
-    public GameObject BossIcon;
-    public GameObject Stage_Information;
+   
 
     //敌人列表
     //public List<GameObject> enemyList = new List<GameObject>();
@@ -646,6 +645,163 @@ public class RoomGenerator : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    /// 关卡信息
+    /// </summary>
+    #region
+    [Header("关卡信息")]
+    public GameObject BossIcon;
+    public GameObject Stage_Information;
+    public Text _Stage_Information;
+    public void ShowInformationOfStage(int Information)//0开始时关卡信息    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6此模式下无法打开菜单
+    {
+        switch (Information) 
+        {
+            case 0:
+
+                
+                //UIManager开始做掉了
+
+                break;
+
+            case 1: // 敌人出现
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "敵出現";   // 日语
+                        break;
+                    case 1:
+                        _Stage_Information.text = "敌人出现"; // 简体
+                        break;
+                    case 2:
+                        _Stage_Information.text = "敵人出現"; // 繁体
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Enemy Appears"; // 英语
+                        break;
+                    case 4:
+                        _Stage_Information.text = "적 등장"; // 韩语
+                        break;
+                }
+                BossIcon.SetActive(true);
+                break;
+
+            case 2: // 清剿完毕
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "掃討完了"; // 日语
+                        break;
+                    case 1:
+                        _Stage_Information.text = "清剿完毕"; // 简体
+                        break;
+                    case 2:
+                        _Stage_Information.text = "清剿完畢"; // 繁体
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Cleared"; // 英语
+                        break;
+                    case 4:
+                        _Stage_Information.text = "소탕 완료"; // 韩语
+                        break;
+                }
+                break;
+
+            case 3: // 请先创建人物
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "キャラを作成してください"; // 日语
+                        break;
+                    case 1:
+                        _Stage_Information.text = "请先创建人物"; // 简体
+                        break;
+                    case 2:
+                        _Stage_Information.text = "請先創建人物"; // 繁体
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Create a Character First"; // 英语
+                        break;
+                    case 4:
+                        _Stage_Information.text = "캐릭터를 먼저 생성하세요"; // 韩语
+                        break;
+                }
+                break;
+
+            case 4: // 关卡尚未解锁
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "ステージ未解放"; // 日语
+                        break;
+                    case 1:
+                        _Stage_Information.text = "关卡尚未解锁"; // 简体
+                        break;
+                    case 2:
+                        _Stage_Information.text = "關卡尚未解鎖"; // 繁体
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Stage Locked"; // 英语
+                        break;
+                    case 4:
+                        _Stage_Information.text = "스테이지 잠금"; // 韩语
+                        break;
+                }
+                break;
+
+
+            case 5: // 战斗中无法打开菜单
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "戦闘中はメニューを開けません"; // 日语
+                        break;
+                    case 1:
+                        _Stage_Information.text = "战斗中无法打开菜单"; // 简体
+                        break;
+                    case 2:
+                        _Stage_Information.text = "戰鬥中無法打開選單"; // 繁体
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Cannot open menu in battle"; // 英语
+                        break;
+                    case 4:
+                        _Stage_Information.text = "전투 중 메뉴를 열 수 없습니다"; // 韩语
+                        break;
+                }
+                break;
+
+            case 6: // 此模式下无法打开菜单
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0:
+                        _Stage_Information.text = "このモードではメニューを開けません"; // 日语
+                        break;
+                    case 1:
+                        _Stage_Information.text = "此模式下无法打开菜单"; // 简体
+                        break;
+                    case 2:
+                        _Stage_Information.text = "此模式下無法打開選單"; // 繁体
+                        break;
+                    case 3:
+                        _Stage_Information.text = "Cannot open menu in this mode"; // 英语
+                        break;
+                    case 4:
+                        _Stage_Information.text = "이 모드에서는 메뉴를 열 수 없습니다"; // 韩语
+                        break;
+                }
+                break;
+        }
+
+
+        Stage_Information.SetActive(true);
+
+        Debug.Log("显示信息");
+    }
+
+
+
+    #endregion
 
     /// <summary>
     /// 结算页面

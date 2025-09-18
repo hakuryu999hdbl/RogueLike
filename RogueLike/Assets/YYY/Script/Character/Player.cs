@@ -602,6 +602,16 @@ public class Player : MonoBehaviour
             inputX = input.x;
             inputY = input.y;
 
+            //将自己有没有移动这件事传输给UIManager
+            UIManager.instance.PlayerIsMoving = false;
+            UIManager.instance.LockOfMenu.SetActive(false);
+
+        }
+        else
+        {
+            //将自己有没有移动这件事传输给UIManager
+            UIManager.instance.PlayerIsMoving = true;
+            UIManager.instance.LockOfMenu.SetActive(true);
         }
 
 
@@ -2130,6 +2140,8 @@ public class Player : MonoBehaviour
 
     private InputAction InteractAction;
 
+    private InputAction MenuAction;
+
     public bool isInputBlocked = true;//在捏人界面暂时切断玩家的输入
 
     private void RegisterHandle()
@@ -2139,6 +2151,7 @@ public class Player : MonoBehaviour
         AttackAction = inputActions.FindAction("Attack");
         DodgeAction = inputActions.FindAction("Dodge");
         InteractAction = inputActions.FindAction("Interact");
+        MenuAction = inputActions.FindAction("Menu");
 
 
         // 订阅输入事件
@@ -2156,6 +2169,10 @@ public class Player : MonoBehaviour
         // 订阅输入事件
         InteractAction.started += OnInteractStarted;
         InteractAction.canceled += OnInteractCanceled;
+
+        // 订阅输入事件
+        MenuAction.started += OnMenuStarted;
+        MenuAction.canceled += OnMenuCanceled;
     }
     private void OnRunStarted(InputAction.CallbackContext context)
     {
@@ -2232,6 +2249,24 @@ public class Player : MonoBehaviour
         }
 
     }
+    private void OnMenuStarted(InputAction.CallbackContext context)
+    {
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
+        {
+            isMenu = true;
+        }
+
+    }
+    private void OnMenuCanceled(InputAction.CallbackContext context)
+    {
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
+        {
+            isMenu = false;
+        }
+
+    }
 
     [Header("手机端触发")]
     public Joystick Joystick;
@@ -2296,9 +2331,10 @@ public class Player : MonoBehaviour
         }
     }
 
+
+    //手机端触发
     public bool isInteracting = false;//持续按下交互键
     public GameObject InteractingButton;
-    //手机端触发
     public void ButtonSetInteract()
     {
 
@@ -2313,6 +2349,25 @@ public class Player : MonoBehaviour
         if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             isInteracting = false;
+        }
+    }
+
+    //手机端触发
+    public bool isMenu = false;//持续按下交互键
+    public void ButtonSetMenu()
+    {
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
+        {
+            isMenu = true;
+        }
+    }
+    public void ButtonSetMenuOver()
+    {
+
+        if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
+        {
+            isMenu = false;
         }
     }
     #endregion
@@ -2621,58 +2676,110 @@ public class Player : MonoBehaviour
 
             if (!isDie && currentHealth > 0) 
             {
-                if (Random.Range(0, 2) == 0)
+                switch (Random.Range(0, 5)) //五分之一被击倒  五分之一被击飞   五分之三只是伤血不触发动画（攻击不会被打断）
                 {
-                    Knockdown();
+                    case 0:
+                        Knockdown();
 
-                    Critial.SetActive(true);
-                }
-                else
-                {
-
-                    //击飞
-                    if (StopX < 0)
-                        Knockback(forceX: -3f);
-                    else if (StopX > 0)
-                        Knockback(forceX: 3f);
-                    else if (StopY < 0)
-                        Knockback(forceX: 0, forceY: -3f);
-                    else if (StopY > 0)
-                        Knockback(forceX: 0, forceY: 3f);
-
+                        Critial.SetActive(true);
+                        break;
+                    case 1:
+                        //击飞
+                        if (StopX < 0)
+                            Knockback(forceX: -3f);
+                        else if (StopX > 0)
+                            Knockback(forceX: 3f);
+                        else if (StopY < 0)
+                            Knockback(forceX: 0, forceY: -3f);
+                        else if (StopY > 0)
+                            Knockback(forceX: 0, forceY: 3f);
 
 
 
-                    //PlayJump();
 
-                    //受伤动画
-                    anim.Play(GetAnimPrefix() + "Default_Hurt");
-                    //Invoke("ReSetAttack", 0.5f);//防止动画回不去(这个在被击倒/站起流程后)
+                        //PlayJump();
+
+                        //受伤动画
+                        anim.Play(GetAnimPrefix() + "Default_Hurt");
+                        //Invoke("ReSetAttack", 0.5f);//防止动画回不去(这个在被击倒/站起流程后)
 
 
-                    if (currentHealth <= maxHealth / 2) 
-                    {
-                        //一定几率打掉衣服丝袜
-                        if (Random.Range(0, 3) == 0)
+                        if (currentHealth <= maxHealth / 2)
                         {
-                            CurrentArmorDefence = 0;
-                            YYY_bodyIndex = 1; SetSkin();
-                            SaveCurrent();//衣服被打落
+                            //一定几率打掉衣服丝袜
+                            if (Random.Range(0, 3) == 0)
+                            {
+                                CurrentArmorDefence = 0;
+                                YYY_bodyIndex = 1; SetSkin();
+                                SaveCurrent();//衣服被打落
 
-                            frameEvents._Effect_tear1();
+                                frameEvents._Effect_tear1();
+                            }
+                            if (Random.Range(0, 3) == 0)
+                            {
+                                CurrentStockingDefence = 0;
+                                YYY_legsIndex = 1; SetSkin();
+                                SaveCurrent();//丝袜被打落
+
+                                frameEvents._Effect_tear1();
+                            }
                         }
-                        if (Random.Range(0, 3) == 0)
-                        {
-                            CurrentStockingDefence = 0;
-                            YYY_legsIndex = 1; SetSkin();
-                            SaveCurrent();//丝袜被打落
-
-                            frameEvents._Effect_tear1();
-                        }
-                    }
-
-                    
+                        break;
                 }
+
+
+                //if (Random.Range(0, 2) == 0)
+                //{
+                //    Knockdown();
+                //
+                //    Critial.SetActive(true);
+                //}
+                //else
+                //{
+                //
+                //    //击飞
+                //    if (StopX < 0)
+                //        Knockback(forceX: -3f);
+                //    else if (StopX > 0)
+                //        Knockback(forceX: 3f);
+                //    else if (StopY < 0)
+                //        Knockback(forceX: 0, forceY: -3f);
+                //    else if (StopY > 0)
+                //        Knockback(forceX: 0, forceY: 3f);
+                //
+                //
+                //
+                //
+                //    //PlayJump();
+                //
+                //    //受伤动画
+                //    anim.Play(GetAnimPrefix() + "Default_Hurt");
+                //    //Invoke("ReSetAttack", 0.5f);//防止动画回不去(这个在被击倒/站起流程后)
+                //
+                //
+                //    if (currentHealth <= maxHealth / 2) 
+                //    {
+                //        //一定几率打掉衣服丝袜
+                //        if (Random.Range(0, 3) == 0)
+                //        {
+                //            CurrentArmorDefence = 0;
+                //            YYY_bodyIndex = 1; SetSkin();
+                //            SaveCurrent();//衣服被打落
+                //
+                //            frameEvents._Effect_tear1();
+                //        }
+                //        if (Random.Range(0, 3) == 0)
+                //        {
+                //            CurrentStockingDefence = 0;
+                //            YYY_legsIndex = 1; SetSkin();
+                //            SaveCurrent();//丝袜被打落
+                //
+                //            frameEvents._Effect_tear1();
+                //        }
+                //    }
+                //
+                //    
+                //}
             }
            
         }

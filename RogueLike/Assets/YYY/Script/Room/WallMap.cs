@@ -146,8 +146,10 @@ public class WallMap : MonoBehaviour
            
             isClean = 1;
 
-            _RoomGenerator.BossIcon.SetActive(true);
-            _RoomGenerator.Stage_Information.SetActive(true);
+            //_RoomGenerator.BossIcon.SetActive(true);
+            //_RoomGenerator.Stage_Information.SetActive(true);
+
+            _RoomGenerator.ShowInformationOfStage(1);
 
 
             GameFlowData.BulletCanThroughtWall = true;//只有在战斗的时候子弹可以穿墙
@@ -172,6 +174,7 @@ public class WallMap : MonoBehaviour
             HasShop = true;
         }
 
+        _RoomGenerator.ShowInformationOfStage(2);
 
         GameFlowData.BulletCanThroughtWall = false;//只有在战斗的时候子弹可以穿墙
         Debug.Log("子弹不可穿墙" + GameFlowData.BulletCanThroughtWall) ;
