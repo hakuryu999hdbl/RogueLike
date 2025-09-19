@@ -66,12 +66,49 @@ public class Enemy : MonoBehaviour
                         // 随机从 Enum 中选择一个值
                         Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
 
-                        if (BecomeSoldier_Man){ Class = EnemyClass.Man; }//召集男性士兵
-
+                        if (BecomeSoldier_Man)
+                        { 
+                            Class = EnemyClass.Man;
+                        }//召集男性士兵
+                        if (BecomeSoldier) 
+                        {
+                            if (UnityEngine.Random.Range(0, 2) == 0)
+                            {
+                                Class = EnemyClass.Man;
+                            }
+                            else
+                            {
+                                Class = EnemyClass.Girl;
+                            }
+                            
+                        }//召集男性或女性士兵
                         if (BecomeTentacleMonster) 
                         {
-                            Class = EnemyClass.Tentacle_Monster;
+
+                            switch (UnityEngine.Random.Range(0, 5))
+                            {
+                                case 0:
+                                    Class = EnemyClass.Monster;
+                                    break;
+                                case 1:
+                                    Class = EnemyClass.Tentacle_Monster;
+                                    break;
+                                case 2:
+                                    Class = EnemyClass.Tentacle_Bug;
+                                    break;
+                                case 3:
+                                    Class = EnemyClass.Tentacle_Bag;
+                                    break;
+                                case 4:
+                                    Class = EnemyClass.Tentacle_HermitCrab;
+                                    break;
+                            }
+
+
+                           
                         }//召集触手怪
+
+
 
 
                         //Class = EnemyClass.Succubus;
@@ -82,6 +119,14 @@ public class Enemy : MonoBehaviour
                         //Class = EnemyClass.Tentacle_Bug;
                         //Class = EnemyClass.Tentacle_Bag;
                         //Class = EnemyClass.Tentacle_HermitCrab;
+
+
+
+                     
+                      
+
+
+
 
                         if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
                         {
@@ -150,7 +195,49 @@ public class Enemy : MonoBehaviour
 
         GateEffect.SetActive(true);//传送门特效
 
+
+        Invoke("DelayDialogue", Random.Range(0.5f, 2.5f));
     }
+
+    void DelayDialogue()
+    {
+        
+        if (tag != "Friend")
+        {
+            switch (BossNumber) 
+            {
+                default:
+                case 0:
+                    switch (Class)
+                    {
+                        case EnemyClass.Man:
+                            UIManager.instance.ShowDialogue("Man");
+                            break;
+
+
+
+                        case EnemyClass.Girl:
+                        case EnemyClass.Succubus:
+                            UIManager.instance.ShowDialogue("Girl");                         
+                            break;
+                    }
+                    break;
+
+                case 1:
+                    UIManager.instance.ShowDialogue("Boss_Captain");
+                    break;
+                case 2:
+                case 3:
+                    UIManager.instance.ShowDialogue("Boss_Selene");
+                    break;
+            }
+
+          
+        }
+
+       
+    }
+
 
     void SetAttackRange()
     {
@@ -2063,7 +2150,8 @@ public class Enemy : MonoBehaviour
 
             isScreaming = true;
 
-
+            //受伤尖叫
+            Scream();
 
             //血
             #region
@@ -2257,6 +2345,82 @@ public class Enemy : MonoBehaviour
         GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
         Destroy(effectPrefabs_2, 2f);
     }//防御
+
+    void Scream()
+    {
+
+        switch (Class)
+        {
+            case EnemyClass.Girl:
+            case EnemyClass.Succubus:
+                switch (Random.Range(0, 2))
+                {
+                    case 0:
+                        frameEvents._yyy_jianjiao4();
+                        break;
+                    case 1:
+                        frameEvents._yyy_jianjiao5();
+                        break;
+                }//女性
+                break;
+            case EnemyClass.Man:
+                switch (Random.Range(0, 4))
+                {
+                    case 0:
+                        frameEvents._Man_die1();
+                        break;
+                    case 1:
+                        frameEvents._Man_die2();
+                        break;
+                    case 2:
+                        frameEvents._Man_die3();
+                        break;
+                    case 3:
+                        frameEvents._Man_die4();
+                        break;
+                }//男性
+                break;
+
+            case EnemyClass.Monster:
+            case EnemyClass.Tentacle_Monster:
+                switch (Random.Range(0, 3))
+                {
+                    case 0:
+                        frameEvents._Zombie_Die_1();
+                        break;
+                    case 1:
+                        frameEvents._Zombie_Die_2();
+                        break;
+                    case 2:
+                        frameEvents._Zombie_Attack();
+                        break;
+                }//感染者 变异体
+                break;
+
+            case EnemyClass.Tentacle_Bug:
+                frameEvents._Orangutan_Die_1();//肉翅蜂
+                break;
+
+            case EnemyClass.Tentacle_Bag:
+            case EnemyClass.Tentacle_HermitCrab:
+                switch (Random.Range(0, 3))
+                {
+                    case 0:
+                        frameEvents._monster_Attack_01();
+                        break;
+                    case 1:
+                        frameEvents._monster_Die_01();
+                        break;
+                    case 2:
+                        frameEvents._Shrike_Die();
+                        break;
+                }//肉袋  淫毒肉炮  
+                break;
+        }
+
+     
+
+    }//尖叫声
 
 
     [Header("暴击")]
@@ -2837,6 +3001,9 @@ public class Enemy : MonoBehaviour
             Invoke("Attack_Cancel", 0.5f);
             return;
         }
+
+
+        UIManager.instance.ShowDialogue("Boss_Selene_Skill");
     }
 
 
@@ -2851,18 +3018,32 @@ public class Enemy : MonoBehaviour
 
 
     //Boss技能  召集
-    public bool BecomeSoldier_Man = false;
+    public bool BecomeSoldier_Man = false;//男性士兵
+    public bool BecomeSoldier = false;//男性或女性士兵
+
     void BossSkill_CallSoldier() 
     {
 
-        //如果场景内敌人少于2个，再召唤一群士兵
+        //如果场景内敌人少于5个，再召唤一群士兵
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies.Length <= 2)
+        if (enemies.Length <= 5)
         {           
             wallmap.SetEnemy(1);
-      
+
+            switch (BossNumber)
+            {
+                case 1:
+                    UIManager.instance.ShowDialogue("Boss_Captain_Skill");
+                    break;
+                case 5:
+                    UIManager.instance.ShowDialogue("Boss_Alexis_Skill");
+                    break;
+            }
         }
+
+
+      
 
  
     }

@@ -2248,6 +2248,7 @@ public class Player : MonoBehaviour
         if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
             isInteracting = false;
+            InteractingButton.SetActive(false);
         }
 
     }
@@ -2624,8 +2625,8 @@ public class Player : MonoBehaviour
             isScreaming = true;
 
 
-           
-
+            //受伤音效
+            frameEvents._02_Syllabary_A();
 
 
 

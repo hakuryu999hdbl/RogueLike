@@ -324,5 +324,7 @@ public class FrameEvents : MonoBehaviour
     public void _Orangutan_Attack_1() { audioS.PlayOneShot(AudioManager.Orangutan_Attack_1); }//Spine帧事件没有，由敌人或玩家或者其他挂着FrameEvent脚本直接使用
     public void _Orangutan_Die_1() { audioS.PlayOneShot(AudioManager.Orangutan_Die_1); }//Spine帧事件没有，由敌人或玩家或者其他挂着FrameEvent脚本直接使用
 
+
+
     #endregion
 }

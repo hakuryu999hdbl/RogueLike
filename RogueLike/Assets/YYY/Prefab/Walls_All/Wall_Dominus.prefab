@@ -133,6 +133,7 @@ MonoBehaviour:
   - {fileID: 4260427553439568412}
   - {fileID: 2434129601215260783}
   - {fileID: 1104986930769744855}
+  SetOtherEnemy: 2
 --- !u!1 &670747003359366614
 GameObject:
   m_ObjectHideFlags: 0
@@ -5085,6 +5086,7 @@ MonoBehaviour:
   spawnPoints:
   - {fileID: 204685002542241270}
   - {fileID: 6696536938788798547}
+  SetOtherEnemy: 0
 --- !u!1 &6642224388231794355
 GameObject:
   m_ObjectHideFlags: 0

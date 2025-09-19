@@ -8,34 +8,64 @@ public class BGM : MonoBehaviour
 
     public static BGM instance { get; private set; }
     public AudioSource audioS;
-
-    [Header("追逐音乐")]
-    public List<AudioClip> ChaseMusicList; // 使用List来存储多个音乐
     public bool isPlaying;
+
+
+    [Header("Boss音乐")]
+    public List<AudioClip> BossMusicList; // 使用List来存储多个音乐
+
+    [Header("关卡音乐")]
+    public List<AudioClip> DungeonMusicList; // 使用List来存储多个音乐
 
     [Header("背景音乐")]
     public List<AudioClip> BackgroundMusicList;// 使用List来存储多个音乐
 
-    // Start is called before the first frame update
+
     void Start()
     {
         instance = this;
         audioS = GetComponent<AudioSource>();
     }
 
-    public void AudioPlayChaseMusic(int BGMNumber)
+    public void AudioPlayBossMusic(int BGMNumber)
     {
-        if (!isPlaying && ChaseMusicList.Count > 0)
+        if (!isPlaying && BossMusicList.Count > 0)
         {
 
             if (BGMNumber < 0)
             {
                 // 从列表中随机选择一首音乐
-                audioS.clip = ChaseMusicList[Random.Range(0, ChaseMusicList.Count)];
+                audioS.clip = BossMusicList[Random.Range(0, BossMusicList.Count)];
             }
             else
             {
-                audioS.clip = ChaseMusicList[BGMNumber];
+                audioS.clip = BossMusicList[BGMNumber];
+            }//如果是小于0，那么随机播放，如果大于0，那么指定该序号播放
+
+
+            //audioS.PlayOneShot(randomClip);
+
+            // 将音频片段赋值给AudioSource的clip，并播放
+            audioS.loop = true;  // 确保启用了循环播放
+            audioS.Play();
+            isPlaying = true;
+        }
+
+    }
+
+    public void AudioPlayChaseMusic(int BGMNumber)
+    {
+        if (!isPlaying && DungeonMusicList.Count > 0)
+        {
+
+            if (BGMNumber < 0)
+            {
+                // 从列表中随机选择一首音乐
+                audioS.clip = DungeonMusicList[Random.Range(0, DungeonMusicList.Count)];
+            }
+            else
+            {
+                audioS.clip = DungeonMusicList[BGMNumber];
             }//如果是小于0，那么随机播放，如果大于0，那么指定该序号播放
           
 

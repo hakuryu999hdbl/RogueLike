@@ -39,13 +39,12 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-
     // Start is called before the first frame update
     void Start()
     {
         //随机天气
-        SetFog(Random.Range(0, 4));
-
+        //SkyBoxNumber = Random.Range(0, 4);
+        SetFog();
 
         //随机房间大小
         //roomNumber = Random.Range(4, 8);
@@ -162,8 +161,11 @@ public class RoomGenerator : MonoBehaviour
     #region
     [Header("雾气与天气")]
     public SkyboxSample SkyboxSample;
-    public void SetFog(int color)
+    public int SkyBoxNumber;
+    public void SetFog()
     {
+
+
 
         // 启用线性雾效
         RenderSettings.fog = true;
@@ -175,7 +177,7 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-        switch (color)
+        switch (SkyBoxNumber)
         {
             case 0:
                 RenderSettings.fog = false;
@@ -859,6 +861,10 @@ public class RoomGenerator : MonoBehaviour
         MissionIcon(true);
 
         Invoke("ResultDetail", 1f);
+
+        //让BGM停止好播放结尾音乐
+        BGM.instance.Stop();
+
 
     }//获胜端口
 

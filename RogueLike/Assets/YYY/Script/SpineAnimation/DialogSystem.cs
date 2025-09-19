@@ -585,7 +585,7 @@ public class DialogSystem : MonoBehaviour
                 GameFlowData.nextScene = "Story_12";
                 break;
             case 1013:
-                //GameFlowData.nextScene = "Menu";
+                GameFlowData.nextScene = "";//返回主菜单
                 break;
         }
 

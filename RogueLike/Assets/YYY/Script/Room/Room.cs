@@ -42,25 +42,28 @@ public class Room : MonoBehaviour
 
         isBossRoom = true;
 
+
+        //普通关卡生成Boss
+
         switch (GameFlowData.nextScene)
         {
-            case "Story_03":
-                BossNumber = 1;
-                break;
-            case "Story_05":
-                BossNumber = 2;
-                break;
-            case "Story_08":
-                BossNumber = 4;
-                break;
-            case "Story_10":
-                BossNumber = 5;
-                break;
-            case "Story_12":
-                BossNumber = 6;
-                break;
-
-
+            //case "Story_03":
+            //    BossNumber = 1;
+            //    break;
+            //case "Story_05":
+            //    BossNumber = 2;
+            //    break;
+            //case "Story_08":
+            //    BossNumber = 4;
+            //    break;
+            //case "Story_10":
+            //    BossNumber = 5;
+            //    break;
+            //case "Story_12":
+            //    BossNumber = 6;
+            //    break;
+        
+        
             // case "Story_01":
             // case "Story_02":
             //
@@ -84,14 +87,11 @@ public class Room : MonoBehaviour
             // case "Dungeon":
             //
             //     break;
-
+        
             default:
                 BossNumber = 1;
                 break;
         }
-
-        
-
 
 
 
@@ -103,6 +103,9 @@ public class Room : MonoBehaviour
     public GameObject Enemy;//生成Boss
     public bool isBossRoom = false;
     public int BossNumber;
+
+   
+
     private void OnTriggerEnter2D(Collider2D collision)//检测到玩家显示
     {
 

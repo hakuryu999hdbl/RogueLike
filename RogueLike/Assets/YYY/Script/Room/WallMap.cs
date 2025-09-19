@@ -138,10 +138,59 @@ public class WallMap : MonoBehaviour
                 gate.Close();  //锁上自己【门】列表的所有门，Gate脚本Gate里有门开关动画器和对应的碰撞体
             }
 
-            if (!isBossRoom) 
+            if (!isBossRoom)
             {
-                SetEnemy();
+
+                //普通房间刷怪
+                switch (GameFlowData.nextScene)
+                {
+                    case "Story_01":
+                    case "Story_02":
+                    case "Story_03":
+                        SetEnemy(1);
+                        break;
+
+                    case "Story_04":
+                    case "Story_05":
+                    case "Story_06":
+                        SetEnemy(3);
+                        break;
+                    case "Story_07":
+                    case "Story_08":
+                    case "Story_09":
+                        SetEnemy(2);
+                        break;
+
+                    default:
+                        SetEnemy();//[10,11,12全类型敌人] 地下城  竞技场   随机敌人
+                        break;
+
+                }
+
+               
+
+
+
                 SetRBQ();
+
+                
+
+            }
+            else 
+            {
+                //需要在Boss房内刷的敌人【0不刷敌人】
+                switch (SetOtherEnemy) 
+                {
+                    case 1:
+                        SetEnemy(1);
+                        break;
+                    case 2:
+                        SetEnemy(2);
+                        break;
+                    case 3:
+                        SetEnemy(3);
+                        break;
+                }
             }
            
             isClean = 1;
@@ -196,7 +245,9 @@ public class WallMap : MonoBehaviour
     [Header("敌人出生点列表")]
     public List<Transform> spawnPoints = new List<Transform>();
 
-    public void SetEnemy(int EnemySkin=0)// 0随机  1男性士兵   
+    public int SetOtherEnemy;//0不设置其他敌人  1设置男性士兵
+
+    public void SetEnemy(int EnemySkin=0)// 0随机  1男性士兵   2触手怪物     3男女敌人
     {
         //队友数量
         GameObject[] friends = GameObject.FindGameObjectsWithTag("Friend");
@@ -237,6 +288,9 @@ public class WallMap : MonoBehaviour
                         break;
                     case 2:
                         enemyScript.BecomeTentacleMonster = true;
+                        break;
+                    case 3:
+                        enemyScript.BecomeSoldier = true;
                         break;
                 }
 

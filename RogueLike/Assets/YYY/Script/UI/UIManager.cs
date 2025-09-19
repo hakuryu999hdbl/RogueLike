@@ -154,50 +154,62 @@ public class UIManager : MonoBehaviour
             case "AVG_02":
                 PlayAVG("Chapter_02");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
             case "AVG_03":
                 PlayAVG("Chapter_03");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
             case "AVG_04":
                 PlayAVG("Chapter_04");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
             case "AVG_05":
                 PlayAVG("Chapter_05");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
             case "AVG_06":
                 PlayAVG("Chapter_06");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
             case "AVG_07":
                 PlayAVG("Chapter_07");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
             case "AVG_08":
                 PlayAVG("Chapter_08");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
             case "AVG_09":
                 PlayAVG("Chapter_09");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
             case "AVG_10":
                 PlayAVG("Chapter_10");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
             case "AVG_11":
                 PlayAVG("Chapter_11");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
             case "AVG_12":
                 PlayAVG("Chapter_12");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
             case "AVG_13":
                 PlayAVG("Chapter_13");
                 To_AVGScene();
+                Invoke("PlayBackgroundMusic", 1f);
                 break;
 
             case "Story_01":
@@ -205,6 +217,7 @@ public class UIManager : MonoBehaviour
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 4;
                 _RoomGenerator.RoomType = 0;//Wall
+                _RoomGenerator.SkyBoxNumber = 0;//夜晚
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -224,15 +237,16 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제1장 왕도 잠입";
                         break;
                 }
-
+                Invoke("PlayDungeonBGM", 1f);
                 break;
 
             case "Story_02":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 5;
-
                 _RoomGenerator.RoomType = 0;//Wall
+                _RoomGenerator.SkyBoxNumber = 0;//夜晚
+
                 switch (PlayerPrefs.GetInt("language"))
                 {
                     case 0:
@@ -251,6 +265,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제2장 황태자 암살";
                         break;
                 }
+                Invoke("PlayDungeonBGM", 1f);
                 break;
 
           
@@ -258,7 +273,7 @@ public class UIManager : MonoBehaviour
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 8;//卫兵队长Boss战
-               
+                _RoomGenerator.SkyBoxNumber = 1;//早上
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -278,7 +293,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제3장 함정 탈출";
                         break;
                 }
-
+                Invoke("PlayBossMusic", 1f);
                 break;
 
 
@@ -287,6 +302,8 @@ public class UIManager : MonoBehaviour
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 5;
                 _RoomGenerator.RoomType = 1;//Dungeon
+                _RoomGenerator.SkyBoxNumber = 2;//白雾
+
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -306,14 +323,14 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제4장 재상 암살";
                         break;
                 }
-
+                Invoke("PlayDungeonBGM", 1f);
                 break;
 
             case "Story_05":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 9;//王女Boss战
-
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -333,7 +350,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제5장 뜻밖의 조우";
                         break;
                 }
-
+                Invoke("PlayBossMusic", 1f);
                 break;
 
 
@@ -342,7 +359,8 @@ public class UIManager : MonoBehaviour
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 5;
                 _RoomGenerator.RoomType = 1;//Dungeon
-
+                _RoomGenerator.SkyBoxNumber = 0;//夜晚
+             
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -362,7 +380,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제6장 패퇴";
                         break;
                 }
-
+                Invoke("PlayDungeonBGM", 1f);
                 break;
 
             case "Story_07":
@@ -370,7 +388,7 @@ public class UIManager : MonoBehaviour
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 6;
                 _RoomGenerator.RoomType = 1;//Dungeon
-
+                _RoomGenerator.SkyBoxNumber = 0;//夜晚
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -390,14 +408,14 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제7장 재정비";
                         break;
                 }
-
+                Invoke("PlayDungeonBGM", 1f);
                 break;
 
             case "Story_08":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 10;//宰相Boss战
-
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -417,7 +435,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제8장 늦은 복수";
                         break;
                 }
-
+                Invoke("PlayBossMusic", 1f);
                 break;
 
             case "Story_09":
@@ -425,6 +443,7 @@ public class UIManager : MonoBehaviour
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 7;
                 _RoomGenerator.RoomType = 1;//Dungeon
+                _RoomGenerator.SkyBoxNumber = 2;//白雾
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -444,13 +463,14 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제9장 남매를 찾아서";
                         break;
                 }
-
+                Invoke("PlayDungeonBGM", 1f);
                 break;
 
             case "Story_10":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 11;//王女与皇太子Boss战
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -470,6 +490,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제10장 지하 결전";
                         break;
                 }
+                Invoke("PlayBossMusic", 1f);
                 break;
           
 
@@ -478,6 +499,7 @@ public class UIManager : MonoBehaviour
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 7;
                 _RoomGenerator.RoomType = 1;//Dungeon
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -497,13 +519,14 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제11장 다시 한번 패배";
                         break;
                 }
-
+                Invoke("PlayDungeonBGM", 1f);
                 break;
 
             case "Story_12":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 12;//皇帝Boss战
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -523,13 +546,14 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제12장 황제";
                         break;
                 }
-
+                Invoke("PlayBossMusic", 1f);
                 break;
 
             case "Arena":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 13;
+                _RoomGenerator.SkyBoxNumber = UnityEngine.Random.Range(0, 4);//随机
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -549,12 +573,14 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "백탁 투기장";
                         break;
                 }
-
+                Invoke("PlayBossMusic", 1f);
                 break;
+
             case "Dungeon":
                 ToSavePageButton(1);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 7;
+                _RoomGenerator.SkyBoxNumber = UnityEngine.Random.Range(0, 4);//随机
                 if (UnityEngine.Random.Range(0, 2) == 0)
                 {
 
@@ -583,17 +609,23 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제국 조교소";
                         break;
                 }
-
+                Invoke("PlayDungeonBGM", 1f);
                 break;
 
             case "CG":
                 ToSavePageButton(0);
                 _RoomGenerator.gameObject.SetActive(true);
                 _RoomGenerator.roomNumber = 1;
+                _RoomGenerator.SkyBoxNumber = UnityEngine.Random.Range(0,4);//随机
+
                 SavePageQuitButton.SetActive(true);//在存档界面退出按钮，只有CG界面可以显示
+                Invoke("PlayDungeonBGM", 1f);
                 break;
 
             default:
+
+                Invoke("PlayBackgroundMusic", 1f);
+
                 break;
         }
 
@@ -1612,8 +1644,6 @@ public class UIManager : MonoBehaviour
 
         ChangeMoney(0,false);//更新钱
 
-     
-        PlayRegionBGM();   //随机背景音乐
 
         //地下城和角斗场模式解锁
         if (PlayerPrefs.GetInt("Chapter_Arena")==0) { LockOfArena.SetActive(true); }
@@ -3096,13 +3126,99 @@ public class UIManager : MonoBehaviour
     /// </summary>
     #region
     [Header("区域BGM")]
-    public BGM BGM;//用于红区等背景音乐
-    public void PlayRegionBGM()
+    public BGM BGM;//用于背景音乐
+
+    public void PlayBossMusic()
     {
-        //BGM.AudioPlayBackgroundMusic(-1);//播放街道等背景音乐
-        BGM.AudioPlayChaseMusic(-1);//播放红区等背景音乐
+        BGM.AudioPlayBossMusic(-1);
+    }
+    public void PlayDungeonBGM()
+    {
+       
+        BGM.AudioPlayChaseMusic(-1);
 
     }
+    public void PlayBackgroundMusic() 
+    {
+        BGM.AudioPlayBackgroundMusic(-1);
+    }
 
+    #endregion
+
+
+    /// <summary>
+    /// 敌人产生台词
+    /// </summary>
+    #region
+    [Header("敌人台词")]
+    public List<GameObject> Man_In_Game_DialogueList;//男性敌人刷出台词
+    public List<GameObject> Girl_In_Game_DialogueList;//女性敌人刷出台词
+
+    public List<GameObject> Boss_Captain_In_Game_DialogueList;//守卫队长刷出台词
+    public List<GameObject> Boss_Captain_Skill_In_Game_DialogueList;//守卫队长技能刷出台词
+
+
+    public List<GameObject> Boss_Selene_In_Game_DialogueList;//赛琳娜刷出台词
+    public List<GameObject> Boss_Selene_Skill_In_Game_DialogueList;//赛琳娜技能刷出台词
+
+    private bool dialogueShowing = false;  // 是否有台词正在显示
+
+    // 敌人调用这个接口
+    private Dictionary<string, int> lastIndexDict = new Dictionary<string, int>();
+
+    public void ShowDialogue(string type)
+    {
+        if (dialogueShowing) return;
+
+        List<GameObject> pool = null;
+        switch (type)
+        {
+            case "Man": pool = Man_In_Game_DialogueList; break;
+            case "Girl": pool = Girl_In_Game_DialogueList; break;
+            case "Boss_Captain": pool = Boss_Captain_In_Game_DialogueList; break;
+            case "Boss_Captain_Skill": pool = Boss_Captain_Skill_In_Game_DialogueList; break;
+            case "Boss_Selene": pool = Boss_Selene_In_Game_DialogueList; break;
+            case "Boss_Selene_Skill": pool = Boss_Selene_Skill_In_Game_DialogueList; break;
+        }
+
+        if (pool == null || pool.Count == 0) return;
+
+        int index;
+        int lastIndex = -1;
+
+        // 取出这个类别上次的 index（如果有）
+        if (lastIndexDict.TryGetValue(type, out var savedIndex))
+        {
+            lastIndex = savedIndex;
+        }
+
+        // 抽一个，避免和上次相同
+        do
+        {
+            index = UnityEngine.Random.Range(0, pool.Count);
+        } while (pool.Count > 1 && index == lastIndex);
+
+        // 记录这次的 index
+        lastIndexDict[type] = index;
+
+        GameObject dialogue = pool[index];
+        StartCoroutine(ShowRoutine(dialogue));
+
+    }//不会重复两次一样的台词
+
+
+
+
+    private IEnumerator ShowRoutine(GameObject dialogue)
+    {
+        dialogue.SetActive(true);
+        dialogueShowing = true;
+
+        float showTime = 5;//台词延迟5秒
+        yield return new WaitForSeconds(showTime);
+
+        dialogue.SetActive(false);
+        dialogueShowing = false;
+    }
     #endregion
 }

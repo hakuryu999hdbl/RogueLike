@@ -54,7 +54,7 @@ public class AudioManager : MonoBehaviour
 
 
 
-        　　　　　　SE_Win, SE_Slap,
+        　　　　　　 SE_Win, SE_Slap,
 
                      Jinye_zhajin1_fast, Jinye_zhajin1_middle, Jinye_zhajin1_one, Jinye_zhajin1_slow,
                      Jinye_yanxia, Jinv_xitian_fast1,
@@ -114,6 +114,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip monster_Summon_01, monster_Summon_02, monster_Attack_01, monster_Die_01;
     public AudioClip Zombie_Summon_1, Zombie_Summon_2, Zombie_Attack, Zombie_Die_1, Zombie_Die_2;
     public AudioClip Orangutan_Summon_1, Orangutan_Attack_1, Orangutan_Die_1;
+
+
+
     #endregion
 
     /// <summary>
