@@ -120,7 +120,12 @@ public class Strike : MonoBehaviour
 
             }
 
+            if (collision.gameObject.GetComponent<Plant_Tentacle>() != null)
+            {
 
+                collision.gameObject.GetComponent<Plant_Tentacle>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
+            }
         }
 
 

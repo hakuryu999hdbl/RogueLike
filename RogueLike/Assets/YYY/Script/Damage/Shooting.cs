@@ -318,6 +318,16 @@ public class Shooting : MonoBehaviour
                 Destroy(gameObject);
             }
 
+
+
+            if (other.gameObject.GetComponent<Plant_Tentacle>() != null)
+            {
+
+                other.gameObject.GetComponent<Plant_Tentacle>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
+            }
+
+
         }//打到障碍物
     }
 

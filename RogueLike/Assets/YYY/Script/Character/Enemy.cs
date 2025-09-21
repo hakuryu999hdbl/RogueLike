@@ -187,7 +187,24 @@ public class Enemy : MonoBehaviour
                         break;
                 }
 
+
+
+                //根据玩家当前的等级赋予敌人生命值，攻击力等
+
+                CurrentWeaponPower = player.Level * Random.Range(10, 20);
+
+                //近战攻击修改
+                MeleeDamage = 100 + player.Level * 20;
+                strike.Damage = -CurrentWeaponPower - MeleeDamage;
+                //远程攻击修改
+                ShootDamage = CurrentWeaponPower + 100 + player.Level * 20;
+                //攻击修改
+                SpellDamage = CurrentWeaponPower + 100 + player.Level * 20;
+
+
             }
+
+
         }//如果已经赋值了队友，那么不随机
 
         anim.Play(GetAnimPrefix() + "Default_Idle");
@@ -1472,6 +1489,9 @@ public class Enemy : MonoBehaviour
                 }//肉袋 淫毒肉炮              
                 break;
         }
+
+
+
     }//近战攻击发出的叫声
 
     #endregion
@@ -2348,75 +2368,93 @@ public class Enemy : MonoBehaviour
 
     void Scream()
     {
-
-        switch (Class)
+        switch (BossNumber) 
         {
-            case EnemyClass.Girl:
-            case EnemyClass.Succubus:
-                switch (Random.Range(0, 2))
+            case 0:
+
+                switch (Class)
                 {
-                    case 0:
-                        frameEvents._yyy_jianjiao4();
+                    case EnemyClass.Girl:
+                    case EnemyClass.Succubus:
+                        switch (Random.Range(0, 2))
+                        {
+                            case 0:
+                                frameEvents._yyy_jianjiao4();
+                                break;
+                            case 1:
+                                frameEvents._yyy_jianjiao5();
+                                break;
+                        }//女性
                         break;
-                    case 1:
-                        frameEvents._yyy_jianjiao5();
+                    case EnemyClass.Man:
+                        switch (Random.Range(0, 4))
+                        {
+                            case 0:
+                                frameEvents._Man_die1();
+                                break;
+                            case 1:
+                                frameEvents._Man_die2();
+                                break;
+                            case 2:
+                                frameEvents._Man_die3();
+                                break;
+                            case 3:
+                                frameEvents._Man_die4();
+                                break;
+                        }//男性
                         break;
-                }//女性
-                break;
-            case EnemyClass.Man:
-                switch (Random.Range(0, 4))
-                {
-                    case 0:
-                        frameEvents._Man_die1();
+
+                    case EnemyClass.Monster:
+                    case EnemyClass.Tentacle_Monster:
+                        switch (Random.Range(0, 3))
+                        {
+                            case 0:
+                                frameEvents._Zombie_Die_1();
+                                break;
+                            case 1:
+                                frameEvents._Zombie_Die_2();
+                                break;
+                            case 2:
+                                frameEvents._Zombie_Attack();
+                                break;
+                        }//感染者 变异体
                         break;
-                    case 1:
-                        frameEvents._Man_die2();
+
+                    case EnemyClass.Tentacle_Bug:
+                        frameEvents._Orangutan_Die_1();//肉翅蜂
                         break;
-                    case 2:
-                        frameEvents._Man_die3();
+
+                    case EnemyClass.Tentacle_Bag:
+                    case EnemyClass.Tentacle_HermitCrab:
+                        switch (Random.Range(0, 3))
+                        {
+                            case 0:
+                                frameEvents._monster_Attack_01();
+                                break;
+                            case 1:
+                                frameEvents._monster_Die_01();
+                                break;
+                            case 2:
+                                frameEvents._Shrike_Die();
+                                break;
+                        }//肉袋  淫毒肉炮  
                         break;
-                    case 3:
-                        frameEvents._Man_die4();
-                        break;
-                }//男性
+                }
+
                 break;
 
-            case EnemyClass.Monster:
-            case EnemyClass.Tentacle_Monster:
-                switch (Random.Range(0, 3))
-                {
-                    case 0:
-                        frameEvents._Zombie_Die_1();
-                        break;
-                    case 1:
-                        frameEvents._Zombie_Die_2();
-                        break;
-                    case 2:
-                        frameEvents._Zombie_Attack();
-                        break;
-                }//感染者 变异体
+            case 1:
+                //守卫队长尖叫
                 break;
 
-            case EnemyClass.Tentacle_Bug:
-                frameEvents._Orangutan_Die_1();//肉翅蜂
+            case 2:
+            case 3:
+                //王女尖叫
                 break;
-
-            case EnemyClass.Tentacle_Bag:
-            case EnemyClass.Tentacle_HermitCrab:
-                switch (Random.Range(0, 3))
-                {
-                    case 0:
-                        frameEvents._monster_Attack_01();
-                        break;
-                    case 1:
-                        frameEvents._monster_Die_01();
-                        break;
-                    case 2:
-                        frameEvents._Shrike_Die();
-                        break;
-                }//肉袋  淫毒肉炮  
-                break;
+               
         }
+
+      
 
      
 

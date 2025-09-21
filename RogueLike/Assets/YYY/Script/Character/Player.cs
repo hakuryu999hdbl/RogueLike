@@ -452,7 +452,19 @@ public class Player : MonoBehaviour
         Girl_legsIndex = Random.Range(10, 13);
         Girl_hatIndex = Random.Range(1, 14);
 
-      
+
+        //还是需要在专门生成露娜的时候需要设置值
+
+        Level = 1;
+        currentExperience = 0;
+        maxHealth = Random.Range(1000, 1200);
+        MeleeDamage = Random.Range(50, 100);
+        ShootDamage = Random.Range(50, 100);
+        SpellDamage = Random.Range(50, 100);
+
+        CurrentWeaponPower = Random.Range(50, 120);
+        CurrentArmorDefence = Random.Range(15, 40);
+        CurrentStockingDefence = Random.Range(15, 40);
 
         SetSkin();
     }
@@ -3018,5 +3030,35 @@ public class Player : MonoBehaviour
         Invoke("Recover", Timer);
     }
 
+
+
+
+    //————————————————————被触手缠住
+
+    public void StartStruggle(int Number) 
+    {
+        isDie = true;
+        //isInputBlocked = true;//切断玩家的方向攻击等输入
+
+        switch(Number)
+        {
+            case 1:
+                anim.Play("CG/CG_TentacleWallFront_1");
+                break;
+
+            case 2:
+                anim.Play("CG/CG_TentacleWallSide_1");
+                break;
+        }
+
+      
+    }
+
+
+
     #endregion
+
+
+
+
 }

@@ -7026,6 +7026,10 @@ MonoBehaviour:
   HealthValueImage: {fileID: 6686174159483745123}
   AttackColliderImage: {fileID: 1936215831724570534}
   AttackRangeImage: {fileID: 4905035225130285095}
+  BossNumber: 0
+  BecomeSoldier_Man: 0
+  BecomeSoldier: 0
+  BecomeTentacleMonster: 0
 --- !u!50 &2929557566085313533
 Rigidbody2D:
   serializedVersion: 4

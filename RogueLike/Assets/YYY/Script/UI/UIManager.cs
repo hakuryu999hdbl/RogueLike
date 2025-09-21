@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour
         //Debug.Log("目前存档里的钱币" + PlayerPrefs.GetInt("Money"));
 
 
-
+        ChangeMoney(0, false);//更新钱
 
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_OnanismFront_1"));//0未解锁  1解锁
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_OnanismSide_1"));//0未解锁  1解锁
@@ -90,8 +90,12 @@ public class UIManager : MonoBehaviour
         //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_12"));//0未解锁  1解锁
         //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_13"));//0未解锁  1解锁
 
-        //Debug.Log("目前的游戏模式解锁状态【Arena】" + PlayerPrefs.GetInt("Chapter_Arena"));//0未解锁  1解锁
-        //Debug.Log("目前的游戏模式解锁状态【Dungeon】" + PlayerPrefs.GetInt("Chapter_Dungeon"));//0未解锁  1解锁
+        Debug.Log("目前的游戏模式解锁状态【Arena】" + PlayerPrefs.GetInt("Chapter_Arena"));//0未解锁  1解锁
+        Debug.Log("目前的游戏模式解锁状态【Dungeon】" + PlayerPrefs.GetInt("Chapter_Dungeon"));//0未解锁  1解锁
+
+        //地下城和角斗场模式解锁
+        if (PlayerPrefs.GetInt("Chapter_Arena") == 0) { LockOfArena.SetActive(true); }
+        if (PlayerPrefs.GetInt("Chapter_Dungeon") == 0) { LockOfDungeon.SetActive(true); }
 
         PlayerPrefs.SetInt("CG_OnanismFront_1", 1);//目前保持第一个CG永远在
         //PlayerPrefs.SetInt("CG_OnanismSide_1", 1);
@@ -1642,12 +1646,10 @@ public class UIManager : MonoBehaviour
 
         UpdateScrollLimits();//更新上下翻页范围
 
-        ChangeMoney(0,false);//更新钱
+     
 
 
-        //地下城和角斗场模式解锁
-        if (PlayerPrefs.GetInt("Chapter_Arena")==0) { LockOfArena.SetActive(true); }
-        if (PlayerPrefs.GetInt("Chapter_Dungeon") == 0) { LockOfDungeon.SetActive(true); }
+        
 
 
     }//读取，显示存档
