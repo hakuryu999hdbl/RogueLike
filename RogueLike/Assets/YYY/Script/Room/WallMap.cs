@@ -68,11 +68,8 @@ public class WallMap : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            //ShowMap();
+  
             PlayerInRoom = true;
-
-
-
 
             // 告知RoomGenerator玩家进入的房间位置
             Invoke("PlayerInThisRoomToRoomGenerator", 0.1f);
@@ -81,6 +78,17 @@ public class WallMap : MonoBehaviour
         if (other.CompareTag("Friend")|| other.CompareTag("Enemy"))
         {
             other.GetComponent<Enemy>().wallmap = this;
+
+
+            if (other.GetComponent<Enemy>().BossNumber!=0) 
+            {
+
+                isBossRoom = true;
+
+
+            }//让Boss反向迫使wallMap知道自己是Boss房
+
+
             //Debug.Log("敌人队友读取wallmap");
         }//队友敌人立刻读取当下WallMap最新信息
 
@@ -133,6 +141,14 @@ public class WallMap : MonoBehaviour
         //踩到门的时候
         if (isClean==0)
         {
+
+            //让房间刷敌数跟着玩家进入房间数来
+            GameFlowData.RoomLevel += 1;
+
+
+
+
+
             foreach (var gate in AllGate)
             {
                 gate.Close();  //锁上自己【门】列表的所有门，Gate脚本Gate里有门开关动画器和对应的碰撞体
@@ -220,6 +236,10 @@ public class WallMap : MonoBehaviour
         {
             SetShop();//在房间中央设置商店
 
+            UIManager.instance.ShowBonusCavans();//开启三选一界面，只能开一次
+
+
+
             HasShop = true;
         }
 
@@ -231,6 +251,8 @@ public class WallMap : MonoBehaviour
     bool HasShop = false;
 
     public bool isCanWinRoom = false;//当此房间的敌人（Boss）全部消灭，玩家获胜
+
+
 
 
     #endregion
@@ -250,13 +272,16 @@ public class WallMap : MonoBehaviour
     public void SetEnemy(int EnemySkin=0)// 0随机  1男性士兵   2触手怪物     3男女敌人
     {
         //队友数量
-        GameObject[] friends = GameObject.FindGameObjectsWithTag("Friend");
-
-        int friendCount = friends.Length;
+        //GameObject[] friends = GameObject.FindGameObjectsWithTag("Friend");
+        //
+        //int friendCount = friends.Length;
 
         //上限
         int enemyToSpawn = Random.Range(1,3);
-        enemyToSpawn += friendCount;
+        //enemyToSpawn += friendCount;
+        enemyToSpawn += GameFlowData.RoomLevel;
+        Debug.Log("此房间敌人数量" + enemyToSpawn + "玩家进入房间数" + GameFlowData.RoomLevel);
+
         if (enemyToSpawn > 7) { enemyToSpawn = 7; }
 
 
@@ -350,7 +375,11 @@ public class WallMap : MonoBehaviour
         if (enemies.Length <= 0)
         {
             isClean = 2;
+
+
             UnLockRoom();
+
+
             Debug.Log("房间清理干净（全场景无 Enemy）");
 
 

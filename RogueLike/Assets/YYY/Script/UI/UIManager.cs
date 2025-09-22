@@ -218,7 +218,7 @@ public class UIManager : MonoBehaviour
 
             case "Story_01":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 4;
                 _RoomGenerator.RoomType = 0;//Wall
                 _RoomGenerator.SkyBoxNumber = 0;//夜晚
@@ -246,7 +246,7 @@ public class UIManager : MonoBehaviour
 
             case "Story_02":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 5;
                 _RoomGenerator.RoomType = 0;//Wall
                 _RoomGenerator.SkyBoxNumber = 0;//夜晚
@@ -275,7 +275,7 @@ public class UIManager : MonoBehaviour
           
             case "Story_03":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 8;//卫兵队长Boss战
                 _RoomGenerator.SkyBoxNumber = 1;//早上
 
@@ -303,7 +303,7 @@ public class UIManager : MonoBehaviour
 
             case "Story_04":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 5;
                 _RoomGenerator.RoomType = 1;//Dungeon
                 _RoomGenerator.SkyBoxNumber = 2;//白雾
@@ -332,7 +332,7 @@ public class UIManager : MonoBehaviour
 
             case "Story_05":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 9;//王女Boss战
                 _RoomGenerator.SkyBoxNumber = 3;//红雾
 
@@ -360,7 +360,7 @@ public class UIManager : MonoBehaviour
 
             case "Story_06":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 5;
                 _RoomGenerator.RoomType = 1;//Dungeon
                 _RoomGenerator.SkyBoxNumber = 0;//夜晚
@@ -389,7 +389,7 @@ public class UIManager : MonoBehaviour
 
             case "Story_07":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 6;
                 _RoomGenerator.RoomType = 1;//Dungeon
                 _RoomGenerator.SkyBoxNumber = 0;//夜晚
@@ -417,7 +417,7 @@ public class UIManager : MonoBehaviour
 
             case "Story_08":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 10;//宰相Boss战
                 _RoomGenerator.SkyBoxNumber = 3;//红雾
 
@@ -444,7 +444,7 @@ public class UIManager : MonoBehaviour
 
             case "Story_09":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 7;
                 _RoomGenerator.RoomType = 1;//Dungeon
                 _RoomGenerator.SkyBoxNumber = 2;//白雾
@@ -472,7 +472,7 @@ public class UIManager : MonoBehaviour
 
             case "Story_10":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 11;//王女与皇太子Boss战
                 _RoomGenerator.SkyBoxNumber = 3;//红雾
 
@@ -500,7 +500,7 @@ public class UIManager : MonoBehaviour
 
             case "Story_11":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 7;
                 _RoomGenerator.RoomType = 1;//Dungeon
                 _RoomGenerator.SkyBoxNumber = 3;//红雾
@@ -528,7 +528,7 @@ public class UIManager : MonoBehaviour
 
             case "Story_12":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 12;//皇帝Boss战
                 _RoomGenerator.SkyBoxNumber = 3;//红雾
 
@@ -555,7 +555,7 @@ public class UIManager : MonoBehaviour
 
             case "Arena":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 13;
                 _RoomGenerator.SkyBoxNumber = UnityEngine.Random.Range(0, 4);//随机
 
@@ -582,7 +582,7 @@ public class UIManager : MonoBehaviour
 
             case "Dungeon":
                 ToSavePageButton(1);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 7;
                 _RoomGenerator.SkyBoxNumber = UnityEngine.Random.Range(0, 4);//随机
                 if (UnityEngine.Random.Range(0, 2) == 0)
@@ -618,7 +618,7 @@ public class UIManager : MonoBehaviour
 
             case "CG":
                 ToSavePageButton(0);
-                _RoomGenerator.gameObject.SetActive(true);
+                Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 1;
                 _RoomGenerator.SkyBoxNumber = UnityEngine.Random.Range(0,4);//随机
 
@@ -635,6 +635,13 @@ public class UIManager : MonoBehaviour
 
         //GameFlowData.nextScene = "";//清理
     }
+
+
+    void DelayShowRoomGenerator() 
+    {
+        _RoomGenerator.gameObject.SetActive(true);
+    }//防止一开始执行东西太多
+
     /// <summary>
     /// 主菜单
     /// </summary>
@@ -670,13 +677,15 @@ public class UIManager : MonoBehaviour
 
 
     [Header("主菜单界面层级")]
-    public int CurrentChooseList = 0;//-4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面
+    public int CurrentChooseList = 0;//-5三选一界面   -4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面
     public int CurrentMode = 0;//0 进入CG界面  1捏人/进入游戏
     public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
     public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
     public int SettingPagecurrentIndex = 0;//0 BGM  1 SE  2 语言  3 删除存档
     public int LanguagePagecurrentIndex = 0;//0 日语 1中文 2繁中 3英语 4韩语
     public int ModePagecurrentIndex = 0;//0 故事模式 1角斗场模式 2地下城模式
+
+    public int BonusPagecurrentIndex = 0;//0左边奖励  1中间奖励  2右边奖励
 
     [SerializeField] private GameObject[] HomePage_highlightObjs; // 主页高亮显示
     [SerializeField] private GameObject[] highlightObjs; // 捏人界面高亮显示
@@ -742,6 +751,8 @@ public class UIManager : MonoBehaviour
         }
 
     }
+
+
 
     [SerializeField] private Button HairLeft, HairRight;
     [SerializeField] private Button EyesLeft, EyesRight;
@@ -1792,7 +1803,7 @@ public class UIManager : MonoBehaviour
         pendingDeleteName = currentSelectedSlot.Data.characterName;
         pendingDeletePrice = SlavePricing.CalcPrice(data);
 
-        int lang = PlayerPrefs.GetInt("language", 1);
+        int lang = PlayerPrefs.GetInt("language");
         if (ConfirmText != null)
             ConfirmText.text = SellTexts.Build(lang, pendingDeleteName, pendingDeletePrice);
 
@@ -2253,6 +2264,24 @@ public class UIManager : MonoBehaviour
         {
             Vector2 dir = ctx.ReadValue<Vector2>();
 
+            //三选一界面
+            if (CurrentChooseList == -5)
+            {
+
+                // 当前菜单项内的左右切换
+                if (dir.x > 0.5f)
+                {
+                    MoveSelection_Bonus(1);
+
+                }
+                else if (dir.x < -0.5f)
+                {
+                    MoveSelection_Bonus(-1);
+
+                }
+            }
+
+
             //主菜单界面
             if (CurrentChooseList == 0)
             {
@@ -2568,6 +2597,16 @@ public class UIManager : MonoBehaviour
         if (player.isInputBlocked)
         {
             // 可选：进入下一级菜单、确认开始游戏等
+
+            //三选一界面
+            if (CurrentChooseList == -5)
+            {
+
+                Invoke("ConfirmBonus", 0.1f);
+            }
+
+
+
 
             //只要暂停菜单显示，攻击键按下就是触发这里
             if (CurrentChooseList == -3)
@@ -2969,7 +3008,7 @@ public class UIManager : MonoBehaviour
 
     public void OpenURL_Discord()
     {
-        Application.OpenURL("https://discord.gg/xZ3uafRm");
+        Application.OpenURL("https://discord.gg/bc49G5Xcq9");
 
         //钮按下后绿色选中也会过去
         HomePagecurrentIndex = 7;
@@ -2991,6 +3030,135 @@ public class UIManager : MonoBehaviour
     #endregion
 
 
+    /// <summary>
+    /// 三选一界面
+    /// </summary>
+    #region
+    [Header("三选一界面")]
+    public List<BonusSlotUI> BonusButtons = new List<BonusSlotUI>();
+    int BonusCurrentIndex = 0;
+
+    void MoveSelection_Bonus(int direction)
+    {
+        // 取消旧高亮
+        BonusButtons[BonusCurrentIndex].SetHighlight(false);
+
+        // 循环查找下一个已解锁的项
+        int max = BonusButtons.Count;
+        for (int i = 1; i < max; i++)
+        {
+            int newIndex = (BonusCurrentIndex + direction * i + max) % max;
+            if (BonusButtons[newIndex].isActiveAndEnabled)
+            {
+                BonusCurrentIndex = newIndex;
+                break;
+            }
+        }
+
+        //显示对应文本
+        Bonus_description.text = BonusButtons[BonusCurrentIndex].description;
+
+        // 更新高亮
+        UpdateHighlight_Bonus();
+
+
+    }//切换当前选中
+
+    void UpdateHighlight_Bonus()
+    {
+        for (int i = 0; i < BonusButtons.Count; i++)
+        {
+            BonusButtons[i].SetHighlight(i == BonusCurrentIndex);
+        }
+    }
+
+
+
+    public Text Bonus_description;
+    public GameObject BonusCavans;
+    bool CanChooseItem = false;//延迟半秒防止按太快
+
+    void CanChoose() 
+    {
+        CanChooseItem = true;
+    }
+
+
+    public void ShowBonusCavans() 
+    {
+
+        CurrentChooseList = -5;
+        player.isInputBlocked = true;//切断玩家的方向攻击等输入
+        //Time.timeScale = 0f;
+
+        BonusCavans.SetActive(true);
+
+        // 先全部隐藏
+        foreach (var btn in BonusButtons)
+        {
+            btn.gameObject.SetActive(false);
+        }
+
+        // 随机选出3个不同的奖励
+        List<int> usedIndex = new List<int>();
+        int max = Mathf.Min(3, BonusButtons.Count);
+
+        for (int i = 0; i < max; i++)
+        {
+            int rand;
+            do
+            {
+                rand = UnityEngine.Random.Range(0, BonusButtons.Count);
+
+            } while (usedIndex.Contains(rand));
+            usedIndex.Add(rand);
+
+            BonusButtons[rand].gameObject.SetActive(true);
+            BonusButtons[rand].ReNewBonus(); // 重新生成数值 & 描述
+        }
+
+        // 设置初始选中项 = 第一个显示的奖励
+        for (int i = 0; i < BonusButtons.Count; i++)
+        {
+            if (BonusButtons[i].gameObject.activeSelf)
+            {
+                BonusCurrentIndex = i;
+                break;
+            }
+        }
+
+        Bonus_description.text = BonusButtons[BonusCurrentIndex].description;
+        UpdateHighlight_Bonus();
+
+        Invoke("CanChoose", 0.5f);//延迟半秒
+   
+    }
+
+
+
+
+    public void ConfirmBonus() 
+    {
+        if (CanChooseItem) 
+        {
+            BonusButtons[BonusCurrentIndex].ApplyBonus();
+            CanChooseItem = false;
+        }
+
+    }//确定奖励
+
+    public void HideBonusCavans() 
+    {
+        CurrentChooseList = -4;
+        player.isInputBlocked = false;
+        Time.timeScale = 1f;
+
+        BonusCavans.SetActive(false);
+    }
+
+    
+
+    #endregion
 
     /// <summary>
     /// 血条等各种值
@@ -3162,6 +3330,7 @@ public class UIManager : MonoBehaviour
 
     public List<GameObject> Boss_Selene_In_Game_DialogueList;//赛琳娜刷出台词
     public List<GameObject> Boss_Selene_Skill_In_Game_DialogueList;//赛琳娜技能刷出台词
+    public List<GameObject> Boss_Selene_Skill2_In_Game_DialogueList;//赛琳娜技能刷出台词2
 
     private bool dialogueShowing = false;  // 是否有台词正在显示
 
@@ -3181,6 +3350,7 @@ public class UIManager : MonoBehaviour
             case "Boss_Captain_Skill": pool = Boss_Captain_Skill_In_Game_DialogueList; break;
             case "Boss_Selene": pool = Boss_Selene_In_Game_DialogueList; break;
             case "Boss_Selene_Skill": pool = Boss_Selene_Skill_In_Game_DialogueList; break;
+            case "Boss_Selene_Skill2": pool = Boss_Selene_Skill2_In_Game_DialogueList; break;
         }
 
         if (pool == null || pool.Count == 0) return;

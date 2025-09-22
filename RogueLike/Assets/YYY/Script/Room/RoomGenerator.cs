@@ -587,7 +587,7 @@ public class RoomGenerator : MonoBehaviour
 
         ChangeTargetPlace(NewEnemy, -2);
     }
-    public void SetFriend()
+    public void SetFriend(int EnemyClass=0)//默认女孩
     {
 
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
@@ -595,10 +595,23 @@ public class RoomGenerator : MonoBehaviour
 
 
         Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
+        switch (EnemyClass) 
+        {
+            case 0:
+                enemy.BecomeSoldier_Girl=true;
+                break;
+
+            case 1:
+                enemy.BecomeSoldier_Man = true;
+                break;
+        }
         enemy.ConvertToFriend();
+
 
         ChangeTargetPlace(NewEnemy, -2);
     }
+
+
 
     #endregion
 
@@ -655,10 +668,33 @@ public class RoomGenerator : MonoBehaviour
     public GameObject BossIcon;
     public GameObject Stage_Information;
     public Text _Stage_Information;
-    public void ShowInformationOfStage(int Information)//0开始时关卡信息    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单
+    public void ShowInformationOfStage(int Information)//-1敌人增援 0开始时关卡信息    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单
     {
         switch (Information) 
         {
+            case -1: // 敌人增援
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        _Stage_Information.text = "敵の増援";
+                        break;
+                    case 1: // 简体
+                        _Stage_Information.text = "敌人增援";
+                        break;
+                    case 2: // 繁体
+                        _Stage_Information.text = "敵人增援";
+                        break;
+                    case 3: // 英语
+                        _Stage_Information.text = "Enemy Reinforcements";
+                        break;
+                    case 4: // 韩语
+                        _Stage_Information.text = "적 증원군";
+                        break;
+                }
+                BossIcon.SetActive(true);
+                break;
+
+
             case 0:
 
                 

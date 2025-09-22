@@ -43,6 +43,9 @@ public class GameFlowData : MonoBehaviour
 
     public static bool BulletCanThroughtWall = false;//子弹和法术是否可以穿过墙壁
 
+    public static　int RoomLevel;//房间刷敌数和难度随着越后越来越难
+
+
 }
 public static class SlavePricing
 {

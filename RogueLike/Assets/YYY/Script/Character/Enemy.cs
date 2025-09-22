@@ -70,6 +70,10 @@ public class Enemy : MonoBehaviour
                         { 
                             Class = EnemyClass.Man;
                         }//召集男性士兵
+                        if (BecomeSoldier_Girl)
+                        {
+                            Class = EnemyClass.Girl;
+                        }//召集女性士兵
                         if (BecomeSoldier) 
                         {
                             if (UnityEngine.Random.Range(0, 2) == 0)
@@ -189,20 +193,21 @@ public class Enemy : MonoBehaviour
 
 
 
-                //根据玩家当前的等级赋予敌人生命值，攻击力等
-
-                CurrentWeaponPower = player.Level * Random.Range(10, 20);
-
-                //近战攻击修改
-                MeleeDamage = 100 + player.Level * 20;
-                strike.Damage = -CurrentWeaponPower - MeleeDamage;
-                //远程攻击修改
-                ShootDamage = CurrentWeaponPower + 100 + player.Level * 20;
-                //攻击修改
-                SpellDamage = CurrentWeaponPower + 100 + player.Level * 20;
-
-
             }
+
+
+
+            //根据玩家当前的等级赋予敌人生命值，攻击力等
+
+            CurrentWeaponPower = player.Level * Random.Range(10, 20);
+
+            //近战攻击修改
+            MeleeDamage = 100 + player.Level * 20;
+            strike.Damage = -CurrentWeaponPower - MeleeDamage;
+            //远程攻击修改
+            ShootDamage = CurrentWeaponPower + 100 + player.Level * 20;
+            //攻击修改
+            SpellDamage = CurrentWeaponPower + 100 + player.Level * 20;
 
 
         }//如果已经赋值了队友，那么不随机
@@ -3011,6 +3016,7 @@ public class Enemy : MonoBehaviour
         if (Class == EnemyClass.Succubus)
         {
 
+            UIManager.instance.ShowDialogue("Boss_Selene_Skill2");
 
             GateEffect.SetActive(true);
 
@@ -3058,7 +3064,7 @@ public class Enemy : MonoBehaviour
     //Boss技能  召集
     public bool BecomeSoldier_Man = false;//男性士兵
     public bool BecomeSoldier = false;//男性或女性士兵
-
+    public bool BecomeSoldier_Girl = false;//女性士兵
     void BossSkill_CallSoldier() 
     {
 
@@ -3068,6 +3074,7 @@ public class Enemy : MonoBehaviour
         if (enemies.Length <= 5)
         {           
             wallmap.SetEnemy(1);
+            RoomGenerator.ShowInformationOfStage(-1);//敌人增援
 
             switch (BossNumber)
             {
@@ -3090,13 +3097,13 @@ public class Enemy : MonoBehaviour
 
     void BossSkill_CallTentacleMonster() 
     {
-        //如果场景内敌人少于2个，再召唤一群触手怪
+        //如果场景内敌人少于5个，再召唤一群触手怪
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies.Length <= 2)
+        if (enemies.Length <= 5)
         {
             wallmap.SetEnemy(2);
-
+            RoomGenerator.ShowInformationOfStage(-1);//敌人增援
         }
     }
 

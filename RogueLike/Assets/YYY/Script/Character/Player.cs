@@ -585,6 +585,7 @@ public class Player : MonoBehaviour
     public bool isDie = false;
     public bool isRape = false;//防止被多个敌人重复捕获
 
+
     /// <summary>
     /// 基础数值
     /// </summary>
