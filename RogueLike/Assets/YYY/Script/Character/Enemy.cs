@@ -1528,25 +1528,29 @@ public class Enemy : MonoBehaviour
 
         switch (CurrentWeapon)
         {
+            case 210:
+                special = -1;//暗黑法球
+                break;
 
-
+            case 202:
+            case 208:
+                special = 6;//飓风法球
+                break;
 
             case 201:
             case 207:
                 special = 5;//剧毒法球
                 break;
             case 203:
-            case 210:
+            //case 210:
                 special = 3;//火焰法球
                 break;
             case 204:
             case 206:
-            case 208:
                 special = 4;//冰冻法球
                 break;
             case 205:
             case 209:
-            case 202:
                 special = 2;//雷电法球
                 break;
 
@@ -1648,8 +1652,8 @@ public class Enemy : MonoBehaviour
     public int CurrentProfession;//0战士 1射手 2法师
 
     //0无武器
-    //1铁剑  2阔剑  3长柄双刃斧  4长枪   5长柄斧   6冻结剑   7黑铁刺剑  8熔岩剑  9引雷剑  10古重剑
-    //101轻弩   102重弩   103复合弩   104火绳复合枪  105火绳短枪   106火绳长枪   107火绳黄铜枪
+    //1匕首 2阔剑  3长柄双刃斧  4长枪   5长柄斧   6冻结剑   7黑铁刺剑  8熔岩剑  9引雷剑  10古重剑
+    //101轻弩   102重弩   103复合弩   104火绳复合枪  105火绳短枪   106火绳长枪   107燧发枪  108刺刀火枪  109火绳黄铜枪  109 110镶银火枪   
     //201黄木短杖  202鹰身短杖   203红宝石短杖    204蓝宝石短杖   205黄玉短杖   206冰冻法杖  207紫水晶法杖  208翡翠法杖  209雷霆法杖  210古木法杖
 
     public void CheckWeapon()
@@ -1664,25 +1668,31 @@ public class Enemy : MonoBehaviour
         {
             switch (CurrentWeapon)
             {
+                case 210:
+                    ChangeMagicEffectColor(1);//魔族魔法阵
+                    break;
 
+
+                case 202:
+                case 208:
+                    ChangeMagicEffectColor(6);//飓风魔法阵
+                    break;
 
                 case 201:
                 case 207:
-                    ChangeMagicEffectColor(5);//剧毒法球
+                    ChangeMagicEffectColor(5);//剧毒魔法阵
                     break;
                 case 203:
-                case 210:
-                    ChangeMagicEffectColor(2);//火焰法球
+                //case 210:
+                    ChangeMagicEffectColor(2);//火焰魔法阵
                     break;
                 case 204:
                 case 206:
-                case 208:
-                    ChangeMagicEffectColor(4);//冰冻法球
+                    ChangeMagicEffectColor(4);//冰冻魔法阵
                     break;
                 case 205:
                 case 209:
-                case 202:
-                    ChangeMagicEffectColor(3);//雷电法球
+                    ChangeMagicEffectColor(3);//雷电魔法阵
                     break;
             }
         }
@@ -1694,12 +1704,18 @@ public class Enemy : MonoBehaviour
 
     public Animator MagicFormationAnim;//魔法阵
     public SpriteRenderer MagicFormation;//魔法阵样式
-    public Sprite Magic_Fire, Magic_Electricity, Magic_Ice, Magic_Poison;
+    public Sprite Magic_Demon, Magic_Fire, Magic_Electricity, Magic_Ice, Magic_Poison, Magic_Wind;
 
     public void ChangeMagicEffectColor(int ColorNumber)
     {
         switch (ColorNumber)
         {
+            case 1:
+                MagicFormation.sprite = Magic_Demon;
+                var main1 = exitEffect.main;
+                main1.startColor = Color.red;
+                break;
+
             case 2:
                 MagicFormation.sprite = Magic_Fire;
                 var main = exitEffect.main;
@@ -1719,6 +1735,11 @@ public class Enemy : MonoBehaviour
                 MagicFormation.sprite = Magic_Poison;
                 var main4 = exitEffect.main;
                 main4.startColor = new Color(0.5f, 0f, 0.5f); //紫色
+                break;
+            case 6:
+                MagicFormation.sprite = Magic_Wind;
+                var main5 = exitEffect.main;
+                main5.startColor = new Color(0.2f, 0.9f, 0.2f); // 偏荧光的亮绿色
                 break;
         }
     }
@@ -2161,7 +2182,12 @@ public class Enemy : MonoBehaviour
             }
 
 
-
+            //玩家如果是魔族化状态则回血
+            if (player.Class==Player.PlayerClass.Succubus&& tag != "Friend")
+            {
+                //Debug.Log("回血");
+                player.ChangeHealth(-amount/4,0);
+            }
 
 
             currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
@@ -2234,7 +2260,11 @@ public class Enemy : MonoBehaviour
 
             if (!isDie && currentHealth > 0)
             {
-                if (Random.Range(0, 2) == 0)
+
+                int DamageType = Random.Range(0, 2);
+                if (TypeOfAttack == 6) { DamageType = 1; }//必定刮飞
+
+                if (DamageType == 0)
                 {
                     Knockdown();//普通攻击随机击倒
                 }
@@ -2862,7 +2892,7 @@ public class Enemy : MonoBehaviour
         }
 
 
-        maxHealth *= 5;
+        maxHealth *= 3;
         currentHealth = maxHealth;
 
     }//Boss 赛琳娜
@@ -2907,8 +2937,10 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        maxHealth *= 3;
+        maxHealth = 1000;
         currentHealth = maxHealth;
+
+        HudText.HUD(maxHealth);
 
     }//Boss 魔族化赛琳娜
     public void BecomeBoss_Alexis()
@@ -3006,7 +3038,7 @@ public class Enemy : MonoBehaviour
 
         ShootBullet();//闪避的同时攻击
 
-        BossSkill_ChangeMagic(Random.Range(3, 6));
+        BossSkill_ChangeMagic(Random.Range(2, 6));
     }
     void BossSkill_Move_CoolDown()
     {
@@ -3055,7 +3087,7 @@ public class Enemy : MonoBehaviour
     void BossSkill_ChangeMagic(int MagicNumber) 
     {
 
-        weaponIndex = MagicNumber;//3红宝石短杖 4蓝宝石短杖 5黄玉短杖
+        weaponIndex = MagicNumber;//2鹰身短杖 3红宝石短杖 4蓝宝石短杖 5黄玉短杖
 
         SetSkin();
     }

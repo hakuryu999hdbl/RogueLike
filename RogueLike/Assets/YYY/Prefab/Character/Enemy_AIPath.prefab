@@ -6988,10 +6988,12 @@ MonoBehaviour:
   exitEffect: {fileID: 5213818111130030104}
   MagicFormationAnim: {fileID: 6123903735767455979}
   MagicFormation: {fileID: 8447641688537525445}
+  Magic_Demon: {fileID: 21300000, guid: 73ec52e7c78b4a54480b9ed455b8b82f, type: 3}
   Magic_Fire: {fileID: 21300000, guid: 0efccdc7ae629434080e004abec182d2, type: 3}
   Magic_Electricity: {fileID: 21300000, guid: 295b04580d583494a835ccf17e71fc97, type: 3}
   Magic_Ice: {fileID: 21300000, guid: 9efb9a86124ae7c4b99a836f8ab6bafd, type: 3}
   Magic_Poison: {fileID: 21300000, guid: 89bed972881c7574a9f8d8815257cb7e, type: 3}
+  Magic_Wind: {fileID: 21300000, guid: 386f9b465f1bfaf4cb562f9c226fc4a6, type: 3}
   _Target: {fileID: 7447802515958920555}
   Patrol_Target: {fileID: 5446786769065216769}
   CurrentTarget: {fileID: 0}
@@ -7029,6 +7031,7 @@ MonoBehaviour:
   BossNumber: 0
   BecomeSoldier_Man: 0
   BecomeSoldier: 0
+  BecomeSoldier_Girl: 0
   BecomeTentacleMonster: 0
 --- !u!50 &2929557566085313533
 Rigidbody2D:

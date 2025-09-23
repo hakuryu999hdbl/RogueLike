@@ -88,12 +88,23 @@ public class Shooting : MonoBehaviour
 
     [Header("特殊类型子弹")]
     public int specialBullet;
-    public GameObject Bullet, Arrow, Electricity, Flame, Ice,Poison;
+    public GameObject Bullet, Arrow, Electricity, Flame, Ice,Poison,Wind;
     public void SetSpecialBullet(int SpecialBullet)// 0一般子弹   1弩箭   2魔法雷电球   3魔法火焰球  4冰魔法  5毒魔法
     {
         //特殊子弹
         switch (SpecialBullet)
         {
+
+            case -1:
+
+                CurrentBulletEffect = DarknessEffect;
+                speed = 50f;
+                TypeOfAttack = -1;//暗黑
+
+                lifetime = 1f;
+                break;
+
+
             case 0:
                 Bullet.SetActive(true);
                 CurrentBulletEffect = FireEffect;
@@ -113,30 +124,40 @@ public class Shooting : MonoBehaviour
                 CurrentBulletEffect = LightingEffect;
                 speed = 20f;
                 TypeOfAttack = 2;//雷伤
-                lifetime = 5f;
+                lifetime = 3f;
                 break;
             case 3:
                 Flame.SetActive(true);
                 CurrentBulletEffect = BlastEffect;
                 speed = 20f;
                 TypeOfAttack = 4;//火伤
-                lifetime = 5f;
+                lifetime = 3f;
                 break;
             case 4:
                 Ice.SetActive(true);
                 CurrentBulletEffect = IceEffect;
-                speed = 30f;
+                speed = 20f;
                 TypeOfAttack = 3;//冻结
-                lifetime = 5f;
+                lifetime = 3f;
                 break;
 
             case 5:
                 Poison.SetActive(true);
                 CurrentBulletEffect = PoisonEffect;
-                speed = 30f;
+                speed = 20f;
                 TypeOfAttack = 5;//毒物
 
-                lifetime = 5f;
+                lifetime = 3f;
+                break;
+
+
+            case 6:
+                Wind.SetActive(true);
+                CurrentBulletEffect = TyphoonEffect;
+                speed = 20f;
+                TypeOfAttack = 6;//吹飞
+
+                lifetime = 2f;
                 break;
         }
         specialBullet = SpecialBullet;
@@ -153,6 +174,8 @@ public class Shooting : MonoBehaviour
     public GameObject LightingEffect;//雷柱特效
     public GameObject IceEffect;//冰特效
     public GameObject PoisonEffect;//毒气特效
+    public GameObject TyphoonEffect;//飓风特效
+    public GameObject DarknessEffect;//暗黑特效
 
     public Transform rayTarget;//特效的的位置
 
@@ -175,14 +198,17 @@ public class Shooting : MonoBehaviour
                 case 0:
                 case 1:
                 case 4:
+               
 
                     if (isCritial) { other.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
                     other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);
                     break;
 
-                //火球，雷球
+                //火球，雷球,风球,暗黑
                 case 2:
                 case 3:
+                case 6:
+                case -1:
                     GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
                     var s = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Spell>();
                     s.DamageToEnemy = true;
@@ -206,7 +232,15 @@ public class Shooting : MonoBehaviour
 
             }
 
-            Destroy(gameObject);
+           
+
+            if (specialBullet!=6) 
+            {
+                Destroy(gameObject);
+            } //风能贯穿
+
+
+
             return;
         }
 
@@ -220,6 +254,7 @@ public class Shooting : MonoBehaviour
                 case 0:
                 case 1:
                 case 4:
+              
 
                     if (other.CompareTag("Player"))
                         other.GetComponent<Player>()?.ChangeHealth(appliedDamage, TypeOfAttack);
@@ -228,9 +263,11 @@ public class Shooting : MonoBehaviour
 
                     break;
 
-                //火球，雷球
+                //火球，雷球,风球,暗黑
                 case 2:
                 case 3:
+                case 6:
+                case -1:
                     GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
                     var s = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Spell>();
                     s.DamageToPlayer = true;
@@ -259,7 +296,11 @@ public class Shooting : MonoBehaviour
             }
 
 
-            Destroy(gameObject);
+            if (specialBullet != 6)
+            {
+                Destroy(gameObject);
+            } //风能贯穿
+
             return;
         }
 

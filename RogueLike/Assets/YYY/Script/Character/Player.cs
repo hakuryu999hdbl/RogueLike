@@ -535,6 +535,35 @@ public class Player : MonoBehaviour
                 }
             }//持续灼烧伤害
 
+            if (Class == PlayerClass.Succubus&&currentStrength<=maxStrength/3) 
+            {
+                BurnTimer += Time.deltaTime;
+
+                if (BurnTimer >= 0.2f)
+                {
+                    currentHealth = Mathf.Clamp(currentHealth - 1, 0, maxHealth);
+                    UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
+
+                    //显示伤害
+                    HudText.HUD(-1);
+
+                    BurnTimer = 0;
+
+                    if (currentHealth <= 0)
+                    {
+                        isDie = true;
+
+                        anim.Play(GetAnimPrefix() + "Default_Die_2");
+
+                        Critical.SetActive(false);
+
+                        UIManager.instance.Ending_UI();
+
+                        return;
+                    }
+                }
+            }
+            //魔族化后的威威削减生命值
         }
         else
         {
@@ -1507,24 +1536,29 @@ public class Player : MonoBehaviour
         switch (CurrentWeapon)
         {
 
+            case 210:
+                special = -1;//暗黑法球
+                break;
 
+            case 202:
+            case 208:
+                special = 6;//飓风法球
+                break;
 
             case 201:
             case 207:
                 special = 5;//剧毒法球
                 break;
             case 203:
-            case 210:
+           // case 210:
                 special = 3;//火焰法球
                 break;
             case 204:
             case 206:
-            case 208:
                 special = 4;//冰冻法球
                 break;
             case 205:
             case 209:
-            case 202:
                 special = 2;//雷电法球
                 break;
 
@@ -1617,28 +1651,36 @@ public class Player : MonoBehaviour
         {
             switch (CurrentWeapon)
             {
+                case 210:
+                    ChangeMagicEffectColor(1);//魔族魔法阵
+                    break;
 
+
+                case 202:
+                case 208:
+                    ChangeMagicEffectColor(6);//飓风魔法阵
+                    break;
 
                 case 201:
                 case 207:
-                    ChangeMagicEffectColor(5);//剧毒法球
+                    ChangeMagicEffectColor(5);//剧毒魔法阵
                     break;
                 case 203:
-                case 210:
-                    ChangeMagicEffectColor(2);//火焰法球
+                //case 210:
+                    ChangeMagicEffectColor(2);//火焰魔法阵
                     break;
                 case 204:
                 case 206:
-                case 208:
-                    ChangeMagicEffectColor(4);//冰冻法球
+                    ChangeMagicEffectColor(4);//冰冻魔法阵
                     break;
                 case 205:
                 case 209:
-                case 202:
-                    ChangeMagicEffectColor(3);//雷电法球
+                    ChangeMagicEffectColor(3);//雷电魔法阵
                     break;
             }
         }
+
+        
 
     }
 
@@ -1649,12 +1691,18 @@ public class Player : MonoBehaviour
 
     public Animator MagicFormationAnim;//魔法阵
     public SpriteRenderer MagicFormation;//魔法阵样式
-    public Sprite Magic_Fire, Magic_Electricity, Magic_Ice, Magic_Poison;
+    public Sprite Magic_Demon,Magic_Fire, Magic_Electricity, Magic_Ice, Magic_Poison, Magic_Wind;
 
     public void ChangeMagicEffectColor(int ColorNumber)
     {
         switch (ColorNumber)
         {
+            case 1:
+                MagicFormation.sprite = Magic_Demon;
+                var main1 = exitEffect.main;
+                main1.startColor = Color.red;
+                break;
+
             case 2:
                 MagicFormation.sprite = Magic_Fire;
                 var main = exitEffect.main;
@@ -1674,6 +1722,11 @@ public class Player : MonoBehaviour
                 MagicFormation.sprite = Magic_Poison;
                 var main4 = exitEffect.main;
                 main4.startColor = new Color(0.5f, 0f, 0.5f); //紫色
+                break;
+            case 6:
+                MagicFormation.sprite = Magic_Wind;
+                var main5 = exitEffect.main;
+                main5.startColor = new Color(0.2f, 0.9f, 0.2f); // 偏荧光的亮绿色
                 break;
         }
     }
@@ -1919,16 +1972,23 @@ public class Player : MonoBehaviour
                     else
                     {
                         //魔族变身
+                        if (YYY_hatIndex == 11 || YYY_hatIndex == 12) 
+                        {
+                            if (Class == PlayerClass.Succubus)
+                            {
+                                ChangeClass(0);
+                            }
+                            else
+                            {
+                                ChangeClass(2);
+                            }
+                            GateEffect.SetActive(true);//传送门特效
 
-                        if (Class == PlayerClass.Succubus)
-                        {
-                            ChangeClass(0);
                         }
-                        else
-                        {
-                            ChangeClass(2);
-                        }
-                        GateEffect.SetActive(true);//传送门特效
+
+                      
+
+
 
                         //PlayChargeAttack(); // 蓄力攻击
                     }
@@ -1955,6 +2015,25 @@ public class Player : MonoBehaviour
         {
             dodgePressTime += Time.deltaTime;
 
+            if (dodgePressTime > 0.2f)
+            {
+                //魔族变身法阵
+                if (YYY_hatIndex == 11 || YYY_hatIndex == 12)
+                {
+                    Demon_Effect.SetActive(true);
+                }
+            }
+            
+        }
+        else
+        {
+            //魔族变身法阵
+            if (YYY_hatIndex == 11 || YYY_hatIndex == 12)
+            {
+
+                Demon_Effect.SetActive(false);
+            }
+        
         }
     }
 
@@ -2431,6 +2510,7 @@ public class Player : MonoBehaviour
     public GameObject Burning_Effect;//灼烧特效
     public GameObject FireEffect;//烧特效
     public GameObject ProtectiveCoverEffect;//防护罩特效
+    public GameObject Demon_Effect;//恶魔特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
 
@@ -2622,6 +2702,9 @@ public class Player : MonoBehaviour
                     }
                     Burning(Random.Range(1, 8), true);//中毒伤害
                     break;
+
+
+
             }
 
 
@@ -2709,7 +2792,11 @@ public class Player : MonoBehaviour
 
             if (!isDie && currentHealth > 0) 
             {
-                switch (Random.Range(0, 5)) //五分之一被击倒  五分之一被击飞   五分之三只是伤血不触发动画（攻击不会被打断）
+
+                int DamageType = Random.Range(0, 5);
+                if (TypeOfAttack == 6){ DamageType = 1; }//必定刮飞
+
+                switch (DamageType) //五分之一被击倒  五分之一被击飞   五分之三只是伤血不触发动画（攻击不会被打断）
                 {
                     case 0:
                         Knockdown();
