@@ -658,8 +658,24 @@ public class UIManager : MonoBehaviour
         Common_All.SetActive(false);
         NextButton.SetActive(true);
 
+        player.isInputBlocked = true;//切断玩家的方向攻击等输入
+
+        CurrentChooseList = -6;
+
+        //拉近相机
+        MainCamera.SetInteger("View", 1);
+
+        //延后允许按下继续
+        Invoke("EndUI_CanPush", 1);
 
     }//生命值归0后触发
+
+    bool CanPushEndUI = false;//防止玩家快速按下
+    void EndUI_CanPush() 
+    {
+        CanPushEndUI = true;
+    }
+
 
     public void ReLoadScene()
     {
@@ -679,7 +695,7 @@ public class UIManager : MonoBehaviour
 
 
     [Header("主菜单界面层级")]
-    public int CurrentChooseList = 0;//-5三选一界面   -4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面
+    public int CurrentChooseList = 0;//-6战败被抓住凌辱  -5三选一界面   -4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面
     public int CurrentMode = 0;//0 进入CG界面  1捏人/进入游戏
     public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
     public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
@@ -917,8 +933,8 @@ public class UIManager : MonoBehaviour
 
 
         MainCamera.SetInteger("View", 0);
-        ShowSaveCavansAnim.SetBool("Track", true);
-        ShowSaveCavansAnim.gameObject.SetActive(true);
+
+        ShowSaveCavans.SetActive(true);
 
 
         player.frameEvents.audioS.Stop();
@@ -1031,8 +1047,10 @@ public class UIManager : MonoBehaviour
         PauseMenu.SetActive(true);
 
 
-        //目前把这个放在了存档界面，所以不用了
+ 
         player.isInputBlocked = true;//切断玩家的方向攻击等输入
+
+       
     }
     public void ContinueGame()
     {
@@ -1050,13 +1068,13 @@ public class UIManager : MonoBehaviour
 
     void isInputBlockedFalse() 
     {
-        //目前把这个放在了存档界面，所以不用了
+  
         player.isInputBlocked = false;//恢复玩家的方向攻击等输入
 
     }//防止按键连续触发
 
     public Animator MainCamera;//控制摄像机拉近远离
-    public Animator ShowSaveCavansAnim;//黑幕显示背景
+    public GameObject ShowSaveCavans;//通用UI层
 
     public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans, ModeCavans, ChapterCavans, AVGCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面
     public DialogSystem dialogSystem;
@@ -1529,8 +1547,8 @@ public class UIManager : MonoBehaviour
 
                         MainCamera.SetInteger("View", 0);
                         Common_All.SetActive(false);
-                        ShowSaveCavansAnim.gameObject.SetActive(true);
-                        ShowSaveCavansAnim.SetBool("Track", true);
+                        ShowSaveCavans.SetActive(true);
+
 
 
                         player.isInputBlocked = true;//切断玩家的方向攻击等输入
@@ -1546,8 +1564,8 @@ public class UIManager : MonoBehaviour
 
                         MainCamera.SetInteger("View", 2);
                         Common_All.SetActive(true);
-                        ShowSaveCavansAnim.gameObject.SetActive(false);
-                        ShowSaveCavansAnim.SetBool("Track", false);
+                        ShowSaveCavans.SetActive(false);
+
 
                         player.isInputBlocked = false;//恢复玩家的方向攻击等输入
 
@@ -1610,7 +1628,7 @@ public class UIManager : MonoBehaviour
 
         CurrentChooseList = 6;
 
-        ShowSaveCavansAnim.gameObject.SetActive(false);
+        ShowSaveCavans.SetActive(false);
         MainCamera.SetInteger("View", 1);
     }
 
@@ -2600,6 +2618,14 @@ public class UIManager : MonoBehaviour
         {
             // 可选：进入下一级菜单、确认开始游戏等
 
+            //局内被捕获状态
+            if (CurrentChooseList == -6 && CanPushEndUI)
+            {
+                Invoke("ReLoadScene", 0.1f);
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+
+
             //三选一界面
             if (CurrentChooseList == -5)
             {
@@ -2788,6 +2814,15 @@ public class UIManager : MonoBehaviour
         if (player.isInputBlocked)
         {
             // 可选：退出菜单、返回上一级等
+
+
+            //局内被捕获状态
+            if (CurrentChooseList == -6&&CanPushEndUI) 
+            {
+                Invoke("ReLoadScene", 0.1f);
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+
 
             //只要暂停菜单显示，闪避键按下就是触发这里
             if (CurrentChooseList == -3)

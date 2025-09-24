@@ -383,10 +383,11 @@ public class Enemy : MonoBehaviour
     void FixedUpdate()
     {
 
-
-
-
-        if (!isDie)
+        if (isRape) 
+        { 
+            return; 
+        }//Rape捕获锁
+        else if (!isDie)
         {
 
             if (MakeSureIsPatrol) { isPatrol = true; }//碰到已死玩家强制巡逻
@@ -787,52 +788,94 @@ public class Enemy : MonoBehaviour
             {
                 if (collision.gameObject.GetComponent<Player>().isRape == false)
                 {
-                    isRape = true;
-                    //anim.Play("RBQ_Punish_Rape");
+                    isRape = true;     
 
-                    switch (Random.Range(1, 9))
+                    switch (Class)
                     {
-                        case 1:
-                            anim.Play("CG/CG_OnanismFront_1");
+                        case EnemyClass.Girl:
+                        case EnemyClass.Succubus:
+                            switch (Random.Range(1, 3))
+                            {
+                                case 1:
+                                    anim.Play("CG/CG_InsultSide_1");
+                                    if (PlayerPrefs.GetInt("CG_InsultSide_1") == 0){ PlayerPrefs.SetInt("CG_InsultSide_1", 1);RoomGenerator.ShowInformationOfStage(0); }
+                                    break;
+                                case 2:
+                                    anim.Play("CG/CG_FistingFront_1");
+                                    if (PlayerPrefs.GetInt("CG_FistingFront_1") == 0) { PlayerPrefs.SetInt("CG_FistingFront_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+                                    break;
+                            }
+
                             break;
-                        case 2:
-                            anim.Play("CG/CG_OnanismSide_1");
+
+                        case EnemyClass.Man:
+
+                            switch (Random.Range(1, 6))
+                            {
+                                case 1:
+                                    anim.Play("CG/CG_RapeSide_1");
+                                    if (PlayerPrefs.GetInt("CG_RapeSide_1") == 0) { PlayerPrefs.SetInt("CG_RapeSide_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+                                    break;
+                                case 2:
+                                    anim.Play("CG/CG_RapeFront_1");
+                                    if (PlayerPrefs.GetInt("CG_RapeFront_1") == 0) { PlayerPrefs.SetInt("CG_RapeFront_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+                                    break;
+                                case 3:
+                                    anim.Play("CG/CG_AssaultSide_1");
+                                    if (PlayerPrefs.GetInt("CG_AssaultSide_1") == 0) { PlayerPrefs.SetInt("CG_AssaultSide_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+                                    break;
+                                case 4:
+                                    anim.Play("CG/CG_AssaultFront_1");
+                                    if (PlayerPrefs.GetInt("CG_AssaultFront_1") == 0) { PlayerPrefs.SetInt("CG_AssaultFront_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+                                    break;
+                                case 5:
+                                    anim.Play("CG/CG_GagSide_1");
+                                    if (PlayerPrefs.GetInt("CG_GagSide_1") == 0) { PlayerPrefs.SetInt("CG_GagSide_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+                                    break;
+                            }
+
                             break;
 
 
-                        case 3:
-                            anim.Play("CG/CG_GagSide_1");
-                            break;
-                        case 4:
-                            anim.Play("CG/CG_FistingFront_1");
+                        case EnemyClass.Monster:
+                            anim.Play("CG/CG_MonsterSide_1");
+                            if (PlayerPrefs.GetInt("CG_MonsterSide_1") == 0) { PlayerPrefs.SetInt("CG_MonsterSide_1", 1); RoomGenerator.ShowInformationOfStage(0); }
                             break;
 
-
-                        case 5:
-                            anim.Play("CG/CG_RapeFront_1");
-                            break;
-                        case 6:
-                            anim.Play("CG/CG_RapeSide_1");
-                            break;
-                        case 7:
-                            anim.Play("CG/CG_AssaultFront_1");
-                            break;
-                        case 8:
-                            anim.Play("CG/CG_AssaultSide_1");
+                        case EnemyClass.Tentacle_Monster:
+                            anim.Play("CG/CG_TentacleMonsterFront_1");
+                            if (PlayerPrefs.GetInt("CG_TentacleMonsterFront_1") == 0) { PlayerPrefs.SetInt("CG_TentacleMonsterFront_1", 1); RoomGenerator.ShowInformationOfStage(0); }
                             break;
 
+                        case EnemyClass.Tentacle_Bag:
+                            anim.Play("CG/CG_TentacleBagFront_1");
+                            if (PlayerPrefs.GetInt("CG_TentacleBagFront_1") == 0) { PlayerPrefs.SetInt("CG_TentacleBagFront_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+                            break;
+
+                        case EnemyClass.Tentacle_Bug:
+                            anim.Play("CG/CG_TentacleBugFront_1");
+                            if (PlayerPrefs.GetInt("CG_TentacleBugFront_1") == 0) { PlayerPrefs.SetInt("CG_TentacleBugFront_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+                            break;
+
+                        case EnemyClass.Tentacle_HermitCrab:
+                            anim.Play("CG/CG_TentacleHermitCrabFront_1");
+                            if (PlayerPrefs.GetInt("CG_TentacleHermitCrabFront_1") == 0) { PlayerPrefs.SetInt("CG_TentacleHermitCrabFront_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+                            break;
                     }
+
+                   
 
 
                     gameObject.transform.position = collision.gameObject.transform.position;//敌人拉到玩家位置
-
-
                     collision.gameObject.GetComponent<Player>().characterSkin.HideSkeleton();//隐藏玩家
-
-
                     collision.gameObject.GetComponent<Player>().isRape = true;
-
                     rbody.simulated = false;//当捕获折磨玩家挂的时候，不能移动
+
+                    //隐藏血条
+                    HudText.gameObject.SetActive(false);
+
+                   
+
 
                     #region
                     // 只获取 YYY 部位的皮肤
@@ -847,11 +890,12 @@ public class Enemy : MonoBehaviour
                     int mBody = Man_bodyIndex;
                     int mHat = Man_hatIndex;
 
-                    int gHead = Girl_headIndex;
-                    int gEyes = Girl_eyesIndex;
-                    int gBody = Girl_bodyIndex;
-                    int gLegs = Girl_legsIndex;
-                    int gHat = Girl_hatIndex;
+                    //将自己YYY的皮肤转移到Girl上
+                    int gHead = YYY_headIndex;
+                    int gEyes = YYY_eyesIndex;
+                    int gBody = YYY_bodyIndex;
+                    int gLegs = YYY_legsIndex;
+                    int gHat = YYY_hatIndex;
 
                     int weapon = weaponIndex;
 
@@ -863,6 +907,9 @@ public class Enemy : MonoBehaviour
                         weapon
                     );
                     #endregion
+
+
+                    Invoke("DelayChangeAnim", 0.1f);
                 }
 
                 MakeSureIsPatrol = true;
@@ -870,6 +917,12 @@ public class Enemy : MonoBehaviour
             }
 
         }//敌人捕获玩家
+    }
+
+    void DelayChangeAnim() 
+    {
+        //将动画器转移到玩家动画器上,防止其他指令干扰
+        anim = player.anim;
     }
 
     public void ReadyToSayThankYou()
@@ -2691,6 +2744,8 @@ public class Enemy : MonoBehaviour
     public Image HealthValueImage;
     public SpriteRenderer AttackColliderImage;
     public SpriteRenderer AttackRangeImage;
+
+
     //切换为队友
     public void ConvertToFriend()
     {
@@ -3029,16 +3084,23 @@ public class Enemy : MonoBehaviour
     float BossSkillCoolDown_Timer = 3f;
     void BossSkill_Move() 
     {
-        wallmap.ChangeTargetPlace(gameObject);
 
-        GateEffect.SetActive(false);
-        GateEffect.SetActive(true);
-        Invoke("BossSkill_Move_CoolDown", BossSkillCoolDown_Timer);
-        BossSkillCoolDown_Timer += 1;//Boss的技能启动时间逐渐增加
+        if (!isRape) 
+        {
+            wallmap.ChangeTargetPlace(gameObject);
 
-        ShootBullet();//闪避的同时攻击
+            GateEffect.SetActive(false);
+            GateEffect.SetActive(true);
+            Invoke("BossSkill_Move_CoolDown", BossSkillCoolDown_Timer);
+            BossSkillCoolDown_Timer += 1;//Boss的技能启动时间逐渐增加
 
-        BossSkill_ChangeMagic(Random.Range(2, 6));
+            ShootBullet();//闪避的同时攻击
+
+            BossSkill_ChangeMagic(Random.Range(2, 6));
+
+        }//针对王女Boss的Rape捕获锁
+
+    
     }
     void BossSkill_Move_CoolDown()
     {

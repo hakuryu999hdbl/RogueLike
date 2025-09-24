@@ -52,10 +52,10 @@ public class Player : MonoBehaviour
         isMage = true;
 
 
-       
-       
-       
-       
+
+
+
+
        
        
        
@@ -528,7 +528,7 @@ public class Player : MonoBehaviour
 
                         Critical.SetActive(false);
 
-                        UIManager.instance.Ending_UI();
+                        UIManager.instance.Ending_UI();//毒烧伤损血死亡
 
                         return;
                     }
@@ -557,7 +557,7 @@ public class Player : MonoBehaviour
 
                         Critical.SetActive(false);
 
-                        UIManager.instance.Ending_UI();
+                        UIManager.instance.Ending_UI();//魔族化损血死亡
 
                         return;
                     }
@@ -2781,7 +2781,7 @@ public class Player : MonoBehaviour
 
                 Critical.SetActive(false);
 
-                UIManager.instance.Ending_UI();
+                UIManager.instance.Ending_UI();//损血死亡
 
                 UIManager.instance._RoomGenerator.MissionIcon(false);
 
