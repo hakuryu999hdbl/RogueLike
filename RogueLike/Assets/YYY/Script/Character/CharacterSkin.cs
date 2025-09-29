@@ -189,6 +189,21 @@ public class CharacterSkin : MonoBehaviour
     }//攻击碰撞体消失
 
 
+
+    public void EnemyOut()
+    {
+
+
+        if (enemy != null)
+        {
+
+            enemy.BossSkill_Childbirth();
+
+        }
+
+    }//产卵
+
+
     #endregion
 
 }

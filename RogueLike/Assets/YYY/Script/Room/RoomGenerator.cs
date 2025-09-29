@@ -38,7 +38,6 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +54,14 @@ public class RoomGenerator : MonoBehaviour
         Invoke("Scan", 0.2f);//这样因该能等到全部生成完
 
         //只有一个房间的时候
-        if (roomNumber == 1) { Instantiate(CG_InterrogationRoom, new Vector3(0, 0, 0), Quaternion.identity); return; }
+        if (roomNumber == 1) 
+        { 
+            Instantiate(CG_InterrogationRoom, new Vector3(0, 0, 0), Quaternion.identity);
+
+            cg_Manager = CG_InterrogationRoom.GetComponent<CG_Manager>();
+
+            return;
+        }
 
         if (roomNumber == 8) { Instantiate(BossRoom_Captain, new Vector3(0, 0, 0), Quaternion.identity); return; }//卫兵队长Boss房
         if (roomNumber == 9) { Instantiate(BossRoom_Selene, new Vector3(0, 0, 0), Quaternion.identity); return; }//王女Boss房
@@ -575,15 +581,14 @@ public class RoomGenerator : MonoBehaviour
 
    
 
-    //敌人列表
-    //public List<GameObject> enemyList = new List<GameObject>();
+  
 
     public void SetEnemy()
     {
 
 
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
-        //enemyList.Add(NewEnemy);
+     
 
         ChangeTargetPlace(NewEnemy, -2);
     }
@@ -591,7 +596,7 @@ public class RoomGenerator : MonoBehaviour
     {
 
         GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
-        //enemyList.Add(NewEnemy);
+     
 
 
         Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
@@ -659,6 +664,112 @@ public class RoomGenerator : MonoBehaviour
         }
     }
     #endregion
+
+    /// <summary>
+    /// CG结局 场景调用专项
+    /// </summary>
+    #region
+    [Header("CG结局控制")]
+    CG_Manager cg_Manager;
+    //RBQ列表
+    public List<GameObject> RBQ_List = new List<GameObject>();
+
+    public void DelayCreatSetFriend_RBQ() 
+    {
+
+        Invoke("SetFriend_RBQ_ToPosition", 1f);
+        Invoke("Set_RBQ_ToPosition", 1.2f);
+        Invoke("Set_RBQ_ToPosition", 1.5f);
+        Invoke("Set_RBQ_ToPosition", 2f);
+    }
+
+    //public void CG_ManagerCameraPostion(int Target) 
+    //{
+    //    switch (Target) 
+    //    {
+    //        case 1:
+    //            SetFriend_RBQ_ToPosition(cg_Manager.Camera_Position_1);
+    //            break;
+    //        case 2:
+    //            SetFriend_RBQ_ToPosition(cg_Manager.Camera_Position_2);
+    //            break;
+    //        case 3:
+    //            SetFriend_RBQ_ToPosition(cg_Manager.Camera_Position_3);
+    //            break;
+    //        case 4:
+    //            SetFriend_RBQ_ToPosition(cg_Manager.Camera_Position_4);
+    //            break;
+    //    }
+    //}
+
+    public void SetFriend_RBQ_ToPosition() 
+    {
+        var others = SaveManager.LoadAllSavesExcept(null);
+        foreach (var data in others)
+        {
+            // 1) 生成实体
+            GameObject newGO = Instantiate(Enemy, transform.position, Quaternion.identity);
+
+            // 2) 取到内部的 Enemy 组件
+            Enemy enemy = newGO.transform.Find("Enemy").GetComponent<Enemy>();
+            if (enemy == null)
+            {
+                Debug.LogError("生成的对象上找不到 Enemy 组件（路径 'Enemy'）。");
+                Destroy(newGO);
+                continue;
+            }
+
+            // 3) 转为友军
+            enemy.ConvertToFriend();
+
+            // 4) 套用该存档数据（皮肤/数值/武器 等）
+            enemy.ApplySaveData(data);
+
+            // 5) 放到合适的跟随/分组位置
+            // 生成随机偏移量
+            float offsetX = Random.Range(-offsetRange, offsetRange);
+            float offsetY = Random.Range(-offsetRange, offsetRange);
+
+            //拉到指定位置
+            enemy.transform.position = cg_Manager.Camera_Position_1.transform.position + new Vector3(offsetX, offsetY, 0f);
+
+            //显示RBQ被抓着头发走
+            enemy.CG_End_RBQ_ShowFront();
+
+            //拉入列表方便集体转移位置
+            RBQ_List.Add(newGO);
+
+           
+        }
+    }
+    public void Set_RBQ_ToPosition() 
+    {
+        GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
+
+
+
+        Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
+        enemy.BecomeSoldier_Girl = true;
+        enemy.ConvertToFriend();
+
+        // 5) 放到合适的跟随/分组位置
+        // 生成随机偏移量
+        float offsetX = Random.Range(-offsetRange, offsetRange);
+        float offsetY = Random.Range(-offsetRange, offsetRange);
+
+        //拉到指定位置
+        enemy.transform.position = cg_Manager.Camera_Position_1.transform.position + new Vector3(offsetX, offsetY, 0f);
+
+        //显示RBQ被抓着头发走
+        enemy.CG_End_RBQ_ShowFront();
+
+        //拉入列表方便集体转移位置
+        RBQ_List.Add(NewEnemy);
+    }//为了让RBQ数量看起来更加充实一些
+
+    #endregion
+
+
 
     /// <summary>
     /// 关卡信息

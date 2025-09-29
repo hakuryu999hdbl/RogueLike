@@ -33,7 +33,7 @@ public class RBQ : MonoBehaviour
         //寻找RoomGenerator
         _RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
 
-        if (RBQState == 0) { RBQState = Random.Range(1, 3); }//如果一开始没有赋值，那么随机
+        if (RBQState == 0) { RBQState = Random.Range(1,3); }//如果一开始没有赋值，那么随机
 
 
         // 随机动画
@@ -44,7 +44,18 @@ public class RBQ : MonoBehaviour
                 //string animName = punishAnims[Random.Range(0, punishAnims.Length)];
                 //anim.Play(animName);
 
-                CurrentRapeType = Random.Range(1, 3);
+
+                if (GameFlowData.nextScene == "Story_01" || GameFlowData.nextScene == "Story_02")
+                { CurrentRapeType = Random.Range(1, 4); }
+                else if (GameFlowData.nextScene == "Story_04" || GameFlowData.nextScene == "Story_06") 
+                {
+                    CurrentRapeType = 3;
+                }
+                else
+                {
+                    CurrentRapeType = Random.Range(1, 6);//7，9，11关
+                }
+               
 
                 switch (CurrentRapeType)
                 {
@@ -54,7 +65,15 @@ public class RBQ : MonoBehaviour
                     case 2:
                         anim.Play("RBQ_Punish_Rape");
                         break;
-
+                    case 3:
+                        anim.Play("RBQ_Punish_Pillory");
+                        break;
+                    case 4:
+                        anim.Play("RBQ_Punish_Tentacle");
+                        break;
+                    case 5:
+                        anim.Play("RBQ_Punish_Monster_Rape_Side");
+                        break;
                 }
 
                 //循环叫声
@@ -164,7 +183,17 @@ public class RBQ : MonoBehaviour
                     case 2:
                         anim.Play("RBQ_Punish_Rape_2");
                         break;
-
+                    case 3:
+                        anim.Play("RBQ_Punish_Pillory_2");
+                        break;
+                    case 4:
+                        //还是自己
+                        enemy.ChangeClass(7);
+                        break;
+                    case 5:
+                        anim.Play("RBQ_Punish_Rape_2");
+                        enemy.ChangeClass(4);
+                        break;
                 }
 
 
@@ -262,7 +291,19 @@ public class RBQ : MonoBehaviour
                             GameObject TortureDevice = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
                             TortureDevice.GetComponent<Plant>().SetImage(0);
                             break;
+                        case 3:
+                            GameObject TortureDevice2 = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
 
+                            if (inputX == 0)
+                            {
+                                TortureDevice2.GetComponent<Plant>().SetImage(5);//正面
+                            }
+                            else
+                            {
+                                TortureDevice2.GetComponent<Plant>().SetImage(9);//侧面
+                            }
+                           
+                            break;
                     }
 
                     WeaponChangeDevice.transform.SetParent(null);//保留架子

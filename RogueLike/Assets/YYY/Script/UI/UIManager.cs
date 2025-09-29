@@ -447,7 +447,7 @@ public class UIManager : MonoBehaviour
                 Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 7;
                 _RoomGenerator.RoomType = 1;//Dungeon
-                _RoomGenerator.SkyBoxNumber = 2;//白雾
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -626,6 +626,29 @@ public class UIManager : MonoBehaviour
                 Invoke("PlayDungeonBGM", 1f);
                 break;
 
+
+            case "CG_AVG_01":
+
+                //拉出AVG
+                PlayAVG("CG_01");
+                To_AVGScene();
+
+                //隐藏存档界面，拉摄像机
+                Invoke("DelayHideSaveCavans", 0.3f);
+
+
+                Invoke("DelayShowRoomGenerator", 0.1f);
+                _RoomGenerator.roomNumber = 1;
+                _RoomGenerator.SkyBoxNumber = 2;//白雾
+
+
+                Invoke("PlayDungeonBGM", 1f);
+                break;
+
+
+
+
+
             default:
 
                 Invoke("PlayBackgroundMusic", 1f);
@@ -637,6 +660,16 @@ public class UIManager : MonoBehaviour
 
         GameFlowData.RoomLevel = 0;//清理
     }
+    public GameObject HalfBlack;//这个完全就是我没敢去测试把AVG拉出ShowSaveCavans里多添加的
+    void DelayHideSaveCavans() 
+    {
+        HalfBlack.SetActive(false);
+        SaveCavans.SetActive(false);
+        MainCamera.SetInteger("View", 1);
+
+        player.characterSkin.HideSkeleton();//隐藏玩家保持相机不动
+
+    }//隐藏存档界面，拉摄像机
 
 
     void DelayShowRoomGenerator() 
@@ -888,8 +921,12 @@ public class UIManager : MonoBehaviour
     }//这个是存档界面在按下退出的时候产生路径[不确定怎么弄专门设置的]
     public void HomePageToCGPage() 
     {
-        GameFlowData.nextScene = "CG";
+        GameFlowData.nextScene = "CG_AVG_01";
+        //GameFlowData.nextScene = "CG";
         ReLoadScene();//前往CG页面
+
+
+
 
         //ToSavePageButton(0);
 
@@ -2142,6 +2179,11 @@ public class UIManager : MonoBehaviour
 
         switch (ChapterName)
         {
+            case "CG_01":
+                dialogSystem.animation_number = 101;
+                break;
+
+
             case "Chapter_01":
                 dialogSystem.animation_number = 1001;
                 break;

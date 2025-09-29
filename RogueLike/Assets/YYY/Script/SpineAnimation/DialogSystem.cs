@@ -21,6 +21,9 @@ public class DialogSystem : MonoBehaviour
     [Header("动画控制器")]
     public int animation_number;
     public Animator Background;
+    public GameObject TheImage;//背景板，场景CG结局不能遮挡
+    public Animator Black_CG;//专门用于CG的黑屏淡入淡出
+
 
     [Header("对话，背景，角色")]
     public GameObject TextButton;
@@ -36,6 +39,7 @@ public class DialogSystem : MonoBehaviour
 
     private void OnEnable()
     {
+
         //textLabel.text = textList[index];
         //index++;
         Invoke("Read",0.1f);
@@ -68,6 +72,9 @@ public class DialogSystem : MonoBehaviour
         switch (PlayerPrefs.GetInt("language"))
         {
             case 0:
+                textAssets.Add(101, Resources.Load<TextAsset>("TXT_Japanese/J_CG_1"));
+
+
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Japanese/J_Story_1"));
                 textAssets.Add(1002, Resources.Load<TextAsset>("TXT_Japanese/J_Story_2"));
                 textAssets.Add(1003, Resources.Load<TextAsset>("TXT_Japanese/J_Story_3"));
@@ -252,7 +259,53 @@ public class DialogSystem : MonoBehaviour
         Text text = textLabel;
         switch (textList[index].Trim().ToString())
         {
-            //字的颜色
+            #region  CG结局调用
+
+            case "Black":
+                //透明CG通用，CG开场必然说这句
+                Background.gameObject.SetActive(false);
+                TheImage.SetActive(false);
+
+                //起个头
+                UIManager.instance.MainCamera.Play("CG_Camera_01");
+
+               
+                index++;
+                break;
+
+            case "Black_FadeOut":
+                Black_CG.SetBool("Black", false);
+                index++;
+                break;
+
+            case "--------------------Start--------------------":
+                UIManager.instance.MainCamera.SetTrigger("Next");
+                //生成存档内全体角色到达指定位置
+                UIManager.instance._RoomGenerator.DelayCreatSetFriend_RBQ();
+
+                index++;
+                break;
+            case "--------------------NEXT--------------------":
+                UIManager.instance.MainCamera.SetTrigger("Next");
+
+                index++;
+                break;
+            case "--------------------NEXT_BlackFadeOut--------------------":
+                UIManager.instance.MainCamera.SetTrigger("Next");
+                Black_CG.SetBool("Black", false);
+                index++;
+                break;
+            case "--------------------NEXT_BlackFadeIn--------------------":
+                UIManager.instance.MainCamera.SetTrigger("Next");
+                Black_CG.SetBool("Black", true);
+                index++;
+                break;
+
+            #endregion
+
+
+            #region  字的颜色
+
             case "BG":
                 text.color = Color.white;
                 index++;
@@ -271,12 +324,21 @@ public class DialogSystem : MonoBehaviour
                 text.color = new Color(0.0f, 0.68f, 0.93f, 1.0f);//蓝色(市民群众士兵)
                 index++;
                 break;
+            case "Orange":
+                text.color = new Color(1.0f, 0.5f, 0.0f, 1.0f); // 橙色(女性敌人)
+                index++;
+                break;
+            case "DeepRed":
+                text.color = new Color(0.8f, 0.2f, 0.2f, 1.0f); // 深红色(性奴)
+                index++;
+                break;
+
             case "Gray":
                 text.color = new Color(0.7f, 0.75f, 0.8f, 1.0f); // 亮灰色(露娜)
                 index++;
                 break;
             case "DarkRed":
-                //text.color = new Color(0.8f, 0.2f, 0.2f, 1.0f); // 深红色
+               
                 text.color = new Color(1.0f, 0.2f, 0.5f, 1.0f); //浅红色(王女）
                 index++;
                 break;
@@ -294,37 +356,26 @@ public class DialogSystem : MonoBehaviour
                 index++;
                 break;
 
+
+
+
             case "Gold":
                 text.color = new Color(1.0f, 0.84f, 0.0f, 1.0f); // 金色（叛变战姬大队长）
                 index++;
                 break;
 
 
-            case "Orange":
-                text.color = new Color(1.0f, 0.5f, 0.0f, 1.0f); // 橙色(播种母体)
-                index++;
-                break;
+      
             case "Purple":
                 text.color = new Color(0.7f, 0.3f, 0.7f, 1.0f); // 紫色 (女记者)
                 index++;
                 break;
-       
 
 
+            #endregion
 
 
-           //case "FadeIn":
-           //    Background.SetTrigger("FadeIn");
-           //    index++;
-           //    break;
-           //case "FadeOut":
-           //    Background.SetTrigger("FadeOut");
-           //    index++;
-           //    break;
-
-
-
-
+            #region 图片
 
             case "Story_00":
                 BG_Image.sprite = Story_00;
@@ -516,6 +567,9 @@ public class DialogSystem : MonoBehaviour
                 text.color = Color.white;
                 index++;
                 break;
+
+
+                #endregion
         }
 
 
@@ -585,6 +639,7 @@ public class DialogSystem : MonoBehaviour
                 GameFlowData.nextScene = "Story_12";
                 break;
             case 1013:
+            case 101:
                 GameFlowData.nextScene = "";//返回主菜单
                 break;
         }

@@ -6,7 +6,11 @@ public class GameFlowData : MonoBehaviour
 {
     public static string nextScene = null;
 
-    //【Menu】进入菜单场景 【CG】进入CG处刑场景
+    //【Menu】进入菜单场景
+    //【CG】进入CG处刑场景
+    //【CG_AVG_01】进入CG结局剧情1
+
+
 
     //【Story_01】进入剧情关卡1
     //【Story_02】进入剧情关卡2
@@ -21,7 +25,7 @@ public class GameFlowData : MonoBehaviour
     //【Story_11】进入剧情关卡11
     //【Story_12】进入剧情关卡12
 
- 
+
     //【AVG_02】进入剧情2
     //【AVG_03】进入剧情3
     //【AVG_04】进入剧情4

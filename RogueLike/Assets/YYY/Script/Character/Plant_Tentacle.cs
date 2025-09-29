@@ -8,13 +8,32 @@ public class Plant_Tentacle : MonoBehaviour
     public Animator anim;
     public GameObject Map_Icon;//被干掉后会地图小标暂时消失
     public bool isHang;//是不是在空中的触手
-
+  
     private void Start()
     {
-
-        Invoke("Birth", Random.Range(1, 5));//随机出现时间，给与层次不齐的感觉
+        if (isFade)
+        {
+            anim.Play("Tentacle_Wall_Fade_In");
+        }
+        else if (isEgg)
+        {
+            ToEgg();
+        }
+        else
+        {
+            Invoke("Birth", Random.Range(1, 5));//随机出现时间，给与层次不齐的感觉
+        }
+        
 
     }
+    public bool isFade = false;
+    public bool isEgg = false;
+    public void ToEgg() 
+    {
+        anim.Play("Egg_In");
+        Rebirth();
+    }
+
     void Birth()
     {
         switch (Random.Range(1, 4))
@@ -122,21 +141,25 @@ public class Plant_Tentacle : MonoBehaviour
 
             if (anim.GetBool("Die") == false)
             {
-                if (isHang)
-                {
-                    collision.gameObject.GetComponent<Player>().StartStruggle(2); //Debug.Log("玩家踩入触手陷阱");
-                }
-                else
-                {
-                    collision.gameObject.GetComponent<Player>().StartStruggle(1); //Debug.Log("玩家踩入触手陷阱");
-                }
+                //if (isHang)
+                //{
+                //    collision.gameObject.GetComponent<Player>().StartStruggle(2); //Debug.Log("玩家踩入触手陷阱");
+                //}
+                //else
+                //{
+                //    collision.gameObject.GetComponent<Player>().StartStruggle(1); //Debug.Log("玩家踩入触手陷阱");
+                //}
+                //
+                //
+                //Die();
+                //
+                //
+                //
+                //collision.transform.position = transform.position;//触手拉过来
 
 
-                Die();
+                collision.gameObject.GetComponent<Player>().ChangeHealth(-200,0);
 
-
-
-                collision.transform.position = transform.position;//触手拉过来
 
             }
 

@@ -123,11 +123,11 @@ public class Enemy : MonoBehaviour
                         //Class = EnemyClass.Tentacle_Bug;
                         //Class = EnemyClass.Tentacle_Bag;
                         //Class = EnemyClass.Tentacle_HermitCrab;
+                        //Class = EnemyClass.HermitCrab;
+                        //Class = EnemyClass.RBQ;
 
 
 
-                     
-                      
 
 
 
@@ -139,7 +139,7 @@ public class Enemy : MonoBehaviour
                         }//一部分远程女射手变成女法师
 
 
-                        if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug)
+                        if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ)
                         {
 
                             CurrentProfession = 0;
@@ -382,8 +382,7 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-
-        if (isRape) 
+          if(isRape) 
         { 
             return; 
         }//Rape捕获锁
@@ -861,6 +860,12 @@ public class Enemy : MonoBehaviour
                             anim.Play("CG/CG_TentacleHermitCrabFront_1");
                             if (PlayerPrefs.GetInt("CG_TentacleHermitCrabFront_1") == 0) { PlayerPrefs.SetInt("CG_TentacleHermitCrabFront_1", 1); RoomGenerator.ShowInformationOfStage(0); }
                             break;
+
+                        case EnemyClass.HermitCrab:
+                        case EnemyClass.RBQ:
+                            anim.Play("CG/CG_TentacleHermitCrabSide_1");
+                            if (PlayerPrefs.GetInt("CG/CG_TentacleHermitCrabSide_1") == 0) { PlayerPrefs.SetInt("CG/CG_TentacleHermitCrabSide_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+                            break;
                     }
 
                    
@@ -983,6 +988,8 @@ public class Enemy : MonoBehaviour
         Tentacle_Bug,
         Tentacle_Bag,
         Tentacle_HermitCrab,
+        HermitCrab,
+        RBQ,
     }
     public void ChangeClass(int c)
     {
@@ -1012,6 +1019,12 @@ public class Enemy : MonoBehaviour
             case 7:
                 Class = EnemyClass.Tentacle_HermitCrab;
                 break;
+            case 8:
+                Class = EnemyClass.HermitCrab;
+                break;
+            case 9:
+                Class = EnemyClass.RBQ;
+                break;
         }
     }
 
@@ -1037,7 +1050,10 @@ public class Enemy : MonoBehaviour
                 return "Tentacle_Bag_";
             case EnemyClass.Tentacle_HermitCrab:
                 return "Tentacle_HermitCrab_";
-
+            case EnemyClass.HermitCrab:
+                return "HermitCrab_";
+            case EnemyClass.RBQ:
+                return "RBQ_";
             // 未来扩展：Tentacle, Demon 等
             default:
                 return "";
@@ -1114,7 +1130,7 @@ public class Enemy : MonoBehaviour
     {
         if (currentHealth > 0)
         {
-            if (Class == EnemyClass.Succubus || Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab) { anim.Play(GetAnimPrefix() + "Default_Idle"); return; }//只有魔族和变异体需要更改
+            if (Class == EnemyClass.Succubus || Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ) { anim.Play(GetAnimPrefix() + "Default_Idle"); return; }//只有魔族和变异体需要更改
 
             switch (visionType)
             {
@@ -1380,7 +1396,7 @@ public class Enemy : MonoBehaviour
         //队友使用玩家的攻击动画
         if (tag == "Friend")
         {
-            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab)
+            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ)
             {
                 anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
             }
@@ -1409,7 +1425,7 @@ public class Enemy : MonoBehaviour
         else
         {
 
-            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab)
+            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ)
             {
                 anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
             }
@@ -1533,6 +1549,8 @@ public class Enemy : MonoBehaviour
 
             case EnemyClass.Tentacle_Bag:
             case EnemyClass.Tentacle_HermitCrab:
+            case EnemyClass.HermitCrab:
+            case EnemyClass.RBQ:
                 switch (Random.Range(0, 3))
                 {
                     case 0:
@@ -1544,8 +1562,8 @@ public class Enemy : MonoBehaviour
                     case 2:
                         frameEvents._Shrike_Summon_Attack();
                         break;
-                }//肉袋 淫毒肉炮              
-                break;
+                }//肉袋 淫毒肉炮 子宫寄生虫  母体   
+                break; 
         }
 
 
@@ -2464,6 +2482,8 @@ public class Enemy : MonoBehaviour
                 {
                     case EnemyClass.Girl:
                     case EnemyClass.Succubus:
+                    case EnemyClass.HermitCrab:
+                    case EnemyClass.RBQ:
                         switch (Random.Range(0, 2))
                         {
                             case 0:
@@ -2819,7 +2839,7 @@ public class Enemy : MonoBehaviour
     /// 变成Boss
     /// </summary>
     #region
-
+    [Header("Boss技能")]
     public int BossNumber = 0;//1士兵队长  2皇女  3魔族化皇女  4宰相   5魔族化皇太子   5魔族化皇帝
 
     public void BecomeBoss_Captain()
@@ -2869,15 +2889,18 @@ public class Enemy : MonoBehaviour
     public void BecomeBoss_Morgan()
     {
 
-        Man_headIndex = 5;//皇子
-        Man_bodyIndex = 5;//皇子
-        Man_hatIndex = 5;//魔族角
+        YYY_headIndex = 12;
+        YYY_eyesIndex = 11;
+        YYY_bodyIndex = 1;
+        YYY_legsIndex = 1;
 
-        weaponIndex = 10;//引雷剑
+        YYY_hatIndex = 2;//精灵
+
+        weaponIndex = 9;//引雷剑(近战麻痹攻击)
 
         SetSkin();
 
-        Class = EnemyClass.Man;
+        Class = EnemyClass.RBQ;
 
         CurrentProfession = 0;
         ChangeType(CurrentProfession);//把CurrentProfession绑进去
@@ -2886,26 +2909,38 @@ public class Enemy : MonoBehaviour
         switch (PlayerPrefs.GetInt("language"))
         {
             case 0:
-                Name.text = "モルガン侯";   // 日语
+                Name.text = "エリシア";   // 日语
                 break;
             case 1:
-                Name.text = "莫尔根侯爵";   // 简体中文
+                Name.text = "艾莉西亚";   // 简体中文
                 break;
             case 2:
-                Name.text = "莫爾根侯爵";   // 繁体中文
+                Name.text = "艾莉西亞";   // 繁体中文
                 break;
             case 3:
-                Name.text = "Marquis Morgan";   // 英语
+                Name.text = "Elicia";   // 英语
                 break;
             case 4:
-                Name.text = "모르간 후작";   // 韩语
+                Name.text = "엘리시아";   // 韩语
                 break;
         }
 
         maxHealth *= 7;
         currentHealth = maxHealth;
 
-    }//Boss 莫尔根侯爵
+    }//Boss 莫尔根侯爵（艾莉西亚躯体）
+
+    public GameObject Egg;
+    public void BossSkill_Childbirth()
+    {
+
+        GameObject effectPrefabs_2 = Instantiate(Egg, transform.position, transform.rotation);
+        Egg.GetComponent<Plant_Tentacle>().isEgg=true;
+        Destroy(effectPrefabs_2, 10f);
+
+    }//艾莉西亚产卵
+
+
     public void BecomeBoss_Selene()
     {
 
@@ -3208,5 +3243,30 @@ public class Enemy : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    /// CG结局剧情控制
+    /// </summary>
+    #region
+   //[Header("CG结局剧情控制")]
+   //bool isCG_End_RBQ = false;
+
+    public void CG_End_RBQ_ShowFront() 
+    {
+        anim.SetBool("is_Man_CarryUp_Catch",true);
+
+
+
+        // 保存 Man 部位
+        Man_headIndex = 1;
+        Man_bodyIndex = 2;
+        Man_hatIndex = 1;
+
+        SetSkin();
+
+        //别走太慢
+        RunSpeed = 5;
+    }
+
+    #endregion
 }
 
