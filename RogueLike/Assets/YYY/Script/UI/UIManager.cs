@@ -327,7 +327,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제4장 재상 암살";
                         break;
                 }
-                Invoke("PlayDungeonBGM", 1f);
+                Invoke("PlayRuinsBGM", 1f);
                 break;
 
             case "Story_05":
@@ -384,7 +384,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제6장 패퇴";
                         break;
                 }
-                Invoke("PlayDungeonBGM", 1f);
+                Invoke("PlayRuinsBGM", 1f);
                 break;
 
             case "Story_07":
@@ -412,7 +412,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제7장 재정비";
                         break;
                 }
-                Invoke("PlayDungeonBGM", 1f);
+                Invoke("PlayRuinsBGM", 1f);
                 break;
 
             case "Story_08":
@@ -467,7 +467,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제9장 남매를 찾아서";
                         break;
                 }
-                Invoke("PlayDungeonBGM", 1f);
+                Invoke("PlayRuinsBGM", 1f);
                 break;
 
             case "Story_10":
@@ -523,7 +523,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제11장 다시 한번 패배";
                         break;
                 }
-                Invoke("PlayDungeonBGM", 1f);
+                Invoke("PlayRuinsBGM", 1f);
                 break;
 
             case "Story_12":
@@ -577,7 +577,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "백탁 투기장";
                         break;
                 }
-                Invoke("PlayBossMusic", 1f);
+                Invoke("PlayRuinsBGM", 1f);
                 break;
 
             case "Dungeon":
@@ -3384,9 +3384,16 @@ public class UIManager : MonoBehaviour
     public void PlayDungeonBGM()
     {
        
-        BGM.AudioPlayChaseMusic(-1);
+        BGM.AudioPlayDungeonMusic(-1);
 
     }
+    public void PlayRuinsBGM()
+    {
+
+        BGM.AudioPlayRuinsMusic(-1);
+
+    }
+
     public void PlayBackgroundMusic() 
     {
         BGM.AudioPlayBackgroundMusic(-1);

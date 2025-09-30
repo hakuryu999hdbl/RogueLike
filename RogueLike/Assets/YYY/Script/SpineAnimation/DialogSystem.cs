@@ -277,7 +277,10 @@ public class DialogSystem : MonoBehaviour
                 Black_CG.SetBool("Black", false);
                 index++;
                 break;
-
+            case "Black_FadeIn":
+                Black_CG.SetBool("Black",true);
+                index++;
+                break;
             case "--------------------Start--------------------":
                 UIManager.instance.MainCamera.SetTrigger("Next");
                 //生成存档内全体角色到达指定位置
@@ -290,17 +293,19 @@ public class DialogSystem : MonoBehaviour
 
                 index++;
                 break;
-            case "--------------------NEXT_BlackFadeOut--------------------":
+            case "--------------------NEXT_BlackFadeOut_1--------------------":
                 UIManager.instance.MainCamera.SetTrigger("Next");
                 Black_CG.SetBool("Black", false);
+                UIManager.instance._RoomGenerator.ArrangeRBQ();
                 index++;
                 break;
-            case "--------------------NEXT_BlackFadeIn--------------------":
+            case "--------------------NEXT_BlackFadeOut_2--------------------":
                 UIManager.instance.MainCamera.SetTrigger("Next");
-                Black_CG.SetBool("Black", true);
+                Black_CG.SetBool("Black", false);
+                UIManager.instance._RoomGenerator.SetRBQFrontOrSide();
+                UIManager.instance._RoomGenerator.cg_Manager.Hide_All();//把多余东西销毁
                 index++;
                 break;
-
             #endregion
 
 
@@ -337,8 +342,7 @@ public class DialogSystem : MonoBehaviour
                 text.color = new Color(0.7f, 0.75f, 0.8f, 1.0f); // 亮灰色(露娜)
                 index++;
                 break;
-            case "DarkRed":
-               
+            case "DarkRed":   
                 text.color = new Color(1.0f, 0.2f, 0.5f, 1.0f); //浅红色(王女）
                 index++;
                 break;

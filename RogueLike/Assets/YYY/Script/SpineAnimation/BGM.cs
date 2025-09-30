@@ -16,6 +16,7 @@ public class BGM : MonoBehaviour
 
     [Header("关卡音乐")]
     public List<AudioClip> DungeonMusicList; // 使用List来存储多个音乐
+    public List<AudioClip> RuinsMusicList; // 使用List来存储多个音乐
 
     [Header("背景音乐")]
     public List<AudioClip> BackgroundMusicList;// 使用List来存储多个音乐
@@ -53,7 +54,7 @@ public class BGM : MonoBehaviour
 
     }
 
-    public void AudioPlayChaseMusic(int BGMNumber)
+    public void AudioPlayDungeonMusic(int BGMNumber)
     {
         if (!isPlaying && DungeonMusicList.Count > 0)
         {
@@ -68,6 +69,32 @@ public class BGM : MonoBehaviour
                 audioS.clip = DungeonMusicList[BGMNumber];
             }//如果是小于0，那么随机播放，如果大于0，那么指定该序号播放
           
+
+            //audioS.PlayOneShot(randomClip);
+
+            // 将音频片段赋值给AudioSource的clip，并播放
+            audioS.loop = true;  // 确保启用了循环播放
+            audioS.Play();
+            isPlaying = true;
+        }
+
+    }
+
+    public void AudioPlayRuinsMusic(int BGMNumber)
+    {
+        if (!isPlaying && DungeonMusicList.Count > 0)
+        {
+
+            if (BGMNumber < 0)
+            {
+                // 从列表中随机选择一首音乐
+                audioS.clip = RuinsMusicList[Random.Range(0, RuinsMusicList.Count)];
+            }
+            else
+            {
+                audioS.clip = RuinsMusicList[BGMNumber];
+            }//如果是小于0，那么随机播放，如果大于0，那么指定该序号播放
+
 
             //audioS.PlayOneShot(randomClip);
 

@@ -670,7 +670,7 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     #region
     [Header("CG结局控制")]
-    CG_Manager cg_Manager;
+    public CG_Manager cg_Manager;
     //RBQ列表
     public List<GameObject> RBQ_List = new List<GameObject>();
 
@@ -681,6 +681,7 @@ public class RoomGenerator : MonoBehaviour
         Invoke("Set_RBQ_ToPosition", 1.2f);
         Invoke("Set_RBQ_ToPosition", 1.5f);
         Invoke("Set_RBQ_ToPosition", 2f);
+        Invoke("Set_RBQ_ToPosition", 2.5f);
     }
 
     //public void CG_ManagerCameraPostion(int Target) 
@@ -734,7 +735,7 @@ public class RoomGenerator : MonoBehaviour
             enemy.transform.position = cg_Manager.Camera_Position_1.transform.position + new Vector3(offsetX, offsetY, 0f);
 
             //显示RBQ被抓着头发走
-            enemy.CG_End_RBQ_ShowFront();
+            enemy.CG_End_RBQ_Man_CarryUp();//生成存档内人数
 
             //拉入列表方便集体转移位置
             RBQ_List.Add(newGO);
@@ -761,11 +762,81 @@ public class RoomGenerator : MonoBehaviour
         enemy.transform.position = cg_Manager.Camera_Position_1.transform.position + new Vector3(offsetX, offsetY, 0f);
 
         //显示RBQ被抓着头发走
-        enemy.CG_End_RBQ_ShowFront();
+        enemy.CG_End_RBQ_Man_CarryUp();//生成凑人数
 
         //拉入列表方便集体转移位置
         RBQ_List.Add(NewEnemy);
     }//为了让RBQ数量看起来更加充实一些
+
+
+    public void DestoryAll_RBQ() 
+    {
+        // 逐个销毁
+        foreach (GameObject obj in RBQ_List)
+        {
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+        }
+        // 清空列表
+        RBQ_List.Clear();
+    }
+
+    public void ArrangeRBQ()
+    {
+        // 清理掉所有 null 槽
+        RBQ_List.RemoveAll(item => item == null);
+
+        // 遍历 RBQ_List，按点位排布
+        for (int i = 0; i < RBQ_List.Count; i++)
+        {
+            if (i < cg_Manager.RBQ_Positions.Count) // 有对应点位
+            {
+                //RBQ_List[i].transform.position = cg_Manager.RBQ_Positions[i].position;
+
+
+                Enemy enemy = RBQ_List[i].transform.Find("Enemy").GetComponent<Enemy>();
+                enemy.CG_End_RBQ_Pillory(0);//先动画，再移位，再定死无法走
+
+                enemy.gameObject.transform.position = cg_Manager.RBQ_Positions[i].position;
+
+
+            }
+            else
+            {
+                // 超过点位数量的多余物体销毁
+                if (RBQ_List[i] != null)
+                {
+                    Destroy(RBQ_List[i]);
+                }
+            }
+        }
+
+        // 移除多余引用
+        if (RBQ_List.Count > cg_Manager.RBQ_Positions.Count)
+        {
+            RBQ_List.RemoveRange(cg_Manager.RBQ_Positions.Count, RBQ_List.Count - cg_Manager.RBQ_Positions.Count);
+        }
+    }
+
+    public void SetRBQFrontOrSide() 
+    {
+        foreach (GameObject obj in RBQ_List)
+        {
+            if (obj != null)
+            {
+                Enemy enemy = obj.transform.Find("Enemy").GetComponent<Enemy>();
+
+                enemy.CG_End_RBQ_Pillory(1);//全体设置为侧面
+
+              
+            }
+        }
+        //cg_Manager.Hide_All();
+        //cg_Manager.HideItem.SetActive(false);
+    }
+ 
 
     #endregion
 

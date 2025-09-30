@@ -3247,14 +3247,16 @@ public class Enemy : MonoBehaviour
     /// CG结局剧情控制
     /// </summary>
     #region
-   //[Header("CG结局剧情控制")]
+    [Header("CG结局剧情控制")]
+    public GameObject HeathBar;//隐藏血条但是留下名称
    //bool isCG_End_RBQ = false;
 
-    public void CG_End_RBQ_ShowFront() 
+    public void CG_End_RBQ_Man_CarryUp() 
     {
         anim.SetBool("is_Man_CarryUp_Catch",true);
 
-
+        //隐藏血条但是留下名称
+        HeathBar.SetActive(false);
 
         // 保存 Man 部位
         Man_headIndex = 1;
@@ -3264,8 +3266,76 @@ public class Enemy : MonoBehaviour
         SetSkin();
 
         //别走太慢
-        RunSpeed = 5;
+        //aiPath.maxSpeed = 6;
+        //RunSpeed = 5;
+        //WalkSpeed = 5;
+
+        //随机延后喘息声
+        Invoke("Delay_Breath_Voice", Random.Range(1, 5.5f));
+
     }
+
+    public void CG_End_RBQ_Pillory(int SideOrFront)//0正面 1侧面
+    {
+        anim.Play("RBQ_Punish_Pillory_2");
+
+        switch (SideOrFront) 
+        {
+            case 0:
+                Invoke("DelayRBQToFront", 0.5f);
+                break;
+
+            case 1:
+                Invoke("DelayRBQToSide", 0.5f);
+                break;
+        }
+       
+
+        //迫使朝前
+        CurrentTarget = _Player;
+    
+
+    }
+
+
+    void DelayRBQToFront()
+    {
+        isDie = true;
+        //迫使朝前
+        anim.SetFloat("InputX", 0);
+        anim.SetFloat("InputY", -1);
+    }
+    void DelayRBQToSide()
+    {
+        isDie = true;
+        //迫使朝前
+        anim.SetFloat("InputX", 1);
+        anim.SetFloat("InputY", 0);
+    }
+
+    void Delay_Breath_Voice() 
+    {
+        //随机喘息
+        switch (Random.Range(0, 4))
+        {
+            case 0:
+                frameEvents._03_Breath_0();
+                break;
+            case 1:
+                frameEvents._03_Breath_1();
+                break;
+            case 2:
+                frameEvents._03_Breath_2();
+                break;
+            case 3:
+                frameEvents._03_Breath_3();
+                break;
+        }
+
+    }
+
+
+
 
     #endregion
 }
