@@ -674,6 +674,10 @@ public class RoomGenerator : MonoBehaviour
     //RBQ列表
     public List<GameObject> RBQ_List = new List<GameObject>();
 
+
+   
+
+
     public void DelayCreatSetFriend_RBQ() 
     {
 
@@ -684,24 +688,7 @@ public class RoomGenerator : MonoBehaviour
         Invoke("Set_RBQ_ToPosition", 2.5f);
     }
 
-    //public void CG_ManagerCameraPostion(int Target) 
-    //{
-    //    switch (Target) 
-    //    {
-    //        case 1:
-    //            SetFriend_RBQ_ToPosition(cg_Manager.Camera_Position_1);
-    //            break;
-    //        case 2:
-    //            SetFriend_RBQ_ToPosition(cg_Manager.Camera_Position_2);
-    //            break;
-    //        case 3:
-    //            SetFriend_RBQ_ToPosition(cg_Manager.Camera_Position_3);
-    //            break;
-    //        case 4:
-    //            SetFriend_RBQ_ToPosition(cg_Manager.Camera_Position_4);
-    //            break;
-    //    }
-    //}
+  
 
     public void SetFriend_RBQ_ToPosition() 
     {
@@ -818,9 +805,9 @@ public class RoomGenerator : MonoBehaviour
         {
             RBQ_List.RemoveRange(cg_Manager.RBQ_Positions.Count, RBQ_List.Count - cg_Manager.RBQ_Positions.Count);
         }
-    }
+    }//先动画，再移位，再定死无法走
 
-    public void SetRBQFrontOrSide() 
+    public void SetRBQSide() 
     {
         foreach (GameObject obj in RBQ_List)
         {
@@ -830,13 +817,39 @@ public class RoomGenerator : MonoBehaviour
 
                 enemy.CG_End_RBQ_Pillory(1);//全体设置为侧面
 
-              
             }
         }
-        //cg_Manager.Hide_All();
-        //cg_Manager.HideItem.SetActive(false);
-    }
- 
+
+    }//全体设置为侧面
+    public void SetRBQFront()
+    {
+        foreach (GameObject obj in RBQ_List)
+        {
+            if (obj != null)
+            {
+                Enemy enemy = obj.transform.Find("Enemy").GetComponent<Enemy>();
+
+                enemy.CG_End_RBQ_Pillory(0);//全体设置为正面
+
+            }
+        }
+
+    }//全体设置为正面
+
+    public void SetRBQFront2()
+    {
+        foreach (GameObject obj in RBQ_List)
+        {
+            if (obj != null)
+            {
+                Enemy enemy = obj.transform.Find("Enemy").GetComponent<Enemy>();
+
+                enemy.CG_End_RBQ_Pillory(2);//全体设置为正面（强奸）
+
+            }
+        }
+
+    }//全体设置为正面（强奸）
 
     #endregion
 

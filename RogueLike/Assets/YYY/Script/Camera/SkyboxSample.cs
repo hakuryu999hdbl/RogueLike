@@ -41,6 +41,7 @@ public class SkyboxSample : MonoBehaviour
 
     public void Day() 
     {
+        mainCamera.clearFlags = CameraClearFlags.Skybox; // 确保切换回来
         switch (Random.Range(0, 4))
         {
             case 0:
@@ -62,18 +63,22 @@ public class SkyboxSample : MonoBehaviour
 
     public void Night() 
     {
+        mainCamera.clearFlags = CameraClearFlags.Skybox; // 确保切换回来
         RenderSettings.skybox = mats[1];
+        DayLight.SetActive(false);
     }
 
     public void RedSky()
     {
         mainCamera.clearFlags = CameraClearFlags.SolidColor;//用纯色
         mainCamera.backgroundColor = Color.red;
+        DayLight.SetActive(false);
     }
 
     public void WhiteSky()
     {
         mainCamera.clearFlags = CameraClearFlags.SolidColor;//用纯色
         mainCamera.backgroundColor = Color.white;
+        DayLight.SetActive(false);
     }
 }

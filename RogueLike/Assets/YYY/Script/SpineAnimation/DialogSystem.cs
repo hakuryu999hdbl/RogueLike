@@ -285,7 +285,6 @@ public class DialogSystem : MonoBehaviour
                 UIManager.instance.MainCamera.SetTrigger("Next");
                 //生成存档内全体角色到达指定位置
                 UIManager.instance._RoomGenerator.DelayCreatSetFriend_RBQ();
-
                 index++;
                 break;
             case "--------------------NEXT--------------------":
@@ -299,13 +298,76 @@ public class DialogSystem : MonoBehaviour
                 UIManager.instance._RoomGenerator.ArrangeRBQ();
                 index++;
                 break;
+ 
             case "--------------------NEXT_BlackFadeOut_2--------------------":
                 UIManager.instance.MainCamera.SetTrigger("Next");
                 Black_CG.SetBool("Black", false);
-                UIManager.instance._RoomGenerator.SetRBQFrontOrSide();
-                UIManager.instance._RoomGenerator.cg_Manager.Hide_All();//把多余东西销毁
+                UIManager.instance._RoomGenerator.SetRBQSide();//全体设置为正面
+
+                UIManager.instance._RoomGenerator.cg_Manager.Creat_Man();//生成侧面群体
+
+                GameObject clone = GameObject.Find("HideItem(Clone)");
+                if (clone != null)
+                {
+                    Destroy(clone);
+                }
+                else
+                {
+                    Debug.LogWarning("没有找到 HideItem(Clone)");
+                }
                 index++;
                 break;
+
+            case "--------------------NEXT_BlackFadeOut_3--------------------":
+                UIManager.instance.MainCamera.SetTrigger("Next");
+                Black_CG.SetBool("Black", false);
+                UIManager.instance._RoomGenerator.SetRBQFront2();//全体设置为正面强奸
+
+                UIManager.instance._RoomGenerator.cg_Manager.Creat_HideItem();//生成正面群体
+
+                GameObject clone2 = GameObject.Find("Man(Clone)");
+                if (clone2 != null)
+                {
+                    Destroy(clone2);
+                }
+                else
+                {
+                    Debug.LogWarning("没有找到 Man(Clone)");
+                }
+
+                index++;
+                break;
+
+            case "--------------------NEXT_BlackFadeOut_4--------------------":
+                UIManager.instance.MainCamera.SetTrigger("Next");
+                Black_CG.SetBool("Black", false);
+                UIManager.instance._RoomGenerator.SetRBQFront();//全体设置为正面
+
+                GameObject clone3 = GameObject.Find("People_SE");
+                if (clone3 != null)
+                {
+                    Destroy(clone3);
+                }
+                else
+                {
+                    Debug.LogWarning("没有找到 Man(Clone)");
+                }
+                GameObject clone4 = GameObject.Find("HideItem(Clone)");
+                if (clone4 != null)
+                {
+                    Destroy(clone4);
+                }
+                else
+                {
+                    Debug.LogWarning("没有找到 HideItem(Clone)");
+                }
+
+                UIManager.instance._RoomGenerator.SkyBoxNumber = 0;//晚上
+                UIManager.instance._RoomGenerator.SetFog();
+
+                index++;
+                break;
+
             #endregion
 
 
@@ -313,6 +375,7 @@ public class DialogSystem : MonoBehaviour
 
             case "BG":
                 text.color = Color.white;
+
                 index++;
                 break;
 
@@ -327,6 +390,7 @@ public class DialogSystem : MonoBehaviour
 
             case "MAN":
                 text.color = new Color(0.0f, 0.68f, 0.93f, 1.0f);//蓝色(市民群众士兵)
+
                 index++;
                 break;
             case "Orange":

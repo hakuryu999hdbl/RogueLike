@@ -7,29 +7,25 @@ public class CG_Manager : MonoBehaviour
     public Transform Camera_Position_1;
     public List<Transform> RBQ_Positions = new List<Transform>();
 
-
+   private void Start()
+   {
+        Instantiate(HideItem,transform.position, transform.rotation);
+   }
 
     public GameObject HideItem;
+    public GameObject Man;
 
 
-    //public List<GameObject> HideObject = new List<GameObject>();
-
-    public void Hide_All() 
+    public void Creat_Man() 
     {
-        HideItem.SetActive(false);
+        Instantiate(Man, transform.position, transform.rotation);
 
-        // 逐个销毁
-        //foreach (GameObject obj in HideObject)
-        //{
-        //    if (obj != null)
-        //    {
-        //        obj.SetActive(false);
-        //    }
-        //}
-        //// 清空列表
-        //HideObject.Clear();
-
-        Debug.Log("隐藏多余物品");
     }
+    public void Creat_HideItem()
+    {
+        Instantiate(HideItem, transform.position, transform.rotation);
+
+    }
+
 
 }

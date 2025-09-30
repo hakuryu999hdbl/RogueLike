@@ -15,9 +15,23 @@ public class CG_End_NPC : MonoBehaviour
         switch (AnimtorNumber) 
         {
             default:
+            case 0:
                 anim.SetFloat("InputX", 0);
                 anim.SetFloat("InputY", -1);
                 anim.Play("Girl_Default_Idle");
+                break;
+
+
+            case 1:
+                anim.SetFloat("InputX", -1);
+                anim.SetFloat("InputY", 0);
+                anim.Play("Man_Default_Idle");
+
+                Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
+
+                SetSkin();
                 break;
         }
     }
