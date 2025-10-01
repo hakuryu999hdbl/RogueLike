@@ -2851,7 +2851,7 @@ public class Enemy : MonoBehaviour
 
         YYY_hatIndex = 1;//人类
 
-        weaponIndex = 10;//古重剑
+        weaponIndex = 5;//长斧
 
         SetSkin();
 
@@ -3259,23 +3259,19 @@ public class Enemy : MonoBehaviour
         HeathBar.SetActive(false);
 
         // 保存 Man 部位
-        Man_headIndex = 1;
-        Man_bodyIndex = 2;
-        Man_hatIndex = 1;
+        Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
+        Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
+        Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
 
         SetSkin();
 
-        //别走太慢
-        //aiPath.maxSpeed = 6;
-        //RunSpeed = 5;
-        //WalkSpeed = 5;
 
         //随机延后喘息声
         Invoke("Delay_Breath_Voice", Random.Range(1, 5.5f));
 
     }
 
-    public void CG_End_RBQ_Pillory(int SideOrFront)//0正面 1侧面  2正面强奸
+    public void CG_End_RBQ_Pillory(int SideOrFront)//0正面 1侧面强奸  2正面强奸
     {
         anim.Play("RBQ_Punish_Pillory_2");
 
@@ -3304,17 +3300,41 @@ public class Enemy : MonoBehaviour
     void DelayRBQToFront()
     {
         isDie = true;
-        //迫使朝前
-        anim.SetFloat("InputX", 0);
-        anim.SetFloat("InputY", -1);
+
+        if (Random.Range(0, 2) == 0)
+        {
+            //迫使朝后（第二种变化的强奸）
+            anim.SetFloat("InputX", 0);
+            anim.SetFloat("InputY", 1);
+        }
+        else
+        {
+            //迫使朝前
+            anim.SetFloat("InputX", 0);
+            anim.SetFloat("InputY", -1);
+        }
+
+        //随机延后喘息声
+        Invoke("Delay_Breath_Voice", Random.Range(1, 5.5f));
     }
 
     void DelayRBQToFront2()
     {
         isDie = true;
-        //迫使朝前
-        anim.SetFloat("InputX", 0);
-        anim.SetFloat("InputY", -1);
+
+        if (Random.Range(0, 2) == 0)
+        {
+            //迫使朝后（第二种变化的强奸）
+            anim.SetFloat("InputX", 0);
+            anim.SetFloat("InputY", 1);
+        }
+        else
+        {
+            //迫使朝前
+            anim.SetFloat("InputX", 0);
+            anim.SetFloat("InputY", -1);
+        }
+
 
         anim.Play("RBQ_Punish_Pillory");
         switch (Random.Range(0, 4))
@@ -3337,65 +3357,115 @@ public class Enemy : MonoBehaviour
     void DelayRBQToSide()
     {
         isDie = true;
-        //迫使朝左
-        anim.SetFloat("InputX", 1);
-        anim.SetFloat("InputY", 0);
 
-        switch (Random.Range(0, 4))
+
+
+        if (Random.Range(0, 2) == 0)
+        {
+            //迫使朝右（第二种变化的强奸）
+            anim.SetFloat("InputX", -1);
+            anim.SetFloat("InputY", 0);
+        }
+        else
+        {
+            //迫使朝左
+            anim.SetFloat("InputX", 1);
+            anim.SetFloat("InputY", 0);
+        }
+
+        anim.Play("RBQ_Punish_Pillory");
+        switch (Random.Range(0, 11))
         {
             case 0:
-            case 4:
-                anim.Play("CG_Re/CG_Pillory_Side_Climax");
-                switch (Random.Range(0, 4))
-                {
-                    case 0:
-                        frameEvents._03_H_ContinualClimax_0();
-                        break;
-                    case 1:
-                        frameEvents._03_H_ContinualClimax_1();
-                        break;
-                    case 2:
-                        frameEvents._03_H_ContinualClimax_2();
-                        break;
-                    case 3:
-                        frameEvents._03_H_ContinualClimax_3();
-                        break;
-                }
+                frameEvents._03_H_ContinualClimax_0();
                 break;
             case 1:
-                anim.Play("CG_Re/CG_Pillory_Side_Affection");
-                switch (Random.Range(0, 4))
-                {
-                    case 0:
-                        frameEvents._03_H_Gasping_0();
-                        break;
-                    case 1:
-                        frameEvents._03_H_Gasping_1();
-                        break;
-                    case 2:
-                        frameEvents._03_H_Gasping_Weak_0();
-                        break;
-                    case 3:
-                        frameEvents._03_H_Gasping_Weak_1();
-                        break;
-                }
+                frameEvents._03_H_ContinualClimax_1();
                 break;
             case 2:
-                anim.Play("CG_Re/CG_Pillory_Side_Bang_Fast");
-                switch (Random.Range(0, 3))
-                {
-                    case 0:
-                        frameEvents._03_H_Gasping_Quick_0();
-                        break;
-                    case 1:
-                        frameEvents._03_H_Gasping_Quick_1();
-                        break;
-                    case 2:
-                        frameEvents._03_H_Gasping_Quick_2();
-                        break;
-                }
+                frameEvents._03_H_ContinualClimax_2();
+                break;
+            case 3:
+                frameEvents._03_H_ContinualClimax_3();
+                break;
+            case 4:
+                frameEvents._03_H_Gasping_0();
+                break;
+            case 5:
+                frameEvents._03_H_Gasping_1();
+                break;
+            case 6:
+                frameEvents._03_H_Gasping_Weak_0();
+                break;
+            case 7:
+                frameEvents._03_H_Gasping_Weak_1();
+                break;
+            case 8:
+                frameEvents._03_H_Gasping_Quick_0();
+                break;
+            case 9:
+                frameEvents._03_H_Gasping_Quick_1();
+                break;
+            case 10:
+                frameEvents._03_H_Gasping_Quick_2();
                 break;
         }
+
+        //switch (Random.Range(0, 4))
+        //{
+        //    case 0:
+        //    case 4:
+        //        anim.Play("CG_Re/CG_Pillory_Side_Climax");
+        //        switch (Random.Range(0, 4))
+        //        {
+        //            case 0:
+        //                frameEvents._03_H_ContinualClimax_0();
+        //                break;
+        //            case 1:
+        //                frameEvents._03_H_ContinualClimax_1();
+        //                break;
+        //            case 2:
+        //                frameEvents._03_H_ContinualClimax_2();
+        //                break;
+        //            case 3:
+        //                frameEvents._03_H_ContinualClimax_3();
+        //                break;
+        //        }
+        //        break;
+        //    case 1:
+        //        anim.Play("CG_Re/CG_Pillory_Side_Affection");
+        //        switch (Random.Range(0, 4))
+        //        {
+        //            case 0:
+        //                frameEvents._03_H_Gasping_0();
+        //                break;
+        //            case 1:
+        //                frameEvents._03_H_Gasping_1();
+        //                break;
+        //            case 2:
+        //                frameEvents._03_H_Gasping_Weak_0();
+        //                break;
+        //            case 3:
+        //                frameEvents._03_H_Gasping_Weak_1();
+        //                break;
+        //        }
+        //        break;
+        //    case 2:
+        //        anim.Play("CG_Re/CG_Pillory_Side_Bang_Fast");
+        //        switch (Random.Range(0, 3))
+        //        {
+        //            case 0:
+        //                frameEvents._03_H_Gasping_Quick_0();
+        //                break;
+        //            case 1:
+        //                frameEvents._03_H_Gasping_Quick_1();
+        //                break;
+        //            case 2:
+        //                frameEvents._03_H_Gasping_Quick_2();
+        //                break;
+        //        }
+        //        break;
+        //}
 
         //不知道为啥会有魔法阵出来
         isMage = false;

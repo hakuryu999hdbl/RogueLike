@@ -9,21 +9,21 @@ public class CG_Manager : MonoBehaviour
 
    private void Start()
    {
-        Instantiate(HideItem,transform.position, transform.rotation);
+        Creat_HideItem_Front();
    }
 
-    public GameObject HideItem;
-    public GameObject Man;
+    public GameObject HideItem_Front;
+    public GameObject HideItem_Side;
 
 
-    public void Creat_Man() 
+    public void Creat_HideItem_Side() 
     {
-        Instantiate(Man, transform.position, transform.rotation);
+        Instantiate(HideItem_Side, transform.position, transform.rotation);
 
     }
-    public void Creat_HideItem()
+    public void Creat_HideItem_Front()
     {
-        Instantiate(HideItem, transform.position, transform.rotation);
+        Instantiate(HideItem_Front, transform.position, transform.rotation);
 
     }
 

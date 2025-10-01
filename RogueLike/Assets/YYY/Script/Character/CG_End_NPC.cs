@@ -14,8 +14,24 @@ public class CG_End_NPC : MonoBehaviour
 
         switch (AnimtorNumber) 
         {
+
+            case -1:
+                //男性站立 正面
+                anim.SetFloat("InputX", 0);
+                anim.SetFloat("InputY", -1);
+                anim.Play("Man_Default_Idle");
+
+                Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
+
+                SetSkin();
+                break;
+
+
             default:
             case 0:
+                //女性站立 正面
                 anim.SetFloat("InputX", 0);
                 anim.SetFloat("InputY", -1);
                 anim.Play("Girl_Default_Idle");
@@ -23,6 +39,7 @@ public class CG_End_NPC : MonoBehaviour
 
 
             case 1:
+                //男性站立 侧面
                 anim.SetFloat("InputX", -1);
                 anim.SetFloat("InputY", 0);
                 anim.Play("Man_Default_Idle");
@@ -32,6 +49,35 @@ public class CG_End_NPC : MonoBehaviour
                 Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
 
                 SetSkin();
+                break;
+
+            case 2:
+                //女性宣读  正面
+                anim.SetFloat("InputX", 0);
+                anim.SetFloat("InputY", -1);
+                anim.Play("NPC_Girl_Read");
+                break;
+
+            case 3:
+                //女性宣读  侧面
+                anim.SetFloat("InputX", -1);
+                anim.SetFloat("InputY", 0);
+                anim.Play("NPC_Girl_Read");
+                break;
+
+            case 4:
+                //女性坐姿  正面
+                anim.SetFloat("InputX", 0);
+                anim.SetFloat("InputY", -1);
+                anim.Play("NPC_Girl_Sit");
+                break;
+
+
+            case 5:
+                //女性坐姿  侧面
+                anim.SetFloat("InputX", -1);
+                anim.SetFloat("InputY", 0);
+                anim.Play("NPC_Girl_Sit");
                 break;
         }
     }

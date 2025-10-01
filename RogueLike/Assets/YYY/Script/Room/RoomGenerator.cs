@@ -686,6 +686,7 @@ public class RoomGenerator : MonoBehaviour
         Invoke("Set_RBQ_ToPosition", 1.5f);
         Invoke("Set_RBQ_ToPosition", 2f);
         Invoke("Set_RBQ_ToPosition", 2.5f);
+        Invoke("Set_RBQ_ToPosition", 3f);
     }
 
   

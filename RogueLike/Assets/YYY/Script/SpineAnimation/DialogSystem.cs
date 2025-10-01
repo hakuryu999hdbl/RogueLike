@@ -92,6 +92,9 @@ public class DialogSystem : MonoBehaviour
 
 
             case 1:
+                textAssets.Add(101, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_1"));
+
+
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_1"));
                 textAssets.Add(1002, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_2"));
                 textAssets.Add(1003, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_3"));
@@ -109,6 +112,9 @@ public class DialogSystem : MonoBehaviour
 
 
             case 2:
+                textAssets.Add(101, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_1"));
+
+
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_1"));
                 textAssets.Add(1002, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_2"));
                 textAssets.Add(1003, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_3"));
@@ -126,6 +132,9 @@ public class DialogSystem : MonoBehaviour
 
 
             case 3:
+                textAssets.Add(101, Resources.Load<TextAsset>("TXT_English/E_CG_1"));
+
+
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_English/E_Story_1"));
                 textAssets.Add(1002, Resources.Load<TextAsset>("TXT_English/E_Story_2"));
                 textAssets.Add(1003, Resources.Load<TextAsset>("TXT_English/E_Story_3"));
@@ -143,6 +152,9 @@ public class DialogSystem : MonoBehaviour
 
 
             case 4:
+                textAssets.Add(101, Resources.Load<TextAsset>("TXT_Korean/K_CG_1"));
+
+
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Korean/K_Story_1"));
                 textAssets.Add(1002, Resources.Load<TextAsset>("TXT_Korean/K_Story_2"));
                 textAssets.Add(1003, Resources.Load<TextAsset>("TXT_Korean/K_Story_3"));
@@ -304,16 +316,16 @@ public class DialogSystem : MonoBehaviour
                 Black_CG.SetBool("Black", false);
                 UIManager.instance._RoomGenerator.SetRBQSide();//全体设置为正面
 
-                UIManager.instance._RoomGenerator.cg_Manager.Creat_Man();//生成侧面群体
+                UIManager.instance._RoomGenerator.cg_Manager.Creat_HideItem_Side();//生成侧面群体
 
-                GameObject clone = GameObject.Find("HideItem(Clone)");
+                GameObject clone = GameObject.Find("HideItem_Front(Clone)");
                 if (clone != null)
                 {
                     Destroy(clone);
                 }
                 else
                 {
-                    Debug.LogWarning("没有找到 HideItem(Clone)");
+                    Debug.LogWarning("没有找到 HideItem_Front(Clone)");
                 }
                 index++;
                 break;
@@ -323,16 +335,16 @@ public class DialogSystem : MonoBehaviour
                 Black_CG.SetBool("Black", false);
                 UIManager.instance._RoomGenerator.SetRBQFront2();//全体设置为正面强奸
 
-                UIManager.instance._RoomGenerator.cg_Manager.Creat_HideItem();//生成正面群体
+                UIManager.instance._RoomGenerator.cg_Manager.Creat_HideItem_Front();//生成正面群体
 
-                GameObject clone2 = GameObject.Find("Man(Clone)");
+                GameObject clone2 = GameObject.Find("HideItem_Side(Clone)");
                 if (clone2 != null)
                 {
                     Destroy(clone2);
                 }
                 else
                 {
-                    Debug.LogWarning("没有找到 Man(Clone)");
+                    Debug.LogWarning("没有找到 HideItem_Side(Clone)");
                 }
 
                 index++;
@@ -352,14 +364,14 @@ public class DialogSystem : MonoBehaviour
                 {
                     Debug.LogWarning("没有找到 Man(Clone)");
                 }
-                GameObject clone4 = GameObject.Find("HideItem(Clone)");
+                GameObject clone4 = GameObject.Find("HideItem_Front(Clone)");
                 if (clone4 != null)
                 {
                     Destroy(clone4);
                 }
                 else
                 {
-                    Debug.LogWarning("没有找到 HideItem(Clone)");
+                    Debug.LogWarning("没有找到 HideItem_Front(Clone)");
                 }
 
                 UIManager.instance._RoomGenerator.SkyBoxNumber = 0;//晚上
