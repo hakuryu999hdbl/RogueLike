@@ -34,4 +34,34 @@ public class CGOptionUI : MonoBehaviour
 
         UIManager.instance.To_AVGScene();
     }
+
+    public int CG_Number;
+
+    public void PlayCG_End()
+    {
+        //switch (CG_Number) 
+        //{
+        //    case 0:
+        //        GameFlowData.nextScene = "CG";
+        //        break;
+        //    case 1:
+        //        GameFlowData.nextScene = "CG_AVG_01";
+        //        break;
+        //    case 2:
+        //        GameFlowData.nextScene = "CG_AVG_02";
+        //        break;
+        //    case 3:
+        //        GameFlowData.nextScene = "CG_AVG_03";
+        //        break;
+        //}
+        //GameFlowData.nextScene = cgKey;
+        //Invoke("ReLoadScene", 0.2f);
+
+        UIManager.instance.ReLoadScene();//前往CG页面
+    }
+
+    //void ReLoadScene() 
+    //{
+    //    UIManager.instance.ReLoadScene();//前往CG页面
+    //}
 }

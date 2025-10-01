@@ -76,6 +76,14 @@ public class UIManager : MonoBehaviour
 
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_FeraSide_1"));//0未解锁  1解锁
 
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_Pillory_Side_1"));//0未解锁  1解锁
+
+
+        //Debug.Log("目前的CG结局解锁状态【CG_End】" + PlayerPrefs.GetInt("CG_AVG_01"));//0未解锁  1解锁
+        //Debug.Log("目前的CG结局解锁状态【CG_End】" + PlayerPrefs.GetInt("CG_AVG_02"));//0未解锁  1解锁
+        //Debug.Log("目前的CG结局解锁状态【CG_End】" + PlayerPrefs.GetInt("CG_AVG_03"));//0未解锁  1解锁
+
+
         //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_01"));//0未解锁  1解锁
         //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_02"));//0未解锁  1解锁
         //Debug.Log("目前的章节解锁状态【Chapter】" + PlayerPrefs.GetInt("Chapter_03"));//0未解锁  1解锁
@@ -92,6 +100,13 @@ public class UIManager : MonoBehaviour
 
         //Debug.Log("目前的游戏模式解锁状态【Arena】" + PlayerPrefs.GetInt("Chapter_Arena"));//0未解锁  1解锁
         //Debug.Log("目前的游戏模式解锁状态【Dungeon】" + PlayerPrefs.GetInt("Chapter_Dungeon"));//0未解锁  1解锁
+
+
+
+
+
+
+
 
         //地下城和角斗场模式解锁
         if (PlayerPrefs.GetInt("Chapter_Arena") == 0) { LockOfArena.SetActive(true); }
@@ -137,6 +152,14 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("CG_HangDown_1", 1);
         //
         //PlayerPrefs.SetInt("CG_FeraSide_1", 1);
+        //PlayerPrefs.SetInt("CG_Pillory_Side_1", 1);
+
+
+        PlayerPrefs.SetInt("CG", 1);//日常调教界面时常可进
+        //PlayerPrefs.SetInt("CG_AVG_01", 1);//cg解锁
+        //PlayerPrefs.SetInt("CG_AVG_02", 1);//cg解锁
+        //PlayerPrefs.SetInt("CG_AVG_03", 1);//cg解锁
+
 
 
         PlayerPrefs.SetInt("Chapter_01", 1);//目前保持第一章永远在
@@ -728,7 +751,7 @@ public class UIManager : MonoBehaviour
 
 
     [Header("主菜单界面层级")]
-    public int CurrentChooseList = 0;//-6战败被抓住凌辱  -5三选一界面   -4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面
+    public int CurrentChooseList = 0;//-6战败被抓住凌辱  -5三选一界面   -4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面   11调教所选择界面
     public int CurrentMode = 0;//0 进入CG界面  1捏人/进入游戏
     public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
     public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
@@ -959,6 +982,7 @@ public class UIManager : MonoBehaviour
         SettingCavans.SetActive(false);
         ModeCavans.SetActive(false);
         ChapterCavans.SetActive(false);
+        CG_End_Cavans.SetActive(false);
         CurrentChooseList = 0;
     }
 
@@ -979,6 +1003,17 @@ public class UIManager : MonoBehaviour
 
         CG_BackButton.SetActive(false);//隐藏CG观赏后退按钮
     }
+
+    public void ToCG_EndPage() 
+    {
+        CG_End_Cavans.SetActive(true);
+        CurrentChooseList = 11;
+
+
+        //打开菜单的时候就预先把CG这个概念放进去
+        UpdateHighlight_CG_End();
+    }
+
 
     public void ToModePage()
     {
@@ -1113,7 +1148,7 @@ public class UIManager : MonoBehaviour
     public Animator MainCamera;//控制摄像机拉近远离
     public GameObject ShowSaveCavans;//通用UI层
 
-    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans, ModeCavans, ChapterCavans, AVGCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面
+    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans, ModeCavans, ChapterCavans, AVGCavans,CG_End_Cavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面,CG结局界面
     public DialogSystem dialogSystem;
     [Header("捏人界面UI")]
     public InputField nameInputField; // 绑定在 Inspector 里
@@ -1692,7 +1727,7 @@ public class UIManager : MonoBehaviour
     {
         CGUnclockStart();//检测CG解锁
         ChapterUnclockStart();//检测Chapter解锁
-
+        CG_End_UnclockStart();//检测CG结局解锁
 
         string folder = Application.persistentDataPath + "/Saves/";
         if (!Directory.Exists(folder)) return;
@@ -2029,6 +2064,8 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+
+
     /// <summary>
     /// CG界面选中
     /// </summary>
@@ -2109,7 +2146,6 @@ public class UIManager : MonoBehaviour
     }
 
     #endregion
-
 
 
     /// <summary>
@@ -2233,6 +2269,97 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
+
+    /// <summary>
+    /// 结局CG调教所界面选中
+    /// </summary>
+    #region
+    public List<CGOptionUI> cg_End_Buttons = new List<CGOptionUI>();
+    int CG_End_currentIndex = 0;
+
+    void CG_End_UnclockStart()
+    {
+        foreach (var btn in cg_End_Buttons)
+        {
+            btn.SetUnlockedFromPrefs();
+        }
+
+        // 查找第一个已解锁的
+        for (int i = 0; i < cg_End_Buttons.Count; i++)
+        {
+            if (cg_End_Buttons[i].unlocked)
+            {
+                currentIndex = i;
+                break;
+            }
+        }
+        UpdateHighlight();
+    }//开始检测CG解锁数
+    void MoveSelection_3(int direction)
+    {
+        // 取消旧高亮
+        cg_End_Buttons[CG_End_currentIndex].SetHighlight(false);
+  
+
+        // 循环查找下一个已解锁的项
+        int max = cg_End_Buttons.Count;
+        for (int i = 1; i < max; i++)
+        {
+            int newIndex = (CG_End_currentIndex + direction * i + max) % max;
+            if (cg_End_Buttons[newIndex].unlocked)
+            {
+                CG_End_currentIndex = newIndex;
+                break;
+            }
+        }
+
+        // 更新高亮
+        UpdateHighlight_CG_End();
+
+
+
+
+    }//切换当前选中
+
+    void UpdateHighlight_CG_End()
+    {
+        for (int i = 0; i < cg_End_Buttons.Count; i++)
+        {
+            cg_End_Buttons[i].SetHighlight(i == CG_End_currentIndex);
+
+            // 显示/隐藏对应介绍
+            if (i < IntroduceOfCG.Count)
+            {
+                IntroduceOfCG[i].SetActive(i == CG_End_currentIndex);
+            }
+        }
+
+
+
+        //不知道什么原因，CGOptionUI那里就是不执行，没有办法只能在切换阶段先这么做了
+        switch (cg_End_Buttons[CG_End_currentIndex].CG_Number)
+        {
+            case 0:
+                GameFlowData.nextScene = "CG";
+                break;
+            case 1:
+                GameFlowData.nextScene = "CG_AVG_01";
+                break;
+            case 2:
+                GameFlowData.nextScene = "CG_AVG_02";
+                break;
+            case 3:
+                GameFlowData.nextScene = "CG_AVG_03";
+                break;
+        }
+        Debug.Log("目前的选中的cgkey:" + cg_End_Buttons[CG_End_currentIndex].cgKey );
+
+        Debug.Log("目前的NextScene" + GameFlowData.nextScene);
+    }
+
+    public List<GameObject> IntroduceOfCG = new List<GameObject>();
+
+    #endregion
 
 
     /// <summary>
@@ -2624,8 +2751,24 @@ public class UIManager : MonoBehaviour
 
             AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
 
+            //CG结局调教所界面
+            if (CurrentChooseList == 11)
+            {
+                // 当前菜单项内的上下切换
+                if (dir.y > 0.5f)
+                {
+                    MoveSelection_3(-1);
 
-           
+                }
+                else if (dir.y < -0.5f)
+                {
+
+                    MoveSelection_3(1);
+                }
+
+                
+            }
+
 
         }
 
@@ -2711,8 +2854,8 @@ public class UIManager : MonoBehaviour
                         break;
                     case 1:
                         //ToSavePageButton(0);//开始游戏进入存档界面(CG)
-
-                        HomePageToCGPage();
+                        //HomePageToCGPage();
+                        Invoke("ToCG_EndPage", 0.1f);//进入CG结局调教所界面
                         break;
                     case 2:
                         Invoke("ToSettingPage", 0.1f);//进入设置界面
@@ -2846,6 +2989,12 @@ public class UIManager : MonoBehaviour
                 NextStage();
                 AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
             }
+
+            //CG结局调教所界面
+            if (CurrentChooseList == 11)
+            {
+                cgButtons[CG_End_currentIndex].PlayCG_End();
+            }
         }
 
 
@@ -2906,8 +3055,8 @@ public class UIManager : MonoBehaviour
                 //AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
-            //设置界面//Mode游戏模式界面
-            if (CurrentChooseList == 3 || CurrentChooseList == 7)
+            //设置界面//Mode游戏模式界面//CG结局调教所界面
+            if (CurrentChooseList == 3 || CurrentChooseList == 7 || CurrentChooseList == 11)
             {
                 ToHomePage();
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);

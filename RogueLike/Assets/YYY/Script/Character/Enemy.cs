@@ -874,7 +874,8 @@ public class Enemy : MonoBehaviour
                     gameObject.transform.position = collision.gameObject.transform.position;//敌人拉到玩家位置
                     collision.gameObject.GetComponent<Player>().characterSkin.HideSkeleton();//隐藏玩家
                     collision.gameObject.GetComponent<Player>().isRape = true;
-                    rbody.simulated = false;//当捕获折磨玩家挂的时候，不能移动
+                    collision.gameObject.GetComponent<Player>().isMage = false; collision.gameObject.GetComponent<Player>().HideMagicEffect();//隐藏魔法阵
+                     rbody.simulated = false;//当捕获折磨玩家挂的时候，不能移动
 
                     //隐藏血条
                     HudText.gameObject.SetActive(false);
@@ -3278,15 +3279,15 @@ public class Enemy : MonoBehaviour
         switch (SideOrFront)
         {
             case 0:
-                Invoke("DelayRBQToFront", 0.5f);
+                Invoke("DelayRBQToFront", Random.Range(0.2f, 0.7f));
                 break;
 
             case 1:
-                Invoke("DelayRBQToSide", 0.5f);
+                Invoke("DelayRBQToSide", Random.Range(0.2f, 0.7f));
                 break;
 
             case 2:
-                Invoke("DelayRBQToFront2", 0.5f);
+                Invoke("DelayRBQToFront2", Random.Range(0.2f, 0.7f));
                 break;
         }
 
