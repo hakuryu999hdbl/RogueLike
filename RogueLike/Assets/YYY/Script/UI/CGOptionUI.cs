@@ -64,4 +64,21 @@ public class CGOptionUI : MonoBehaviour
     //{
     //    UIManager.instance.ReLoadScene();//前往CG页面
     //}
+
+    //这个是CG_End点击按钮触发，没有办法了写
+    public void ToCG_End_01()
+    {
+        GameFlowData.nextScene = "CG_AVG_01";
+        UIManager.instance.ReLoadScene();//前往CG页面
+    }
+    public void ToCG_End_02()
+    {
+        GameFlowData.nextScene = "CG_AVG_01";
+        UIManager.instance.ReLoadScene();//前往CG页面
+    }
+    public void ToCG_End_03()
+    {
+        GameFlowData.nextScene = "CG_AVG_01";
+        UIManager.instance.ReLoadScene();//前往CG页面
+    }
 }

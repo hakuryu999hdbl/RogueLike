@@ -700,6 +700,87 @@ public class UIManager : MonoBehaviour
         _RoomGenerator.gameObject.SetActive(true);
     }//防止一开始执行东西太多
 
+
+    /// <summary>
+    /// 作弊按钮
+    /// </summary>
+    #region
+
+    public void SetCheatButton() 
+    {
+        PlayerPrefs.SetInt("CG_OnanismFront_1", 1);//目前保持第一个CG永远在
+        PlayerPrefs.SetInt("CG_OnanismSide_1", 1);
+        
+        PlayerPrefs.SetInt("CG_InsultSide_1", 1);
+        PlayerPrefs.SetInt("CG_GagSide_1", 1);
+        PlayerPrefs.SetInt("CG_FistingFront_1", 1);
+        
+        PlayerPrefs.SetInt("CG_RapeFront_1", 1);
+        PlayerPrefs.SetInt("CG_RapeSide_1", 1);
+        PlayerPrefs.SetInt("CG_AssaultFront_1", 1);
+        PlayerPrefs.SetInt("CG_AssaultSide_1", 1);
+        
+        PlayerPrefs.SetInt("CG_TentacleBagFront_1", 1);
+        PlayerPrefs.SetInt("CG_TentacleBugSide_1", 1);
+        
+        PlayerPrefs.SetInt("CG_TentacleFront_1", 1);
+        
+        PlayerPrefs.SetInt("CG_TentacleHermitCrabFront_1", 1);
+        PlayerPrefs.SetInt("CG_TentacleHermitCrabSide_1", 1);
+        
+        PlayerPrefs.SetInt("CG_TentacleLeechSide_1", 1);
+        
+        PlayerPrefs.SetInt("CG_TentacleMonsterFront_1", 1);
+        PlayerPrefs.SetInt("CG_MonsterSide_1", 1);
+        
+        PlayerPrefs.SetInt("CG_TentacleWallFront_1", 1);
+        PlayerPrefs.SetInt("CG_TentacleWallSide_1", 1);
+        
+        
+        
+        PlayerPrefs.SetInt("CG_Hogtie_1", 1);
+        
+        PlayerPrefs.SetInt("CG_HangSide_4", 1);
+        PlayerPrefs.SetInt("CG_HangSide_1", 1);
+        PlayerPrefs.SetInt("CG_HangFront_1", 1);
+        
+        PlayerPrefs.SetInt("CG_HangDown_4", 1);
+        PlayerPrefs.SetInt("CG_HangDown_1", 1);
+        
+        PlayerPrefs.SetInt("CG_FeraSide_1", 1);
+        PlayerPrefs.SetInt("CG_Pillory_Side_1", 1);
+
+
+        PlayerPrefs.SetInt("CG", 1);//日常调教界面时常可进
+        PlayerPrefs.SetInt("CG_AVG_01", 1);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_02", 1);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_03", 1);//cg解锁
+
+
+
+        PlayerPrefs.SetInt("Chapter_01", 1);//目前保持第一章永远在
+        PlayerPrefs.SetInt("Chapter_02", 1);
+        PlayerPrefs.SetInt("Chapter_03", 1);
+        PlayerPrefs.SetInt("Chapter_04", 1);
+        PlayerPrefs.SetInt("Chapter_05", 1);
+        PlayerPrefs.SetInt("Chapter_06", 1);
+        PlayerPrefs.SetInt("Chapter_07", 1);
+        PlayerPrefs.SetInt("Chapter_08", 1);
+        PlayerPrefs.SetInt("Chapter_09", 1);
+        PlayerPrefs.SetInt("Chapter_10", 1);
+        PlayerPrefs.SetInt("Chapter_11", 1);
+        PlayerPrefs.SetInt("Chapter_12", 1);
+        PlayerPrefs.SetInt("Chapter_13", 1);
+
+        PlayerPrefs.SetInt("Chapter_Arena", 1);
+        PlayerPrefs.SetInt("Chapter_Dungeon", 1);
+
+
+        ReLoadScene();
+    }
+
+    #endregion
+
     /// <summary>
     /// 主菜单
     /// </summary>
@@ -744,11 +825,18 @@ public class UIManager : MonoBehaviour
 
     public void ChooseSurrender() 
     {
+        //暂时先这么做
+        PlayerPrefs.SetInt("CG_AVG_01", 1);//cg解锁
 
         GameFlowData.nextScene = "CG_AVG_01";
         ReLoadScene();
 
     }//这个接口专门处理投降后根据当前关卡处理结局CG
+
+    
+
+
+
 
     public void ReLoadScene()
     {
@@ -765,6 +853,8 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+
 
 
     [Header("主菜单界面层级")]
@@ -1001,6 +1091,9 @@ public class UIManager : MonoBehaviour
         ChapterCavans.SetActive(false);
         CG_End_Cavans.SetActive(false);
         CurrentChooseList = 0;
+
+        //这个主要是针对CG结局界面做的
+        GameFlowData.nextScene = "";
     }
 
     public void ToCGPage()
