@@ -1647,10 +1647,10 @@ public class Enemy : MonoBehaviour
                 frameEvents._Bullet_Pistol_3();
                 break;
             case 107:
+            case 108:
                 special = 0;//子弹
                 frameEvents._Bullet_AK();
                 break;
-            case 108:
             case 109:
             case 110:
                 special = 0;//子弹

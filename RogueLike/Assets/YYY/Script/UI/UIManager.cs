@@ -733,6 +733,23 @@ public class UIManager : MonoBehaviour
     }
 
 
+    public void ToEnd_Surrender_Cavans() 
+    {
+        CurrentChooseList = -7;
+        End_Surrender_Cavans.SetActive(true);
+
+        Time.timeScale=0f;
+
+    }//进入投降战败界面
+
+    public void ChooseSurrender() 
+    {
+
+        GameFlowData.nextScene = "CG_AVG_01";
+        ReLoadScene();
+
+    }//这个接口专门处理投降后根据当前关卡处理结局CG
+
     public void ReLoadScene()
     {
         Time.timeScale = 1;
@@ -751,7 +768,7 @@ public class UIManager : MonoBehaviour
 
 
     [Header("主菜单界面层级")]
-    public int CurrentChooseList = 0;//-6战败被抓住凌辱  -5三选一界面   -4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面   11调教所选择界面
+    public int CurrentChooseList = 0;//-7战败投降界面  -6战败被抓住凌辱  -5三选一界面   -4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面   11调教所选择界面
     public int CurrentMode = 0;//0 进入CG界面  1捏人/进入游戏
     public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
     public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
@@ -1148,7 +1165,7 @@ public class UIManager : MonoBehaviour
     public Animator MainCamera;//控制摄像机拉近远离
     public GameObject ShowSaveCavans;//通用UI层
 
-    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans, ModeCavans, ChapterCavans, AVGCavans,CG_End_Cavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面,CG结局界面
+    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans, ModeCavans, ChapterCavans, AVGCavans,CG_End_Cavans, End_Surrender_Cavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面,CG结局界面,战败投降界面
     public DialogSystem dialogSystem;
     [Header("捏人界面UI")]
     public InputField nameInputField; // 绑定在 Inspector 里
@@ -2803,10 +2820,21 @@ public class UIManager : MonoBehaviour
         {
             // 可选：进入下一级菜单、确认开始游戏等
 
+            //战败投降界面
+            if (CurrentChooseList == -7)
+            {
+                Time.timeScale = 1f;
+                Invoke("ReLoadScene", 0.1f);
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+
+
+
             //局内被捕获状态
             if (CurrentChooseList == -6 && CanPushEndUI)
             {
-                Invoke("ReLoadScene", 0.1f);
+             
+                ToEnd_Surrender_Cavans();
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
@@ -3007,10 +3035,19 @@ public class UIManager : MonoBehaviour
             // 可选：退出菜单、返回上一级等
 
 
+            //战败投降界面
+            if (CurrentChooseList == -7)
+            {
+                Time.timeScale = 1f;
+                Invoke("ChooseSurrender", 0.1f);
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+
+
             //局内被捕获状态
             if (CurrentChooseList == -6&&CanPushEndUI) 
             {
-                Invoke("ReLoadScene", 0.1f);
+                ToEnd_Surrender_Cavans();
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
