@@ -1859,10 +1859,11 @@ public class UIManager : MonoBehaviour
 
         UpdateScrollLimits();//更新上下翻页范围
 
-     
 
 
-        
+        UpdateCreateCostText();//更新创建奴隶价格
+
+
 
 
     }//读取，显示存档
@@ -1880,31 +1881,117 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
+    [Header("创建新角色需要花费显示")]
+    public Text CreateCostText; // 显示价码牌用的UI文本
+    public void UpdateCreateCostText()
+    {
+        int saveCount = SaveManager.CountSaves();
+        int nextCost = 0;
+
+        if (saveCount == 0) nextCost = 0;
+        else nextCost = 1000 * saveCount;
+
+        // 文字多语言（建议统一管理）
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0: // 日语
+                CreateCostText.text = $"次の奴隷生成費用：{nextCost} 金貨";
+                break;
+            case 1: // 简体
+                CreateCostText.text = $"创建下一个奴隶需要：{nextCost} 金币";
+                break;
+            case 2: // 繁体
+                CreateCostText.text = $"建立下一個奴隸需要：{nextCost} 金幣";
+                break;
+            case 3: // 英语
+                CreateCostText.text = $"Next creation cost: {nextCost} gold";
+                break;
+            case 4: // 韩语
+                CreateCostText.text = $"다음 노예 생성 비용: {nextCost} 골드";
+                break;
+        }
+    }//更新当前创建奴隶费用
     public void CreateNewSave()
     {
 
-        player.currentSaveName = null;   // ← 防止 SaveCurrent 误把老档当“当前档”
+        int currentMoney = PlayerPrefs.GetInt("Money", 0);
+        int saveCount = SaveManager.CountSaves(); // 当前已有存档数
 
-        player._CreateNewSkin();
+        int cost = 0; // 生成花费
 
-        #region 种族选项需要根据耳朵来设置
-        raceOptionIndex = RaceOptionFromHat_Simple(player.YYY_hatIndex);
-        if (IsLuna(player.currentSaveName)) { IntroduceOfRace.text = LUNA_LOCK[Lang]; } else { ApplyRaceSelectionSimple(); }//预先设置提示词
-        UpdateUI();
+
+        #region  人数上限锁
+        int maxSaves = 5; // 最大可创建奴隶数
+        // 判断数量上限
+        if (saveCount >= maxSaves)
+        {
+            Debug.Log("已达最大奴隶数量！");
+            player.frameEvents._Attack_pai1();
+            return;
+        }
         #endregion
 
-        RefreshSaveSlots();
-
-        //显示捏人界面，隐藏存档界面
-        SaveCavans.SetActive(false);
-        CreateCavans.SetActive(true);
-
-        UpdateUI();//更新捏人界面UI
-
-        CurrentChooseList = 1;//进入捏人界面
 
 
-        nameInputField.ActivateInputField(); // ✅ 激活输入框并进入编辑
+        // 费用规则
+        if (saveCount == 0) cost = 0;
+        else cost = 1000 * saveCount; // 1个=1000, 2个=2000, 3个=3000, ...
+
+
+        // 检查金币是否足够
+        if (currentMoney >= cost)
+        {
+            // 扣钱
+            ChangeMoney(-cost);
+
+            // 创建新角色（原逻辑）
+            #region   跳出捏人界面等
+
+            player.currentSaveName = null;   // ← 防止 SaveCurrent 误把老档当“当前档”
+
+            player._CreateNewSkin();
+
+            #region 种族选项需要根据耳朵来设置
+            raceOptionIndex = RaceOptionFromHat_Simple(player.YYY_hatIndex);
+            if (IsLuna(player.currentSaveName)) { IntroduceOfRace.text = LUNA_LOCK[Lang]; } else { ApplyRaceSelectionSimple(); }//预先设置提示词
+            UpdateUI();
+            #endregion
+
+            RefreshSaveSlots();
+
+            //显示捏人界面，隐藏存档界面
+            SaveCavans.SetActive(false);
+            CreateCavans.SetActive(true);
+
+            UpdateUI();//更新捏人界面UI
+
+            CurrentChooseList = 1;//进入捏人界面
+
+
+            nameInputField.ActivateInputField(); // ✅ 激活输入框并进入编辑
+
+            #endregion
+
+
+
+
+            Debug.Log($"已花费 {cost} 金币创建新角色（当前共有 {saveCount + 1} 个角色）");
+
+
+            // 更新显示价码
+            UpdateCreateCostText();
+        }
+        else
+        {
+            Debug.Log("金币不足，无法创建新角色！");
+            player.frameEvents._Attack_pai1();
+           _RoomGenerator.ShowInformationOfStage(-2);
+        }
+
+
+
+
+       
 
     }//点击【＋】就会随机存档
 
@@ -1983,6 +2070,9 @@ public class UIManager : MonoBehaviour
 
         Invoke("CancelDelete", 0.1f);//目前暂时这么做，以防确定按太快直接跳到捏人界面
 
+
+        UpdateCreateCostText();//更新价码牌
+
     }//删除这个角色
 
     public void CancelDelete()
@@ -2004,6 +2094,14 @@ public class UIManager : MonoBehaviour
         PlayerSaveData data = SaveManager.Load(currentSelectedSlot.Data.characterName);
         pendingDeleteName = currentSelectedSlot.Data.characterName;
         pendingDeletePrice = SlavePricing.CalcPrice(data);
+
+
+        // 限制：若只剩1个存档，强制为0
+        int saveCount = SaveManager.CountSaves(); // 当前已有存档数
+        if (saveCount <= 1)
+            pendingDeletePrice = 0;
+
+
 
         int lang = PlayerPrefs.GetInt("language");
         if (ConfirmText != null)

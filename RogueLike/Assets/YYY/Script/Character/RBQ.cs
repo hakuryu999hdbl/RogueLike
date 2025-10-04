@@ -376,6 +376,7 @@ public class RBQ : MonoBehaviour
                                     // 播放提示音或显示提示文字
                                     Debug.Log("金币不足！");
                                     frameEvents._Attack_pai1();
+                                    _RoomGenerator.ShowInformationOfStage(-2);
                                 }
 
                             }
@@ -411,6 +412,7 @@ public class RBQ : MonoBehaviour
                                     // 播放提示音或显示提示文字
                                     Debug.Log("金币不足！");
                                     frameEvents._Attack_pai1();
+                                    _RoomGenerator.ShowInformationOfStage(-2);
                                 }
 
 
@@ -447,6 +449,7 @@ public class RBQ : MonoBehaviour
                                     // 播放提示音或显示提示文字
                                     Debug.Log("金币不足！");
                                     frameEvents._Attack_pai1();
+                                    _RoomGenerator.ShowInformationOfStage(-2);
                                 }
 
                             }
@@ -485,6 +488,7 @@ public class RBQ : MonoBehaviour
                                     // 播放提示音或显示提示文字
                                     Debug.Log("金币不足！");
                                     frameEvents._Attack_pai1();
+                                    _RoomGenerator.ShowInformationOfStage(-2);
                                 }
 
                                
@@ -525,6 +529,7 @@ public class RBQ : MonoBehaviour
                                     // 播放提示音或显示提示文字
                                     Debug.Log("金币不足！");
                                     frameEvents._Attack_pai1();
+                                    _RoomGenerator.ShowInformationOfStage(-2);
                                 }
 
 
@@ -577,6 +582,7 @@ public class RBQ : MonoBehaviour
                                 // 播放提示音或显示提示文字
                                 Debug.Log("金币不足！");
                                 frameEvents._Attack_pai1();
+                                _RoomGenerator.ShowInformationOfStage(-2);
                             }
 
                            

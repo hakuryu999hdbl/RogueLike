@@ -866,10 +866,33 @@ public class RoomGenerator : MonoBehaviour
     public Text _Stage_Information;
 
 
-    public void ShowInformationOfStage(int Information)//-1敌人增援   0新的CG解锁    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单
+    public void ShowInformationOfStage(int Information)//-2金币不够  -1敌人增援   0新的CG解锁    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单
     {
         switch (Information) 
         {
+            case -2: // 金币不够
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        _Stage_Information.text = "金貨が足りません！";
+                        break;
+                    case 1: // 简体
+                        _Stage_Information.text = "金币不足！";
+                        break;
+                    case 2: // 繁体
+                        _Stage_Information.text = "金幣不足！";
+                        break;
+                    case 3: // 英语
+                        _Stage_Information.text = "Not enough gold!";
+                        break;
+                    case 4: // 韩语
+                        _Stage_Information.text = "골드가 부족합니다!";
+                        break;
+                }
+
+                break;
+
+
             case -1: // 敌人增援
                 switch (PlayerPrefs.GetInt("language"))
                 {

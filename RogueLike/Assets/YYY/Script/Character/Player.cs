@@ -2824,26 +2824,29 @@ public class Player : MonoBehaviour
                         //Invoke("ReSetAttack", 0.5f);//防止动画回不去(这个在被击倒/站起流程后)
 
 
-                        if (currentHealth <= maxHealth / 2)
-                        {
-                            //一定几率打掉衣服丝袜
-                            if (Random.Range(0, 3) == 0)
-                            {
-                                CurrentArmorDefence = 0;
-                                YYY_bodyIndex = 1; SetSkin();
-                                SaveCurrent();//衣服被打落
 
-                                frameEvents._Effect_tear1();
-                            }
-                            if (Random.Range(0, 3) == 0)
-                            {
-                                CurrentStockingDefence = 0;
-                                YYY_legsIndex = 1; SetSkin();
-                                SaveCurrent();//丝袜被打落
 
-                                frameEvents._Effect_tear1();
-                            }
-                        }
+                        //ToDo：藏玩家被打掉衣服丝袜
+                        //if (currentHealth <= maxHealth / 2)
+                        //{
+                        //    //一定几率打掉衣服丝袜
+                        //    if (Random.Range(0, 3) == 0)
+                        //    {
+                        //        CurrentArmorDefence = 0;
+                        //        YYY_bodyIndex = 1; SetSkin();
+                        //        SaveCurrent();//衣服被打落
+                        //
+                        //        frameEvents._Effect_tear1();
+                        //    }
+                        //    if (Random.Range(0, 3) == 0)
+                        //    {
+                        //        CurrentStockingDefence = 0;
+                        //        YYY_legsIndex = 1; SetSkin();
+                        //        SaveCurrent();//丝袜被打落
+                        //
+                        //        frameEvents._Effect_tear1();
+                        //    }
+                        //}
                         break;
                 }
 
