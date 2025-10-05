@@ -53,7 +53,16 @@ public class RoomGenerator : MonoBehaviour
 
         Invoke("Scan", 0.2f);//这样因该能等到全部生成完
 
-        //只有一个房间的时候
+
+        //一般CG的调教室
+        if (roomNumber == 0)
+        {
+            Instantiate(CG_Torture, new Vector3(0, 0, 0), Quaternion.identity);
+
+            return;
+        }
+
+        //只有一个房间的时候（结局CG游街处刑广场）
         if (roomNumber == 1) 
         { 
             Instantiate(CG_InterrogationRoom, new Vector3(0, 0, 0), Quaternion.identity);
@@ -395,6 +404,8 @@ public class RoomGenerator : MonoBehaviour
     #region
     [Header("固定地图")]
     public GameObject CG_InterrogationRoom;//拷问所
+    public GameObject CG_Torture;//调教室
+
     public GameObject BossRoom_Captain;//卫兵队长Boss战
     public GameObject BossRoom_Selene;//王女Boss战
     public GameObject BossRoom_Morgan;//宰相Boss战

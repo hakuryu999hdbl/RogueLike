@@ -111,7 +111,7 @@ public class SaveSlotUI : MonoBehaviour
         HealthText.color = HealthColor(Data.maxHP);
 
         MeleeDamage.color = AttackColor(Data.meleeDamage);
-        ShootDamage.color =AttackColor(Data.shootDamage);
+        ShootDamage.color = AttackColor(Data.shootDamage);
         SpellDamage.color = AttackColor(Data.spellDamage);
 
         // 武器：名称 + 数值 同色
@@ -133,7 +133,7 @@ public class SaveSlotUI : MonoBehaviour
         }
 
 
-        switch (ProfessionID) 
+        switch (ProfessionID)
         {
             case 0:
                 Weapon_Icon.sprite = Sword;
@@ -200,7 +200,7 @@ public class SaveSlotUI : MonoBehaviour
 
     }
 
-   
+
 
     public static class WeaponNameDatabase
     {
@@ -318,11 +318,11 @@ public class SaveSlotUI : MonoBehaviour
     {
         public static readonly string[][] ClothesNames = new string[][]
         {
-        new string[] { "", "女性用鎧", "盗賊の軽装", "魔法学院制服", "暗殺マント", "なし" },
-        new string[] { "", "女式盔甲", "盗贼便服", "魔法院制服", "刺客斗篷", "无" },
-        new string[] { "", "女式盔甲", "盜賊便服", "魔法院制服", "刺客斗篷", "無" },
-        new string[] { "", "Women's Armor", "Rogue Outfit", "Academy Uniform", "Assn. Cloak", "None" },
-        new string[] { "", "여성용 갑옷", "도적 복장", "마법학교 교복", "암살망토", "없음" }
+        new string[] { "", "女性用鎧", "盗賊の軽装", "魔導士団制服", "暗殺マント", "なし" },
+        new string[] { "", "女式盔甲", "盗贼便服", "魔导士团制服", "刺客斗篷", "无" },
+        new string[] { "", "女式盔甲", "盜賊便服", "魔導士團制服", "刺客斗篷", "無" },
+        new string[] { "", "Women's Armor", "Rogue Outfit", "Mage Order Uniform", "Assassin Cloak", "None" },
+        new string[] { "", "여성용 갑옷", "도적 복장", "마도기사단 제복", "암살망토", "없음" }
         };
 
         public static readonly string[][] StockingNames = new string[][]

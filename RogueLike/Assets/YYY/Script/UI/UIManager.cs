@@ -642,8 +642,9 @@ public class UIManager : MonoBehaviour
             case "CG":
                 ToSavePageButton(0);
                 Invoke("DelayShowRoomGenerator", 0.1f);
-                _RoomGenerator.roomNumber = 1;
-                _RoomGenerator.SkyBoxNumber = UnityEngine.Random.Range(0,4);//随机
+                _RoomGenerator.roomNumber = 0;//调教室
+                //_RoomGenerator.SkyBoxNumber = UnityEngine.Random.Range(0,4);//随机
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
 
                 SavePageQuitButton.SetActive(true);//在存档界面退出按钮，只有CG界面可以显示
                 Invoke("PlayDungeonBGM", 1f);
@@ -661,7 +662,7 @@ public class UIManager : MonoBehaviour
 
 
                 Invoke("DelayShowRoomGenerator", 0.1f);
-                _RoomGenerator.roomNumber = 1;
+                _RoomGenerator.roomNumber = 1;//游街和处刑广场
                 _RoomGenerator.SkyBoxNumber = 2;//白雾
 
 
@@ -2685,17 +2686,29 @@ public class UIManager : MonoBehaviour
                 // 当前菜单项内的上下切换
                 if (dir.y > 0.5f)
                 {
-                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex - 1, 0, 9);
+                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex - 1, 0, 8);
                     UpdateHomePage_Highlight();
 
 
                 }
                 else if (dir.y < -0.5f)
                 {
-                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex + 1, 0, 9);
+                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex + 1, 0, 8);
                     UpdateHomePage_Highlight();
 
 
+                }
+
+                // 当前菜单项内的左右切换
+                if (dir.x > 0.5f)
+                {
+                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex - 4, 0, 8);
+                    UpdateHomePage_Highlight();
+                }
+                else if (dir.x < -0.5f)
+                {
+                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex + 4, 0, 8);
+                    UpdateHomePage_Highlight();
                 }
             }
 
