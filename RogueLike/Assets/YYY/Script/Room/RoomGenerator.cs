@@ -877,10 +877,32 @@ public class RoomGenerator : MonoBehaviour
     public Text _Stage_Information;
 
 
-    public void ShowInformationOfStage(int Information)//-2金币不够  -1敌人增援   0新的CG解锁    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单
+    public void ShowInformationOfStage(int Information)//-3已达最大奴隶数量！ -2金币不够  -1敌人增援   0新的CG解锁    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单
     {
         switch (Information) 
         {
+            case -3: // 已达最大奴隶数量！
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        _Stage_Information.text = "奴隷の最大数に達しました！";
+                        break;
+                    case 1: // 简体
+                        _Stage_Information.text = "已达最大奴隶数量！";
+                        break;
+                    case 2: // 繁体
+                        _Stage_Information.text = "已達最大奴隸數量！";
+                        break;
+                    case 3: // 英语
+                        _Stage_Information.text = "Maximum slave capacity reached!";
+                        break;
+                    case 4: // 韩语
+                        _Stage_Information.text = "노예의 최대 수에 도달했습니다!";
+                        break;
+                }
+
+                break;
+
             case -2: // 金币不够
                 switch (PlayerPrefs.GetInt("language"))
                 {

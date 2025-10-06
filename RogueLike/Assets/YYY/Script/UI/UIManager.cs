@@ -683,6 +683,12 @@ public class UIManager : MonoBehaviour
         //GameFlowData.nextScene = "";//清理
 
         GameFlowData.RoomLevel = 0;//清理
+
+
+        //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
+        LockStage();
+
+
     }
     public GameObject HalfBlack;//这个完全就是我没敢去测试把AVG拉出ShowSaveCavans里多添加的
     void DelayHideSaveCavans() 
@@ -706,6 +712,80 @@ public class UIManager : MonoBehaviour
     /// 作弊按钮
     /// </summary>
     #region
+
+    //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
+    public void LockStage() 
+    {
+
+        //PlayerPrefs.SetInt("CG_OnanismFront_1", 1);//目前保持第一个CG永远在
+        PlayerPrefs.SetInt("CG_OnanismSide_1", 0);
+
+        PlayerPrefs.SetInt("CG_InsultSide_1", 0);
+        PlayerPrefs.SetInt("CG_GagSide_1", 0);
+        PlayerPrefs.SetInt("CG_FistingFront_1", 0);
+
+        PlayerPrefs.SetInt("CG_RapeFront_1", 0);
+        PlayerPrefs.SetInt("CG_RapeSide_1", 0);
+        PlayerPrefs.SetInt("CG_AssaultFront_1", 0);
+        PlayerPrefs.SetInt("CG_AssaultSide_1", 0);
+
+        PlayerPrefs.SetInt("CG_TentacleBagFront_1", 0);
+        PlayerPrefs.SetInt("CG_TentacleBugSide_1", 0);
+
+        PlayerPrefs.SetInt("CG_TentacleFront_1", 0);
+
+        PlayerPrefs.SetInt("CG_TentacleHermitCrabFront_1", 0);
+        PlayerPrefs.SetInt("CG_TentacleHermitCrabSide_1", 0);
+
+        PlayerPrefs.SetInt("CG_TentacleLeechSide_1", 0);
+
+        PlayerPrefs.SetInt("CG_TentacleMonsterFront_1", 0);
+        PlayerPrefs.SetInt("CG_MonsterSide_1", 0);
+
+        PlayerPrefs.SetInt("CG_TentacleWallFront_1", 0);
+        PlayerPrefs.SetInt("CG_TentacleWallSide_1", 0);
+
+
+
+        PlayerPrefs.SetInt("CG_Hogtie_1", 0);
+
+        PlayerPrefs.SetInt("CG_HangSide_4", 0);
+        PlayerPrefs.SetInt("CG_HangSide_1", 0);
+        PlayerPrefs.SetInt("CG_HangFront_1", 0);
+
+        PlayerPrefs.SetInt("CG_HangDown_4", 0);
+        PlayerPrefs.SetInt("CG_HangDown_1", 0);
+
+        PlayerPrefs.SetInt("CG_FeraSide_1", 0);
+        PlayerPrefs.SetInt("CG_Pillory_Side_1", 0);
+
+
+        //PlayerPrefs.SetInt("CG", 1);//日常调教界面时常可进
+        //PlayerPrefs.SetInt("CG_AVG_01", 1);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_02", 0);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_03", 0);//cg解锁
+
+
+
+        //PlayerPrefs.SetInt("Chapter_01", 1);//目前保持第一章永远在
+        //PlayerPrefs.SetInt("Chapter_02", 1);
+        //PlayerPrefs.SetInt("Chapter_03", 1);//第三章的AVG变成感谢试玩
+        PlayerPrefs.SetInt("Chapter_04", 0);
+        PlayerPrefs.SetInt("Chapter_05", 0);
+        PlayerPrefs.SetInt("Chapter_06", 0);
+        PlayerPrefs.SetInt("Chapter_07", 0);
+        PlayerPrefs.SetInt("Chapter_08", 0);
+        PlayerPrefs.SetInt("Chapter_09", 0);
+        PlayerPrefs.SetInt("Chapter_10", 0);
+        PlayerPrefs.SetInt("Chapter_11", 0);
+        PlayerPrefs.SetInt("Chapter_12", 0);
+        PlayerPrefs.SetInt("Chapter_13", 0);
+
+        PlayerPrefs.SetInt("Chapter_Arena", 0);
+        PlayerPrefs.SetInt("Chapter_Dungeon", 0);
+
+
+    }
 
     public void SetCheatButton() 
     {
@@ -1313,11 +1393,11 @@ public class UIManager : MonoBehaviour
 
     public void OnHairLeft()
     {
-        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_headIndex, 1, 13, -1); CreatNewcurrentIndex = 1; UpdateHighlight(); }
+        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_headIndex, 1, 12, -1); CreatNewcurrentIndex = 1; UpdateHighlight(); }//王女的发型无法选择
     }
     public void OnHairRight()
     {
-        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_headIndex, 1, 13, +1); CreatNewcurrentIndex = 1; UpdateHighlight(); }
+        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_headIndex, 1, 12, +1); CreatNewcurrentIndex = 1; UpdateHighlight(); }//王女的发型无法选择
     }
 
     public void OnEyesLeft()
@@ -1360,11 +1440,23 @@ public class UIManager : MonoBehaviour
 
     public void OnClassLeft()
     {
-        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, -1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
+        if (IsLuna(player.currentSaveName) == false) 
+        { 
+            ChangeSkin(ref player.YYY_bodyIndex, 10, 12, -1);
+            if (CurrentMode == 1) { player.PlayNormalAttack(); }//只有在非CG界面捏人才能更换职业时不增加攻击动作，防止动画变不回来           
+            CreatNewcurrentIndex = 4; 
+            UpdateHighlight();
+        }
     }
     public void OnClassRight()
     {
-        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1); player.PlayNormalAttack(); CreatNewcurrentIndex = 4; UpdateHighlight(); }
+        if (IsLuna(player.currentSaveName) == false) 
+        { 
+            ChangeSkin(ref player.YYY_bodyIndex, 10, 12, +1);
+            if (CurrentMode == 1) { player.PlayNormalAttack(); }//只有在非CG界面捏人才能更换职业时不增加攻击动作，防止动画变不回来       
+            CreatNewcurrentIndex = 4; 
+            UpdateHighlight();
+        }
     }
     void ChangeSkin(ref int index, int min, int max, int delta)
     {
@@ -1892,23 +1984,33 @@ public class UIManager : MonoBehaviour
         if (saveCount == 0) nextCost = 0;
         else nextCost = 1000 * saveCount;
 
+
+        #region
+        int currentMoney = PlayerPrefs.GetInt("Money", 0);
+
+        // 金币够则黄色，不够红色
+        string colorTag = currentMoney >= nextCost ? "#FFD700" : "#FF4040";
+        string costText = $"<color={colorTag}>{nextCost}</color>";
+        #endregion
+
+
         // 文字多语言（建议统一管理）
         switch (PlayerPrefs.GetInt("language"))
         {
             case 0: // 日语
-                CreateCostText.text = $"次の奴隷生成費用：{nextCost} 金貨";
+                CreateCostText.text = $"次の奴隷生成費用：{costText} 金貨";
                 break;
             case 1: // 简体
-                CreateCostText.text = $"创建下一个奴隶需要：{nextCost} 金币";
+                CreateCostText.text = $"创建下一个奴隶需要：{costText} 金币";
                 break;
             case 2: // 繁体
-                CreateCostText.text = $"建立下一個奴隸需要：{nextCost} 金幣";
+                CreateCostText.text = $"建立下一個奴隸需要：{costText} 金幣";
                 break;
             case 3: // 英语
-                CreateCostText.text = $"Next creation cost: {nextCost} gold";
+                CreateCostText.text = $"Next creation cost: {costText} gold";
                 break;
             case 4: // 韩语
-                CreateCostText.text = $"다음 노예 생성 비용: {nextCost} 골드";
+                CreateCostText.text = $"다음 노예 생성 비용: {costText} 골드";
                 break;
         }
     }//更新当前创建奴隶费用
@@ -1922,12 +2024,13 @@ public class UIManager : MonoBehaviour
 
 
         #region  人数上限锁
-        int maxSaves = 5; // 最大可创建奴隶数
+        int maxSaves = 3; // 最大可创建奴隶数
         // 判断数量上限
         if (saveCount >= maxSaves)
         {
             Debug.Log("已达最大奴隶数量！");
             player.frameEvents._Attack_pai1();
+            _RoomGenerator.ShowInformationOfStage(-3);
             return;
         }
         #endregion
