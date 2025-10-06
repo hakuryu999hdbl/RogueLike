@@ -420,6 +420,7 @@ public class DialogSystem : MonoBehaviour
                 break;
             case "DarkRed":   
                 text.color = new Color(1.0f, 0.2f, 0.5f, 1.0f); //浅红色(王女）
+                Playlist_Voice();
                 index++;
                 break;
             case "LightBlue":
@@ -432,7 +433,8 @@ public class DialogSystem : MonoBehaviour
                 break;
 
             case "Green":
-                text.color = new Color(0.0f, 1.0f, 0.0f, 1.0f); // 绿色（魔族女干部）
+                text.color = new Color(0.0f, 1.0f, 0.0f, 1.0f); // 绿色（守卫队长）
+                Playlist_Voice();
                 index++;
                 break;
 
@@ -669,6 +671,51 @@ public class DialogSystem : MonoBehaviour
 
         
     }
+
+
+    /// <summary>
+    /// 插入声音
+    /// </summary>
+    #region
+    [SerializeField] AudioSource voiceSource;
+    [SerializeField] List<AudioClip> Playlist;//当前播放的列表
+
+    [SerializeField] List<AudioClip> Playlist_CG_AVG_01;//头枷轮奸
+
+    int VoiceIndex = 0;
+
+    public void Playlist_Voice()
+    {
+
+        // 1) 选择「当前台词列表」
+        switch (animation_number)
+        {
+            case 101:
+                Playlist = Playlist_CG_AVG_01;//头枷轮奸
+                break;
+
+         
+        }
+
+     
+
+
+
+
+
+        // 2) 播台词
+        var clip = Playlist[VoiceIndex++];
+        voiceSource.Stop();
+        voiceSource.clip = clip;
+        voiceSource.Play();
+
+
+
+    }
+
+
+    #endregion
+
 
 
     //快进按钮触发在这里
