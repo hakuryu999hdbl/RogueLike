@@ -2621,7 +2621,16 @@ public class Enemy : MonoBehaviour
 
         Invoke("Disappear", 1f);
 
-
+        //Boss死亡音效
+        switch (BossNumber) 
+        {
+            case 1:
+                UIManager.instance.ShowDialogue("Boss_Captain_Die");
+                break;
+            case 2:
+                UIManager.instance.ShowDialogue("Boss_Selene_Die");
+                break;
+        }
 
 
     }//死亡

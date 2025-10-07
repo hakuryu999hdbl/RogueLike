@@ -688,7 +688,7 @@ public class UIManager : MonoBehaviour
         //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
         LockStage();
 
-
+        UpdateCreateCostText();//更新创建奴隶价格
     }
     public GameObject HalfBlack;//这个完全就是我没敢去测试把AVG拉出ShowSaveCavans里多添加的
     void DelayHideSaveCavans() 
@@ -1928,6 +1928,9 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
+
+        
+
         CGUnclockStart();//检测CG解锁
         ChapterUnclockStart();//检测Chapter解锁
         CG_End_UnclockStart();//检测CG结局解锁
@@ -1954,7 +1957,7 @@ public class UIManager : MonoBehaviour
 
 
 
-        UpdateCreateCostText();//更新创建奴隶价格
+      
 
 
 
@@ -1980,7 +1983,7 @@ public class UIManager : MonoBehaviour
     {
         int saveCount = SaveManager.CountSaves();
         int nextCost = 0;
-
+        Debug.Log("目前奴隶数"+ saveCount);
         if (saveCount == 0) nextCost = 0;
         else nextCost = 1000 * saveCount;
 
@@ -2083,7 +2086,7 @@ public class UIManager : MonoBehaviour
 
 
             // 更新显示价码
-            UpdateCreateCostText();
+            UpdateCreateCostText();//购买完
         }
         else
         {
@@ -3905,11 +3908,12 @@ public class UIManager : MonoBehaviour
 
     public List<GameObject> Boss_Captain_In_Game_DialogueList;//守卫队长刷出台词
     public List<GameObject> Boss_Captain_Skill_In_Game_DialogueList;//守卫队长技能刷出台词
-
+    public List<GameObject> Boss_Captain_Die_In_Game_DialogueList;//守卫队长死亡刷出台词
 
     public List<GameObject> Boss_Selene_In_Game_DialogueList;//赛琳娜刷出台词
     public List<GameObject> Boss_Selene_Skill_In_Game_DialogueList;//赛琳娜技能刷出台词
     public List<GameObject> Boss_Selene_Skill2_In_Game_DialogueList;//赛琳娜技能刷出台词2
+    public List<GameObject> Boss_Selene_Die_In_Game_DialogueList;//赛琳娜死亡刷出台词
 
     private bool dialogueShowing = false;  // 是否有台词正在显示
 
@@ -3927,9 +3931,11 @@ public class UIManager : MonoBehaviour
             case "Girl": pool = Girl_In_Game_DialogueList; break;
             case "Boss_Captain": pool = Boss_Captain_In_Game_DialogueList; break;
             case "Boss_Captain_Skill": pool = Boss_Captain_Skill_In_Game_DialogueList; break;
+            case "Boss_Captain_Die": pool = Boss_Captain_Die_In_Game_DialogueList; break;
             case "Boss_Selene": pool = Boss_Selene_In_Game_DialogueList; break;
             case "Boss_Selene_Skill": pool = Boss_Selene_Skill_In_Game_DialogueList; break;
             case "Boss_Selene_Skill2": pool = Boss_Selene_Skill2_In_Game_DialogueList; break;
+            case "Boss_Selene_Die": pool = Boss_Selene_Die_In_Game_DialogueList; break;
         }
 
         if (pool == null || pool.Count == 0) return;
