@@ -720,14 +720,14 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("CG_OnanismFront_1", 1);//目前保持第一个CG永远在
         PlayerPrefs.SetInt("CG_OnanismSide_1", 0);
 
-        PlayerPrefs.SetInt("CG_InsultSide_1", 0);
-        PlayerPrefs.SetInt("CG_GagSide_1", 0);
-        PlayerPrefs.SetInt("CG_FistingFront_1", 0);
+        //PlayerPrefs.SetInt("CG_InsultSide_1", 0);
+        //PlayerPrefs.SetInt("CG_GagSide_1", 0);
+        //PlayerPrefs.SetInt("CG_FistingFront_1", 0);
 
-        PlayerPrefs.SetInt("CG_RapeFront_1", 0);
-        PlayerPrefs.SetInt("CG_RapeSide_1", 0);
-        PlayerPrefs.SetInt("CG_AssaultFront_1", 0);
-        PlayerPrefs.SetInt("CG_AssaultSide_1", 0);
+        //PlayerPrefs.SetInt("CG_RapeFront_1", 0);
+        //PlayerPrefs.SetInt("CG_RapeSide_1", 0);
+        //PlayerPrefs.SetInt("CG_AssaultFront_1", 0);
+        //PlayerPrefs.SetInt("CG_AssaultSide_1", 0);
 
         PlayerPrefs.SetInt("CG_TentacleBagFront_1", 0);
         PlayerPrefs.SetInt("CG_TentacleBugSide_1", 0);
@@ -939,7 +939,7 @@ public class UIManager : MonoBehaviour
 
 
     [Header("主菜单界面层级")]
-    public int CurrentChooseList = 0;//-7战败投降界面  -6战败被抓住凌辱  -5三选一界面   -4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面   11调教所选择界面
+    public int CurrentChooseList = 0;//-7战败投降界面  -6战败被抓住凌辱  -5三选一界面   -4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面   11调教所选择界面  12感谢名单界面
     public int CurrentMode = 0;//0 进入CG界面  1捏人/进入游戏
     public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
     public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
@@ -1171,6 +1171,7 @@ public class UIManager : MonoBehaviour
         ModeCavans.SetActive(false);
         ChapterCavans.SetActive(false);
         CG_End_Cavans.SetActive(false);
+        ThanksCavans.SetActive(false);
         CurrentChooseList = 0;
 
         //这个主要是针对CG结局界面做的
@@ -1179,20 +1180,34 @@ public class UIManager : MonoBehaviour
 
     public void ToCGPage()
     {
-        CGCavans.SetActive(true);
-        CurrentChooseList = 5;
+        if (SaveManager.CountSaves() > 0) // 没有任何存档无法开始
+        {
+
+            CGCavans.SetActive(true);
+            CurrentChooseList = 5;
 
 
 
-        MainCamera.SetInteger("View", 0);
+            MainCamera.SetInteger("View", 0);
 
-        ShowSaveCavans.SetActive(true);
+            ShowSaveCavans.SetActive(true);
 
 
-        player.frameEvents.audioS.Stop();
-        player.anim.Play("Girl_Broken_Idle");
+            player.frameEvents.audioS.Stop();
+            player.anim.Play("Girl_Broken_Idle");
 
-        CG_BackButton.SetActive(false);//隐藏CG观赏后退按钮
+            CG_BackButton.SetActive(false);//隐藏CG观赏后退按钮
+
+        }
+        else
+        {
+
+            //提示需要创建角色
+            AudioManager.instance.AudioPlay(AudioManager.instance.SE_Reba);
+
+            _RoomGenerator.ShowInformationOfStage(3);
+        }
+
     }
 
     public void ToCG_EndPage() 
@@ -1226,6 +1241,15 @@ public class UIManager : MonoBehaviour
     {
         dialogSystem.ShowText();
     }
+
+
+
+    public void ToThanksPage() 
+    {
+        CurrentChooseList = 12;
+        ThanksCavans.SetActive(true);
+    }
+
 
     #endregion
 
@@ -1339,7 +1363,7 @@ public class UIManager : MonoBehaviour
     public Animator MainCamera;//控制摄像机拉近远离
     public GameObject ShowSaveCavans;//通用UI层
 
-    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans, ModeCavans, ChapterCavans, AVGCavans,CG_End_Cavans, End_Surrender_Cavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面,CG结局界面,战败投降界面
+    public GameObject HomePageCavans, SaveCavans, CreateCavans, SettingCavans, LanguageCavans, CGCavans, ModeCavans, ChapterCavans, AVGCavans,CG_End_Cavans, End_Surrender_Cavans,ThanksCavans;//主菜单界面，存档界面,捏人界面,设置界面,CG界面,游戏模式选择界面,CG结局界面,战败投降界面
     public DialogSystem dialogSystem;
     [Header("捏人界面UI")]
     public InputField nameInputField; // 绑定在 Inspector 里
@@ -2376,6 +2400,37 @@ public class UIManager : MonoBehaviour
     public float SEVolume = 0f;
 
 
+    //按键触发按钮
+
+    public void BGM_Up() 
+    {
+        float NewBGMVolume = BGMVolume + 10f;
+        SetBGMVolune(NewBGMVolume);
+        BGMVolume = NewBGMVolume;
+        Debug.Log("拉高BGM");
+    }
+    public void BGM_Down()
+    {
+        float NewBGMVolume = BGMVolume - 10f;
+        SetBGMVolune(NewBGMVolume);
+        BGMVolume = NewBGMVolume;
+        Debug.Log("降低BGM");
+    }
+
+    public void SE_Up() 
+    {
+        float NewSEVolume = SEVolume + 10f;
+        SetVolune(NewSEVolume);
+        SEVolume = NewSEVolume;
+        Debug.Log("拉高SE");
+    }
+    public void SE_Down()
+    {
+        float NewSEVolume = SEVolume - 10f;
+        SetVolune(NewSEVolume);
+        SEVolume = NewSEVolume;
+        Debug.Log("降低SE");
+    }
 
     #endregion
 
@@ -2792,14 +2847,14 @@ public class UIManager : MonoBehaviour
                 // 当前菜单项内的上下切换
                 if (dir.y > 0.5f)
                 {
-                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex - 1, 0, 8);
+                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex - 1, 0, 9);
                     UpdateHomePage_Highlight();
 
 
                 }
                 else if (dir.y < -0.5f)
                 {
-                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex + 1, 0, 8);
+                    HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex + 1, 0, 9);
                     UpdateHomePage_Highlight();
 
 
@@ -2920,17 +2975,10 @@ public class UIManager : MonoBehaviour
                     switch (SettingPagecurrentIndex)
                     {
                         case 0:
-
-                            float NewBGMVolume = BGMVolume + 10f;
-                            SetBGMVolune(NewBGMVolume);
-                            BGMVolume = NewBGMVolume;
-                            Debug.Log("拉高BGM");
+                            BGM_Up();
                             break;
                         case 1:
-                            float NewSEVolume = SEVolume + 10f;
-                            SetVolune(NewSEVolume);
-                            SEVolume = NewSEVolume;
-                            Debug.Log("拉高SE");
+                            SE_Up();
                             break;
 
                     }
@@ -2944,17 +2992,10 @@ public class UIManager : MonoBehaviour
 
 
                         case 0:
-
-                            float NewBGMVolume = BGMVolume - 10f;
-                            SetBGMVolune(NewBGMVolume);
-                            BGMVolume = NewBGMVolume;
-                            Debug.Log("降低BGM");
+                            BGM_Down();
                             break;
                         case 1:
-                            float NewSEVolume = SEVolume - 10f;
-                            SetVolune(NewSEVolume);
-                            SEVolume = NewSEVolume;
-                            Debug.Log("降低SE");
+                            SE_Down();
                             break;
 
                     }
@@ -3201,19 +3242,22 @@ public class UIManager : MonoBehaviour
                     case 3:
                         ExitGame();
                         break;
-                    case 4:
-                        OpenURL_Ci_en();
+                    case 4:    
+                        Invoke("ToThanksPage", 0.1f);//进入感谢界面
                         break;
                     case 5:
-                        OpenURL_Patreon();
+                        OpenURL_Ci_en();
                         break;
                     case 6:
-                        OpenURL_Steam();
+                        OpenURL_Patreon();
                         break;
                     case 7:
-                        OpenURL_Discord();
+                        OpenURL_Steam();
                         break;
                     case 8:
+                        OpenURL_Discord();
+                        break;
+                    case 9:
                         OpenURL_YYY();
                         break;
                 }
@@ -3402,8 +3446,8 @@ public class UIManager : MonoBehaviour
                 //AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
-            //设置界面//Mode游戏模式界面//CG结局调教所界面
-            if (CurrentChooseList == 3 || CurrentChooseList == 7 || CurrentChooseList == 11)
+            //设置界面//Mode游戏模式界面//CG结局调教所界面//感谢名单界面
+            if (CurrentChooseList == 3 || CurrentChooseList == 7 || CurrentChooseList == 11 || CurrentChooseList == 12)
             {
                 ToHomePage();
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
@@ -3551,6 +3595,9 @@ public class UIManager : MonoBehaviour
         Debug.Log("Exiting game...");
 
         Application.Quit();
+
+        //退出强制打开商店页面
+        OpenURL_DLsite_Fanza();
     }
 
 
@@ -3602,6 +3649,11 @@ public class UIManager : MonoBehaviour
     }
 
 
+    public void OpenURL_DLsite_Fanza()
+    {
+        Application.OpenURL("https://www.dlsite.com/maniax/announce/=/product_id/RJ01484541.html");
+        Application.OpenURL("https://www.dmm.co.jp/dc/doujin/-/detail/=/cid=d_678786/?utm_source=twitter&utm_medium=social_tpost&utm_campaign=start&utm_term=d_678786&utm_content=doujin");
+    }
     #endregion
 
 

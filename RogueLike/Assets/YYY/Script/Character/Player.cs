@@ -1177,6 +1177,14 @@ public class Player : MonoBehaviour
 
     public void _Attack_Cancel()
     {
+
+        // 如果角色此时在闪避中，强制终止攻击判定
+        if (isDodge || isDodging)
+        {
+            ResetCombo();
+        }
+
+
         if (visionType == Player.PlayerType.ShortRangePlayer)//男性女性女魔族近战都用这个
         {
             canCombo = false;
@@ -2055,7 +2063,22 @@ public class Player : MonoBehaviour
         {
             return;//防止连续闪避
         }
-       
+
+
+
+
+        // 开始闪避前重置攻击
+        if (isAttacking || isAttacking2)
+        {
+            ResetCombo();
+            isAttacking = false;
+            attackTriggered = false;
+
+            //蓄力变成了
+            ChangeCritical(-maxCritical);
+        }
+
+
 
         if (currentStrength > 50) // 确保不在连续闪避状态
         {
@@ -2168,6 +2191,14 @@ public class Player : MonoBehaviour
     void DodgingOver()
     {
         isDodge = false;
+
+        // 确保闪避结束后可以再次攻击
+        if (currentHealth > 0)
+        {
+            ResetCombo();
+            isAttacking = false;
+            attackTriggered = false;
+        }
     }
 
     [Header("闪避触发成功暴击")]
@@ -2631,7 +2662,14 @@ public class Player : MonoBehaviour
                 //受伤时连击取消
                 if (currentHealth > 0)
                 {
-                    Invoke("ResetCombo", 1f);//防止挂了又站起来
+                    //Invoke("ResetCombo", 1f);//防止挂了又站起来
+
+                    //立即重置
+                    CancelInvoke("ResetCombo");
+                    ResetCombo(); // 即时中断蓄力或攻击状态
+                    isAttacking = false;
+                    attackTriggered = false;
+                    isDodging = false;
                 }
 
 

@@ -196,18 +196,18 @@ public class Enemy : MonoBehaviour
             }
 
 
-
+            //ToDo:削减敌人攻击力加成
             //根据玩家当前的等级赋予敌人生命值，攻击力等
 
-            CurrentWeaponPower = player.Level * Random.Range(10, 20);
-
-            //近战攻击修改
-            MeleeDamage = 100 + player.Level * 20;
-            strike.Damage = -CurrentWeaponPower - MeleeDamage;
-            //远程攻击修改
-            ShootDamage = CurrentWeaponPower + 100 + player.Level * 20;
-            //攻击修改
-            SpellDamage = CurrentWeaponPower + 100 + player.Level * 20;
+           // CurrentWeaponPower = player.Level * Random.Range(10, 20);
+           //
+           // //近战攻击修改
+           // MeleeDamage = 100 + player.Level * 20;
+           // strike.Damage = -CurrentWeaponPower - MeleeDamage;
+           // //远程攻击修改
+           // ShootDamage = CurrentWeaponPower + 100 + player.Level * 20;
+           // //攻击修改
+           // SpellDamage = CurrentWeaponPower + 100 + player.Level * 20;
 
 
         }//如果已经赋值了队友，那么不随机
@@ -2217,7 +2217,7 @@ public class Enemy : MonoBehaviour
                 case 3:
                     if (Random.Range(0, 3) == 0)
                     {
-                        Freeze(1);//冻结伤害
+                        Freeze(Random.Range(2,5));//冻结伤害
                     }
                     else
                     {
@@ -2631,6 +2631,13 @@ public class Enemy : MonoBehaviour
                 UIManager.instance.ShowDialogue("Boss_Selene_Die");
                 break;
         }
+
+        //击杀敌人获得金币
+        if(tag != "Friend") 
+        {
+            UIManager.instance.ChangeMoney(Random.Range(10, 50));
+        }
+    
 
 
     }//死亡
