@@ -189,6 +189,19 @@ public class Enemy : MonoBehaviour
                     case 6:
                         BecomeBoss_Dominus();
                         break;
+
+                    case 7:
+                        BecomeBoss_DarkMage();
+
+                        // 每隔 5 秒执行一次 Boss技能 召集触手怪物
+                        InvokeRepeating(nameof(BossSkill_CallTentacleMonster), 3f, 5f);
+
+
+                        break;
+
+
+
+                       
                 }
 
 
@@ -251,6 +264,10 @@ public class Enemy : MonoBehaviour
                 case 2:
                 case 3:
                     UIManager.instance.ShowDialogue("Boss_Selene");
+                    break;
+
+                case 7:
+                    UIManager.instance.ShowDialogue("Boss_DarkMage");
                     break;
             }
 
@@ -2613,35 +2630,49 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
-        //敌人受伤玩家获取经验
-        player.ChangeExperience(100);
+     
 
         isDie = true;
         anim.Play(GetAnimPrefix() + "Default_Die_2");//防止倒下又起来,搞了第二死亡
 
         Invoke("Disappear", 1f);
 
-        //Boss死亡音效
-        switch (BossNumber) 
+        if (!DieBonue) 
         {
-            case 1:
-                UIManager.instance.ShowDialogue("Boss_Captain_Die");
-                break;
-            case 2:
-                UIManager.instance.ShowDialogue("Boss_Selene_Die");
-                break;
+            //Boss死亡音效
+            switch (BossNumber)
+            {
+                case 1:
+                    UIManager.instance.ShowDialogue("Boss_Captain_Die");
+                    break;
+                case 2:
+                    UIManager.instance.ShowDialogue("Boss_Selene_Die");
+                    break;
+
+                case 7:
+                    UIManager.instance.ShowDialogue("Boss_DarkMage_Die");
+                    break;
+            }
+
+
+            //敌人受伤玩家获取经验
+            player.ChangeExperience(100);
+            //击杀敌人获得金币
+            if (tag != "Friend")
+            {
+                UIManager.instance.ChangeMoney(Random.Range(10, 50));
+            }
+
+            DieBonue = true;
         }
 
-        //击杀敌人获得金币
-        if(tag != "Friend") 
-        {
-            UIManager.instance.ChangeMoney(Random.Range(10, 50));
-        }
+       
     
 
 
     }//死亡
 
+    bool DieBonue = false;//死亡触发金币只能一次
 
     [Header("全部自身存在与出生点WallMap")]
     public GameObject AllOfThis;
@@ -2857,7 +2888,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     #region
     [Header("Boss技能")]
-    public int BossNumber = 0;//1士兵队长  2皇女  3魔族化皇女  4宰相   5魔族化皇太子   5魔族化皇帝
+    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5魔族化皇太子   6魔族化皇帝    7魔族黑魔法法师
 
     public void BecomeBoss_Captain()
     {
@@ -3129,6 +3160,52 @@ public class Enemy : MonoBehaviour
 
     }//Boss 多米纳斯
 
+    public void BecomeBoss_DarkMage()
+    {
+
+
+        YYY_headIndex = 5;  // 粉毛
+        YYY_eyesIndex = 11;
+        YYY_bodyIndex = 3;
+        YYY_legsIndex = 2;
+
+        YYY_hatIndex = 1;//人类
+
+        weaponIndex = 10;//黑魔法
+
+        SetSkin();
+
+        Class = EnemyClass.Girl;
+
+        CurrentProfession = 2;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0:
+                Name.text = "黒魔導士";   // 日语
+                break;
+            case 1:
+                Name.text = "黑魔导士";   // 简体中文
+                break;
+            case 2:
+                Name.text = "黑魔導士";   // 繁体中文
+                break;
+            case 3:
+                Name.text = "Dark Sorceress";   // 英语
+                break;
+            case 4:
+                Name.text = "흑마도사";   // 韩语
+                break;
+        }
+
+        maxHealth *= 4;
+        currentHealth = maxHealth;
+
+        HudText.HUD(maxHealth);
+
+    }//Boss 黑魔法法师
 
 
     //Boss技能  瞬移近  瞬移远
@@ -3214,26 +3291,26 @@ public class Enemy : MonoBehaviour
     void BossSkill_CallSoldier()
     {
 
-        //如果场景内敌人少于5个，再召唤一群士兵
+        //如果场景内敌人少于4个，再召唤一群士兵
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies.Length <= 5)
+        if (enemies.Length <= 4)
         {
             wallmap.SetEnemy(1);
             RoomGenerator.ShowInformationOfStage(-1);//敌人增援
 
-            switch (BossNumber)
-            {
-                case 1:
-                    UIManager.instance.ShowDialogue("Boss_Captain_Skill");
-                    break;
-                case 5:
-                    UIManager.instance.ShowDialogue("Boss_Alexis_Skill");
-                    break;
-            }
+         
         }
 
-
+        switch (BossNumber)
+        {
+            case 1:
+                UIManager.instance.ShowDialogue("Boss_Captain_Skill");
+                break;
+            case 5:
+                UIManager.instance.ShowDialogue("Boss_Alexis_Skill");
+                break;
+        }
 
 
 
@@ -3243,15 +3320,25 @@ public class Enemy : MonoBehaviour
 
     void BossSkill_CallTentacleMonster()
     {
-        //如果场景内敌人少于5个，再召唤一群触手怪
+        //如果场景内敌人少于4个，再召唤一群触手怪
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies.Length <= 5)
+        if (enemies.Length <= 4)
         {
             wallmap.SetEnemy(2);
             RoomGenerator.ShowInformationOfStage(-1);//敌人增援
         }
+
+        switch (BossNumber)
+        {
+            case 7:
+                UIManager.instance.ShowDialogue("Boss_DarkMage_Skill");
+                break;
+        }
     }
+
+
+
 
     void OnDestroy()
     {

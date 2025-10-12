@@ -62,8 +62,8 @@ public class Room : MonoBehaviour
             //case "Story_12":
             //    BossNumber = 6;
             //    break;
-        
-        
+
+
             // case "Story_01":
             // case "Story_02":
             //
@@ -87,9 +87,14 @@ public class Room : MonoBehaviour
             // case "Dungeon":
             //
             //     break;
-        
+
             default:
-                BossNumber = 1;
+            case "Story_01":
+                BossNumber = 1;//守卫队长
+                break;
+
+            case "Story_02":
+                BossNumber = 7;//黑魔导士
                 break;
         }
 
@@ -119,9 +124,7 @@ public class Room : MonoBehaviour
             //如果亚历克西斯在场，那么赛琳娜也在场
             if (BossNumber == 5) 
             {
-                GameObject NewEnemy2 = Instantiate(Enemy, transform.position, Quaternion.identity);
-                Enemy enemyScript2 = NewEnemy2.GetComponentInChildren<Enemy>();
-                enemyScript2.BossNumber = 3;
+                Invoke("SetSelene", 1f);
             }
 
 
@@ -130,6 +133,11 @@ public class Room : MonoBehaviour
 
     }
 
-
+    public void SetSelene() 
+    {
+        GameObject NewEnemy2 = Instantiate(Enemy, transform.position, Quaternion.identity);
+        Enemy enemyScript2 = NewEnemy2.GetComponentInChildren<Enemy>();
+        enemyScript2.BossNumber = 3;
+    }//魔族化赛琳娜
   
 }

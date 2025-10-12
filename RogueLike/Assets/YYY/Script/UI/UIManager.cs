@@ -176,6 +176,9 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("Chapter_12", 1);
         //PlayerPrefs.SetInt("Chapter_13", 1);
 
+
+        GameFlowData.nextScene = "Story_03";//测试Boss使用
+
         switch (GameFlowData.nextScene)
         {
             case "AVG_02":
@@ -1953,7 +1956,11 @@ public class UIManager : MonoBehaviour
     void Start()
     {
 
-        
+        // 初始化音量
+        SetBGMVolune(BGMVolume);
+        SetSEVolune(SEVolume);
+
+
 
         CGUnclockStart();//检测CG解锁
         ChapterUnclockStart();//检测Chapter解锁
@@ -2382,16 +2389,16 @@ public class UIManager : MonoBehaviour
 
 
     //--------音量
-    public void SetVolune(float value)
-    {
-        audioMixer.SetFloat("MainVolume", value);
-        SE_Bar.fillAmount = Mathf.InverseLerp(-80f, 0f, SEVolume);
-    }
-    public void SetBGMVolune(float value)
-    {
-        BGM_Mixer.SetFloat("BGMVolume", value);
-        BGM_Bar.fillAmount = Mathf.InverseLerp(-80f, 0f, BGMVolume);
-    }
+   // public void SetVolune(float value)
+   // {
+   //     audioMixer.SetFloat("MainVolume", value);
+   //     SE_Bar.fillAmount = Mathf.InverseLerp(-80f, 0f, SEVolume);
+   // }
+   // public void SetBGMVolune(float value)
+   // {
+   //     BGM_Mixer.SetFloat("BGMVolume", value);
+   //     BGM_Bar.fillAmount = Mathf.InverseLerp(-80f, 0f, BGMVolume);
+   // }
 
     public Image BGM_Bar;
     public Image SE_Bar;
@@ -2399,37 +2406,81 @@ public class UIManager : MonoBehaviour
     public float BGMVolume = 0f;
     public float SEVolume = 0f;
 
+    private const float MinVolume = -80f;
+    private const float MaxVolume = 0f;
 
     //按键触发按钮
 
-    public void BGM_Up() 
+
+
+    // public void BGM_Up() 
+    // {
+    //     float NewBGMVolume = BGMVolume + 10f;
+    //     SetBGMVolune(NewBGMVolume);
+    //     BGMVolume = NewBGMVolume;
+    //     Debug.Log("拉高BGM");
+    // }
+    // public void BGM_Down()
+    // {
+    //     float NewBGMVolume = BGMVolume - 10f;
+    //     SetBGMVolune(NewBGMVolume);
+    //     BGMVolume = NewBGMVolume;
+    //     Debug.Log("降低BGM");
+    // }
+    //
+    // public void SE_Up() 
+    // {
+    //     float NewSEVolume = SEVolume + 10f;
+    //     SetVolune(NewSEVolume);
+    //     SEVolume = NewSEVolume;
+    //     Debug.Log("拉高SE");
+    // }
+    // public void SE_Down()
+    // {
+    //     float NewSEVolume = SEVolume - 10f;
+    //     SetVolune(NewSEVolume);
+    //     SEVolume = NewSEVolume;
+    //     Debug.Log("降低SE");
+    // }
+
+    //-------- SE --------
+    public void SetSEVolune(float value)
     {
-        float NewBGMVolume = BGMVolume + 10f;
-        SetBGMVolune(NewBGMVolume);
-        BGMVolume = NewBGMVolume;
-        Debug.Log("拉高BGM");
-    }
-    public void BGM_Down()
-    {
-        float NewBGMVolume = BGMVolume - 10f;
-        SetBGMVolune(NewBGMVolume);
-        BGMVolume = NewBGMVolume;
-        Debug.Log("降低BGM");
+        SEVolume = Mathf.Clamp(value, MinVolume, MaxVolume);
+        audioMixer.SetFloat("MainVolume", SEVolume);
+        SE_Bar.fillAmount = Mathf.InverseLerp(MinVolume, MaxVolume, SEVolume);
     }
 
-    public void SE_Up() 
+    public void SE_Up()
     {
-        float NewSEVolume = SEVolume + 10f;
-        SetVolune(NewSEVolume);
-        SEVolume = NewSEVolume;
-        Debug.Log("拉高SE");
+        SetSEVolune(SEVolume + 10f);
+        Debug.Log("拉高 SE 音量：" + SEVolume);
     }
+
     public void SE_Down()
     {
-        float NewSEVolume = SEVolume - 10f;
-        SetVolune(NewSEVolume);
-        SEVolume = NewSEVolume;
-        Debug.Log("降低SE");
+        SetSEVolune(SEVolume - 10f);
+        Debug.Log("降低 SE 音量：" + SEVolume);
+    }
+
+    //-------- BGM --------
+    public void SetBGMVolune(float value)
+    {
+        BGMVolume = Mathf.Clamp(value, MinVolume, MaxVolume);
+        BGM_Mixer.SetFloat("BGMVolume", BGMVolume);
+        BGM_Bar.fillAmount = Mathf.InverseLerp(MinVolume, MaxVolume, BGMVolume);
+    }
+
+    public void BGM_Up()
+    {
+        SetBGMVolune(BGMVolume + 10f);
+        Debug.Log("拉高 BGM 音量：" + BGMVolume);
+    }
+
+    public void BGM_Down()
+    {
+        SetBGMVolune(BGMVolume - 10f);
+        Debug.Log("降低 BGM 音量：" + BGMVolume);
     }
 
     #endregion
@@ -3967,6 +4018,10 @@ public class UIManager : MonoBehaviour
     public List<GameObject> Boss_Selene_Skill2_In_Game_DialogueList;//赛琳娜技能刷出台词2
     public List<GameObject> Boss_Selene_Die_In_Game_DialogueList;//赛琳娜死亡刷出台词
 
+    public List<GameObject> Boss_DarkMage_In_Game_DialogueList;//黑魔导士刷出台词
+    public List<GameObject> Boss_DarkMage_Skill_In_Game_DialogueList;//黑魔导士技能刷出台词
+    public List<GameObject> Boss_DarkMage_Die_In_Game_DialogueList;//黑魔导士死亡刷出台词
+
     private bool dialogueShowing = false;  // 是否有台词正在显示
 
     // 敌人调用这个接口
@@ -3981,13 +4036,19 @@ public class UIManager : MonoBehaviour
         {
             case "Man": pool = Man_In_Game_DialogueList; break;
             case "Girl": pool = Girl_In_Game_DialogueList; break;
+
             case "Boss_Captain": pool = Boss_Captain_In_Game_DialogueList; break;
             case "Boss_Captain_Skill": pool = Boss_Captain_Skill_In_Game_DialogueList; break;
             case "Boss_Captain_Die": pool = Boss_Captain_Die_In_Game_DialogueList; break;
+
             case "Boss_Selene": pool = Boss_Selene_In_Game_DialogueList; break;
             case "Boss_Selene_Skill": pool = Boss_Selene_Skill_In_Game_DialogueList; break;
             case "Boss_Selene_Skill2": pool = Boss_Selene_Skill2_In_Game_DialogueList; break;
             case "Boss_Selene_Die": pool = Boss_Selene_Die_In_Game_DialogueList; break;
+
+            case "Boss_DarkMage": pool = Boss_DarkMage_In_Game_DialogueList; break;
+            case "Boss_DarkMage_Skill": pool = Boss_DarkMage_Skill_In_Game_DialogueList; break;
+            case "Boss_DarkMage_Die": pool = Boss_DarkMage_Die_In_Game_DialogueList; break;
         }
 
         if (pool == null || pool.Count == 0) return;
