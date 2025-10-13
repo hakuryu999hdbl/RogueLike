@@ -177,7 +177,8 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("Chapter_13", 1);
 
 
-        GameFlowData.nextScene = "Story_03";//测试Boss使用
+        //GameFlowData.nextScene = "Story_03";//测试Boss使用
+        //GameFlowData.nextScene = "CG_AVG_02";//测试CG使用
 
         switch (GameFlowData.nextScene)
         {
@@ -673,6 +674,24 @@ public class UIManager : MonoBehaviour
                 break;
 
 
+            case "CG_AVG_02":
+
+                //拉出AVG
+                PlayAVG("CG_02");
+                To_AVGScene();
+
+                //隐藏存档界面，拉摄像机
+                Invoke("DelayHideSaveCavans", 0.3f);
+
+
+                Invoke("DelayShowRoomGenerator", 0.1f);
+                _RoomGenerator.roomNumber = 1;//游街和处刑广场
+                _RoomGenerator.SkyBoxNumber = 2;//白雾
+                //_RoomGenerator.SkyBoxNumber = 1;//早上
+
+                Invoke("PlayDungeonBGM", 1f);
+                break;
+
 
 
 
@@ -689,7 +708,7 @@ public class UIManager : MonoBehaviour
 
 
         //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
-        LockStage();
+        //LockStage();
 
         UpdateCreateCostText();//更新创建奴隶价格
     }
@@ -2638,6 +2657,9 @@ public class UIManager : MonoBehaviour
         {
             case "CG_01":
                 dialogSystem.animation_number = 101;
+                break;
+            case "CG_02":
+                dialogSystem.animation_number = 102;
                 break;
 
 

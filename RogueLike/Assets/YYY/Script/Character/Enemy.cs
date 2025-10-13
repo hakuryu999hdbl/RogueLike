@@ -3357,7 +3357,18 @@ public class Enemy : MonoBehaviour
 
     public void CG_End_RBQ_Man_CarryUp()
     {
-        anim.SetBool("is_Man_CarryUp_Catch", true);
+
+        switch (GameFlowData.nextScene)
+        {
+            case "CG_AVG_01":
+                anim.SetBool("is_Man_CarryUp_Catch", true);//首枷輪姦
+                break;
+            case "CG_AVG_02":
+                anim.SetBool("is_Man_CarryUp_ShameWagon", true);//陵辱車
+                break;
+        }
+
+       
 
         //隐藏血条但是留下名称
         HeathBar.SetActive(false);
@@ -3377,7 +3388,17 @@ public class Enemy : MonoBehaviour
 
     public void CG_End_RBQ_Pillory(int SideOrFront)//0正面 1侧面强奸  2正面强奸
     {
-        anim.Play("RBQ_Punish_Pillory_2");
+
+        switch (GameFlowData.nextScene)
+        {
+            case "CG_AVG_01":
+                anim.Play("RBQ_Punish_Pillory_2");//首枷輪姦
+                break;
+            case "CG_AVG_02":
+                anim.Play("RBQ_Punish_ShameWagon_2");//陵辱車
+                break;
+        }
+       
 
         switch (SideOrFront)
         {
@@ -3440,7 +3461,19 @@ public class Enemy : MonoBehaviour
         }
 
 
-        anim.Play("RBQ_Punish_Pillory");
+        switch (GameFlowData.nextScene)
+        {
+            case "CG_AVG_01":
+                anim.Play("RBQ_Punish_Pillory");//首枷輪姦
+                break;
+            case "CG_AVG_02":
+                anim.Play("RBQ_Punish_ShameWagon");//陵辱車
+                break;
+        }
+      
+
+
+
         switch (Random.Range(0, 4))
         {
             case 0:
@@ -3477,7 +3510,17 @@ public class Enemy : MonoBehaviour
             anim.SetFloat("InputY", 0);
         }
 
-        anim.Play("RBQ_Punish_Pillory");
+
+        switch (GameFlowData.nextScene)
+        {
+            case "CG_AVG_01":
+                anim.Play("RBQ_Punish_Pillory");//首枷輪姦
+                break;
+            case "CG_AVG_02":
+                anim.Play("RBQ_Punish_ShameWagon");//陵辱車
+                break;
+        }
+
         switch (Random.Range(0, 11))
         {
             case 0:

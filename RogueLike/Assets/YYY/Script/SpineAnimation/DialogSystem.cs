@@ -73,6 +73,7 @@ public class DialogSystem : MonoBehaviour
         {
             case 0:
                 textAssets.Add(101, Resources.Load<TextAsset>("TXT_Japanese/J_CG_1"));
+                textAssets.Add(102, Resources.Load<TextAsset>("TXT_Japanese/J_CG_2"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Japanese/J_Story_1"));
@@ -93,6 +94,7 @@ public class DialogSystem : MonoBehaviour
 
             case 1:
                 textAssets.Add(101, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_1"));
+                textAssets.Add(102, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_2"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_1"));
@@ -113,6 +115,7 @@ public class DialogSystem : MonoBehaviour
 
             case 2:
                 textAssets.Add(101, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_1"));
+                textAssets.Add(102, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_2"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_1"));
@@ -133,6 +136,7 @@ public class DialogSystem : MonoBehaviour
 
             case 3:
                 textAssets.Add(101, Resources.Load<TextAsset>("TXT_English/E_CG_1"));
+                textAssets.Add(102, Resources.Load<TextAsset>("TXT_English/E_CG_2"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_English/E_Story_1"));
@@ -153,6 +157,7 @@ public class DialogSystem : MonoBehaviour
 
             case 4:
                 textAssets.Add(101, Resources.Load<TextAsset>("TXT_Korean/K_CG_1"));
+                textAssets.Add(102, Resources.Load<TextAsset>("TXT_Korean/K_CG_2"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Korean/K_Story_1"));
@@ -681,33 +686,41 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] List<AudioClip> Playlist;//当前播放的列表
 
     [SerializeField] List<AudioClip> Playlist_CG_AVG_01;//头枷轮奸
+    [SerializeField] List<AudioClip> Playlist_CG_AVG_02;//泄欲车
 
     int VoiceIndex = 0;
 
     public void Playlist_Voice()
     {
 
-        // 1) 选择「当前台词列表」
-        switch (animation_number)
+        if (animation_number == 101|| animation_number == 102)
         {
-            case 101:
-                Playlist = Playlist_CG_AVG_01;//头枷轮奸
-                break;
+            // 1) 选择「当前台词列表」
+            switch (animation_number)
+            {
+                case 101:
+                    Playlist = Playlist_CG_AVG_01;//头枷轮奸
+                    break;
+                case 102:
+                    Playlist = Playlist_CG_AVG_02;//泄欲车
+                    break;
 
-         
+            }
+
+
+
+
+
+
+
+            // 2) 播台词
+            var clip = Playlist[VoiceIndex++];
+            voiceSource.Stop();
+            voiceSource.clip = clip;
+            voiceSource.Play();
         }
 
-     
-
-
-
-
-
-        // 2) 播台词
-        var clip = Playlist[VoiceIndex++];
-        voiceSource.Stop();
-        voiceSource.clip = clip;
-        voiceSource.Play();
+      
 
 
 
@@ -769,6 +782,7 @@ public class DialogSystem : MonoBehaviour
            //     break;
            // case 1013:
             case 101:
+            case 102:
                 GameFlowData.nextScene = "";//返回主菜单
                 break;
         }
