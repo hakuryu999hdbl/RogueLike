@@ -63,8 +63,9 @@ public class AudioManager : MonoBehaviour
 
     public AudioClip SE_Rope,SE_Vibrator,SE_Electricity,magic_flame2;
     public AudioClip SE_Gate_Open, SE_Gate_Close, SE_IronDoor_Open,SE_IronDoor_Close;
+    public AudioClip SE_Wagon, SE_Bell;
 
-   [Header("叶语嫣")]
+  [Header("叶语嫣")]
     public AudioClip Audio_03_Breath_3_Short_2;
     public AudioClip Audio_03_Breath_0, Audio_03_Breath_1, Audio_03_Breath_2, Audio_03_Breath_3, Audio_03_Breath_4, Audio_03_Breath_5;
     public AudioClip YYY_WalkClip_1, YYY_WalkClip_2, YYY_RunClip_1, YYY_RunClip_2, FootClip;

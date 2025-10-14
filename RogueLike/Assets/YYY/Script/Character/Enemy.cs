@@ -3366,6 +3366,9 @@ public class Enemy : MonoBehaviour
             case "CG_AVG_02":
                 anim.SetBool("is_Man_CarryUp_ShameWagon", true);//陵辱車
                 break;
+            case "CG_AVG_03":
+                anim.SetBool("is_Man_CarryUp_Cage", true);//性奴拍卖会狗笼肉货
+                break;
         }
 
        
@@ -3378,13 +3381,21 @@ public class Enemy : MonoBehaviour
         Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
         Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
 
+        //保存 Girl 部位
+        Girl_headIndex = Random.Range(1, 13);  // 除去皇女
+        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+        Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
+        Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
+        Girl_hatIndex = 1;
+
+
         SetSkin();
 
 
         //随机延后喘息声
         Invoke("Delay_Breath_Voice", Random.Range(1, 5.5f));
 
-    }
+    }//侧面走扛
 
     public void CG_End_RBQ_Pillory(int SideOrFront)//0正面 1侧面强奸  2正面强奸
     {
@@ -3395,7 +3406,10 @@ public class Enemy : MonoBehaviour
                 anim.Play("RBQ_Punish_Pillory_2");//首枷輪姦
                 break;
             case "CG_AVG_02":
-                anim.Play("RBQ_Punish_ShameWagon_2");//陵辱車
+                anim.Play("RBQ_Punish_ShameWagon_2");//陵辱車接客
+                break;
+            case "CG_AVG_03":
+                anim.Play("RBQ_Punish_Cage_2");//狗笼肉货
                 break;
         }
        
@@ -3441,7 +3455,7 @@ public class Enemy : MonoBehaviour
 
         //随机延后喘息声
         Invoke("Delay_Breath_Voice", Random.Range(1, 5.5f));
-    }
+    }//正面展示
 
     void DelayRBQToFront2()
     {
@@ -3467,7 +3481,10 @@ public class Enemy : MonoBehaviour
                 anim.Play("RBQ_Punish_Pillory");//首枷輪姦
                 break;
             case "CG_AVG_02":
-                anim.Play("RBQ_Punish_ShameWagon");//陵辱車
+                anim.Play("RBQ_Punish_ShameWagon");//陵辱車接客
+                break;
+            case "CG_AVG_03":
+                anim.Play("RBQ_Punish_Cage");//狗笼肉货
                 break;
         }
       
@@ -3490,7 +3507,7 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-    }
+    }//正面强奸
     void DelayRBQToSide()
     {
         isDie = true;
@@ -3517,7 +3534,10 @@ public class Enemy : MonoBehaviour
                 anim.Play("RBQ_Punish_Pillory");//首枷輪姦
                 break;
             case "CG_AVG_02":
-                anim.Play("RBQ_Punish_ShameWagon");//陵辱車
+                anim.Play("RBQ_Punish_ShameWagon");//陵辱車接客
+                break;
+            case "CG_AVG_03":
+                anim.Play("RBQ_Punish_Cage");//狗笼肉货
                 break;
         }
 
@@ -3558,61 +3578,6 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        //switch (Random.Range(0, 4))
-        //{
-        //    case 0:
-        //    case 4:
-        //        anim.Play("CG_Re/CG_Pillory_Side_Climax");
-        //        switch (Random.Range(0, 4))
-        //        {
-        //            case 0:
-        //                frameEvents._03_H_ContinualClimax_0();
-        //                break;
-        //            case 1:
-        //                frameEvents._03_H_ContinualClimax_1();
-        //                break;
-        //            case 2:
-        //                frameEvents._03_H_ContinualClimax_2();
-        //                break;
-        //            case 3:
-        //                frameEvents._03_H_ContinualClimax_3();
-        //                break;
-        //        }
-        //        break;
-        //    case 1:
-        //        anim.Play("CG_Re/CG_Pillory_Side_Affection");
-        //        switch (Random.Range(0, 4))
-        //        {
-        //            case 0:
-        //                frameEvents._03_H_Gasping_0();
-        //                break;
-        //            case 1:
-        //                frameEvents._03_H_Gasping_1();
-        //                break;
-        //            case 2:
-        //                frameEvents._03_H_Gasping_Weak_0();
-        //                break;
-        //            case 3:
-        //                frameEvents._03_H_Gasping_Weak_1();
-        //                break;
-        //        }
-        //        break;
-        //    case 2:
-        //        anim.Play("CG_Re/CG_Pillory_Side_Bang_Fast");
-        //        switch (Random.Range(0, 3))
-        //        {
-        //            case 0:
-        //                frameEvents._03_H_Gasping_Quick_0();
-        //                break;
-        //            case 1:
-        //                frameEvents._03_H_Gasping_Quick_1();
-        //                break;
-        //            case 2:
-        //                frameEvents._03_H_Gasping_Quick_2();
-        //                break;
-        //        }
-        //        break;
-        //}
 
         //不知道为啥会有魔法阵出来
         isMage = false;
@@ -3620,7 +3585,7 @@ public class Enemy : MonoBehaviour
 
 
 
-    }
+    }//侧面强奸
 
     void Delay_Breath_Voice()
     {

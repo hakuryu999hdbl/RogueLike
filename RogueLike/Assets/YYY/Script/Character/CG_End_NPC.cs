@@ -10,22 +10,41 @@ public class CG_End_NPC : MonoBehaviour
     public Animator anim;//接入Spine动画机
     private void Start()
     {
-        SetSkin();
+
 
         switch (AnimtorNumber) 
         {
 
             case -1:
-                //男性站立 正面
-                anim.SetFloat("InputX", 0);
-                anim.SetFloat("InputY", -1);
-                anim.Play("Man_Default_Idle");
 
-                Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
-                Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
-                Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
+                if(GameFlowData.nextScene== "CG_AVG_03")
+                {
+                    //保存 Girl 部位
+                    Girl_headIndex = Random.Range(1, 13);  // 除去皇女
+                    Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+                    Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
+                    Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
+                    Girl_hatIndex = 1;
 
-                SetSkin();
+                    //狗笼肉货堆积
+                    anim.SetFloat("InputX", -1);
+                    anim.SetFloat("InputY", 0);
+                    anim.Play("RBQ_Punish_Cage_2");
+                }
+
+                if (GameFlowData.nextScene == "CG_AVG_01"|| GameFlowData.nextScene == "CG_AVG_02")
+                {
+                    //男性站立 正面
+                    anim.SetFloat("InputX", 0);
+                    anim.SetFloat("InputY", -1);
+                    anim.Play("Man_Default_Idle");
+
+                    Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                    Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                    Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
+                }
+
+               
                 break;
 
 
@@ -39,47 +58,128 @@ public class CG_End_NPC : MonoBehaviour
 
 
             case 1:
-                //男性站立 侧面
-                anim.SetFloat("InputX", -1);
-                anim.SetFloat("InputY", 0);
-                anim.Play("Man_Default_Idle");
 
-                Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
-                Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
-                Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
+                if (GameFlowData.nextScene == "CG_AVG_03")
+                {
+                    //保存 Girl 部位
+                    Girl_headIndex = Random.Range(1, 13);  // 除去皇女
+                    Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+                    Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
+                    Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
+                    Girl_hatIndex = 1;
 
-                SetSkin();
+                    //狗笼肉货堆积
+                    anim.SetFloat("InputX", -1);
+                    anim.SetFloat("InputY", 0);
+                    anim.Play("RBQ_Punish_Cage_2");
+                }
+
+                if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
+                {
+                    //男性站立 侧面
+                    anim.SetFloat("InputX", -1);
+                    anim.SetFloat("InputY", 0);
+                    anim.Play("Man_Default_Idle");
+
+                    Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                    Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                    Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
+                }
+
+ 
                 break;
 
             case 2:
-                //女性宣读  正面
-                anim.SetFloat("InputX", 0);
-                anim.SetFloat("InputY", -1);
-                anim.Play("NPC_Girl_Read");
+
+
+                if (GameFlowData.nextScene == "CG_AVG_03")
+                {
+                    //男性站立 正面
+                    anim.SetFloat("InputX", 0);
+                    anim.SetFloat("InputY", -1);
+                    anim.Play("Man_Default_Idle");
+
+                    Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                    Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                    Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
+                }
+
+
+                if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
+                {
+                    //女性宣读  正面
+                    anim.SetFloat("InputX", 0);
+                    anim.SetFloat("InputY", -1);
+                    anim.Play("NPC_Girl_Read");
+                }
+
+
+             
                 break;
 
             case 3:
-                //女性宣读  侧面
-                anim.SetFloat("InputX", -1);
-                anim.SetFloat("InputY", 0);
-                anim.Play("NPC_Girl_Read");
+
+
+                if (GameFlowData.nextScene == "CG_AVG_03")
+                {
+                    //男性站立 侧面
+                    anim.SetFloat("InputX", -1);
+                    anim.SetFloat("InputY", 0);
+                    anim.Play("Man_Default_Idle");
+
+                    Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                    Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                    Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
+                }
+
+                if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
+                {
+                    //女性宣读  侧面
+                    anim.SetFloat("InputX", -1);
+                    anim.SetFloat("InputY", 0);
+                    anim.Play("NPC_Girl_Read");
+                }
+
+              
                 break;
 
             case 4:
-                //女性坐姿  正面
-                anim.SetFloat("InputX", 0);
-                anim.SetFloat("InputY", -1);
-                anim.Play("NPC_Girl_Sit");
+
+                if (GameFlowData.nextScene == "CG_AVG_03")
+                {
+                    Destroy(gameObject);
+                }
+
+                if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
+                {
+                    //女性坐姿  正面
+                    anim.SetFloat("InputX", 0);
+                    anim.SetFloat("InputY", -1);
+                    anim.Play("NPC_Girl_Sit");
+                }   
                 break;
 
 
             case 5:
-                //女性坐姿  侧面
-                anim.SetFloat("InputX", -1);
-                anim.SetFloat("InputY", 0);
-                anim.Play("NPC_Girl_Sit");
+
+                if (GameFlowData.nextScene == "CG_AVG_03")
+                {
+                    Destroy(gameObject);
+                }
+
+                if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
+                {
+                    //女性坐姿  侧面
+                    anim.SetFloat("InputX", 0);
+                    anim.SetFloat("InputY", -1);
+                    anim.Play("NPC_Girl_Sit");
+                }
                 break;
         }
+
+
+
+        SetSkin();
     }
 
 

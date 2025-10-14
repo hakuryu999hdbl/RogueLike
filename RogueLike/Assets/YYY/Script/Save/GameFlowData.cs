@@ -10,6 +10,7 @@ public class GameFlowData : MonoBehaviour
     //【CG】进入CG处刑场景
     //【CG_AVG_01】进入CG结局剧情1
     //【CG_AVG_02】进入CG结局剧情2
+    //【CG_AVG_03】进入CG结局剧情3
 
 
 

@@ -111,6 +111,10 @@ public class FrameEvents : MonoBehaviour
     public void _SE_IronDoor_Open() { audioS.PlayOneShot(AudioManager.SE_IronDoor_Open); }
     public void _SE_IronDoor_Close() { audioS.PlayOneShot(AudioManager.SE_IronDoor_Close); }
 
+
+    public void _SE_Wagon() { audioS.PlayOneShot(AudioManager.SE_Wagon); }
+    public void _SE_Bell() { audioS.PlayOneShot(AudioManager.SE_Bell); }
+
     //------------叶语嫣
     public void _SE_HighHeels_Walk_1() { audioS.PlayOneShot(AudioManager.YYY_WalkClip_1); }
     public void _SE_HighHeels_Walk_2() { audioS.PlayOneShot(AudioManager.YYY_WalkClip_2); }

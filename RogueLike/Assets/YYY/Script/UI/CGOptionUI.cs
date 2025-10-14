@@ -78,7 +78,7 @@ public class CGOptionUI : MonoBehaviour
     }
     public void ToCG_End_03()
     {
-        GameFlowData.nextScene = "CG_AVG_01";
+        GameFlowData.nextScene = "CG_AVG_03";
         UIManager.instance.ReLoadScene();//前往CG页面
     }
 }

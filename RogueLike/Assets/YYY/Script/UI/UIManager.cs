@@ -178,7 +178,7 @@ public class UIManager : MonoBehaviour
 
 
         //GameFlowData.nextScene = "Story_03";//测试Boss使用
-        //GameFlowData.nextScene = "CG_AVG_02";//测试CG使用
+        //GameFlowData.nextScene = "CG_AVG_03";//测试CG使用
 
         switch (GameFlowData.nextScene)
         {
@@ -692,7 +692,27 @@ public class UIManager : MonoBehaviour
                 Invoke("PlayDungeonBGM", 1f);
                 break;
 
+            case "CG_AVG_03":
 
+                //拉出AVG
+                PlayAVG("CG_03");
+                To_AVGScene();
+
+                //隐藏存档界面，拉摄像机
+                Invoke("DelayHideSaveCavans", 0.3f);
+
+
+                Invoke("DelayShowRoomGenerator", 0.1f);
+                _RoomGenerator.roomNumber = 1;//游街和处刑广场
+
+
+                //_RoomGenerator.SkyBoxNumber = 0;//夜晚
+
+                _RoomGenerator.SkyBoxNumber = 2;//白雾
+                //_RoomGenerator.SkyBoxNumber = 1;//早上
+
+                Invoke("PlayDungeonBGM", 1f);
+                break;
 
 
             default:
@@ -1164,7 +1184,7 @@ public class UIManager : MonoBehaviour
         //ToSavePageButton(0);
 
     }//这个是主界面在去CG界面的时候产生路径[不确定怎么弄专门设置的]
-    void DelayPlayerPose() { player.anim.Play("Girl_Broken_Idle"); }//UIManager里的Awake太早来不及触发
+    void DelayPlayerPose() { player.anim.Play("RBQ_Punish_Rape_2"); }//UIManager里的Awake太早来不及触发
     public void ToChapterPage()
     {
         ChapterCavans.SetActive(true);
@@ -1216,7 +1236,7 @@ public class UIManager : MonoBehaviour
 
 
             player.frameEvents.audioS.Stop();
-            player.anim.Play("Girl_Broken_Idle");
+            player.anim.Play("RBQ_Punish_Rape_2");
 
             CG_BackButton.SetActive(false);//隐藏CG观赏后退按钮
 
@@ -2697,6 +2717,9 @@ public class UIManager : MonoBehaviour
                 break;
             case "CG_02":
                 dialogSystem.animation_number = 102;
+                break;
+            case "CG_03":
+                dialogSystem.animation_number = 103;
                 break;
 
 
