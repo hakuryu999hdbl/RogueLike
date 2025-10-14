@@ -439,17 +439,42 @@ public class SaveSlotUI : MonoBehaviour
     }//弹出确认删除存档框
     public void DeleteCurrentSave()
     {
+        // SaveManager.DeleteSave(Data.characterName);
+        // player.ClearSkin(); // ✅ 清除当前皮肤
+        //
+        // Destroy(this.gameObject);
+        //
+        //
+        // UIManager.instance.RefreshSaveSlots(); // ✅ 删除后刷新
+        //
+        // UIManager.instance.UpdateCurrentSelection(UIManager.instance.currentIndex);//刷新列表后也是选中当前
+        //
+        // AudioManager.instance.AudioPlay(AudioManager.instance.Effect_tear1);
+
+
+        // 1️⃣ 安全删除存档文件
         SaveManager.DeleteSave(Data.characterName);
-        player.ClearSkin(); // ✅ 清除当前皮肤
 
-        Destroy(this.gameObject);
+        // 2️⃣ 从UI列表移除自己（防止残留）
+        if (UIManager.instance.saveSlots.Contains(this))
+            UIManager.instance.saveSlots.Remove(this);
 
+        // 3️⃣ 清除皮肤表现
+        player.ClearSkin();
 
-        UIManager.instance.RefreshSaveSlots(); // ✅ 删除后刷新
+        // 4️⃣ 销毁自己
+        Destroy(gameObject);
 
-        UIManager.instance.UpdateCurrentSelection(UIManager.instance.currentIndex);//刷新列表后也是选中当前
+        // 5️⃣ 延迟刷新整个列表，给 Destroy 一帧时间
+        UIManager.instance.Invoke(nameof(UIManager.instance.RefreshSaveSlots), 0.05f);
+
+        // 6️⃣ 延迟重新选中第一个存档，确保高亮存在
+        UIManager.instance.Invoke(nameof(UIManager.instance.SelectFirstSlotSafe), 0.1f);
 
         AudioManager.instance.AudioPlay(AudioManager.instance.Effect_tear1);
+
+
+
     }//删除这个档的皮肤
 
     public void ClickVoice()

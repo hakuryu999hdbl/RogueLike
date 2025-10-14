@@ -1781,7 +1781,18 @@ public class UIManager : MonoBehaviour
         CreateCavans.SetActive(false);
         SaveCavans.SetActive(true);
 
-        UpdateCurrentSelection(currentIndex);//完成捏人后再一次回到当前选中
+
+        // ✅ 先刷新存档UI
+        RefreshSaveSlots();//每次确定种族天赋后也需要刷新存档界面
+
+        // ✅ 等待一帧后再选中第一个（或最新一个）存档，保证UI已生成完
+        Invoke(nameof(SelectNewestSlotSafe), 0.05f);
+
+        //UpdateCurrentSelection(currentIndex);//完成捏人后再一次回到当前选中
+
+
+
+        // UI状态恢复
 
         CurrentChooseList = 2;//返回存档界面
 
@@ -1793,7 +1804,7 @@ public class UIManager : MonoBehaviour
         isInputing = false;
 
 
-        RefreshSaveSlots();//每次确定种族天赋后也需要刷新存档界面
+     
 
     }//玩家点击Ok
 
@@ -2189,6 +2200,28 @@ public class UIManager : MonoBehaviour
 
     }//刷新当前存档UI
 
+    public void SelectFirstSlotSafe()
+    {
+        if (saveSlots.Count > 0)
+        {
+            UpdateCurrentSelection(0);
+        }
+        else
+        {
+            currentSelectedSlot = null;
+            currentIndex = 0;
+        }
+    }//检测当前存档有没有，有的话选中第一个
+
+    public void SelectNewestSlotSafe()
+    {
+        if (saveSlots.Count == 0) return;
+
+        // 如果是新增角色，默认选中最后一个
+        int newestIndex = saveSlots.Count - 1;
+
+        UpdateCurrentSelection(newestIndex);
+    }//检测新增的角色，如果是新增角色，默认选中最后一个
 
     //////////////////////列表显示存档，方向键切换当前选中按钮//////////////////////////////////
     public List<SaveSlotUI> saveSlots = new List<SaveSlotUI>();
@@ -2197,6 +2230,9 @@ public class UIManager : MonoBehaviour
     public void UpdateCurrentSelection(int newIndex)
     {
         if (saveSlots.Count == 0) return;
+
+        // 清理已销毁的引用
+        saveSlots.RemoveAll(s => s == null);
 
         newIndex = Mathf.Clamp(newIndex, 0, saveSlots.Count - 1);
 
@@ -2218,12 +2254,13 @@ public class UIManager : MonoBehaviour
 
     public void DeleteCurrentSelection()
     {
-        if (saveSlots.Count == 0) return;
+        // if (saveSlots.Count == 0) return;
+        if (currentSelectedSlot == null) return;
 
+        // 先删除角色，再加钱（防止残留重复触发）
+        currentSelectedSlot.DeleteCurrentSave();
         // 加钱（用你的 ChangeMoney；若不在同脚本，换成 UIManager.instance.ChangeMoney(...))
         ChangeMoney(pendingDeletePrice);
-
-        currentSelectedSlot.DeleteCurrentSave();
 
         Invoke("CancelDelete", 0.1f);//目前暂时这么做，以防确定按太快直接跳到捏人界面
 

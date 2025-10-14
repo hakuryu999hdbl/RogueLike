@@ -46,33 +46,36 @@ public class RBQ : MonoBehaviour
 
 
                 if (GameFlowData.nextScene == "Story_01" || GameFlowData.nextScene == "Story_02")
-                { CurrentRapeType = Random.Range(1, 4); }
+                { CurrentRapeType = 4; }
                 else if (GameFlowData.nextScene == "Story_04" || GameFlowData.nextScene == "Story_06") 
                 {
-                    CurrentRapeType = 3;
+                    CurrentRapeType = Random.Range(3, 5);
                 }
                 else
                 {
-                    CurrentRapeType = Random.Range(1, 6);//7，9，11关
+                    CurrentRapeType = Random.Range(1, 7);//7，9，11关
                 }
                
 
                 switch (CurrentRapeType)
                 {
                     case 1:
-                        anim.Play("RBQ_Punish_Hang");
+                        anim.Play("RBQ_Punish_Hang");//吊缚鞭打
                         break;
                     case 2:
-                        anim.Play("RBQ_Punish_Rape");
+                        anim.Play("RBQ_Punish_Rape");//后入强奸
                         break;
                     case 3:
-                        anim.Play("RBQ_Punish_Pillory");
+                        anim.Play("RBQ_Punish_Pillory");//头枷拘束
                         break;
                     case 4:
-                        anim.Play("RBQ_Punish_Tentacle");
+                        anim.Play("RBQ_Punish_ShameWagon");//泄欲车
                         break;
                     case 5:
-                        anim.Play("RBQ_Punish_Monster_Rape_Side");
+                        anim.Play("RBQ_Punish_Tentacle");//触手拘束
+                        break;
+                    case 6:
+                        anim.Play("RBQ_Punish_Monster_Rape_Side");//变异体强奸
                         break;
                 }
 
@@ -178,21 +181,24 @@ public class RBQ : MonoBehaviour
                 switch (CurrentRapeType)
                 {
                     case 1:
-                        anim.Play("RBQ_Punish_Hang_2");
+                        anim.Play("RBQ_Punish_Hang_2");//吊缚鞭打
                         break;
                     case 2:
-                        anim.Play("RBQ_Punish_Rape_2");
+                        anim.Play("RBQ_Punish_Rape_2");//后入强奸
                         break;
                     case 3:
-                        anim.Play("RBQ_Punish_Pillory_2");
+                        anim.Play("RBQ_Punish_Pillory_2");//头枷拘束
                         break;
                     case 4:
-                        //还是自己
-                        enemy.ChangeClass(7);
+                        anim.Play("RBQ_Punish_ShameWagon_2");//泄欲车
                         break;
                     case 5:
-                        anim.Play("RBQ_Punish_Rape_2");
-                        enemy.ChangeClass(4);
+                        //还是自己
+                        enemy.ChangeClass(7);//触手拘束
+                        break;
+                    case 6:
+                        anim.Play("RBQ_Punish_Rape_2");//变异体强奸
+                        enemy.ChangeClass(4);//产生变异体
                         break;
                 }
 
@@ -288,10 +294,14 @@ public class RBQ : MonoBehaviour
                     switch (CurrentRapeType)
                     {
                         case 1:
+
+                            //吊缚鞭打
                             GameObject TortureDevice = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
                             TortureDevice.GetComponent<Plant>().SetImage(0);
                             break;
                         case 3:
+
+                            //头枷拘束
                             GameObject TortureDevice2 = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
 
                             if (inputX == 0)
@@ -303,6 +313,22 @@ public class RBQ : MonoBehaviour
                                 TortureDevice2.GetComponent<Plant>().SetImage(9);//侧面
                             }
                            
+                            break;
+
+                        case 4:
+
+                            //泄欲车
+                            GameObject TortureDevice3 = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
+
+                            if (inputX == 0)
+                            {
+                                TortureDevice3.GetComponent<Plant>().SetImage(2);//正面
+                            }
+                            else
+                            {
+                                TortureDevice3.GetComponent<Plant>().SetImage(1);//侧面
+                            }
+
                             break;
                     }
 
