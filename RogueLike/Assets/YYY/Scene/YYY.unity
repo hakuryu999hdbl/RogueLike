@@ -2403,6 +2403,8 @@ MonoBehaviour:
     m_Bits: 64
   isDodge: 0
   strike: {fileID: 904417489}
+  isInvincible: 0
+  Invincible_Mark: {fileID: 1711904757}
   moveAction: {fileID: 389908679454232702, guid: deaf91781ed4539448d73a93eae4fb40, type: 3}
   inputActions: {fileID: -944628639613478452, guid: deaf91781ed4539448d73a93eae4fb40, type: 3}
   isInputBlocked: 1
@@ -40882,8 +40884,8 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Dimension   Mystia   GuanLe
+    m_LineSpacing: 2
+  m_Text: Dimension   Mystia   GuanLe   Ina_Miyo   OTL_OTL   Mockingbird
 --- !u!222 &1112346650
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -48073,6 +48075,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 01971f540472553438962fbc898e18a4, type: 3}
   - {fileID: 8300000, guid: ade563e4ac11d42409c7750862deae44, type: 3}
   - {fileID: 8300000, guid: fdebaf5d923ebb041a542ee68b41f92d, type: 3}
+  Playlist_CG_AVG_03: []
 --- !u!1 &1268049010
 GameObject:
   m_ObjectHideFlags: 0
@@ -48303,7 +48306,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1668996046, guid: 6a62a5436091b3b498ce648d5be5bea3, type: 3}
+  m_Sprite: {fileID: -1434149071, guid: a22c5b01fc19fdd4988166456cb1ed40, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -56012,6 +56015,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1622040253}
+  - {fileID: 1711904758}
   - {fileID: 908704478}
   - {fileID: 1286819640}
   - {fileID: 1533871520}
@@ -63676,6 +63680,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1711582731}
+  m_CullTransparentMesh: 1
+--- !u!1 &1711904757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1711904758}
+  - component: {fileID: 1711904760}
+  - component: {fileID: 1711904759}
+  m_Layer: 0
+  m_Name: Invincible
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1711904758
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711904757}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1489750644}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 40}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1711904759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711904757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 981999369, guid: a22c5b01fc19fdd4988166456cb1ed40, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1711904760
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711904757}
   m_CullTransparentMesh: 1
 --- !u!1 &1722493088
 GameObject:

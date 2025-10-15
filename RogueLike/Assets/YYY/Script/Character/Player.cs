@@ -535,34 +535,34 @@ public class Player : MonoBehaviour
                 }
             }//持续灼烧伤害
 
-            if (Class == PlayerClass.Succubus&&currentStrength<=maxStrength/3) 
-            {
-                BurnTimer += Time.deltaTime;
-
-                if (BurnTimer >= 0.2f)
-                {
-                    currentHealth = Mathf.Clamp(currentHealth - 1, 0, maxHealth);
-                    UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
-
-                    //显示伤害
-                    HudText.HUD(-1);
-
-                    BurnTimer = 0;
-
-                    if (currentHealth <= 0)
-                    {
-                        isDie = true;
-
-                        anim.Play(GetAnimPrefix() + "Default_Die_2");
-
-                        Critical.SetActive(false);
-
-                        UIManager.instance.Ending_UI();//魔族化损血死亡
-
-                        return;
-                    }
-                }
-            }
+            //if (Class == PlayerClass.Succubus&&currentStrength<=maxStrength/3) 
+            //{
+            //    BurnTimer += Time.deltaTime;
+            //
+            //    if (BurnTimer >= 0.2f)
+            //    {
+            //        currentHealth = Mathf.Clamp(currentHealth - 1, 0, maxHealth);
+            //        UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
+            //
+            //        //显示伤害
+            //        HudText.HUD(-1);
+            //
+            //        BurnTimer = 0;
+            //
+            //        if (currentHealth <= 0)
+            //        {
+            //            isDie = true;
+            //
+            //            anim.Play(GetAnimPrefix() + "Default_Die_2");
+            //
+            //            Critical.SetActive(false);
+            //
+            //            UIManager.instance.Ending_UI();//魔族化损血死亡
+            //
+            //            return;
+            //        }
+            //    }
+            //}
             //魔族化后的威威削减生命值
         }
         else
@@ -578,6 +578,15 @@ public class Player : MonoBehaviour
 
         // 每帧更新剑物体的旋转
         Strike_Effect.transform.Rotate(0, 0, 100 * Time.deltaTime);
+
+        //无敌标志
+        if (isInvincible)
+        { 
+            Invincible_Mark.SetActive(true);
+            attackPressTime = 1f;//法师这类一定要蓄力才能攻击的角色，在闪避过后给与的奖励蓄力中一定要按下0.2秒后松手才能攻击
+        }
+        else
+        { Invincible_Mark.SetActive(false); }
 
         //当这些动画在播放的时候玩家不能移动
         AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
@@ -1109,6 +1118,7 @@ public class Player : MonoBehaviour
             attackPressTime = 0f;
 
             attackTriggered = false;
+
         }
 
     }
@@ -1124,7 +1134,7 @@ public class Player : MonoBehaviour
 
             if (!attackTriggered)
             {
-                if (attackPressTime < 0.2f)
+                if (attackPressTime < 0.15f)//改善蓄力容忍度
                 {
                     PlayNormalAttack(); // 普通攻击
                 }
@@ -1178,11 +1188,21 @@ public class Player : MonoBehaviour
     public void _Attack_Cancel()
     {
 
+
+
         // ToDo闪避/如果角色此时在闪避中，强制终止攻击判定
-        //if (isDodge || isDodging)
-        //{
-        //    ResetCombo();
-        //}
+        if (isDodge || isDodging)
+        {
+            ResetCombo();
+            return;
+        }
+
+
+        // ---闪避无敌状态---
+        if (isInvincible)
+        {
+            isInvincible = false; // 一旦开始攻击结束，解除无敌
+        }
 
 
         if (visionType == Player.PlayerType.ShortRangePlayer)//男性女性女魔族近战都用这个
@@ -1198,7 +1218,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                ResetCombo();
+                ResetCombo();//近战4连击结束重置攻击
             }
         }
         else
@@ -1348,6 +1368,13 @@ public class Player : MonoBehaviour
 
 
     }
+
+    void ResetAttackState()
+    {
+        isAttacking = false;
+        attackTriggered = false;
+    }//轻量型ReSetCombo,在闪避时使用
+
 
     float Save_attackPressTime;//不知道什么原因，远程蓄力传过去是0
     private void PlayChargeAttack()
@@ -1615,7 +1642,13 @@ public class Player : MonoBehaviour
 
         s.Init(-ShootDamage-CurrentWeaponPower, -SpellDamage - CurrentWeaponPower, willCrit, Save_attackPressTime, special, direction, Shooting.BulletOwnerType.Friend);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
 
-    
+
+
+        // ---闪避无敌状态---
+        if (isInvincible)
+        {
+            isInvincible = false; //射出子弹时，解除无敌
+        }
 
     }//射击子弹
 
@@ -2068,16 +2101,34 @@ public class Player : MonoBehaviour
 
 
         // ToDo闪避/开始闪避前重置攻击
-        if (isAttacking || isAttacking2)
-        {
-            ResetCombo();
-            isAttacking = false;
-            attackTriggered = false;
-       
-            //蓄力变成了
-            ChangeCritical(-maxCritical);
-        }
+        //if (isAttacking || isAttacking2)
+        //{
+        //    ResetCombo();
+        //    isAttacking = false;
+        //    attackTriggered = false;
+        //
+        //    //蓄力变成了
+        //    ChangeCritical(-maxCritical);
+        //}
 
+        // 若当前正在蓄力，则保留蓄力，不清空
+        if (isAttacking && attackPressTime > 0f && !attackTriggered)
+        {
+            // 蓄力中允许闪避，但暂停计时
+            canMove = false;
+        }
+        else
+        {
+            // 仅在普通攻击中重置
+            if (isAttacking2)
+            {
+                ResetAttackState();//轻量型ResetCombo/闪避开始的重置攻击
+                //ResetCombo();//闪避开始的重置攻击
+                //isAttacking = false;
+                //attackTriggered = false;
+                ChangeCritical(-maxCritical);
+            }
+        }
 
 
         if (currentStrength > 50) // 确保不在连续闪避状态
@@ -2134,10 +2185,11 @@ public class Player : MonoBehaviour
     IEnumerator Dodge(Vector2 direction, float dodgeSpeed, float dodgeDistance)
     {
 
-        //闪避后连击取消
-        if (currentHealth > 0)
+
+        //闪避后连击取消// 仅在当前不蓄力时才重置
+        if (currentHealth > 0 && !isAttacking)
         {
-            Invoke("ResetCombo", 1f);//防止挂了又站起来
+            Invoke("ResetCombo", 1f);
         }
 
         // 音效、体力扣除
@@ -2195,15 +2247,36 @@ public class Player : MonoBehaviour
         //ToDo闪避/ 确保闪避结束后可以再次攻击
         if (currentHealth > 0)
         {
-            ResetCombo();
-            isAttacking = false;
-            attackTriggered = false;
+            canMove = true;
+            CancelInvoke("ResetCombo"); // 防止延迟打断
+
+            // 如果玩家仍然在按攻击键，重新标记为蓄力中
+            if (isAttacking && !attackTriggered)
+            {
+                isAttacking = true;
+            }
+
+
+
+
+            // 如果正在蓄力，就保留攻击状态，不要重置
+            //if (isAttacking && !attackTriggered)
+            //{
+            //    return;
+            //}
+            //
+            //// 其他情况才恢复Idle
+            //ResetCombo();
+
+            //ResetAttackState();//轻量型重置攻击/闪避结束后的重置攻击
         }
     }
 
     [Header("闪避触发成功暴击")]
     public Strike strike;//目前用于触发暴击效果
-
+    [Header("闪避无敌状态")]
+    public bool isInvincible = false; // 无敌状态标志
+    public GameObject Invincible_Mark;//处于无敌中标志
     public void DodgeEnemyAttack()
     {
         if (isDodgeCoolDown)
@@ -2218,6 +2291,11 @@ public class Player : MonoBehaviour
         HudText.SpecialText(1);
 
         Time.timeScale = 0.3f;
+
+
+        // ---闪避无敌状态：开启无敌 ---
+        isInvincible = true;
+
 
         Invoke("DodgeEnemyAttackOver", 0.2f);
 
@@ -2234,13 +2312,15 @@ public class Player : MonoBehaviour
     void ChangeDodgeCoolDown()
     {
         isDodgeCoolDown = false;
+
+        isInvincible = false;//暂时无敌1.5秒看看
     }
 
     void DodgeEnemyAttackOver()
     {
         Time.timeScale = 1f;//继续
 
-
+        
     }
 
 
@@ -2558,8 +2638,19 @@ public class Player : MonoBehaviour
     [Header("暴击")]
     public GameObject Critial;
 
+
+
+
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物
     {
+
+        if (isInvincible)
+        {
+            // 无敌状态下直接忽略伤害
+            return;
+        }
+
+
         if (!isScreaming && currentHealth > 0 && !isDie)//冷却不受击，死亡后不受击，倒地不受击，(所有攻击都无法canMove)攻击中不受击
         {
 
@@ -2577,8 +2668,17 @@ public class Player : MonoBehaviour
             if (amount < 0)
             {
 
+                #region
+                currentCombo = 0;
+                comboQueued = false;
+                canCombo = false;
+                isAttacking2 = false;
+                //保留防御动画
+                //ResetCombo();//只要受伤重置连击
+                #endregion
 
-                Attack_Cancel();//只要受伤就松手蓄力
+                //ResetAttackState();
+                //Attack_Cancel();//只要受伤就松手蓄力
 
                 if (!isDie && canMove)//处于攻击状态下无法防御
                 {
@@ -2591,11 +2691,11 @@ public class Player : MonoBehaviour
            
                     if (Random.value < blockChance)
                     {
-           
+
                         if (Class == PlayerClass.Succubus || isMage)
                         {
                             ProtectiveCoverEffect.SetActive(true);
-                          
+
                             switch (Random.Range(0, 3))
                             {
                                 case 0:
@@ -2610,22 +2710,23 @@ public class Player : MonoBehaviour
                             }
 
                         }//只有魔族和法师需要特效（遮挡无防御动画）
-           
+
                         if (visionType == PlayerType.ShortRangePlayer)
                         {
                             anim.Play(GetAnimPrefix() + "Strike_Block");
                         }
                         else
                         {
-           
+
                             if (isMage)
                             {
                                 //没有法师防御动画
                             }
                             else { anim.Play(GetAnimPrefix() + "Shoot_Block"); }
-           
+
                         }
-           
+
+
                         // 防御成功扣除体力
                         ChangeStrength(-50);
            
@@ -2652,7 +2753,17 @@ public class Player : MonoBehaviour
                         Vector3 spawnPosition_2 = transform.position + offset_2;
                         GameObject effectPrefabs_2 = Instantiate(SparkEffect, spawnPosition_2, transform.rotation);
                         Destroy(effectPrefabs_2, 2f);
-           
+
+
+
+
+
+                        // 防御成功后 0.3 秒恢复 Idle（防止卡死在防御动画）
+                        //Invoke(nameof(DefenseRecover), 0.3f);
+
+
+                       
+
                         return;
                     }
            
@@ -2665,10 +2776,13 @@ public class Player : MonoBehaviour
                     //Invoke("ResetCombo", 1f);//防止挂了又站起来
 
                     //立即重置
-                    CancelInvoke("ResetCombo");
-                    ResetCombo(); // 即时中断蓄力或攻击状态
-                    isAttacking = false;
-                    attackTriggered = false;
+                    //CancelInvoke("ResetCombo");
+                    //ResetCombo(); // 受伤时即时中断蓄力或攻击状态
+
+                    ResetAttackState();//轻量型ResetCombo/受伤时即时中断蓄力或攻击状态
+
+                    //isAttacking = false;
+                    //attackTriggered = false;
                     isDodging = false;
                 }
 
@@ -2828,7 +2942,7 @@ public class Player : MonoBehaviour
 
             //击倒再站起
 
-            if (!isDie && currentHealth > 0) 
+            if (!isDie && currentHealth > 0&&currentCritical<=0)//蓄力期间不会被击倒击飞 
             {
 
                 int DamageType = Random.Range(0, 5);
@@ -2895,6 +3009,16 @@ public class Player : MonoBehaviour
         }
 
     }
+
+    public void RestoreHealth(int amount) 
+    {
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
+
+        //显示伤害
+        HudText.HUD(amount);
+
+    }//回血专用路径
 
 
     void HurtOver()

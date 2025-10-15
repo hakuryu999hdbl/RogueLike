@@ -2274,8 +2274,9 @@ public class Enemy : MonoBehaviour
             //玩家如果是魔族化状态则回血
             if (player.Class == Player.PlayerClass.Succubus && tag != "Friend")
             {
+                player.RestoreHealth(-amount / 4);
                 //Debug.Log("回血");
-                player.ChangeHealth(-amount / 4, 0);
+                //player.ChangeHealth(-amount / 4, 0);
             }
 
 
@@ -2841,6 +2842,9 @@ public class Enemy : MonoBehaviour
         //  改变小地图显示颜色为绿色
         Arrow.GetComponent<SpriteRenderer>().color = Color.green;
 
+        //受伤数字变红
+        HudText.isFriend = true;
+
         Debug.Log($"{gameObject.name} has switched to Friend.");
 
         //敌人攻击冷却
@@ -2873,7 +2877,8 @@ public class Enemy : MonoBehaviour
         //  改变小地图显示颜色为绿色
         Arrow.GetComponent<SpriteRenderer>().color = Color.red;
 
-
+        //受伤数字变白
+        HudText.isFriend = false;
 
         Debug.Log($"{gameObject.name} has switched to Enemy.");
 

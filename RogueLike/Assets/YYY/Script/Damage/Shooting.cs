@@ -88,17 +88,18 @@ public class Shooting : MonoBehaviour
 
     [Header("特殊类型子弹")]
     public int specialBullet;
-    public GameObject Bullet, Arrow, Electricity, Flame, Ice,Poison,Wind;
-    public void SetSpecialBullet(int SpecialBullet)// 0一般子弹   1弩箭   2魔法雷电球   3魔法火焰球  4冰魔法  5毒魔法
+    public GameObject Bullet, Arrow, Electricity, Flame, Ice,Poison,Wind,Darkness;
+    public void SetSpecialBullet(int SpecialBullet)//-1暗黑魔法  0一般子弹   1弩箭   2魔法雷电球   3魔法火焰球  4冰魔法  5毒魔法
     {
         //特殊子弹
         switch (SpecialBullet)
         {
 
             case -1:
-
+                Darkness.SetActive(true);
                 CurrentBulletEffect = DarknessEffect;
-                speed = 50f;
+                //speed = 50f;
+                speed = 20f;
                 TypeOfAttack = -1;//暗黑
 
                 lifetime = 1f;
@@ -214,7 +215,7 @@ public class Shooting : MonoBehaviour
                     s.DamageToEnemy = true;
                     s.Init(PrefabsDamage, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
 
-                    Destroy(EffectPrefabs, 0.5f);
+                    Destroy(EffectPrefabs, 1f);
 
                     break;
 
@@ -274,7 +275,7 @@ public class Shooting : MonoBehaviour
                     s.DamageToFriend = true;
                     s.Init(PrefabsDamage, TypeOfAttack, isCritial,chargeTime);// ← 直接把算好的值传进去
 
-                    Destroy(EffectPrefabs, 0.5f);
+                    Destroy(EffectPrefabs, 1f);
 
                     break;
 

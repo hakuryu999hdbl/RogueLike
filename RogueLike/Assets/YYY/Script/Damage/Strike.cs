@@ -39,6 +39,8 @@ public class Strike : MonoBehaviour
             appliedDamage = Mathf.RoundToInt(appliedDamage * chargeMultiplier);
         }
 
+
+
     }//初始化随机伤害
     private void OnDisable()
     {
