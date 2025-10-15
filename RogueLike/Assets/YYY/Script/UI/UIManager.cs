@@ -728,7 +728,7 @@ public class UIManager : MonoBehaviour
 
 
         //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
-        //LockStage();
+        LockStage();
 
         UpdateCreateCostText();//更新创建奴隶价格
     }

@@ -163,18 +163,18 @@ public class WallMap : MonoBehaviour
                     case "Story_01":
                     case "Story_02":
                     case "Story_03":
-                        SetEnemy(1);
+                        SetEnemy(1);//第1，2，3关只有男性敌人
                         break;
 
                     case "Story_04":
                     case "Story_05":
                     case "Story_06":
-                        SetEnemy(3);
+                        SetEnemy(3);//第4，5，6关只有男性和女性敌人
                         break;
                     case "Story_07":
                     case "Story_08":
                     case "Story_09":
-                        SetEnemy(2);
+                        SetEnemy(2);//第7，8，9关只有触手怪敌人
                         break;
 
                     default:
@@ -198,13 +198,13 @@ public class WallMap : MonoBehaviour
                 switch (SetOtherEnemy) 
                 {
                     case 1:
-                        SetEnemy(1);
+                        SetEnemy(1);//Boss房间另外刷男性敌人
                         break;
                     case 2:
-                        SetEnemy(2);
+                        SetEnemy(2);//Boss房间另外刷触手敌人
                         break;
                     case 3:
-                        SetEnemy(3);
+                        SetEnemy(3);//Boss房间另外刷男性女性敌人
                         break;
                 }
             }

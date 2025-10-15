@@ -2622,6 +2622,7 @@ public class Player : MonoBehaviour
     public GameObject FireEffect;//烧特效
     public GameObject ProtectiveCoverEffect;//防护罩特效
     public GameObject Demon_Effect;//恶魔特效
+    public GameObject Dark_Space_Effect;//暗黑全屏特效
 
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
 
@@ -2641,7 +2642,7 @@ public class Player : MonoBehaviour
 
 
 
-    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物
+    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 -1暗黑  0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物   6击飞
     {
 
         if (isInvincible)
@@ -2803,6 +2804,12 @@ public class Player : MonoBehaviour
             //伤害类型
             switch (TypeOfAttack)
             {
+
+                case -1:
+                    Dark_Space_Effect.SetActive(true);//暗黑伤害
+                    break;
+
+
                 case 1:
                     Strike_Effect.SetActive(true);//剑伤害
                     break;

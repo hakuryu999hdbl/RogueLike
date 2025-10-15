@@ -2426,6 +2426,7 @@ MonoBehaviour:
   FireEffect: {fileID: 8085956180755329075, guid: 90a92e097cc79514d896dce42d12675a, type: 3}
   ProtectiveCoverEffect: {fileID: 1275863067}
   Demon_Effect: {fileID: 1533871519}
+  Dark_Space_Effect: {fileID: 1722747829}
   Floor_Blood_0: {fileID: 3847335236365124758, guid: f15a558e588307946844104b598ed691, type: 3}
   Floor_Blood_1: {fileID: 8773297149955030747, guid: 7ee8f04e3eac831439b5fc33a9b94a38, type: 3}
   Floor_Blood_2: {fileID: 6090803375863818630, guid: 33e51ded56057a64da352d862e56ca63, type: 3}
@@ -40885,7 +40886,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 2
-  m_Text: Dimension   Mystia   GuanLe   Ina_Miyo   OTL_OTL   Mockingbird
+  m_Text: "Dimension   Mystia   GuanLe   Ina_Miyo   OTL_OTL   \u711A\u685C\n"
 --- !u!222 &1112346650
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -63692,6 +63693,8 @@ GameObject:
   - component: {fileID: 1711904758}
   - component: {fileID: 1711904760}
   - component: {fileID: 1711904759}
+  - component: {fileID: 1711904761}
+  - component: {fileID: 1711904762}
   m_Layer: 0
   m_Name: Invincible
   m_TagString: Untagged
@@ -63707,7 +63710,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1711904757}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -63715,8 +63718,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 40}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1.8, y: 20.9}
+  m_SizeDelta: {x: 15.73, y: 15.73}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1711904759
 MonoBehaviour:
@@ -63738,7 +63741,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 981999369, guid: a22c5b01fc19fdd4988166456cb1ed40, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6b8a81ee548fc93458f9283089a2ef36, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -63756,6 +63759,125 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1711904757}
   m_CullTransparentMesh: 1
+--- !u!95 &1711904761
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711904757}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3b25e4e76d6eadf4dad51fc13adb4968, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!82 &1711904762
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711904757}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 726cef9543c29cc4eaeea675479e5b40, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 552f6d024a535c445a2a692cfa690da6, type: 3}
+  m_Resource: {fileID: 8300000, guid: 552f6d024a535c445a2a692cfa690da6, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 1.01
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1722493088
 GameObject:
   m_ObjectHideFlags: 0
@@ -74409,7 +74531,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ver.0.0.2
+  m_Text: Ver.0.0.3
 --- !u!222 &1991218265
 CanvasRenderer:
   m_ObjectHideFlags: 0

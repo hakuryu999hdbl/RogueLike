@@ -194,9 +194,11 @@ public class Enemy : MonoBehaviour
                         BecomeBoss_DarkMage();
 
                         // 每隔 5 秒执行一次 Boss技能 召集触手怪物
-                        InvokeRepeating(nameof(BossSkill_CallTentacleMonster), 3f, 5f);
+                        //InvokeRepeating(nameof(BossSkill_CallTentacleMonster), 3f, 5f);
 
+                        InvokeRepeating(nameof(BossSkill_CallDarkness), 3f, 5f);
 
+                        //BossSkill_CallDarkness();
                         break;
 
 
@@ -2098,7 +2100,7 @@ public class Enemy : MonoBehaviour
 
 
 
-    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式  0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物
+    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式 -1暗黑  0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物  6击飞
     {
 
         if (!isScreaming && !isRape && IsGrounded())//冷却中与捕获中不会被伤到,在空中也不会被伤到
@@ -2136,7 +2138,7 @@ public class Enemy : MonoBehaviour
 
                         BossSkillCoolDown_Timer = 2;//瞬间加快频率
 
-                        wallmap.SetEnemy(2);
+                        wallmap.SetEnemy(2);//赛琳娜魔族化时刻召唤触手怪
 
                     }//赛琳娜魔族化
 
@@ -3301,7 +3303,7 @@ public class Enemy : MonoBehaviour
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         if (enemies.Length <= 4)
         {
-            wallmap.SetEnemy(1);
+            wallmap.SetEnemy(1);//守卫队长召集男性士兵
             RoomGenerator.ShowInformationOfStage(-1);//敌人增援
 
          
@@ -3330,9 +3332,34 @@ public class Enemy : MonoBehaviour
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         if (enemies.Length <= 4)
         {
-            wallmap.SetEnemy(2);
+            wallmap.SetEnemy(2);//未知Boss召唤触手怪
             RoomGenerator.ShowInformationOfStage(-1);//敌人增援
         }
+
+       
+    }
+
+    //Boss技能  追逐暗影
+    public GameObject Darkness_Enemy;
+    public void BossSkill_CallDarkness() 
+    {
+        ShowMagicEffect();//显示魔法阵召唤
+
+        //告诉自己生成的RBQ出生WallMap
+        GameObject NewEnemy = Instantiate(Darkness_Enemy, transform.position, Quaternion.identity);
+        NewEnemy.GetComponent<AIDestinationSetter>().target = player.transform;
+        NewEnemy.GetComponentInChildren<Spell>().Init(-100,-1, false, 0);
+
+        Destroy(NewEnemy,2f);
+
+
+        GameObject NewEnemy2 = Instantiate(Darkness_Enemy, wallmap.transform.position, Quaternion.identity);
+        NewEnemy2.GetComponent<AIDestinationSetter>().target = player.transform;
+        NewEnemy2.GetComponentInChildren<Spell>().Init(-100, -1, false, 0);
+
+
+        Destroy(NewEnemy2, 2f);
+
 
         switch (BossNumber)
         {
@@ -3341,7 +3368,6 @@ public class Enemy : MonoBehaviour
                 break;
         }
     }
-
 
 
 
