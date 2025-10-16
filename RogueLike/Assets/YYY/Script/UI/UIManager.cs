@@ -304,7 +304,8 @@ public class UIManager : MonoBehaviour
                 ToSavePageButton(1);
                 Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 8;//卫兵队长Boss战
-                _RoomGenerator.SkyBoxNumber = 1;//早上
+                //_RoomGenerator.SkyBoxNumber = 1;//早上
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
 
                 switch (PlayerPrefs.GetInt("language"))
                 {

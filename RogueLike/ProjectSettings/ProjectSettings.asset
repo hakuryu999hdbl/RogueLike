@@ -142,8 +142,7 @@ PlayerSettings:
   vulkanEnableCommandBufferRecycling: 1
   loadStoreDebugModeEnabled: 0
   bundleVersion: 0.0.3
-  preloadedAssets:
-  - {fileID: 11400000, guid: a019db25435c73a49be5816acbaf65fe, type: 2}
+  preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -166,7 +165,7 @@ PlayerSettings:
   androidMinAspectRatio: 1
   applicationIdentifier:
     Android: com.FTgirl.RogueLike
-    Standalone: com.DefaultCompany.Dungeon
+    Standalone: com.FTgirl.CrossdresserKiller
   buildNumber:
     Bratwurst: 0
     Standalone: 0
