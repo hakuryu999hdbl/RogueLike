@@ -207,14 +207,13 @@ public class RoomGenerator : MonoBehaviour
                 //RenderSettings.fogMode = FogMode.ExponentialSquared; // 使用指数雾
                 //RenderSettings.fogDensity = 0.05f; // 雾的浓度（根据需要调整）
                 //RenderSettings.fogColor = new Color(0.8f, 0.8f, 0.8f); // 稍深的灰色
-
-
-                RenderSettings.fogColor = Color.gray;
+ 
                 SkyboxSample.WhiteSky();
+                RenderSettings.fogColor = Color.gray;
                 break;
-            case 3:
-                RenderSettings.fogColor = Color.red;
+            case 3:      
                 SkyboxSample.RedSky();
+                RenderSettings.fogColor = Color.red;
                 break;
         }
 

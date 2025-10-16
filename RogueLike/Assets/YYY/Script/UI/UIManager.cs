@@ -177,7 +177,7 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("Chapter_13", 1);
 
 
-        GameFlowData.nextScene = "Story_03";//测试Boss使用
+        //GameFlowData.nextScene = "Story_03";//测试Boss使用
         //GameFlowData.nextScene = "CG_AVG_03";//测试CG使用
 
         switch (GameFlowData.nextScene)
