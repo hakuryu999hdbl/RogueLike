@@ -15,7 +15,7 @@ public class RBQ : MonoBehaviour
 
     [Header("基础数值")]
     public Animator anim;//接入Spine动画机
-    private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle", "RBQ_Torture_CutDown" };
+    private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle", "RBQ_Torture_CutDown", "RBQ_Punish_Cage_Left_2" };
 
     public int RBQState = 0;//0单人拘束 1双人拷问中  2尸体  3肉货
     bool isCreateEnemy = false;//是否产生过敌人

@@ -334,7 +334,7 @@ public class WallMap : MonoBehaviour
 
     public void SetRBQ()
     {
-        int enemyToSpawn = Mathf.Min(spawnPoints.Count, Random.Range(0, 3)); // 最多不超过可用点数量
+        int enemyToSpawn = Mathf.Min(spawnPoints.Count, Random.Range(2, 3)); // 最多不超过可用点数量
 
         for (int i = 0; i < enemyToSpawn; i++)
         {

@@ -94,10 +94,10 @@ public class CG_End_NPC : MonoBehaviour
 
                 if (GameFlowData.nextScene == "CG_AVG_03")
                 {
-                    //男性站立 正面
+                    //性奴商人站立 正面
                     anim.SetFloat("InputX", 0);
                     anim.SetFloat("InputY", -1);
-                    anim.Play("Man_Default_Idle");
+                    anim.Play("NPC_Man_SlaveTrader");
 
                     Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
                     Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝

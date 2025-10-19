@@ -125,7 +125,7 @@ public class Enemy : MonoBehaviour
                         //Class = EnemyClass.Tentacle_HermitCrab;
                         //Class = EnemyClass.HermitCrab;
                         //Class = EnemyClass.RBQ;
-
+                        Class = EnemyClass.FleshArmor;
 
 
 
@@ -139,7 +139,7 @@ public class Enemy : MonoBehaviour
                         }//一部分远程女射手变成女法师
 
 
-                        if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ)
+                        if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor)
                         {
 
                             CurrentProfession = 0;
@@ -154,6 +154,18 @@ public class Enemy : MonoBehaviour
 
                         }//肉翅虫具有麻痹效果
 
+                        if (Class == EnemyClass.FleshArmor)
+                        {
+                            RunSpeed = Random.Range(1, 3);
+                            WalkSpeed = Random.Range(1, 3);
+
+                            //Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
+                            Man_bodyIndex = 2;//盔甲
+                            Man_hatIndex = 6;//绷带
+
+                            SetSkin();
+
+                        }//肉铠只能走  且固定Hat皮肤
 
 
 
@@ -214,15 +226,15 @@ public class Enemy : MonoBehaviour
             //ToDo:削减敌人攻击力加成
             //根据玩家当前的等级赋予敌人生命值，攻击力等
 
-           // CurrentWeaponPower = player.Level * Random.Range(10, 20);
-           //
-           // //近战攻击修改
-           // MeleeDamage = 100 + player.Level * 20;
-           // strike.Damage = -CurrentWeaponPower - MeleeDamage;
-           // //远程攻击修改
-           // ShootDamage = CurrentWeaponPower + 100 + player.Level * 20;
-           // //攻击修改
-           // SpellDamage = CurrentWeaponPower + 100 + player.Level * 20;
+            CurrentWeaponPower = player.Level * Random.Range(10, 20);
+            
+            //近战攻击修改
+            MeleeDamage = 100 + player.Level * 20;
+            strike.Damage = -CurrentWeaponPower - MeleeDamage;
+            //远程攻击修改
+            ShootDamage = CurrentWeaponPower + 100 + player.Level * 20;
+            //攻击修改
+            SpellDamage = CurrentWeaponPower + 100 + player.Level * 20;
 
 
         }//如果已经赋值了队友，那么不随机
@@ -827,6 +839,7 @@ public class Enemy : MonoBehaviour
                             break;
 
                         case EnemyClass.Man:
+                        case EnemyClass.FleshArmor:
 
                             switch (Random.Range(1, 6))
                             {
@@ -1010,6 +1023,7 @@ public class Enemy : MonoBehaviour
         Tentacle_HermitCrab,
         HermitCrab,
         RBQ,
+        FleshArmor,
     }
     public void ChangeClass(int c)
     {
@@ -1045,6 +1059,9 @@ public class Enemy : MonoBehaviour
             case 9:
                 Class = EnemyClass.RBQ;
                 break;
+            case 10:
+                Class = EnemyClass.FleshArmor;
+                break;
         }
     }
 
@@ -1074,6 +1091,8 @@ public class Enemy : MonoBehaviour
                 return "HermitCrab_";
             case EnemyClass.RBQ:
                 return "RBQ_";
+            case EnemyClass.FleshArmor:
+                return "FleshArmor_";
             // 未来扩展：Tentacle, Demon 等
             default:
                 return "";
@@ -1150,7 +1169,7 @@ public class Enemy : MonoBehaviour
     {
         if (currentHealth > 0)
         {
-            if (Class == EnemyClass.Succubus || Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ) { anim.Play(GetAnimPrefix() + "Default_Idle"); return; }//只有魔族和变异体需要更改
+            if (Class == EnemyClass.Succubus || Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor) { anim.Play(GetAnimPrefix() + "Default_Idle"); return; }//只有魔族和变异体需要更改
 
             switch (visionType)
             {
@@ -1330,6 +1349,8 @@ public class Enemy : MonoBehaviour
         {
             attackTimer += Time.deltaTime;
 
+            if (Class == EnemyClass.FleshArmor){ attackTimer = attackCooldown; }//肉铠一靠近就砍
+
             if (attackTimer >= attackCooldown)
             {
 
@@ -1416,7 +1437,7 @@ public class Enemy : MonoBehaviour
         //队友使用玩家的攻击动画
         if (tag == "Friend")
         {
-            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ)
+            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor)
             {
                 anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
             }
@@ -1445,7 +1466,7 @@ public class Enemy : MonoBehaviour
         else
         {
 
-            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ)
+            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor)
             {
                 anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
             }
@@ -1539,6 +1560,7 @@ public class Enemy : MonoBehaviour
                 }//女性
                 break;
             case EnemyClass.Man:
+            case EnemyClass.FleshArmor:
                 frameEvents._Man_attack();//男性
                 break;
 
@@ -2169,7 +2191,27 @@ public class Enemy : MonoBehaviour
 
                 }
 
+                if (currentHealth <= maxHealth / 4 && Class == EnemyClass.FleshArmor)
+                {
+                    Class = EnemyClass.Man;
+                    Attack_Cancel();//重置攻击
 
+                    anim.Play("Man_Strike_Idle");//转换
+
+
+                    CurrentProfession = 0;
+                    ChangeType(CurrentProfession);//把CurrentProfession绑进去
+                    SetAttackRange();
+
+                    maxHealth = 2000;
+                    currentHealth = maxHealth;
+
+                    //HudText.HUD(maxHealth);
+
+                    RunSpeed = 5;//瞬间提速
+
+
+                }//肉铠二状态
 
 
                 if (!isDie && currentHealth > 0 && amount != -currentHealth)
@@ -2187,7 +2229,11 @@ public class Enemy : MonoBehaviour
                         return;
                     }
 
-
+                    if (tag == "Enemy" && Class == EnemyClass.FleshArmor && TypeOfAttack==0)
+                    {
+                        Block();
+                        return;
+                    }//肉铠必定防御(除非受到法术属性攻击)
                 }
 
                 //防护检测
@@ -2340,7 +2386,7 @@ public class Enemy : MonoBehaviour
             Destroy(blood, Random.Range(4f, 5f));
             #endregion
 
-            if (currentHealth <= 0)
+            if (currentHealth <= 0&&Class!=EnemyClass.FleshArmor)//肉铠状态下不死，只有转换成Man死
             {
                 Die();
 
@@ -2516,6 +2562,7 @@ public class Enemy : MonoBehaviour
                         }//女性
                         break;
                     case EnemyClass.Man:
+                    case EnemyClass.FleshArmor:
                         switch (Random.Range(0, 4))
                         {
                             case 0:
@@ -3550,12 +3597,51 @@ public class Enemy : MonoBehaviour
             //迫使朝右（第二种变化的强奸）
             anim.SetFloat("InputX", -1);
             anim.SetFloat("InputY", 0);
+
+            //这种向右的是从CG这里直接扒过来，带着帧事件的声音，所以不发循环声
         }
         else
         {
             //迫使朝左
             anim.SetFloat("InputX", 1);
             anim.SetFloat("InputY", 0);
+
+            switch (Random.Range(0, 11))
+            {
+                case 0:
+                    frameEvents._03_H_ContinualClimax_0();
+                    break;
+                case 1:
+                    frameEvents._03_H_ContinualClimax_1();
+                    break;
+                case 2:
+                    frameEvents._03_H_ContinualClimax_2();
+                    break;
+                case 3:
+                    frameEvents._03_H_ContinualClimax_3();
+                    break;
+                case 4:
+                    frameEvents._03_H_Gasping_0();
+                    break;
+                case 5:
+                    frameEvents._03_H_Gasping_1();
+                    break;
+                case 6:
+                    frameEvents._03_H_Gasping_Weak_0();
+                    break;
+                case 7:
+                    frameEvents._03_H_Gasping_Weak_1();
+                    break;
+                case 8:
+                    frameEvents._03_H_Gasping_Quick_0();
+                    break;
+                case 9:
+                    frameEvents._03_H_Gasping_Quick_1();
+                    break;
+                case 10:
+                    frameEvents._03_H_Gasping_Quick_2();
+                    break;
+            }
         }
 
 
@@ -3572,42 +3658,7 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        switch (Random.Range(0, 11))
-        {
-            case 0:
-                frameEvents._03_H_ContinualClimax_0();
-                break;
-            case 1:
-                frameEvents._03_H_ContinualClimax_1();
-                break;
-            case 2:
-                frameEvents._03_H_ContinualClimax_2();
-                break;
-            case 3:
-                frameEvents._03_H_ContinualClimax_3();
-                break;
-            case 4:
-                frameEvents._03_H_Gasping_0();
-                break;
-            case 5:
-                frameEvents._03_H_Gasping_1();
-                break;
-            case 6:
-                frameEvents._03_H_Gasping_Weak_0();
-                break;
-            case 7:
-                frameEvents._03_H_Gasping_Weak_1();
-                break;
-            case 8:
-                frameEvents._03_H_Gasping_Quick_0();
-                break;
-            case 9:
-                frameEvents._03_H_Gasping_Quick_1();
-                break;
-            case 10:
-                frameEvents._03_H_Gasping_Quick_2();
-                break;
-        }
+        
 
 
         //不知道为啥会有魔法阵出来
