@@ -206,6 +206,9 @@ public class WallMap : MonoBehaviour
                     case 3:
                         SetEnemy(3);//Boss房间另外刷男性女性敌人
                         break;
+                    case 4:
+                        SetEnemy(4);//Boss房间另外刷肉铠
+                        break;
                 }
             }
            
@@ -268,9 +271,10 @@ public class WallMap : MonoBehaviour
     [Header("敌人出生点列表")]
     public List<Transform> spawnPoints = new List<Transform>();
 
-    public int SetOtherEnemy;//0不设置其他敌人  1设置男性士兵
+    public int SetOtherEnemy;//0不设置其他敌人  1设置男性士兵   2设置触手怪物   3男女敌人   4肉铠
 
-    public void SetEnemy(int EnemySkin=0)// 0随机  1男性士兵   2触手怪物     3男女敌人
+    //基础房间刷怪  Boss召唤刷怪   Boss房额外刷怪
+    public void SetEnemy(int EnemySkin=0)// 0随机  1男性士兵   2触手怪物     3男女敌人  4肉铠
     {
         //队友数量
         //GameObject[] friends = GameObject.FindGameObjectsWithTag("Friend");
@@ -317,6 +321,9 @@ public class WallMap : MonoBehaviour
                         break;
                     case 3:
                         enemyScript.BecomeSoldier = true;
+                        break;
+                    case 4:
+                        enemyScript.BecomeFleshArmor = true;
                         break;
                 }
 

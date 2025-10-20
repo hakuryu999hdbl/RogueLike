@@ -111,7 +111,10 @@ public class Enemy : MonoBehaviour
 
 
                         }//召集触手怪
-
+                        if (BecomeFleshArmor)
+                        { 
+                            Class = EnemyClass.FleshArmor;
+                        }//召集肉铠
 
 
 
@@ -125,7 +128,7 @@ public class Enemy : MonoBehaviour
                         //Class = EnemyClass.Tentacle_HermitCrab;
                         //Class = EnemyClass.HermitCrab;
                         //Class = EnemyClass.RBQ;
-                        Class = EnemyClass.FleshArmor;
+                        //Class = EnemyClass.FleshArmor;
 
 
 
@@ -200,22 +203,29 @@ public class Enemy : MonoBehaviour
                         break;
                     case 6:
                         BecomeBoss_Dominus();
-                        break;
-
-                    case 7:
-                        BecomeBoss_DarkMage();
 
                         // 每隔 5 秒执行一次 Boss技能 召集触手怪物
                         //InvokeRepeating(nameof(BossSkill_CallTentacleMonster), 3f, 5f);
 
-                        InvokeRepeating(nameof(BossSkill_CallDarkness), 3f, 5f);
+                        break;
 
-                        //BossSkill_CallDarkness();
+                    case 7:
+                        BecomeBoss_DarkMage();
+                        InvokeRepeating(nameof(BossSkill_CallDarkness), 5f, 10f);
+
+                        // 每隔 5 秒执行一次 Boss技能 召集肉铠
+                        InvokeRepeating(nameof(BossSkill_CallFleshArmor), 15f, 5f);
+
+                        break;
+
+                    case 8:
+                        BecomeBoss_Warden();
+
+                        // 每隔 5 秒执行一次 Boss技能 召集肉铠
+                        InvokeRepeating(nameof(BossSkill_CallFleshArmor), 3f, 5f);
                         break;
 
 
-
-                       
                 }
 
 
@@ -282,6 +292,9 @@ public class Enemy : MonoBehaviour
 
                 case 7:
                     UIManager.instance.ShowDialogue("Boss_DarkMage");
+                    break;
+                case 8:
+                    UIManager.instance.ShowDialogue("Boss_Warden");
                     break;
             }
 
@@ -1349,7 +1362,7 @@ public class Enemy : MonoBehaviour
         {
             attackTimer += Time.deltaTime;
 
-            if (Class == EnemyClass.FleshArmor){ attackTimer = attackCooldown; }//肉铠一靠近就砍
+            if (Class == EnemyClass.FleshArmor||BossNumber==1){ attackTimer = attackCooldown; }//守卫队长和肉铠一靠近就砍
 
             if (attackTimer >= attackCooldown)
             {
@@ -2147,9 +2160,7 @@ public class Enemy : MonoBehaviour
 
                 isPatrol = false;//受伤后立刻进入战斗
 
-                //Boss瞬移技能
-
-
+               
                 if (BossNumber == 2 || BossNumber == 3)
                 {
                     if (currentHealth <= maxHealth / 2 && Class == EnemyClass.Girl)
@@ -2189,7 +2200,8 @@ public class Enemy : MonoBehaviour
                     }
 
 
-                }
+                } //赛琳娜瞬移技能
+                if (BossNumber == 7&&Random.Range(0,3)==0){ BossSkill_ToDarknessPlace(); return; }//黑魔导士传送暗影位置
 
                 if (currentHealth <= maxHealth / 4 && Class == EnemyClass.FleshArmor)
                 {
@@ -2386,8 +2398,16 @@ public class Enemy : MonoBehaviour
             Destroy(blood, Random.Range(4f, 5f));
             #endregion
 
-            if (currentHealth <= 0&&Class!=EnemyClass.FleshArmor)//肉铠状态下不死，只有转换成Man死
+            if (currentHealth <= 0)
             {
+
+
+                if (Class == EnemyClass.FleshArmor) //肉铠状态下不死，只有转换成Man死
+                {
+                    currentHealth = 100;//保留生命值，防止触发了别的currentHealth <= 0
+                    return;
+                }
+
                 Die();
 
                 return;
@@ -2702,6 +2722,10 @@ public class Enemy : MonoBehaviour
                 case 7:
                     UIManager.instance.ShowDialogue("Boss_DarkMage_Die");
                     break;
+
+                case 8:
+                    UIManager.instance.ShowDialogue("Boss_Warden_Die");
+                    break;
             }
 
 
@@ -2942,7 +2966,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     #region
     [Header("Boss技能")]
-    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5魔族化皇太子   6魔族化皇帝    7魔族黑魔法法师
+    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5魔族化皇太子   6魔族化皇帝    7魔族黑魔法法师   8典狱长
 
     public void BecomeBoss_Captain()
     {
@@ -3261,7 +3285,62 @@ public class Enemy : MonoBehaviour
 
     }//Boss 黑魔法法师
 
+    public void BecomeBoss_Warden() 
+    {
+       
 
+
+        YYY_headIndex = Random.Range(1, 13);  // 除去皇女
+        YYY_eyesIndex = Random.Range(1, 14);  // 1~13
+        YYY_bodyIndex = Random.Range(10, 13);//剑士射手法师
+        YYY_legsIndex = Random.Range(10, 13);//剑士射手法师
+
+        Man_headIndex = 6;
+        Man_bodyIndex = 2;//盔甲
+        Man_hatIndex = 6;//绷带
+
+        weaponIndex = Random.Range(1, 11);
+
+        SetSkin();
+
+
+
+        RunSpeed = Random.Range(1, 3);
+        WalkSpeed = Random.Range(1, 3);
+
+
+
+        Class = EnemyClass.FleshArmor;
+
+        CurrentProfession = 0;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0:
+                Name.text = "典獄長";   // 日语
+                break;
+            case 1:
+                Name.text = "典狱长";   // 简体中文
+                break;
+            case 2:
+                Name.text = "典獄長";   // 繁体中文
+                break;
+            case 3:
+                Name.text = "Warden";   // 英语
+                break;
+            case 4:
+                Name.text = "간수장";   // 韩语 (Warden)
+                break;
+        }
+
+        maxHealth *= 5;
+        currentHealth = maxHealth;
+
+    }//Boss典狱长
+
+    #region 王女赛琳娜技能
     //Boss技能  瞬移近  瞬移远
     bool BossSkillCoolDown_Move = false;
     float BossSkillCoolDown_Timer = 3f;
@@ -3336,12 +3415,16 @@ public class Enemy : MonoBehaviour
 
         SetSkin();
     }
+    #endregion
 
-
+    #region  守卫队长技能  典狱长技能  皇太子亚历克西斯技能
     //Boss技能  召集
     public bool BecomeSoldier_Man = false;//男性士兵
+    public bool BecomeTentacleMonster = false;//触手怪物
     public bool BecomeSoldier = false;//男性或女性士兵
     public bool BecomeSoldier_Girl = false;//女性士兵
+    public bool BecomeFleshArmor = false;//肉铠
+
     void BossSkill_CallSoldier()
     {
 
@@ -3370,7 +3453,6 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public bool BecomeTentacleMonster = false;
 
     void BossSkill_CallTentacleMonster()
     {
@@ -3386,8 +3468,35 @@ public class Enemy : MonoBehaviour
        
     }
 
+
+    void BossSkill_CallFleshArmor() 
+    {
+        //如果场景内敌人少于4个，再召唤一群肉铠
+
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        if (enemies.Length <= 4)
+        {
+            wallmap.SetEnemy(4);//召集肉铠
+            RoomGenerator.ShowInformationOfStage(-1);//敌人增援
+
+
+        }
+
+        switch (BossNumber)
+        {
+            case 8:
+                //UIManager.instance.ShowDialogue("Boss_Warden_Skill");
+                break;
+        }
+    }
+
+    #endregion
+
+    #region  黑魔导士技能
     //Boss技能  追逐暗影
     public GameObject Darkness_Enemy;
+
+    GameObject Darkness_Enemy_1, Darkness_Enemy_2;//短暂的记录自己生成的暗影
     public void BossSkill_CallDarkness() 
     {
         ShowMagicEffect();//显示魔法阵召唤
@@ -3395,17 +3504,17 @@ public class Enemy : MonoBehaviour
         //告诉自己生成的RBQ出生WallMap
         GameObject NewEnemy = Instantiate(Darkness_Enemy, transform.position, Quaternion.identity);
         NewEnemy.GetComponent<AIDestinationSetter>().target = player.transform;
-        NewEnemy.GetComponentInChildren<Spell>().Init(-100,-1, false, 0);
-
-        Destroy(NewEnemy,2f);
+        NewEnemy.GetComponentInChildren<Spell>().Init(-20*player.Level,-1, false, 0);
+        Darkness_Enemy_1 = NewEnemy;
+        Destroy(NewEnemy, 1.4f);
 
 
         GameObject NewEnemy2 = Instantiate(Darkness_Enemy, wallmap.transform.position, Quaternion.identity);
         NewEnemy2.GetComponent<AIDestinationSetter>().target = player.transform;
-        NewEnemy2.GetComponentInChildren<Spell>().Init(-100, -1, false, 0);
+        NewEnemy2.GetComponentInChildren<Spell>().Init(-20 * player.Level, -1, false, 0);
+        Darkness_Enemy_2 = NewEnemy2;
 
-
-        Destroy(NewEnemy2, 2f);
+        Destroy(NewEnemy2, 1.4f);
 
 
         switch (BossNumber)
@@ -3414,14 +3523,46 @@ public class Enemy : MonoBehaviour
                 UIManager.instance.ShowDialogue("Boss_DarkMage_Skill");
                 break;
         }
+
+        Invoke(nameof(BossSkill_ToDarknessPlace), 1f);
     }
+    //Boss技能  传送到暗影位置
+    public void BossSkill_ToDarknessPlace() 
+    {
+        GateEffect.SetActive(true);
+        if (Random.Range(0, 2) == 0)
+        {
+            if (Darkness_Enemy_1 != null)
+            {
+                transform.position = Darkness_Enemy_1.transform.position;
+            }
+            else
+            {
+                transform.position = wallmap.transform.position;
+            }
+           
+        }
+        else
+        {
+            if (Darkness_Enemy_2 != null)
+            {
+                transform.position = Darkness_Enemy_2.transform.position;
+            }
+            else
+            {
+                transform.position = wallmap.transform.position;
+            }
 
-
+        }
+       
+    }
+    #endregion
 
     void OnDestroy()
     {
         // Boss死亡时停止召唤
         CancelInvoke(nameof(BossSkill_CallSoldier));
+        CancelInvoke(nameof(BossSkill_CallTentacleMonster));
     }
     #endregion
 
@@ -3447,6 +3588,23 @@ public class Enemy : MonoBehaviour
             case "CG_AVG_03":
                 anim.SetBool("is_Man_CarryUp_Cage", true);//性奴拍卖会狗笼肉货
                 break;
+            case "CG_AVG_04":
+
+               // RunSpeed = Random.Range(1, 3);
+               // WalkSpeed = Random.Range(1, 3);
+               //
+               // Man_headIndex = Random.Range(1, 5);
+               // Man_bodyIndex = 2;//盔甲
+               // Man_hatIndex = 6;//绷带
+               //
+               // SetSkin();
+               //
+               // Class = EnemyClass.FleshArmor;
+               //
+               // isPatrol = true;
+               //
+               // anim.Play("FleshArmor_Default_Walk");//肉铠结局
+                break;
         }
 
        
@@ -3469,7 +3627,8 @@ public class Enemy : MonoBehaviour
 
         SetSkin();
 
-
+        //长音频之前停声音
+        frameEvents.audioS.Stop();
         //随机延后喘息声
         Invoke("Delay_Breath_Voice", Random.Range(1, 5.5f));
 
@@ -3489,8 +3648,11 @@ public class Enemy : MonoBehaviour
             case "CG_AVG_03":
                 anim.Play("RBQ_Punish_Cage_2");//狗笼肉货
                 break;
+            case "CG_AVG_04":
+                anim.Play("RBQ_Torture_CutDown");//四肢切断挂饰    
+                //anim.Play("FleshArmor_Default_Idle");//肉铠
+                break;
         }
-       
 
         switch (SideOrFront)
         {
@@ -3531,6 +3693,8 @@ public class Enemy : MonoBehaviour
             anim.SetFloat("InputY", -1);
         }
 
+        //长音频之前停声音
+        frameEvents.audioS.Stop();
         //随机延后喘息声
         Invoke("Delay_Breath_Voice", Random.Range(1, 5.5f));
     }//正面展示
@@ -3565,10 +3729,11 @@ public class Enemy : MonoBehaviour
                 anim.Play("RBQ_Punish_Cage");//狗笼肉货
                 break;
         }
-      
 
 
 
+        //长音频之前停声音
+        frameEvents.audioS.Stop();
         switch (Random.Range(0, 4))
         {
             case 0:
@@ -3590,6 +3755,8 @@ public class Enemy : MonoBehaviour
     {
         isDie = true;
 
+        //长音频之前停声音
+        frameEvents.audioS.Stop();
 
 
         if (Random.Range(0, 2) == 0)
@@ -3606,6 +3773,8 @@ public class Enemy : MonoBehaviour
             anim.SetFloat("InputX", 1);
             anim.SetFloat("InputY", 0);
 
+
+          
             switch (Random.Range(0, 11))
             {
                 case 0:
@@ -3671,6 +3840,8 @@ public class Enemy : MonoBehaviour
 
     void Delay_Breath_Voice()
     {
+       
+
         //随机喘息
         switch (Random.Range(0, 4))
         {

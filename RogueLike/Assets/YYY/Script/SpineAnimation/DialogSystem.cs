@@ -75,6 +75,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(101, Resources.Load<TextAsset>("TXT_Japanese/J_CG_1"));
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Japanese/J_CG_2"));
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Japanese/J_CG_3"));
+                textAssets.Add(104, Resources.Load<TextAsset>("TXT_Japanese/J_CG_4"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Japanese/J_Story_1"));
@@ -96,6 +97,8 @@ public class DialogSystem : MonoBehaviour
             case 1:
                 textAssets.Add(101, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_1"));
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_2"));
+                textAssets.Add(103, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_3"));
+                textAssets.Add(104, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_4"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_1"));
@@ -117,6 +120,8 @@ public class DialogSystem : MonoBehaviour
             case 2:
                 textAssets.Add(101, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_1"));
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_2"));
+                textAssets.Add(103, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_3"));
+                textAssets.Add(104, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_4"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_1"));
@@ -138,6 +143,8 @@ public class DialogSystem : MonoBehaviour
             case 3:
                 textAssets.Add(101, Resources.Load<TextAsset>("TXT_English/E_CG_1"));
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_English/E_CG_2"));
+                textAssets.Add(103, Resources.Load<TextAsset>("TXT_English/E_CG_3"));
+                textAssets.Add(104, Resources.Load<TextAsset>("TXT_English/E_CG_4"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_English/E_Story_1"));
@@ -159,6 +166,8 @@ public class DialogSystem : MonoBehaviour
             case 4:
                 textAssets.Add(101, Resources.Load<TextAsset>("TXT_Korean/K_CG_1"));
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Korean/K_CG_2"));
+                textAssets.Add(103, Resources.Load<TextAsset>("TXT_Korean/K_CG_3"));
+                textAssets.Add(104, Resources.Load<TextAsset>("TXT_Korean/K_CG_4"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Korean/K_Story_1"));
@@ -240,6 +249,23 @@ public class DialogSystem : MonoBehaviour
 
     string Prompt;
 
+
+    #region  短结局CG使用
+    void DaleyArrangeRBQ()
+    {
+        UIManager.instance._RoomGenerator.ArrangeRBQ();
+    }
+    void DaleyDelayCreatSetFriend_RBQ()
+    {
+        //生成存档内全体角色到达指定位置
+        UIManager.instance._RoomGenerator.DelayCreatSetFriend_RBQ();
+
+    }
+
+
+    #endregion
+
+
     IEnumerator SetTextUI()
     {
 
@@ -272,7 +298,7 @@ public class DialogSystem : MonoBehaviour
        
 
         #endregion
-
+     
         //判断一整行的字符是
         Text text = textLabel;
         switch (textList[index].Trim().ToString())
@@ -285,7 +311,23 @@ public class DialogSystem : MonoBehaviour
                 TheImage.SetActive(false);
 
                 //起个头
-                UIManager.instance.MainCamera.Play("CG_Camera_01");
+                switch (GameFlowData.nextScene) 
+                {
+                    case "CG_AVG_04":
+
+                        //肉铠刑架
+                        UIManager.instance.MainCamera.Play("CG_Camera2_01");
+                        Invoke("DaleyDelayCreatSetFriend_RBQ", 0.2f);
+                        Invoke("DaleyArrangeRBQ", 3.5f);
+                      
+                        break;
+                    default:
+                        //头枷轮奸/泄欲车/拍卖会
+                        UIManager.instance.MainCamera.Play("CG_Camera_01");
+                        break;
+                }
+
+              
 
                
                 index++;
@@ -787,6 +829,7 @@ public class DialogSystem : MonoBehaviour
             case 101:
             case 102:
             case 103:
+            case 104:
                 GameFlowData.nextScene = "";//返回主菜单
                 break;
         }

@@ -7,6 +7,7 @@ public class RBQ : MonoBehaviour
 {
     [Header("主动触发声音")]
     public FrameEvents frameEvents;//这个和Spine上面区分开来，防止声音叠住
+    public FrameEvents frameEvents_Spine;//这个是Spine动画器声音，用来锁住那一侧声音
 
     [Header("寻找RoomGenerator")]
     RoomGenerator _RoomGenerator;//寻找RoomGenerator
@@ -35,6 +36,8 @@ public class RBQ : MonoBehaviour
 
         if (RBQState == 0) { RBQState = Random.Range(1,3); }//如果一开始没有赋值，那么随机
 
+        // 根据方向旋转（可选，或控制朝向动画片段）
+        ApplyFacingRotation();
 
         // 随机动画
         switch (RBQState)
@@ -79,8 +82,26 @@ public class RBQ : MonoBehaviour
                         break;
                 }
 
+
+                #region 是否循环叫声
+
+                bool CanGasping = true;
+
+                if (CurrentRapeType==3|| CurrentRapeType == 4) 
+                {
+                    if (inputX==1&&inputY==0)
+                    {
+                        //朝右的有帧事件发出声音不能循环叫声
+                        CanGasping = false;
+                    }
+                }
+
                 //循环叫声
-                InvokeRepeating("Gasping_Long", 1f, 58f);
+                if (CanGasping) { InvokeRepeating("Gasping_Long", 1f, 58f); }
+
+                #endregion
+
+
 
                 Destroy(Check.gameObject);
                 break;
@@ -91,6 +112,8 @@ public class RBQ : MonoBehaviour
 
                 Destroy(Check.gameObject);
                 Destroy(UI_Player_Icon.gameObject);//尸体隐藏标志
+
+
                 break;
             case 3:
                 //商店肉货
@@ -101,13 +124,13 @@ public class RBQ : MonoBehaviour
                 //商店随机武器
                 GenerateRandomWeapons();
 
+
                 break;
         }
 
 
 
-        // 根据方向旋转（可选，或控制朝向动画片段）
-        ApplyFacingRotation();
+       
 
 
         //随机皮肤
@@ -139,7 +162,7 @@ public class RBQ : MonoBehaviour
                 inputX = 0; inputY = -1;
                 break;
         }
-
+        
         // 动画传入方向
         anim.SetFloat("InputX", inputX);
         anim.SetFloat("InputY", inputY);
@@ -205,6 +228,7 @@ public class RBQ : MonoBehaviour
 
                 //停止播放
                 frameEvents.audioS.Stop();
+                frameEvents_Spine.audioS.Stop();
                 CancelInvoke(nameof(Gasping_Long));
 
 

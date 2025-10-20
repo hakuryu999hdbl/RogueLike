@@ -99,9 +99,9 @@ public class CG_End_NPC : MonoBehaviour
                     anim.SetFloat("InputY", -1);
                     anim.Play("NPC_Man_SlaveTrader");
 
-                    Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
-                    Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
-                    Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
+                    Man_headIndex = 4;
+                    Man_bodyIndex = 3;
+                    Man_hatIndex = 4;
                 }
 
 
@@ -127,9 +127,9 @@ public class CG_End_NPC : MonoBehaviour
                     anim.SetFloat("InputY", 0);
                     anim.Play("Man_Default_Idle");
 
-                    Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
-                    Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
-                    Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
+                    Man_headIndex = 4;
+                    Man_bodyIndex = 3;
+                    Man_hatIndex = 4;
                 }
 
                 if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
@@ -170,8 +170,8 @@ public class CG_End_NPC : MonoBehaviour
                 if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
                 {
                     //女性坐姿  侧面
-                    anim.SetFloat("InputX", 0);
-                    anim.SetFloat("InputY", -1);
+                    anim.SetFloat("InputX", 1);
+                    anim.SetFloat("InputY", 0);
                     anim.Play("NPC_Girl_Sit");
                 }
                 break;

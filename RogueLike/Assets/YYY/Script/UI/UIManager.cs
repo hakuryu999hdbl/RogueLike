@@ -177,8 +177,8 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("Chapter_13", 1);
 
 
-        //GameFlowData.nextScene = "Story_03";//测试Boss使用
-        //GameFlowData.nextScene = "CG_AVG_03";//测试CG使用
+        //GameFlowData.nextScene = "Story_04";//测试Boss使用
+        //GameFlowData.nextScene = "CG_AVG_04";//测试CG使用
 
         switch (GameFlowData.nextScene)
         {
@@ -662,7 +662,7 @@ public class UIManager : MonoBehaviour
                 PlayAVG("CG_01");
                 To_AVGScene();
 
-                //隐藏存档界面，拉摄像机
+                //隐藏存档界面，拉摄像机,隐藏玩家
                 Invoke("DelayHideSaveCavans", 0.3f);
 
 
@@ -681,7 +681,7 @@ public class UIManager : MonoBehaviour
                 PlayAVG("CG_02");
                 To_AVGScene();
 
-                //隐藏存档界面，拉摄像机
+                //隐藏存档界面，拉摄像机,隐藏玩家
                 Invoke("DelayHideSaveCavans", 0.3f);
 
 
@@ -699,7 +699,7 @@ public class UIManager : MonoBehaviour
                 PlayAVG("CG_03");
                 To_AVGScene();
 
-                //隐藏存档界面，拉摄像机
+                //隐藏存档界面，拉摄像机,隐藏玩家
                 Invoke("DelayHideSaveCavans", 0.3f);
 
 
@@ -708,12 +708,30 @@ public class UIManager : MonoBehaviour
 
 
                 //_RoomGenerator.SkyBoxNumber = 0;//夜晚
-
                 _RoomGenerator.SkyBoxNumber = 2;//白雾
-                //_RoomGenerator.SkyBoxNumber = 1;//早上
 
                 Invoke("PlayDungeonBGM", 1f);
                 break;
+
+            case "CG_AVG_04":
+
+                //拉出AVG
+                PlayAVG("CG_04");
+                To_AVGScene();
+
+                //隐藏存档界面，拉摄像机,隐藏玩家
+                Invoke("DelayHideSaveCavans", 0.3f);
+
+
+                Invoke("DelayShowRoomGenerator", 0.1f);
+                _RoomGenerator.roomNumber = -1;//惩戒回廊
+
+
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
+
+                Invoke("PlayDungeonBGM", 1f);
+                break;
+
 
 
             default:
@@ -729,7 +747,9 @@ public class UIManager : MonoBehaviour
 
 
         //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
-        LockStage();
+        //LockStage();
+
+
 
         UpdateCreateCostText();//更新创建奴隶价格
     }
@@ -742,7 +762,7 @@ public class UIManager : MonoBehaviour
 
         player.characterSkin.HideSkeleton();//隐藏玩家保持相机不动
 
-    }//隐藏存档界面，拉摄像机
+    }//隐藏存档界面，拉摄像机,隐藏玩家
 
 
     void DelayShowRoomGenerator() 
@@ -949,10 +969,54 @@ public class UIManager : MonoBehaviour
 
     public void ChooseSurrender() 
     {
-        //暂时先这么做
-        PlayerPrefs.SetInt("CG_AVG_01", 1);//cg解锁
 
-        GameFlowData.nextScene = "CG_AVG_01";
+        switch (GameFlowData.nextScene)
+        {
+            default:
+            case "Story_01":
+            case "Story_02":
+                //头枷轮奸结局
+                PlayerPrefs.SetInt("CG_AVG_01", 1);//cg解锁
+                GameFlowData.nextScene = "CG_AVG_01";
+                break;
+            case "Story_03":
+                //肉铠结局
+                PlayerPrefs.SetInt("CG_AVG_04", 1);//cg解锁
+                GameFlowData.nextScene = "CG_AVG_04";
+                break;
+
+
+
+            case "Story_04":
+                //拍卖会结局
+                PlayerPrefs.SetInt("CG_AVG_03", 1);//cg解锁
+                GameFlowData.nextScene = "CG_AVG_03";
+                break;
+
+            case "Story_05":
+                //王女性玩具结局
+
+                break;
+
+            case "Story_06":
+            case "Story_07":
+                //肉圣物结局
+                break;
+            case "Story_08":
+                //青梅竹马团员结局
+
+                break;
+            case "Story_09":
+                //泄欲车结局
+                PlayerPrefs.SetInt("CG_AVG_02", 1);//cg解锁
+                GameFlowData.nextScene = "CG_AVG_02";
+                break;
+
+        }
+
+       
+
+
         ReLoadScene();
 
     }//这个接口专门处理投降后根据当前关卡处理结局CG
@@ -2722,7 +2786,9 @@ public class UIManager : MonoBehaviour
             case "CG_03":
                 dialogSystem.animation_number = 103;
                 break;
-
+            case "CG_04":
+                dialogSystem.animation_number = 104;
+                break;
 
             case "Chapter_01":
                 dialogSystem.animation_number = 1001;
@@ -4105,14 +4171,25 @@ public class UIManager : MonoBehaviour
     public List<GameObject> Boss_DarkMage_Skill_In_Game_DialogueList;//黑魔导士技能刷出台词
     public List<GameObject> Boss_DarkMage_Die_In_Game_DialogueList;//黑魔导士死亡刷出台词
 
+    public List<GameObject> Boss_Warden_In_Game_DialogueList;//典狱长刷出台词
+    public List<GameObject> Boss_Warden_Die_In_Game_DialogueList;//典狱长刷出台词
+
     private bool dialogueShowing = false;  // 是否有台词正在显示
+    private GameObject currentDialogue = null; // 当前正在显示的台词
+    private Coroutine dialogueRoutine = null;  // 当前协程引用
 
     // 敌人调用这个接口
     private Dictionary<string, int> lastIndexDict = new Dictionary<string, int>();
 
     public void ShowDialogue(string type)
     {
-        if (dialogueShowing) return;
+        // 先强制隐藏正在显示的台词
+        if (currentDialogue != null)
+        {
+            if (dialogueRoutine != null) StopCoroutine(dialogueRoutine);
+            currentDialogue.SetActive(false);
+            currentDialogue = null;
+        }
 
         List<GameObject> pool = null;
         switch (type)
@@ -4132,6 +4209,9 @@ public class UIManager : MonoBehaviour
             case "Boss_DarkMage": pool = Boss_DarkMage_In_Game_DialogueList; break;
             case "Boss_DarkMage_Skill": pool = Boss_DarkMage_Skill_In_Game_DialogueList; break;
             case "Boss_DarkMage_Die": pool = Boss_DarkMage_Die_In_Game_DialogueList; break;
+
+            case "Boss_Warden": pool = Boss_Warden_In_Game_DialogueList; break;
+            case "Boss_Warden_Die": pool = Boss_Warden_Die_In_Game_DialogueList; break;
         }
 
         if (pool == null || pool.Count == 0) return;
@@ -4155,23 +4235,22 @@ public class UIManager : MonoBehaviour
         lastIndexDict[type] = index;
 
         GameObject dialogue = pool[index];
-        StartCoroutine(ShowRoutine(dialogue));
-
-    }//不会重复两次一样的台词
-
-
-
+        dialogueRoutine = StartCoroutine(ShowRoutine(dialogue));
+    }
 
     private IEnumerator ShowRoutine(GameObject dialogue)
     {
+        currentDialogue = dialogue;
         dialogue.SetActive(true);
         dialogueShowing = true;
 
-        float showTime = 5;//台词延迟5秒
+        float showTime = 5f; // 台词显示5秒
         yield return new WaitForSeconds(showTime);
 
         dialogue.SetActive(false);
         dialogueShowing = false;
+        currentDialogue = null;
+        dialogueRoutine = null;
     }
     #endregion
 }

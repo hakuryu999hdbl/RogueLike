@@ -54,6 +54,17 @@ public class RoomGenerator : MonoBehaviour
         Invoke("Scan", 0.2f);//这样因该能等到全部生成完
 
 
+        //结局CG惩戒回廊
+        if (roomNumber == -1)
+        {
+            Instantiate(CG_HallofDiscipline, new Vector3(0, 0, 0), Quaternion.identity);
+
+            cg_Manager = CG_HallofDiscipline.GetComponent<CG_Manager>();
+
+            return;
+        }
+
+
         //一般CG的调教室
         if (roomNumber == 0)
         {
@@ -65,9 +76,9 @@ public class RoomGenerator : MonoBehaviour
         //只有一个房间的时候（结局CG游街处刑广场）
         if (roomNumber == 1) 
         { 
-            Instantiate(CG_InterrogationRoom, new Vector3(0, 0, 0), Quaternion.identity);
+            Instantiate(CG_ExecutionSquare, new Vector3(0, 0, 0), Quaternion.identity);
 
-            cg_Manager = CG_InterrogationRoom.GetComponent<CG_Manager>();
+            cg_Manager = CG_ExecutionSquare.GetComponent<CG_Manager>();
 
             return;
         }
@@ -197,23 +208,33 @@ public class RoomGenerator : MonoBehaviour
             case 0:
                 RenderSettings.fog = false;
                 SkyboxSample.Night();
+
                 break;
             case 1:
                 RenderSettings.fog = false;
                 SkyboxSample.Day();
                 break;
             case 2:
+                SkyboxSample.WhiteSky();
+                RenderSettings.fogColor = Color.gray;
+
+                RenderSettings.fogStartDistance = 0f;           // 开始出现雾
+                RenderSettings.fogEndDistance = 50f;             // 完全被雾覆盖
+
                 // 设置雾效模式和浓度（电脑版打开）
                 //RenderSettings.fogMode = FogMode.ExponentialSquared; // 使用指数雾
                 //RenderSettings.fogDensity = 0.05f; // 雾的浓度（根据需要调整）
                 //RenderSettings.fogColor = new Color(0.8f, 0.8f, 0.8f); // 稍深的灰色
- 
-                SkyboxSample.WhiteSky();
-                RenderSettings.fogColor = Color.gray;
+
                 break;
             case 3:      
                 SkyboxSample.RedSky();
                 RenderSettings.fogColor = Color.red;
+
+
+                RenderSettings.fogStartDistance = 0f;           // 开始出现雾
+                RenderSettings.fogEndDistance = 50f;             // 完全被雾覆盖
+
                 break;
         }
 
@@ -402,7 +423,8 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     #region
     [Header("固定地图")]
-    public GameObject CG_InterrogationRoom;//拷问所
+    public GameObject CG_HallofDiscipline;//惩戒回廊
+    public GameObject CG_ExecutionSquare;//处刑广场
     public GameObject CG_Torture;//调教室
 
     public GameObject BossRoom_Captain;//卫兵队长Boss战
@@ -862,6 +884,10 @@ public class RoomGenerator : MonoBehaviour
 
     }//全体设置为正面（强奸）
 
+
+
+
+
     #endregion
 
 
@@ -1166,18 +1192,32 @@ public class RoomGenerator : MonoBehaviour
 
         MissionIcon(true);
 
-        Invoke("ResultDetail", 1f);
+
+        Invoke("TimeStop",0.2f);
 
         //让BGM停止好播放结尾音乐
         BGM.instance.Stop();
 
-
+       
+        StartCoroutine(ResultDetailDelay());
     }//获胜端口
 
+    void TimeStop() 
+    {
+        Time.timeScale = 0f;
+    }
+
+    IEnumerator ResultDetailDelay()
+    {
+        // 使用 real-time，不受 TimeScale 影响
+        yield return new WaitForSecondsRealtime(1f);
+
+        ResultDetail();
+    }
     void ResultDetail()
     {
         ResultCavans.SetActive(true);
-        Time.timeScale = 0f;
+      
 
         UIManager.instance.StageClean();
     }

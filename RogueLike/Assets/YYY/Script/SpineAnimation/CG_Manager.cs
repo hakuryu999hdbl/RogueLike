@@ -9,7 +9,12 @@ public class CG_Manager : MonoBehaviour
 
    private void Start()
    {
-        Creat_HideItem_Front();
+        if(GameFlowData.nextScene!= "CG_AVG_04")
+        {
+            Creat_HideItem_Front();
+        }//目前头枷轮奸，泄欲车，拍卖会需要这个
+
+       
    }
 
     public GameObject HideItem_Front;

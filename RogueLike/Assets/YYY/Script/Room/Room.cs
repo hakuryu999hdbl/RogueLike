@@ -90,12 +90,17 @@ public class Room : MonoBehaviour
 
             default:
             case "Story_01":
+            case "Story_02":
                 BossNumber = 1;//守卫队长
                 break;
 
-            case "Story_02":
-                BossNumber = 7;//黑魔导士
+            case "Story_04":
+                BossNumber = 8;//典狱长
                 break;
+
+            //case "Story_04":
+            //    BossNumber = 7;//黑魔导士
+            //    break;
         }
 
 
