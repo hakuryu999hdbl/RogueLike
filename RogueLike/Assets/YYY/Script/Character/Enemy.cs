@@ -831,7 +831,7 @@ public class Enemy : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)//检测到玩家显示
     {
 
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player"&&tag=="Enemy")//防止死后刚好碰到队友
         {
             if (collision.gameObject.GetComponent<Player>().currentHealth <= 0 && !MakeSureIsPatrol)
             {
@@ -3491,7 +3491,7 @@ public class Enemy : MonoBehaviour
         switch (BossNumber)
         {
             case 8:
-                //UIManager.instance.ShowDialogue("Boss_Warden_Skill");
+                UIManager.instance.ShowDialogue("Boss_Warden");
                 break;
         }
     }

@@ -98,9 +98,9 @@ public class Room : MonoBehaviour
                 BossNumber = 8;//典狱长
                 break;
 
-            //case "Story_04":
-            //    BossNumber = 7;//黑魔导士
-            //    break;
+            case "Story_06":
+                BossNumber = 7;//黑魔导士
+                break;
         }
 
 

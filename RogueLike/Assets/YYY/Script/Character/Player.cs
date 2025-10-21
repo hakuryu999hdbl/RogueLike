@@ -1381,7 +1381,7 @@ public class Player : MonoBehaviour
     {
         TryCrit(); // 改用新方法触发暴击
         strike.chargeTime = attackPressTime; // 把蓄力时间传过去（蓄力那段时间也能成攻击力 能加上去）
-        Debug.Log("近战玩家阶段最初蓄力时间" + attackPressTime);
+        //Debug.Log("近战玩家阶段最初蓄力时间" + attackPressTime);
         PlayNormalAttack();
 
     }//蓄力攻击
@@ -2461,7 +2461,7 @@ public class Player : MonoBehaviour
         if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
 
-            if (speed == 0)
+            if (speed == 0&&!isDodging && !isAttacking)//移动与按下闪避键中无法打开
             {
                 UIManager.instance.OpenCloseMenu();
                 AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
@@ -2944,6 +2944,11 @@ public class Player : MonoBehaviour
 
                 UIManager.instance._RoomGenerator.MissionIcon(false);
 
+                if (GameFlowData.nextScene=="Arena") 
+                {
+                    Invoke(nameof(ArenaMode_ShowBestWave), 1.5f);
+                }
+
                 return;
             }
 
@@ -3016,6 +3021,11 @@ public class Player : MonoBehaviour
         }
 
     }
+
+    void ArenaMode_ShowBestWave() 
+    {
+        UIManager.instance._RoomGenerator.ShowInformationOfStage(10);
+    }//如果是竞技场模式，死后一定显示最高波数
 
     public void RestoreHealth(int amount) 
     {

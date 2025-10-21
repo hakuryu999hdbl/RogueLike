@@ -902,7 +902,7 @@ public class RoomGenerator : MonoBehaviour
     public Text _Stage_Information;
 
 
-    public void ShowInformationOfStage(int Information)//-3已达最大奴隶数量！ -2金币不够  -1敌人增援   0新的CG解锁    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单
+    public void ShowInformationOfStage(int Information)//-3已达最大奴隶数量！ -2金币不够  -1敌人增援   0新的CG解锁    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单  9第X波
     {
         switch (Information) 
         {
@@ -1108,20 +1108,20 @@ public class RoomGenerator : MonoBehaviour
             case 6: // 移动中无法打开菜单 
                 switch (PlayerPrefs.GetInt("language"))
                 {
-                    case 0:
-                        _Stage_Information.text = "移動中はメニューを開けません"; // 日语
+                    case 0: // 日语
+                        _Stage_Information.text = "移動・攻撃・回避中はメニューを開けません";
                         break;
-                    case 1:
-                        _Stage_Information.text = "移动中无法打开菜单"; // 简体
+                    case 1: // 简体中文
+                        _Stage_Information.text = "移动、攻击或闪避中无法打开菜单";
                         break;
-                    case 2:
-                        _Stage_Information.text = "移動中無法打開選單"; // 繁体
+                    case 2: // 繁体中文
+                        _Stage_Information.text = "移動、攻擊或閃避中無法打開選單";
                         break;
-                    case 3:
-                        _Stage_Information.text = "Cannot open menu while moving"; // 英语
+                    case 3: // 英语
+                        _Stage_Information.text = "Cannot open the menu while moving, attacking, or dodging.";
                         break;
-                    case 4:
-                        _Stage_Information.text = "이동 중에는 메뉴를 열 수 없습니다"; // 韩语
+                    case 4: // 韩语
+                        _Stage_Information.text = "이동·공격·회피 중에는 메뉴를 열 수 없습니다.";
                         break;
                 }
                 break;
@@ -1164,6 +1164,53 @@ public class RoomGenerator : MonoBehaviour
                         break;
                     case 4:
                         _Stage_Information.text = "이 모드에서는 메뉴를 열 수 없습니다"; // 韩语
+                        break;
+                }
+                break;
+
+            case 9: // 第X波敌人
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        _Stage_Information.text = "第" + (GameFlowData.RoomLevel + 1) + "波の敵";
+                        break;
+                    case 1: // 简体中文
+                        _Stage_Information.text = "第" + (GameFlowData.RoomLevel + 1) + "波敌人";
+                        break;
+                    case 2: // 繁体中文
+                        _Stage_Information.text = "第" + (GameFlowData.RoomLevel + 1) + "波敵人";
+                        break;
+                    case 3: // 英语
+                        _Stage_Information.text = "Wave " + (GameFlowData.RoomLevel + 1);
+                        break;
+                    case 4: // 韩语
+                        _Stage_Information.text = (GameFlowData.RoomLevel + 1) + "번째 웨이브";
+                        break;
+                }
+                break;
+
+
+            case 10: //最高记录
+
+                int bestWave = PlayerPrefs.GetInt("Arena_Wave", 0);
+                string colorTag = "#FFD700"; // 金黄色，可改为红色 "#FF4444"、蓝色 "#00BFFF" 等
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        _Stage_Information.text = $"最高記録：第<color={colorTag}>{bestWave}</color>波";
+                        break;
+                    case 1: // 简体中文
+                        _Stage_Information.text = $"最高纪录：第<color={colorTag}>{bestWave}</color>波";
+                        break;
+                    case 2: // 繁体中文
+                        _Stage_Information.text = $"最高紀錄：第<color={colorTag}>{bestWave}</color>波";
+                        break;
+                    case 3: // 英语
+                        _Stage_Information.text = $"Best Record: Wave <color={colorTag}>{bestWave}</color>";
+                        break;
+                    case 4: // 韩语
+                        _Stage_Information.text = $"최고 기록: <color={colorTag}>{bestWave}</color>번째 웨이브";
                         break;
                 }
                 break;

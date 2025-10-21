@@ -118,7 +118,7 @@ public class WallMap : MonoBehaviour
 
     public int isClean = 0;//0未打开  1刷敌   2清零
     public bool isBossRoom = false;//在Boss房里敌人不刷
-
+    public bool isArena = false;//角斗场的无限刷敌
 
     public void OnlyLockDoor() 
     {
@@ -154,8 +154,64 @@ public class WallMap : MonoBehaviour
                 gate.Close();  //锁上自己【门】列表的所有门，Gate脚本Gate里有门开关动画器和对应的碰撞体
             }
 
-            if (!isBossRoom)
+
+            if (isArena)
             {
+                switch (GameFlowData.RoomLevel) 
+                {
+                  
+
+                    case 1:
+                    case 2:
+                        SetEnemy(1);//刷男性敌人
+
+                        break;
+
+                    case 3:
+                    case 4:
+                    case 5:
+                        SetEnemy(3);//刷男性女性敌人
+
+                        break;
+
+                    case 6:
+                    case 7:
+                    case 8:
+                        SetEnemy(2);//刷触手敌人
+
+                        break;
+
+                      default:
+                        SetEnemy();//全类型敌人
+
+                        break;
+                }
+            }
+            else if (isBossRoom)
+            {
+
+
+                //需要在Boss房内刷的敌人【0不刷敌人】
+                switch (SetOtherEnemy)
+                {
+                    case 1:
+                        SetEnemy(1);//Boss房间另外刷男性敌人
+                        break;
+                    case 2:
+                        SetEnemy(2);//Boss房间另外刷触手敌人
+                        break;
+                    case 3:
+                        SetEnemy(3);//Boss房间另外刷男性女性敌人
+                        break;
+                    case 4:
+                        SetEnemy(4);//Boss房间另外刷肉铠
+                        break;
+                }
+
+            }
+            else 
+            {
+
 
                 //普通房间刷怪
                 switch (GameFlowData.nextScene)
@@ -183,33 +239,13 @@ public class WallMap : MonoBehaviour
 
                 }
 
-               
+
 
 
 
                 SetRBQ();
 
                 
-
-            }
-            else 
-            {
-                //需要在Boss房内刷的敌人【0不刷敌人】
-                switch (SetOtherEnemy) 
-                {
-                    case 1:
-                        SetEnemy(1);//Boss房间另外刷男性敌人
-                        break;
-                    case 2:
-                        SetEnemy(2);//Boss房间另外刷触手敌人
-                        break;
-                    case 3:
-                        SetEnemy(3);//Boss房间另外刷男性女性敌人
-                        break;
-                    case 4:
-                        SetEnemy(4);//Boss房间另外刷肉铠
-                        break;
-                }
             }
            
             isClean = 1;
@@ -228,29 +264,59 @@ public class WallMap : MonoBehaviour
     }
     void UnLockRoom()
     {
-        //打开自己列表所有门
 
-        foreach (var gate in AllGate)
+        if (isArena)
         {
-            gate.Open(); // 设为打开动画
+            isClean = 0;//重刷敌人
+
+            int currentWave = GameFlowData.RoomLevel + 1;
+            int highestWave = PlayerPrefs.GetInt("Arena_Wave", 0);
+
+            Debug.Log("目前角斗场最高波次：" + highestWave);
+            Debug.Log("当前波次：" + currentWave);
+
+            // 如果当前波次更高，则更新记录
+            if (currentWave > highestWave)
+            {
+                PlayerPrefs.SetInt("Arena_Wave", currentWave);
+                PlayerPrefs.Save();
+                Debug.Log("新的最高波次记录：" + currentWave);
+            }
+
+            // 显示“第X波敌人”
+            _RoomGenerator.ShowInformationOfStage(9);
+
+            // 延迟锁门
+            Invoke(nameof(LockRoom), 2f);
+        }
+        else 
+        {
+            //打开自己列表所有门
+
+            foreach (var gate in AllGate)
+            {
+                gate.Open(); // 设为打开动画
+            }
+
+            if (!HasShop && !isBossRoom)
+            {
+                //ToDo：藏商店
+                //SetShop();//在房间中央设置商店
+
+                UIManager.instance.ShowBonusCavans();//开启三选一界面，只能开一次
+
+
+
+                HasShop = true;
+            }
+
+            _RoomGenerator.ShowInformationOfStage(2);
+
+            GameFlowData.BulletCanThroughtWall = false;//只有在战斗的时候子弹可以穿墙
+            Debug.Log("子弹不可穿墙" + GameFlowData.BulletCanThroughtWall);
         }
 
-        if (!HasShop&&!isBossRoom)
-        {
-            //ToDo：藏商店
-            //SetShop();//在房间中央设置商店
-
-            UIManager.instance.ShowBonusCavans();//开启三选一界面，只能开一次
-
-
-
-            HasShop = true;
-        }
-
-        _RoomGenerator.ShowInformationOfStage(2);
-
-        GameFlowData.BulletCanThroughtWall = false;//只有在战斗的时候子弹可以穿墙
-        Debug.Log("子弹不可穿墙" + GameFlowData.BulletCanThroughtWall) ;
+      
     }
     bool HasShop = false;
 
@@ -276,14 +342,16 @@ public class WallMap : MonoBehaviour
     //基础房间刷怪  Boss召唤刷怪   Boss房额外刷怪
     public void SetEnemy(int EnemySkin=0)// 0随机  1男性士兵   2触手怪物     3男女敌人  4肉铠
     {
+        //上限
+        int enemyToSpawn = Random.Range(1, 3);
+
         //队友数量
         //GameObject[] friends = GameObject.FindGameObjectsWithTag("Friend");
         //
         //int friendCount = friends.Length;
-
-        //上限
-        int enemyToSpawn = Random.Range(1,3);
         //enemyToSpawn += friendCount;
+
+
         enemyToSpawn += GameFlowData.RoomLevel;
         Debug.Log("此房间敌人数量" + enemyToSpawn + "玩家进入房间数" + GameFlowData.RoomLevel);
 
