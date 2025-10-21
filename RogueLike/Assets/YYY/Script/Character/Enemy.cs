@@ -179,8 +179,14 @@ public class Enemy : MonoBehaviour
                     case 1:
                         BecomeBoss_Captain();
 
-                        // 每隔 5 秒执行一次 Boss技能 召集士兵
-                        InvokeRepeating(nameof(BossSkill_CallSoldier), 3f, 5f);
+                        if(GameFlowData.nextScene!= "Story_01")
+                        {
+                            // 每隔 5 秒执行一次 Boss技能 召集士兵
+                            InvokeRepeating(nameof(BossSkill_CallSoldier), 3f, 5f);
+
+                        }//第一关的守卫队长不召集敌人
+
+                       
 
                         break;
                     case 2:
@@ -3499,6 +3505,12 @@ public class Enemy : MonoBehaviour
     GameObject Darkness_Enemy_1, Darkness_Enemy_2;//短暂的记录自己生成的暗影
     public void BossSkill_CallDarkness() 
     {
+
+        if (player.currentHealth <= 0) 
+        {
+            return;
+        }//玩家死后不再召唤
+
         ShowMagicEffect();//显示魔法阵召唤
 
         //告诉自己生成的RBQ出生WallMap

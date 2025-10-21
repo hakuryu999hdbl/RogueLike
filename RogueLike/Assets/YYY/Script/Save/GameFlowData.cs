@@ -8,10 +8,14 @@ public class GameFlowData : MonoBehaviour
 
     //【Menu】进入菜单场景
     //【CG】进入CG处刑场景
-    //【CG_AVG_01】进入CG结局剧情1
-    //【CG_AVG_02】进入CG结局剧情2
-    //【CG_AVG_03】进入CG结局剧情3
-    //【CG_AVG_04】进入CG结局剧情4
+    //【CG_AVG_01】进入CG结局剧情1 头枷轮奸
+    //【CG_AVG_02】进入CG结局剧情2 泄欲车
+    //【CG_AVG_03】进入CG结局剧情3 性奴拍卖会
+    //【CG_AVG_04】进入CG结局剧情4 肉铠
+    //【CG_AVG_05】进入CG结局剧情5 王女性玩具
+    //【CG_AVG_06】进入CG结局剧情6 魔界试验体
+    //【CG_AVG_07】进入CG结局剧情7 肉圣物
+    //【CG_AVG_08】进入CG结局剧情8 快乐牢
 
 
 

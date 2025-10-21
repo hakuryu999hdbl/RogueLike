@@ -39,31 +39,11 @@ public class CGOptionUI : MonoBehaviour
 
     public void PlayCG_End()
     {
-        //switch (CG_Number) 
-        //{
-        //    case 0:
-        //        GameFlowData.nextScene = "CG";
-        //        break;
-        //    case 1:
-        //        GameFlowData.nextScene = "CG_AVG_01";
-        //        break;
-        //    case 2:
-        //        GameFlowData.nextScene = "CG_AVG_02";
-        //        break;
-        //    case 3:
-        //        GameFlowData.nextScene = "CG_AVG_03";
-        //        break;
-        //}
-        //GameFlowData.nextScene = cgKey;
-        //Invoke("ReLoadScene", 0.2f);
 
         UIManager.instance.ReLoadScene();//前往CG页面
     }
 
-    //void ReLoadScene() 
-    //{
-    //    UIManager.instance.ReLoadScene();//前往CG页面
-    //}
+
 
     //这个是CG_End点击按钮触发，没有办法了写
     public void ToCG_End_01()
@@ -79,6 +59,36 @@ public class CGOptionUI : MonoBehaviour
     public void ToCG_End_03()
     {
         GameFlowData.nextScene = "CG_AVG_03";
+        UIManager.instance.ReLoadScene();//前往CG页面
+    }
+
+    public void ToCG_End_04()
+    {
+        GameFlowData.nextScene = "CG_AVG_04";
+        UIManager.instance.ReLoadScene();//前往CG页面
+    }
+
+    public void ToCG_End_05()
+    {
+        GameFlowData.nextScene = "CG_AVG_05";
+        UIManager.instance.ReLoadScene();//前往CG页面
+    }
+
+    public void ToCG_End_06()
+    {
+        GameFlowData.nextScene = "CG_AVG_06";
+        UIManager.instance.ReLoadScene();//前往CG页面
+    }
+
+    public void ToCG_End_07()
+    {
+        GameFlowData.nextScene = "CG_AVG_07";
+        UIManager.instance.ReLoadScene();//前往CG页面
+    }
+
+    public void ToCG_End_08()
+    {
+        GameFlowData.nextScene = "CG_AVG_08";
         UIManager.instance.ReLoadScene();//前往CG页面
     }
 }

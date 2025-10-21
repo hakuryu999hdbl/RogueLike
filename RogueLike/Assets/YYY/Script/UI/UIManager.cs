@@ -714,7 +714,10 @@ public class UIManager : MonoBehaviour
                 break;
 
             case "CG_AVG_04":
-
+            case "CG_AVG_05":
+            case "CG_AVG_06":
+            case "CG_AVG_07":
+            case "CG_AVG_08":
                 //拉出AVG
                 PlayAVG("CG_04");
                 To_AVGScene();
@@ -827,7 +830,11 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("CG_AVG_01", 1);//cg解锁
         PlayerPrefs.SetInt("CG_AVG_02", 0);//cg解锁
         PlayerPrefs.SetInt("CG_AVG_03", 0);//cg解锁
-
+        PlayerPrefs.SetInt("CG_AVG_04", 0);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_05", 0);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_06", 0);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_07", 0);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_08", 0);//cg解锁
 
 
         //PlayerPrefs.SetInt("Chapter_01", 1);//目前保持第一章永远在
@@ -899,8 +906,11 @@ public class UIManager : MonoBehaviour
         PlayerPrefs.SetInt("CG_AVG_01", 1);//cg解锁
         PlayerPrefs.SetInt("CG_AVG_02", 1);//cg解锁
         PlayerPrefs.SetInt("CG_AVG_03", 1);//cg解锁
-
-
+        PlayerPrefs.SetInt("CG_AVG_04", 1);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_05", 1);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_06", 1);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_07", 1);//cg解锁
+        PlayerPrefs.SetInt("CG_AVG_08", 1);//cg解锁
 
         PlayerPrefs.SetInt("Chapter_01", 1);//目前保持第一章永远在
         PlayerPrefs.SetInt("Chapter_02", 1);
@@ -2920,6 +2930,21 @@ public class UIManager : MonoBehaviour
                 break;
             case 3:
                 GameFlowData.nextScene = "CG_AVG_03";
+                break;
+            case 4:
+                GameFlowData.nextScene = "CG_AVG_04";
+                break;
+            case 5:
+                GameFlowData.nextScene = "CG_AVG_05";
+                break;
+            case 6:
+                GameFlowData.nextScene = "CG_AVG_06";
+                break;
+            case 7:
+                GameFlowData.nextScene = "CG_AVG_07";
+                break;
+            case 8:
+                GameFlowData.nextScene = "CG_AVG_08";
                 break;
         }
         Debug.Log("目前的选中的cgkey:" + cg_End_Buttons[CG_End_currentIndex].cgKey );
