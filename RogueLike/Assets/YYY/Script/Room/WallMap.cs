@@ -303,6 +303,8 @@ public class WallMap : MonoBehaviour
                 //ToDo：藏商店
                 //SetShop();//在房间中央设置商店
 
+                
+
                 UIManager.instance.ShowBonusCavans();//开启三选一界面，只能开一次
 
 

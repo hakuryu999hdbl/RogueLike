@@ -750,7 +750,7 @@ public class UIManager : MonoBehaviour
 
 
         //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
-        //LockStage();
+        LockStage();
 
 
 
@@ -830,7 +830,7 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("CG_AVG_01", 1);//cg解锁
         PlayerPrefs.SetInt("CG_AVG_02", 0);//cg解锁
         PlayerPrefs.SetInt("CG_AVG_03", 0);//cg解锁
-        PlayerPrefs.SetInt("CG_AVG_04", 0);//cg解锁
+        //PlayerPrefs.SetInt("CG_AVG_04", 1);//cg解锁
         PlayerPrefs.SetInt("CG_AVG_05", 0);//cg解锁
         PlayerPrefs.SetInt("CG_AVG_06", 0);//cg解锁
         PlayerPrefs.SetInt("CG_AVG_07", 0);//cg解锁
@@ -839,8 +839,8 @@ public class UIManager : MonoBehaviour
 
         //PlayerPrefs.SetInt("Chapter_01", 1);//目前保持第一章永远在
         //PlayerPrefs.SetInt("Chapter_02", 1);
-        //PlayerPrefs.SetInt("Chapter_03", 1);//第三章的AVG变成感谢试玩
-        PlayerPrefs.SetInt("Chapter_04", 0);
+        //PlayerPrefs.SetInt("Chapter_03", 1);
+        //PlayerPrefs.SetInt("Chapter_04", 1);//第四章的AVG变成感谢试玩
         PlayerPrefs.SetInt("Chapter_05", 0);
         PlayerPrefs.SetInt("Chapter_06", 0);
         PlayerPrefs.SetInt("Chapter_07", 0);
@@ -2025,6 +2025,8 @@ public class UIManager : MonoBehaviour
                         RefreshSaveSlots();//只有在打开存档菜单时更新
 
                         CurrentChooseList = 2;
+
+                        player.CheckDemonMode();//从魔族化变回
                     }
                     else
                     {
@@ -3978,6 +3980,9 @@ public class UIManager : MonoBehaviour
     void CanChoose()
     {
         CanChooseItem = true;
+
+        
+
     }
 
 
@@ -3986,7 +3991,9 @@ public class UIManager : MonoBehaviour
 
         CurrentChooseList = -5;
         player.isInputBlocked = true;//切断玩家的方向攻击等输入
-        //Time.timeScale = 0f;
+
+        //Time.timeScale = 0f;//三选一界面延迟暂停，防止位移导致问题
+        player.isFrozen = true;//因为三选一界面一旦暂停无法移动光标，所以用这个方法控制住
 
         BonusCavans.SetActive(true);
 
@@ -4049,6 +4056,8 @@ public class UIManager : MonoBehaviour
         CurrentChooseList = -4;
         player.isInputBlocked = false;
         Time.timeScale = 1f;
+
+        player.isFrozen = false;//因为三选一界面一旦暂停无法移动光标，所以用这个方法控制住
 
         BonusCavans.SetActive(false);
     }

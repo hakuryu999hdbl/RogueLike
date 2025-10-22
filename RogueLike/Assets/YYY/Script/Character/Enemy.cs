@@ -168,6 +168,9 @@ public class Enemy : MonoBehaviour
 
                             SetSkin();
 
+                            //随机延后喘息声
+                            Invoke("Delay_Breath_Voice", Random.Range(1, 2.5f));
+
                         }//肉铠只能走  且固定Hat皮肤
 
 
@@ -218,9 +221,6 @@ public class Enemy : MonoBehaviour
                     case 7:
                         BecomeBoss_DarkMage();
                         InvokeRepeating(nameof(BossSkill_CallDarkness), 5f, 10f);
-
-                        // 每隔 5 秒执行一次 Boss技能 召集肉铠
-                        InvokeRepeating(nameof(BossSkill_CallFleshArmor), 15f, 5f);
 
                         break;
 
@@ -2928,7 +2928,26 @@ public class Enemy : MonoBehaviour
 
         //敌人攻击冷却
         attackCooldown = 1f;
+
+        //如果是魔族队友的话，自动魔族化
+        Invoke(nameof(MakeSureSuccubusFrined), 1f);
+
+
     }
+
+    void MakeSureSuccubusFrined()
+    {
+        //如果是魔族队友的话，自动魔族化
+        if (YYY_hatIndex == 11 || YYY_hatIndex == 12)
+        {
+           // Class = EnemyClass.Succubus;
+            ChangeClass(2);
+            anim.Play("Succubus_Default_Walk");
+            Debug.Log($"{gameObject.name} 已经魔族化");
+        }
+
+    }
+
 
     // 切换为敌人
     public void ConvertToEnemy()
@@ -3518,7 +3537,7 @@ public class Enemy : MonoBehaviour
         NewEnemy.GetComponent<AIDestinationSetter>().target = player.transform;
         NewEnemy.GetComponentInChildren<Spell>().Init(-20*player.Level,-1, false, 0);
         Darkness_Enemy_1 = NewEnemy;
-        Destroy(NewEnemy, 1.4f);
+        Destroy(NewEnemy, 0.7f);
 
 
         GameObject NewEnemy2 = Instantiate(Darkness_Enemy, wallmap.transform.position, Quaternion.identity);
@@ -3526,7 +3545,7 @@ public class Enemy : MonoBehaviour
         NewEnemy2.GetComponentInChildren<Spell>().Init(-20 * player.Level, -1, false, 0);
         Darkness_Enemy_2 = NewEnemy2;
 
-        Destroy(NewEnemy2, 1.4f);
+        Destroy(NewEnemy2, 0.7f);
 
 
         switch (BossNumber)
@@ -3575,6 +3594,7 @@ public class Enemy : MonoBehaviour
         // Boss死亡时停止召唤
         CancelInvoke(nameof(BossSkill_CallSoldier));
         CancelInvoke(nameof(BossSkill_CallTentacleMonster));
+        CancelInvoke(nameof(BossSkill_CallFleshArmor));
     }
     #endregion
 

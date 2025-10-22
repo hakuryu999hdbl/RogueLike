@@ -535,6 +535,22 @@ public class Player : MonoBehaviour
                 }
             }//持续灼烧伤害
 
+
+
+            //魔族化后生命值永远被控制于1/4左右
+            if (Class == PlayerClass.Succubus)
+            {
+                
+
+                if(currentHealth>= maxStrength / 4)
+                {
+                    currentHealth = maxStrength / 4;
+                    UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
+                }
+
+
+            }
+
             //if (Class == PlayerClass.Succubus&&currentStrength<=maxStrength/3) 
             //{
             //    BurnTimer += Time.deltaTime;
@@ -2050,6 +2066,14 @@ public class Player : MonoBehaviour
 
     }
 
+    public void CheckDemonMode() 
+    {
+        if (Class == PlayerClass.Succubus)
+        {
+            ChangeClass(0);
+        }
+    }//当玩家切入菜单的时候一定要退出魔族化
+
     void CheckDodge()
     {
         if (isDodging && !dodgeTriggered)
@@ -2131,7 +2155,7 @@ public class Player : MonoBehaviour
         }
 
 
-        if (currentStrength > 50) // 确保不在连续闪避状态
+        if (currentStrength > 100) // 确保不在连续闪避状态
         {
             if (isDodge) return;//防止连续闪避
 
@@ -2194,7 +2218,7 @@ public class Player : MonoBehaviour
 
         // 音效、体力扣除
         frameEvents._SE_Clothes();
-        //ChangeStrength(-50);
+        ChangeStrength(-100);
 
 
         GhostPhantom.sprite = Phantom;
