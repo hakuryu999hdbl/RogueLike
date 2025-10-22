@@ -2929,8 +2929,21 @@ public class Enemy : MonoBehaviour
         //敌人攻击冷却
         attackCooldown = 1f;
 
-        //如果是魔族队友的话，自动魔族化
-        Invoke(nameof(MakeSureSuccubusFrined), 1f);
+        //如果是魔族队友的话，自动魔族化，不是CG状态下
+
+        if (GameFlowData.nextScene != "CG" &&
+            GameFlowData.nextScene != "CG_AVG_01"&&
+            GameFlowData.nextScene != "CG_AVG_02" &&
+            GameFlowData.nextScene != "CG_AVG_03" &&
+            GameFlowData.nextScene != "CG_AVG_04" &&
+            GameFlowData.nextScene != "CG_AVG_05" &&
+            GameFlowData.nextScene != "CG_AVG_06" &&
+            GameFlowData.nextScene != "CG_AVG_07" &&
+            GameFlowData.nextScene != "CG_AVG_08") 
+        {
+            Invoke(nameof(MakeSureSuccubusFrined), 1f);
+        }
+       
 
 
     }

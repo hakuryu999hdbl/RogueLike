@@ -9721,6 +9721,7 @@ MonoBehaviour:
   AllGate: []
   isClean: 2
   isBossRoom: 0
+  isArena: 0
   isCanWinRoom: 0
   EnemyCount: 0
   spawnPoints:
@@ -27080,6 +27081,7 @@ MonoBehaviour:
   - {fileID: 7591067167582081822}
   isClean: 0
   isBossRoom: 1
+  isArena: 0
   isCanWinRoom: 0
   EnemyCount: 0
   spawnPoints:
