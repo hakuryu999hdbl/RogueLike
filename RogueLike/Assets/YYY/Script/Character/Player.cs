@@ -482,18 +482,20 @@ public class Player : MonoBehaviour
     }
     #endregion
 
+    [Header("当玩家踩入魔法阵")]
+    public bool InMagicCircle = false;
 
     private void FixedUpdate()
     {
 
         //移动中菜单锁显示
-        if (speed == 0)
+        if (speed != 0||isDodging||isAttacking)
         {
-            UIManager.instance.LockOfMenu.SetActive(false);
+            UIManager.instance.LockOfMenu.SetActive(true);
         }
         else
         {
-            UIManager.instance.LockOfMenu.SetActive(true);
+            UIManager.instance.LockOfMenu.SetActive(false);
         }
 
 
@@ -603,6 +605,22 @@ public class Player : MonoBehaviour
         }
         else
         { Invincible_Mark.SetActive(false); }
+
+
+        //玩家踩入回血法阵
+        if (InMagicCircle && currentHealth < maxHealth)
+        {
+            BurnTimer += Time.deltaTime;
+
+            if (BurnTimer >= 0.2f)
+            {
+                RestoreHealth(100);
+
+                BurnTimer = 0;         
+            }
+        }
+
+
 
         //当这些动画在播放的时候玩家不能移动
         AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
@@ -2485,7 +2503,7 @@ public class Player : MonoBehaviour
         if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
 
-            if (speed == 0&&!isDodging && !isAttacking)//移动与按下闪避键中无法打开
+            if (speed == 0&&!isDodging && !isAttacking)//移动与按下闪避按下攻击键中无法打开
             {
                 UIManager.instance.OpenCloseMenu();
                 AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);

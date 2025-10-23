@@ -33,7 +33,7 @@ public class BonusSlotUI : MonoBehaviour
 
     public GameObject highlightObj; // 高亮显示的物体，比如绿色描边
 
-
+    public int index; // 由UIManager初始化时赋值
 
 
     // Start is called before the first frame update
@@ -46,7 +46,7 @@ public class BonusSlotUI : MonoBehaviour
 
 
         // 随机选择一个防具编号（2, 10, 11, 12）
-        int[] validIndexes = { 2, 10, 11, 12 };
+        int[] validIndexes = { 2, 3, 4, 5, 6, 7, 10, 11, 12 };
         ClothesStockingIndex = validIndexes[Random.Range(0, validIndexes.Length)];
 
         ClothesStockingDefence = Random.Range(3, 10);
@@ -303,6 +303,15 @@ public class BonusSlotUI : MonoBehaviour
         highlightObj.SetActive(on); // 只在解锁时允许显示高亮
     }
 
+    #region 手机端按键需求
+    public void TouchBonusButton() 
+    {
+        // 直接告诉UIManager我被点了
+        UIManager.instance.SelectBonusByIndex(index);
+    }
+
+    #endregion
+
 
     public void ApplyBonus()
     {
@@ -396,5 +405,5 @@ public class BonusSlotUI : MonoBehaviour
 
         UIManager.instance.HideBonusCavans();
 
-    }//按下按钮触发
+    }//按下领取按钮触发
 }

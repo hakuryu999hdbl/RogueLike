@@ -96091,6 +96091,8 @@ MonoBehaviour:
   Enemy: {fileID: 6987948351437209287, guid: 91df628e27ab1ae488b2f947d3d59f07, type: 3}
   isBossRoom: 1
   BossNumber: 5
+  isCreateBoss: 0
+  box: {fileID: 4661888000759729790}
 --- !u!61 &4661888000759729790
 BoxCollider2D:
   m_ObjectHideFlags: 0

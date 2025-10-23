@@ -177,7 +177,7 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("Chapter_13", 1);
 
 
-        //GameFlowData.nextScene = "Story_04";//测试Boss使用
+        //GameFlowData.nextScene = "Story_03";//测试Boss使用
         //GameFlowData.nextScene = "CG_AVG_04";//测试CG使用
 
         switch (GameFlowData.nextScene)
@@ -4036,6 +4036,13 @@ public class UIManager : MonoBehaviour
 
         Invoke("CanChoose", 0.5f);//延迟半秒
 
+
+
+        for (int i = 0; i < BonusButtons.Count; i++)
+        {
+            BonusButtons[i].index = i;
+        }
+
     }
 
 
@@ -4063,6 +4070,21 @@ public class UIManager : MonoBehaviour
     }
 
 
+
+    public void SelectBonusByIndex(int idx)
+    {
+        if (idx < 0 || idx >= BonusButtons.Count) return;
+        if (!BonusButtons[idx].gameObject.activeSelf) return;
+
+        // 更新选中索引
+        BonusCurrentIndex = idx;
+
+        // 显示说明
+        Bonus_description.text = BonusButtons[idx].description;
+
+        // 更新高亮
+        UpdateHighlight_Bonus();
+    }
 
     #endregion
 

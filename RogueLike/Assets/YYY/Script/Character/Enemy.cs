@@ -430,6 +430,8 @@ public class Enemy : MonoBehaviour
 
     #endregion
 
+    [Header("当队友踩入魔法阵")]
+    public bool InMagicCircle = false;
     void FixedUpdate()
     {
         if (isRape)
@@ -509,6 +511,20 @@ public class Enemy : MonoBehaviour
 
         // 每帧更新剑物体的旋转
         Strike_Effect.transform.Rotate(0, 0, 100 * Time.deltaTime);
+
+
+        //队友踩入回血法阵
+        if (InMagicCircle && currentHealth < maxHealth)
+        {
+            BurnTimer += Time.deltaTime;
+
+            if (BurnTimer >= 0.2f)
+            {
+                RestoreHealth(100);
+
+                BurnTimer = 0;
+            }
+        }
 
 
         //当这些动画在播放的时候玩家不能移动
@@ -1263,8 +1279,13 @@ public class Enemy : MonoBehaviour
 
         YYY_headIndex = Random.Range(1, 13);  // 除去皇女
         YYY_eyesIndex = Random.Range(1, 14);  // 1~13
-        YYY_bodyIndex = Random.Range(10, 13); //CurrentProfession = YYY_bodyIndex - 10;//注意这个地方的敌人的职业也不能轻易更改！
-        YYY_legsIndex = Random.Range(10, 13);//剑士射手法师
+
+        int[] validIndexes = { 2, 3, 4, 5, 6, 7, 10, 11, 12 };
+        YYY_bodyIndex = validIndexes[Random.Range(0, validIndexes.Length)];
+        YYY_legsIndex = validIndexes[Random.Range(0, validIndexes.Length)];
+
+        //YYY_bodyIndex = Random.Range(10, 13); //CurrentProfession = YYY_bodyIndex - 10;//注意这个地方的敌人的职业也不能轻易更改！
+        //YYY_legsIndex = Random.Range(10, 13);//剑士射手法师
 
         int[] YYY_pool = { 1, 2, 3, 4, 10, 11, 12 };
         YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
@@ -2481,6 +2502,16 @@ public class Enemy : MonoBehaviour
 
 
     }
+
+    public void RestoreHealth(int amount)
+    {
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        UpdateHealthBar(currentHealth, maxHealth);
+
+        //显示伤害
+        HudText.HUD(amount);
+
+    }//回血专用路径
 
     void HurtOver()
     {

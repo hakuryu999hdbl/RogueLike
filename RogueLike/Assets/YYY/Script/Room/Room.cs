@@ -113,24 +113,31 @@ public class Room : MonoBehaviour
     public GameObject Enemy;//生成Boss
     public bool isBossRoom = false;
     public int BossNumber;
-
-   
+    public bool isCreateBoss = false;//Boss只能刷一次
 
     private void OnTriggerEnter2D(Collider2D collision)//检测到玩家显示
     {
 
         if (collision.gameObject.tag == "Player"&&isBossRoom)
         {
-            // 在该点生成敌人
-            GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
-            Enemy enemyScript = NewEnemy.GetComponentInChildren<Enemy>();
-            enemyScript.BossNumber = BossNumber;
-
-            //如果亚历克西斯在场，那么赛琳娜也在场
-            if (BossNumber == 5) 
+            if (!isCreateBoss) 
             {
-                Invoke("SetSelene", 1f);
+                // 在该点生成敌人
+                GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
+                Enemy enemyScript = NewEnemy.GetComponentInChildren<Enemy>();
+                enemyScript.BossNumber = BossNumber;
+
+                //如果亚历克西斯在场，那么赛琳娜也在场
+                if (BossNumber == 5)
+                {
+                    Invoke("SetSelene", 1f);
+                }
+
+
+                isCreateBoss = true;
             }
+
+          
 
 
         }//生成Boss
@@ -144,5 +151,28 @@ public class Room : MonoBehaviour
         Enemy enemyScript2 = NewEnemy2.GetComponentInChildren<Enemy>();
         enemyScript2.BossNumber = 3;
     }//魔族化赛琳娜
-  
+
+
+
+
+    public BoxCollider2D box;//开始游戏后1秒之后，将Boss房尺寸缩小，变成进入和锁门同时进行
+    private void Start()
+    {
+        // 延迟1秒后执行 ResizeCollider
+        Invoke(nameof(ResizeCollider), 1f);
+    }
+    void ResizeCollider()
+    {
+        if (isBossRoom) 
+        {
+            if (box != null)
+            {
+                box.size = new Vector2(40f, 24f);
+                box.offset = new Vector2(1f, 0f);
+            }
+        }
+       
+    }
+
+
 }

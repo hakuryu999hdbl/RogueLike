@@ -266,6 +266,24 @@ public class SaveSlotUI : MonoBehaviour
             case 2:
                 index = 3;
                 break;
+
+            case 3:
+                index = 5;
+                break;
+            case 4:
+                index = 6;
+                break;
+            case 5:
+                index = 7;
+                break;
+            case 6:
+                index = 8;
+                break;
+            case 7:
+                index = 9;
+                break;
+
+
             case 10:
                 index = 0;
                 break;
@@ -296,6 +314,24 @@ public class SaveSlotUI : MonoBehaviour
             case 2:
                 index = 3;
                 break;
+
+            case 3:
+                index = 5;
+                break;
+            case 4:
+                index = 6;
+                break;
+            case 5:
+                index = 7;
+                break;
+            case 6:
+                index = 8;
+                break;
+            case 7:
+                index = 9;
+                break;
+
+
             case 10:
                 index = 0;
                 break;
@@ -317,22 +353,32 @@ public class SaveSlotUI : MonoBehaviour
     public static class EquipmentNameDatabase
     {
         public static readonly string[][] ClothesNames = new string[][]
-        {
-        new string[] { "", "女性用鎧", "盗賊の軽装", "魔導士団制服", "暗殺マント", "なし" },
-        new string[] { "", "女式盔甲", "盗贼便服", "魔导士团制服", "刺客斗篷", "无" },
-        new string[] { "", "女式盔甲", "盜賊便服", "魔導士團制服", "刺客斗篷", "無" },
-        new string[] { "", "Women's Armor", "Rogue Outfit", "Mage Order Uniform", "Assassin Cloak", "None" },
-        new string[] { "", "여성용 갑옷", "도적 복장", "마도기사단 제복", "암살망토", "없음" }
-        };
+{
+    // 日语
+    new string[] { "", "女性用鎧", "盗賊の軽装", "魔導士団制服", "暗殺マント", "なし", "ギルドスーツ", "クロスボウ服", "紅の礼装", "ゴシックドレス", "シスター服" },
+    // 简体中文
+    new string[] { "", "女式盔甲", "盗贼便服", "魔导士团制服", "刺客斗篷", "无", "公会套裙", "轻装弩手服", "绯红礼裙", "哥特长裙", "修女服" },
+    // 繁体中文
+    new string[] { "", "女式鎧甲", "盜賊便服", "魔導士團制服", "刺客斗篷", "無", "公會套裙", "輕裝弩手服", "緋紅禮裙", "哥德長裙", "修女服" },
+    // 英语
+    new string[] { "", "Women's Armor", "Rogue Outfit", "Mage Order Uniform", "Assassin Cloak", "None", "Guild Dress", "Crossbow Outfit", "Crimson Dress", "Gothic Dress", "Nun Outfit" },
+    // 韩语
+    new string[] { "", "여성용 갑옷", "도적 복장", "마도기사단 제복", "암살망토", "없음", "길드 드레스", "크로스보우 복장", "진홍색 드레스", "고딕 드레스", "수녀복" }
+};
 
         public static readonly string[][] StockingNames = new string[][]
-        {
-        new string[] { "", "ストッキング腿铠", "ソックスブーツ", "ガーターソックス", "ニーブーツ", "なし" },
-        new string[] { "", "丝袜腿甲", "黑色长袜靴", "蕾丝吊带袜", "过膝袜短靴", "无" },
-        new string[] { "", "絲襪腿甲", "黑色長襪靴", "蕾絲吊帶襪", "過膝襪短靴", "無" },
-        new string[] { "", "Leg Armor", "Long Boots", "Garter Stockings", "Knee Boots", "None" },
-        new string[] { "", "스타킹 레그 아머", "검은색 롱삭스 부츠", "검은색 레이스 가터 스타킹", "하이부츠", "없음" }
-        };
+{
+    // 日语
+    new string[] { "", "ストッキング腿鎧", "ソックスブーツ", "ガーターソックス", "ニーブーツ", "なし", "ロングソックスブーツ", "薄黒ストッキング", "黒ヒール", "黒ブーツ", "白ニーソ" },
+    // 简体中文
+    new string[] { "", "丝袜腿甲", "黑色长袜靴", "蕾丝吊带袜", "过膝袜短靴", "无", "长袜靴", "薄黑长袜", "黑色高跟鞋", "黑色短靴", "白丝过膝袜" },
+    // 繁体中文
+    new string[] { "", "絲襪腿甲", "黑色長襪靴", "蕾絲吊帶襪", "過膝襪短靴", "無", "長襪靴", "薄黑長襪", "黑色高跟鞋", "黑色短靴", "白絲過膝襪" },
+    // 英语
+    new string[] { "", "Leg Armor", "Long Boots", "Garter Stockings", "Knee Boots", "None", "Sock Boots", "Thin Black Stockings", "Black Heels", "Short Boots", "White Thigh-highs" },
+    // 韩语
+    new string[] { "", "스타킹 레그 아머", "롱삭스 부츠", "가터 스타킹", "하이부츠", "없음", "삭스 부츠", "얇은 검정 스타킹", "검은 하이힐", "짧은 부츠", "하얀 니삭스" }
+};
     }
 
 
