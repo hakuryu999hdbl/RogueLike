@@ -610,10 +610,10 @@ public class RoomGenerator : MonoBehaviour
     [Header("设置敌人队友RBQ")]
     public GameObject Enemy;
     public GameObject RBQ;
+    public GameObject MagicCircle;
 
-   
 
-  
+
 
     public void SetEnemy()
     {

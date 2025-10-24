@@ -741,20 +741,38 @@ public class RBQ : MonoBehaviour
 
 
 
-        YYY_headIndex = Random.Range(1, 13);  // 除去皇女
-        YYY_eyesIndex = Random.Range(1, 14);  // 1~13
 
-        int[] validIndexes = { 2, 3, 4, 5, 6, 7, 10, 11, 12 };
-        YYY_bodyIndex = validIndexes[Random.Range(0, validIndexes.Length)];
-        YYY_legsIndex = validIndexes[Random.Range(0, validIndexes.Length)];
+        switch (GameFlowData.nextScene)
+        {
+            case "Story_04":
+            case "Story_06":
+            case "Story_07":
 
-        //YYY_bodyIndex = Random.Range(10, 13); //CurrentProfession = YYY_bodyIndex - 10;//注意这个地方的敌人的职业也不能轻易更改！
-        //YYY_legsIndex = Random.Range(10, 13);//剑士射手法师
+                //惩戒修女关卡
+                YYY_headIndex = Random.Range(1, 5);  //黑发主要
+                YYY_eyesIndex = Random.Range(1, 14);  // 1~13
+                YYY_bodyIndex = 7;//惩戒修女
+                int[] YYY_pool2 = { 2, 4, 5, 6, 7, 11, 12 };
+                YYY_legsIndex = YYY_pool2[UnityEngine.Random.Range(0, YYY_pool2.Length)];//和修女服搭配的丝袜
+                YYY_hatIndex = 7;//惩戒修女头巾
 
-        int[] YYY_pool = { 1, 2, 3, 4, 10, 11, 12 };
-        YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
+                break;
+
+            default:
+                YYY_headIndex = Random.Range(1, 13);  // 除去皇女
+                YYY_eyesIndex = Random.Range(1, 14);  // 1~13
+
+                //目前已有的中挑选，除去王女和黑魔导士
+                int[] validIndexes = { 2, 4, 6, 7, 10, 11, 12 };
+                YYY_bodyIndex = validIndexes[Random.Range(0, validIndexes.Length)];
+                YYY_legsIndex = validIndexes[Random.Range(0, validIndexes.Length)];
+
+                int[] YYY_pool = { 1, 2, 3, 4, 10, 11, 12 };
+                YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
+                break;
 
 
+        }
 
 
 
@@ -762,13 +780,22 @@ public class RBQ : MonoBehaviour
         Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
         Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
 
-        Girl_headIndex = Random.Range(1, 13);  // 除去皇女
-        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
-        Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
+        //Girl_headIndex = Random.Range(1, 13);  // 除去皇女
+        //Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+        //Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
+        //Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
+        //
+        //int[] Girl_pool = { 1, 2, 3, 4, 10, 11, 12 };//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
+        //Girl_hatIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];
 
-        int[] Girl_pool = { 1, 2, 3, 4, 10, 11, 12 };//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
-        Girl_hatIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];
+
+        Girl_headIndex = Random.Range(1, 5);  //黑发主要
+        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+        Girl_bodyIndex = 7;//惩戒修女
+        int[] Girl_pool = { 2, 4, 5, 6, 7, 11, 12 };
+        Girl_legsIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];//和修女服搭配的丝袜
+        Girl_hatIndex = 7;//惩戒修女头巾
+
 
         weaponIndex = Random.Range(1, 11);
 

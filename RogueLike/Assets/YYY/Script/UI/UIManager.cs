@@ -176,7 +176,7 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("Chapter_12", 1);
         //PlayerPrefs.SetInt("Chapter_13", 1);
 
-
+        //GameFlowData.nextScene = "Arena";
         //GameFlowData.nextScene = "Story_03";//测试Boss使用
         //GameFlowData.nextScene = "CG_AVG_04";//测试CG使用
 
@@ -750,7 +750,7 @@ public class UIManager : MonoBehaviour
 
 
         //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
-        LockStage();
+        //LockStage();
 
 
 
@@ -4275,6 +4275,10 @@ public class UIManager : MonoBehaviour
     public List<GameObject> Boss_Warden_In_Game_DialogueList;//典狱长刷出台词
     public List<GameObject> Boss_Warden_Die_In_Game_DialogueList;//典狱长刷出台词
 
+    public List<GameObject> Boss_CombatNun_In_Game_DialogueList;//首席战斗修女刷出台词
+    public List<GameObject> Boss_CombatNun_Skill_In_Game_DialogueList;//首席战斗修女技能刷出台词
+    public List<GameObject> Boss_CombatNun_Die_In_Game_DialogueList;//首席战斗修女死亡刷出台词
+
     private bool dialogueShowing = false;  // 是否有台词正在显示
     private GameObject currentDialogue = null; // 当前正在显示的台词
     private Coroutine dialogueRoutine = null;  // 当前协程引用
@@ -4313,6 +4317,10 @@ public class UIManager : MonoBehaviour
 
             case "Boss_Warden": pool = Boss_Warden_In_Game_DialogueList; break;
             case "Boss_Warden_Die": pool = Boss_Warden_Die_In_Game_DialogueList; break;
+
+            case "Boss_CombatNun": pool = Boss_CombatNun_In_Game_DialogueList; break;
+            case "Boss_CombatNun_Skill": pool = Boss_CombatNun_Skill_In_Game_DialogueList; break;
+            case "Boss_CombatNun_Die": pool = Boss_CombatNun_Die_In_Game_DialogueList; break;
         }
 
         if (pool == null || pool.Count == 0) return;

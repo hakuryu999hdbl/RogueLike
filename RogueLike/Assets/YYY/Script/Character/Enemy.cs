@@ -74,18 +74,7 @@ public class Enemy : MonoBehaviour
                         {
                             Class = EnemyClass.Girl;
                         }//召集女性士兵
-                        if (BecomeSoldier)
-                        {
-                            if (UnityEngine.Random.Range(0, 2) == 0)
-                            {
-                                Class = EnemyClass.Man;
-                            }
-                            else
-                            {
-                                Class = EnemyClass.Girl;
-                            }
-
-                        }//召集男性或女性士兵
+                       
                         if (BecomeTentacleMonster)
                         {
 
@@ -206,7 +195,7 @@ public class Enemy : MonoBehaviour
 
 
                         // 每隔 5 秒执行一次 Boss技能 召集士兵
-                        InvokeRepeating(nameof(BossSkill_CallSoldier), 3f, 5f);
+                        InvokeRepeating(nameof(BossSkill_CallSoldier), 5f, 10f);
 
 
                         break;
@@ -228,10 +217,20 @@ public class Enemy : MonoBehaviour
                         BecomeBoss_Warden();
 
                         // 每隔 5 秒执行一次 Boss技能 召集肉铠
-                        InvokeRepeating(nameof(BossSkill_CallFleshArmor), 3f, 5f);
+                        InvokeRepeating(nameof(BossSkill_CallFleshArmor), 5f, 10f);
                         break;
 
+                    case 9:
+                        BecomeBoss_CombatNun();
 
+                        if (GameFlowData.nextScene != "Story_07")
+                        {
+                            // 每隔 5 秒执行一次 Boss技能 召集惩戒修女
+                            InvokeRepeating(nameof(BossSkill_CallSoldier_Girl), 5f, 10f);
+
+                        }//第六关的首席战斗修女不召集敌人
+
+                        break;
                 }
 
 
@@ -253,6 +252,9 @@ public class Enemy : MonoBehaviour
             SpellDamage = CurrentWeaponPower + 100 + player.Level * 20;
 
 
+            maxHealth += player.Level * 100;
+            currentHealth = maxHealth;
+
         }//如果已经赋值了队友，那么不随机
 
         anim.Play(GetAnimPrefix() + "Default_Idle");
@@ -273,19 +275,25 @@ public class Enemy : MonoBehaviour
             {
                 default:
                 case 0:
-                    switch (Class)
+                    //一次出现很多小怪太吵限制一些
+                    if (Random.Range(0, 3) == 0)
                     {
-                        case EnemyClass.Man:
-                            UIManager.instance.ShowDialogue("Man");
-                            break;
+                        switch (Class)
+                        {
+                            case EnemyClass.Man:
+                                UIManager.instance.ShowDialogue("Man");
+                                break;
 
 
 
-                        case EnemyClass.Girl:
-                        case EnemyClass.Succubus:
-                            UIManager.instance.ShowDialogue("Girl");
-                            break;
+                            case EnemyClass.Girl:
+                            case EnemyClass.Succubus:
+                                UIManager.instance.ShowDialogue("Girl");
+                                break;
+                        }
                     }
+                   
+
                     break;
 
                 case 1:
@@ -301,6 +309,9 @@ public class Enemy : MonoBehaviour
                     break;
                 case 8:
                     UIManager.instance.ShowDialogue("Boss_Warden");
+                    break;
+                case 9:
+                    UIManager.instance.ShowDialogue("Boss_CombatNun");
                     break;
             }
 
@@ -432,6 +443,7 @@ public class Enemy : MonoBehaviour
 
     [Header("当队友踩入魔法阵")]
     public bool InMagicCircle = false;
+
     void FixedUpdate()
     {
         if (isRape)
@@ -1277,34 +1289,60 @@ public class Enemy : MonoBehaviour
 
 
 
-        YYY_headIndex = Random.Range(1, 13);  // 除去皇女
-        YYY_eyesIndex = Random.Range(1, 14);  // 1~13
+      
 
-        int[] validIndexes = { 2, 3, 4, 5, 6, 7, 10, 11, 12 };
-        YYY_bodyIndex = validIndexes[Random.Range(0, validIndexes.Length)];
-        YYY_legsIndex = validIndexes[Random.Range(0, validIndexes.Length)];
+        switch (GameFlowData.nextScene)
+        {
+            case "Story_04":
+            case "Story_06":
+            case "Story_07":
 
-        //YYY_bodyIndex = Random.Range(10, 13); //CurrentProfession = YYY_bodyIndex - 10;//注意这个地方的敌人的职业也不能轻易更改！
-        //YYY_legsIndex = Random.Range(10, 13);//剑士射手法师
+                //惩戒修女关卡
+                YYY_headIndex = Random.Range(1, 5);  //黑发主要
+                YYY_eyesIndex = Random.Range(1, 14);  // 1~13
+                YYY_bodyIndex = 7;//惩戒修女
+                int[] YYY_pool2 = { 2, 4, 5, 6, 7, 11, 12 };
+                YYY_legsIndex = YYY_pool2[UnityEngine.Random.Range(0, YYY_pool2.Length)];//和修女服搭配的丝袜
+                YYY_hatIndex = 7;//惩戒修女头巾
 
-        int[] YYY_pool = { 1, 2, 3, 4, 10, 11, 12 };
-        YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
+                break;
+
+            default:
+                YYY_headIndex = Random.Range(1, 13);  // 除去皇女
+                YYY_eyesIndex = Random.Range(1, 14);  // 1~13
+
+                //目前已有的中挑选，除去王女和黑魔导士
+                int[] validIndexes = { 2,  4,  6, 7, 10, 11, 12 };
+                YYY_bodyIndex = validIndexes[Random.Range(0, validIndexes.Length)];
+                YYY_legsIndex = validIndexes[Random.Range(0, validIndexes.Length)];
+
+                int[] YYY_pool = { 1, 2, 3, 4, 10, 11, 12 };
+                YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
+                break;
 
 
-
+        }
 
 
         Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
         Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
         Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
 
-        Girl_headIndex = Random.Range(1, 13);  // 除去皇女
-        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
-        Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
+        //Girl_headIndex = Random.Range(1, 13);  // 除去皇女
+        //Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+        //Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
+        //Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
+        //
+        //int[] Girl_pool = { 1, 2, 3, 4, 10, 11, 12 };//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
+        //Girl_hatIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];
 
-        int[] Girl_pool = { 1, 2, 3, 4, 10, 11, 12 };//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
-        Girl_hatIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];
+
+        Girl_headIndex = Random.Range(1, 5);  //黑发主要
+        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+        Girl_bodyIndex = 7;//惩戒修女
+        int[] Girl_pool = { 2, 4, 5, 6, 7, 11, 12 };
+        Girl_legsIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];//和修女服搭配的丝袜
+        Girl_hatIndex = 7;//惩戒修女头巾
 
         weaponIndex = Random.Range(1, 11);
 
@@ -1389,7 +1427,9 @@ public class Enemy : MonoBehaviour
         {
             attackTimer += Time.deltaTime;
 
-            if (Class == EnemyClass.FleshArmor||BossNumber==1){ attackTimer = attackCooldown; }//守卫队长和肉铠一靠近就砍
+            if (Class == EnemyClass.FleshArmor||BossNumber==1 ) { attackTimer = attackCooldown; }//守卫队长和肉铠一靠近就攻击
+            if (BossNumber == 9 && CombatNunLife<=1) { attackTimer = attackCooldown; }//首席战斗修女 在射手/近战情况下 立刻攻击
+
 
             if (attackTimer >= attackCooldown)
             {
@@ -2245,7 +2285,7 @@ public class Enemy : MonoBehaviour
                     maxHealth = 2000;
                     currentHealth = maxHealth;
 
-                    //HudText.HUD(maxHealth);
+                    HudText.HUD(maxHealth);
 
                     RunSpeed = 5;//瞬间提速
 
@@ -2427,7 +2467,13 @@ public class Enemy : MonoBehaviour
 
             if (currentHealth <= 0)
             {
-
+                if (BossNumber==9&& CombatNunLife>0)//首席战斗修女不会死，直到把3个状态打完
+                {
+                    currentHealth = maxHealth;//保留生命值，防止触发了别的currentHealth <= 0
+                    CombatNunLife -= 1;
+                    BecomeBoss_CombatNun();
+                    return;
+                }
 
                 if (Class == EnemyClass.FleshArmor) //肉铠状态下不死，只有转换成Man死
                 {
@@ -2763,6 +2809,10 @@ public class Enemy : MonoBehaviour
                 case 8:
                     UIManager.instance.ShowDialogue("Boss_Warden_Die");
                     break;
+
+                case 9:
+                    UIManager.instance.ShowDialogue("Boss_CombatNun_Die");
+                    break;
             }
 
 
@@ -2974,8 +3024,6 @@ public class Enemy : MonoBehaviour
         {
             Invoke(nameof(MakeSureSuccubusFrined), 1f);
         }
-       
-
 
     }
 
@@ -3035,7 +3083,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     #region
     [Header("Boss技能")]
-    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5魔族化皇太子   6魔族化皇帝    7魔族黑魔法法师   8典狱长
+    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5魔族化皇太子   6魔族化皇帝    7魔族黑魔法法师   8典狱长  9首席战斗修女
 
     public void BecomeBoss_Captain()
     {
@@ -3409,6 +3457,54 @@ public class Enemy : MonoBehaviour
 
     }//Boss典狱长
 
+    int CombatNunLife = 2;//先法师 再射手 最后近战  血越打越厚
+    public void BecomeBoss_CombatNun()
+    {
+        YYY_headIndex = 4;
+        YYY_eyesIndex = 6;
+        YYY_bodyIndex = 7;
+        YYY_legsIndex = 7;
+
+        YYY_hatIndex = 6;//首席战斗修女冠
+
+        weaponIndex = 3;//重弩 双刃斧 火焰法杖
+
+        SetSkin();
+
+        Class = EnemyClass.Girl;
+
+        CurrentProfession = CombatNunLife;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0:
+                Name.text = "首席戦闘シスター";   // 日语
+                break;
+            case 1:
+                Name.text = "首席战斗修女";   // 简体中文
+                break;
+            case 2:
+                Name.text = "首席戰鬥修女";   // 繁体中文
+                break;
+            case 3:
+                Name.text = "Chief Battle Sister";   // 英语
+                break;
+            case 4:
+                Name.text = "최고 전투 수녀";   // 韩语
+                break;
+        }
+
+        //maxHealth += 1000;
+        currentHealth = maxHealth;
+
+        HudText.HUD(maxHealth);
+
+    }//Boss 士兵队长
+
+
     #region 王女赛琳娜技能
     //Boss技能  瞬移近  瞬移远
     bool BossSkillCoolDown_Move = false;
@@ -3486,11 +3582,10 @@ public class Enemy : MonoBehaviour
     }
     #endregion
 
-    #region  守卫队长技能  典狱长技能  皇太子亚历克西斯技能
+    #region  守卫队长技能  典狱长技能   首席战斗修女技能   皇太子亚历克西斯技能
     //Boss技能  召集
     public bool BecomeSoldier_Man = false;//男性士兵
     public bool BecomeTentacleMonster = false;//触手怪物
-    public bool BecomeSoldier = false;//男性或女性士兵
     public bool BecomeSoldier_Girl = false;//女性士兵
     public bool BecomeFleshArmor = false;//肉铠
 
@@ -3520,8 +3615,32 @@ public class Enemy : MonoBehaviour
 
 
 
-    }
+    }//召集男性士兵
 
+    void BossSkill_CallSoldier_Girl()
+    {
+
+        //如果场景内敌人少于4个，再召唤一群士兵
+
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        if (enemies.Length <= 4)
+        {
+            wallmap.SetEnemy(3);//首席战斗修女召集惩戒修女
+            RoomGenerator.ShowInformationOfStage(-1);//敌人增援
+
+
+        }
+
+        switch (BossNumber)
+        {
+            case 9:
+                UIManager.instance.ShowDialogue("Boss_CombatNun_Skill");
+                break;
+        }
+
+
+
+    }//召集惩戒修女
 
     void BossSkill_CallTentacleMonster()
     {

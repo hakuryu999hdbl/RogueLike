@@ -95,7 +95,7 @@ public class Player : MonoBehaviour
         //数值赋予
 
 
-        #region  隔开
+        #region  血量比例代入
 
         //this.maxHealth = data.maxHP;
         //currentHealth = maxHealth;
@@ -1064,13 +1064,23 @@ public class Player : MonoBehaviour
         Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
         Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
 
-        Girl_headIndex = Random.Range(1, 13);  // 除去皇女
-        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
-        Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
+        //Girl_headIndex = Random.Range(1, 13);  // 除去皇女
+        //Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+        //Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
+        //Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
+        //
+        //int[] Girl_pool = { 1, 2, 3, 4, 10, 11, 12 };//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
+        //Girl_hatIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];
 
-        int[] Girl_pool = { 1, 2, 3, 4, 10, 11, 12 };//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
-        Girl_hatIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];
+
+        Girl_headIndex = Random.Range(1, 5);  //黑发主要
+        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+        Girl_bodyIndex = 7;//惩戒修女
+        int[] Girl_pool = { 2, 4, 5, 6, 7, 11, 12 };
+        Girl_legsIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];//和修女服搭配的丝袜
+        Girl_hatIndex = 7;//惩戒修女头巾
+
+
 
         //weaponIndex = Random.Range(1, 11);
         weaponIndex =1;//初始武器为匕首/轻弩/黄木短杖
@@ -1220,7 +1230,8 @@ public class Player : MonoBehaviour
         {
             ChangeCritical(-10);//松开暴击率快速下降
 
-            if (isMage) { HideMagicEffect(); }//法师隐藏法阵
+            //if (isMage) { HideMagicEffect(); }//法师隐藏法阵
+            HideMagicEffect();//无论什么职业只要松手就隐藏
         }
     }
 

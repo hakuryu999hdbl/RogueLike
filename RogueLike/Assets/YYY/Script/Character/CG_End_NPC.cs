@@ -53,8 +53,8 @@ public class CG_End_NPC : MonoBehaviour
                 //女性站立 正面
                 anim.SetFloat("InputX", 0);
                 anim.SetFloat("InputY", -1);
-                //anim.Play("Girl_Default_Idle");
-                anim.Play("Girl_Spell_Idle");
+                anim.Play("Girl_Default_Idle");
+                //anim.Play("Girl_Spell_Idle");
                 break;
 
 

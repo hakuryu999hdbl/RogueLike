@@ -94,12 +94,21 @@ public class Room : MonoBehaviour
                 BossNumber = 1;//守卫队长
                 break;
 
+            //Boss房 黑魔导士
+
             case "Story_04":
-                BossNumber = 8;//典狱长
+                BossNumber = 7;//黑魔导士
                 break;
 
+            //Boss房 王女赛琳娜
+
             case "Story_06":
-                BossNumber = 7;//黑魔导士
+            case "Story_07":
+                BossNumber = 9;//首席战斗修女
+                break;
+
+            case "Story_09":
+                BossNumber = 8;//典狱长
                 break;
         }
 

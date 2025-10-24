@@ -163,26 +163,26 @@ public class WallMap : MonoBehaviour
 
                     case 1:
                     case 2:
-                        SetEnemy(1);//刷男性敌人
+                        SetEnemy(1);//角斗场刷男性敌人
 
                         break;
 
                     case 3:
                     case 4:
                     case 5:
-                        SetEnemy(3);//刷男性女性敌人
+                        SetEnemy(3);//角斗场刷女性敌人
 
                         break;
 
                     case 6:
                     case 7:
                     case 8:
-                        SetEnemy(2);//刷触手敌人
+                        SetEnemy(2);//角斗场刷触手敌人
 
                         break;
 
                       default:
-                        SetEnemy();//全类型敌人
+                        SetEnemy();//角斗场全类型敌人
 
                         break;
                 }
@@ -201,7 +201,7 @@ public class WallMap : MonoBehaviour
                         SetEnemy(2);//Boss房间另外刷触手敌人
                         break;
                     case 3:
-                        SetEnemy(3);//Boss房间另外刷男性女性敌人
+                        SetEnemy(3);//Boss房间另外女性敌人
                         break;
                     case 4:
                         SetEnemy(4);//Boss房间另外刷肉铠
@@ -225,16 +225,19 @@ public class WallMap : MonoBehaviour
                     case "Story_04":
                     case "Story_05":
                     case "Story_06":
-                        SetEnemy(3);//第4，5，6关只有男性和女性敌人
-                        break;
                     case "Story_07":
+                        SetEnemy(3);//第4，5，6，7关只有女性敌人
+                        break;
                     case "Story_08":
                     case "Story_09":
                         SetEnemy(2);//第7，8，9关只有触手怪敌人
                         break;
 
                     default:
-                        SetEnemy();//[10,11,12全类型敌人] 地下城  竞技场   随机敌人
+                    case "Story_10":
+                    case "Story_11":
+                    case "Story_13":
+                        SetEnemy();//地下城    随机敌人
                         break;
 
                 }
@@ -303,7 +306,7 @@ public class WallMap : MonoBehaviour
                 //ToDo：藏商店
                 //SetShop();//在房间中央设置商店
 
-                
+                Instantiate(_RoomGenerator.MagicCircle, transform.position, Quaternion.identity);
 
                 UIManager.instance.ShowBonusCavans();//开启三选一界面，只能开一次
 
@@ -339,10 +342,10 @@ public class WallMap : MonoBehaviour
     [Header("敌人出生点列表")]
     public List<Transform> spawnPoints = new List<Transform>();
 
-    public int SetOtherEnemy;//0不设置其他敌人  1设置男性士兵   2设置触手怪物   3男女敌人   4肉铠
+    public int SetOtherEnemy;//0不设置其他敌人  1设置男性士兵   2设置触手怪物   3女敌人   4肉铠
 
     //基础房间刷怪  Boss召唤刷怪   Boss房额外刷怪
-    public void SetEnemy(int EnemySkin=0)// 0随机  1男性士兵   2触手怪物     3男女敌人  4肉铠
+    public void SetEnemy(int EnemySkin=0)// 0随机  1男性士兵   2触手怪物  3女敌人  4肉铠
     {
         //上限
         int enemyToSpawn = Random.Range(1, 3);
@@ -390,7 +393,7 @@ public class WallMap : MonoBehaviour
                         enemyScript.BecomeTentacleMonster = true;
                         break;
                     case 3:
-                        enemyScript.BecomeSoldier = true;
+                        enemyScript.BecomeSoldier_Girl = true;
                         break;
                     case 4:
                         enemyScript.BecomeFleshArmor = true;
