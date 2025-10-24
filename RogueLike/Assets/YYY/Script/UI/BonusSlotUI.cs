@@ -330,6 +330,11 @@ public class BonusSlotUI : MonoBehaviour
 
             case BonusType.WeaponUpgrade_Sword:
 
+                // 先保存血量比例
+                float ratio = Mathf.Clamp01((float)UIManager.instance.player.currentHealth / Mathf.Max(1, UIManager.instance.player.maxHealth));
+
+
+
                 // 给玩家加属性
                 UIManager.instance.player.PickupWeapon(WeaponIndex, 0); // 剑，剑士
                 int WeaponAtk = UIManager.instance.player.CurrentWeaponPower;
@@ -337,11 +342,22 @@ public class BonusSlotUI : MonoBehaviour
                 UIManager.instance.player.CurrentWeaponPower = WeaponAtk;
                 UIManager.instance.player.SaveCurrent();
 
+
+                // ✅ 再次刷新并保持血量
+                if (ratio < 0.999f)
+                    UIManager.instance.player.ApplySaveData(SaveManager.Load(UIManager.instance.player.currentSaveName), true, ratio);
+
+
                 UIManager.instance.player.frameEvents._SE_Clothes();
 
                 break;
 
             case BonusType.WeaponUpgrade_Pistol:
+
+
+                // 先保存血量比例
+                float ratio2 = Mathf.Clamp01((float)UIManager.instance.player.currentHealth / Mathf.Max(1, UIManager.instance.player.maxHealth));
+
 
                 // 给玩家加属性
                 UIManager.instance.player.PickupWeapon(WeaponIndex, 1); // 枪，射手
@@ -350,11 +366,24 @@ public class BonusSlotUI : MonoBehaviour
                 UIManager.instance.player.CurrentWeaponPower = WeaponAtk2;
                 UIManager.instance.player.SaveCurrent();
 
+
+                // ✅ 再次刷新并保持血量
+                if (ratio2 < 0.999f)
+                    UIManager.instance.player.ApplySaveData(SaveManager.Load(UIManager.instance.player.currentSaveName), true, ratio2);
+
+
+
                 UIManager.instance.player.frameEvents._SE_Clothes();
 
                 break;
 
             case BonusType.WeaponUpgrade_Staff:
+
+
+                // 先保存血量比例
+                float ratio3 = Mathf.Clamp01((float)UIManager.instance.player.currentHealth / Mathf.Max(1, UIManager.instance.player.maxHealth));
+
+
 
                 // 给玩家加属性
                 UIManager.instance.player.PickupWeapon(WeaponIndex, 2); //杖，法师
@@ -364,29 +393,58 @@ public class BonusSlotUI : MonoBehaviour
                 UIManager.instance.player.SaveCurrent();
 
 
+                // ✅ 再次刷新并保持血量
+                if (ratio3 < 0.999f)
+                    UIManager.instance.player.ApplySaveData(SaveManager.Load(UIManager.instance.player.currentSaveName), true, ratio3);
+
+
                 UIManager.instance.player.frameEvents._SE_Clothes();
 
                 break;
 
 
             case BonusType.ClothesUpgrade:
+
+                // 先保存血量比例
+                float ratio4 = Mathf.Clamp01((float)UIManager.instance.player.currentHealth / Mathf.Max(1, UIManager.instance.player.maxHealth));
+
+
                 UIManager.instance.player.YYY_bodyIndex = ClothesStockingIndex; UIManager.instance.player.SetSkin();
                 int ArmorDef = UIManager.instance.player.CurrentArmorDefence;
                 ArmorDef += ClothesStockingDefence;
                 UIManager.instance.player.CurrentArmorDefence = ArmorDef;
                 UIManager.instance.player.SaveCurrent();
 
+
+                // ✅ 再次刷新并保持血量
+                if (ratio4 < 0.999f)
+                    UIManager.instance.player.ApplySaveData(SaveManager.Load(UIManager.instance.player.currentSaveName), true, ratio4);
+
+
+
                 UIManager.instance.player.frameEvents._SE_Clothes();
-            
+
                 break;
 
             case BonusType.StockingUpgrade:
+
+                // 先保存血量比例
+                float ratio5 = Mathf.Clamp01((float)UIManager.instance.player.currentHealth / Mathf.Max(1, UIManager.instance.player.maxHealth));
+
+
+
 
                 UIManager.instance.player.YYY_legsIndex = ClothesStockingIndex; UIManager.instance.player.SetSkin();
                 int StockingDef = UIManager.instance.player.CurrentStockingDefence;
                 StockingDef += ClothesStockingDefence;
                 UIManager.instance.player.CurrentStockingDefence = StockingDef;
                 UIManager.instance.player.SaveCurrent();
+
+
+                // ✅ 再次刷新并保持血量
+                if (ratio5 < 0.999f)
+                    UIManager.instance.player.ApplySaveData(SaveManager.Load(UIManager.instance.player.currentSaveName), true, ratio5);
+
 
                 UIManager.instance.player.frameEvents._SE_Clothes();
 

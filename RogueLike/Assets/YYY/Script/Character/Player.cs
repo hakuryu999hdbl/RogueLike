@@ -75,7 +75,7 @@ public class Player : MonoBehaviour
     public string currentSaveName; // 当前操作的存档名
 
 
-    public void ApplySaveData(PlayerSaveData data)
+    public void ApplySaveData(PlayerSaveData data, bool preserveHealth = false, float prevHealthRatio = -1f)
     {
         // 应用皮肤信息
         this.YYY_headIndex = data.headIndex;
@@ -93,9 +93,42 @@ public class Player : MonoBehaviour
 
 
         //数值赋予
+
+
+        #region  隔开
+
+        //this.maxHealth = data.maxHP;
+        //currentHealth = maxHealth;
+        //UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
+
+
+        // --- 数值（先记录新max，再决定currentHealth是否继承） ---
         this.maxHealth = data.maxHP;
-        currentHealth = maxHealth;
+
+        // 计算要不要继承“上一名”的血量比例
+        // 1) 如果调用方明确给了 prevHealthRatio（0~1），用它
+        // 2) 否则，如果 preserveHealth==true，但没传入比例，就用“当前player身上”的比例（保险）
+        // 3) 否则（不保留），直接回满
+        float ratioToKeep = 1f;
+        if (preserveHealth)
+        {
+            if (prevHealthRatio >= 0f)
+                ratioToKeep = Mathf.Clamp01(prevHealthRatio);
+            else if (this.maxHealth > 0) // 用“切换前”的比例（此时this.currentHealth仍旧是“旧人”的血）
+                ratioToKeep = Mathf.Clamp01((float)this.currentHealth / Mathf.Max(1, this.maxHealth));
+        }
+
+        if (ratioToKeep < 0.999f)
+            this.currentHealth = Mathf.RoundToInt(this.maxHealth * ratioToKeep);
+        else
+            this.currentHealth = this.maxHealth;
+
         UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
+
+
+        #endregion
+
+
 
         this.maxStrength = maxHealth;
         currentStrength = maxStrength;
@@ -553,35 +586,7 @@ public class Player : MonoBehaviour
 
             }
 
-            //if (Class == PlayerClass.Succubus&&currentStrength<=maxStrength/3) 
-            //{
-            //    BurnTimer += Time.deltaTime;
-            //
-            //    if (BurnTimer >= 0.2f)
-            //    {
-            //        currentHealth = Mathf.Clamp(currentHealth - 1, 0, maxHealth);
-            //        UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
-            //
-            //        //显示伤害
-            //        HudText.HUD(-1);
-            //
-            //        BurnTimer = 0;
-            //
-            //        if (currentHealth <= 0)
-            //        {
-            //            isDie = true;
-            //
-            //            anim.Play(GetAnimPrefix() + "Default_Die_2");
-            //
-            //            Critical.SetActive(false);
-            //
-            //            UIManager.instance.Ending_UI();//魔族化损血死亡
-            //
-            //            return;
-            //        }
-            //    }
-            //}
-            //魔族化后的威威削减生命值
+           
         }
         else
         {

@@ -469,13 +469,30 @@ public class SaveSlotUI : MonoBehaviour
 
     public void Choose()
     {
-        player.ApplySaveData(Data);
-        UIManager.instance.SetCurrentSlot(this); // 通知UIManager进行高亮更新
-
-
-        player._ClothesToClass();//临时让衣服改变职业
+        //player.ApplySaveData(Data);
+        //UIManager.instance.SetCurrentSlot(this); // 通知UIManager进行高亮更新
+        //
+        //
+        //player._ClothesToClass();//临时让衣服改变职业
 
         // AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
+
+
+        // 1) 记录“切换前”的血量比例
+        float prevRatio = 1f;
+        if (player != null && player.maxHealth > 0)
+            prevRatio = Mathf.Clamp01((float)player.currentHealth / player.maxHealth);
+
+        // 2) 载入新角色数据，并决定是否继承血量
+        //    逻辑：如果上一名不是满血（<0.999），就继承；满血则全满
+        bool preserve = prevRatio < 0.999f;
+
+        player.ApplySaveData(Data, preserveHealth: preserve, prevHealthRatio: prevRatio);
+
+        // 3) UI 高亮逻辑照旧
+        UIManager.instance.SetCurrentSlot(this);
+        player._ClothesToClass();
+
 
     }//选择这个档的皮肤
 
