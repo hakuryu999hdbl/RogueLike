@@ -76,6 +76,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Japanese/J_CG_2"));
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Japanese/J_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Japanese/J_CG_4"));
+                textAssets.Add(107, Resources.Load<TextAsset>("TXT_Japanese/J_CG_7"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Japanese/J_Story_1"));
@@ -458,7 +459,11 @@ public class DialogSystem : MonoBehaviour
                 index++;
                 break;
             case "DeepRed":
-                text.color = new Color(0.8f, 0.2f, 0.2f, 1.0f); // 深红色(性奴)
+                text.color = new Color(0.8f, 0.2f, 0.2f, 1.0f); // 深红色(黑魔导士)
+                index++;
+                break;
+            case "Red":
+                text.color = Color.red; // 红色(首席战斗修女)
                 index++;
                 break;
 
@@ -730,7 +735,8 @@ public class DialogSystem : MonoBehaviour
 
     [SerializeField] List<AudioClip> Playlist_CG_AVG_01;//头枷轮奸
     [SerializeField] List<AudioClip> Playlist_CG_AVG_02;//泄欲车
-    [SerializeField] List<AudioClip> Playlist_CG_AVG_03;//性奴拍卖会
+
+    [SerializeField] List<AudioClip> Playlist_CG_AVG_07;//肉圣物净化
     int VoiceIndex = 0;
 
     public void Playlist_Voice()
@@ -748,7 +754,7 @@ public class DialogSystem : MonoBehaviour
                     Playlist = Playlist_CG_AVG_02;//泄欲车
                     break;
                 case 103:
-                    Playlist = Playlist_CG_AVG_03;//性奴拍卖会
+                    Playlist = Playlist_CG_AVG_07;//肉圣物净化
                     break;
             }
 
@@ -830,6 +836,7 @@ public class DialogSystem : MonoBehaviour
             case 102:
             case 103:
             case 104:
+            case 107:
                 GameFlowData.nextScene = "";//返回主菜单
                 break;
         }

@@ -54,6 +54,16 @@ public class RoomGenerator : MonoBehaviour
         Invoke("Scan", 0.2f);//这样因该能等到全部生成完
 
 
+        //结局CG惩戒修会圣堂
+        if (roomNumber == -2)
+        {
+            Instantiate(CG_Chapel, new Vector3(0, 0, 0), Quaternion.identity);
+
+            cg_Manager = CG_Chapel.GetComponent<CG_Manager>();
+
+            return;
+        }
+
         //结局CG惩戒回廊
         if (roomNumber == -1)
         {
@@ -423,6 +433,7 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     #region
     [Header("固定地图")]
+    public GameObject CG_Chapel;//惩戒修会圣堂
     public GameObject CG_HallofDiscipline;//惩戒回廊
     public GameObject CG_ExecutionSquare;//处刑广场
     public GameObject CG_Torture;//调教室

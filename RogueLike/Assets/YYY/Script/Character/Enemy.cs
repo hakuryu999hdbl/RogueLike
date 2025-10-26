@@ -3800,6 +3800,10 @@ public class Enemy : MonoBehaviour
                //
                // anim.Play("FleshArmor_Default_Walk");//肉铠结局
                 break;
+
+            case "CG_AVG_07":
+                anim.SetBool("is_Girl_CarryUp_Side", true);//惩戒修女牵着
+                break;
         }
 
        
@@ -3813,11 +3817,12 @@ public class Enemy : MonoBehaviour
         Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
 
         //保存 Girl 部位
-        Girl_headIndex = Random.Range(1, 13);  // 除去皇女
+        Girl_headIndex = Random.Range(1, 5);  //黑发主要
         Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = Random.Range(10, 13);//剑士射手法师
-        Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
-        Girl_hatIndex = 1;
+        Girl_bodyIndex = 7;//惩戒修女
+        int[] Girl_pool = { 2, 4, 5, 6, 7, 11, 12 };
+        Girl_legsIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];//和修女服搭配的丝袜
+        Girl_hatIndex = 7;//惩戒修女头巾
 
 
         SetSkin();
@@ -3832,6 +3837,8 @@ public class Enemy : MonoBehaviour
     public void CG_End_RBQ_Pillory(int SideOrFront)//0正面 1侧面强奸  2正面强奸
     {
 
+
+
         switch (GameFlowData.nextScene)
         {
             case "CG_AVG_01":
@@ -3844,9 +3851,13 @@ public class Enemy : MonoBehaviour
                 anim.Play("RBQ_Punish_Cage_2");//狗笼肉货
                 break;
             case "CG_AVG_04":
-                anim.Play("RBQ_Torture_CutDown");//四肢切断挂饰    
-                //anim.Play("FleshArmor_Default_Idle");//肉铠
+                anim.Play("RBQ_Torture_CutDown");//四肢切断挂饰   
                 break;
+
+            case "CG_AVG_07":
+                anim.Play("RBQ_Punish_Crucifixion_2");//倒十字肉圣物  
+                break;
+
         }
 
         switch (SideOrFront)
@@ -3912,18 +3923,7 @@ public class Enemy : MonoBehaviour
         }
 
 
-        switch (GameFlowData.nextScene)
-        {
-            case "CG_AVG_01":
-                anim.Play("RBQ_Punish_Pillory");//首枷輪姦
-                break;
-            case "CG_AVG_02":
-                anim.Play("RBQ_Punish_ShameWagon");//陵辱車接客
-                break;
-            case "CG_AVG_03":
-                anim.Play("RBQ_Punish_Cage");//狗笼肉货
-                break;
-        }
+    
 
 
 
@@ -3942,6 +3942,43 @@ public class Enemy : MonoBehaviour
                 break;
             case 3:
                 frameEvents._03_H_Gasping_Weak_1();
+                break;
+        }
+
+
+        switch (GameFlowData.nextScene)
+        {
+            case "CG_AVG_01":
+                anim.Play("RBQ_Punish_Pillory");//首枷輪姦
+                break;
+            case "CG_AVG_02":
+                anim.Play("RBQ_Punish_ShameWagon");//陵辱車接客
+                break;
+            case "CG_AVG_03":
+                anim.Play("RBQ_Punish_Cage");//狗笼肉货
+                break;
+
+
+            case "CG_AVG_07":
+                anim.Play("RBQ_Punish_Crucifixion");//倒十字肉圣物  
+
+
+                //堵嘴
+                frameEvents.audioS.Stop();
+
+                switch (Random.Range(0, 3))
+                {
+                    case 0:
+                        frameEvents._03_Resist_5();
+                        break;
+                    case 1:
+                        frameEvents._03_Voice_Struggle_1();
+                        break;
+                    case 2:
+                        frameEvents._03_Voice_Struggle_2();
+                        break;
+
+                }
                 break;
         }
 
@@ -4020,6 +4057,28 @@ public class Enemy : MonoBehaviour
             case "CG_AVG_03":
                 anim.Play("RBQ_Punish_Cage");//狗笼肉货
                 break;
+
+            case "CG_AVG_07":
+                anim.Play("RBQ_Punish_Crucifixion");//倒十字肉圣物  
+
+                //堵嘴
+                frameEvents.audioS.Stop();
+
+                switch (Random.Range(0, 3))
+                {
+                    case 0:
+                        frameEvents._03_Resist_5();
+                        break;
+                    case 1:
+                        frameEvents._03_Voice_Struggle_1();
+                        break;
+                    case 2:
+                        frameEvents._03_Voice_Struggle_2();
+                        break;
+                  
+                }
+
+                break;
         }
 
         
@@ -4051,6 +4110,12 @@ public class Enemy : MonoBehaviour
                 break;
             case 3:
                 frameEvents._03_Breath_3();
+                break;
+            case 4:
+                frameEvents._03_Breath_4();
+                break;
+            case 5:
+                frameEvents._03_Breath_5();
                 break;
         }
 

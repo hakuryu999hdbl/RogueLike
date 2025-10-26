@@ -5810,6 +5810,7 @@ MonoBehaviour:
   SkyboxSample: {fileID: 1162173333}
   SkyBoxNumber: 0
   RoomType: 1
+  CG_Chapel: {fileID: 2555496712518004242, guid: f256c3ed5c157004a9934cdfef465ae4, type: 3}
   CG_HallofDiscipline: {fileID: 2510313311480906500, guid: 5d0bcc14f7de1a54fa76c3840e81d168, type: 3}
   CG_ExecutionSquare: {fileID: 5553637100842546407, guid: 3608f1ee0386f9342b4b6824eabe2c5e, type: 3}
   CG_Torture: {fileID: 955405008988503922, guid: e589abdfa807777498cb13ac613cb2e5, type: 3}
@@ -51909,7 +51910,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 01971f540472553438962fbc898e18a4, type: 3}
   - {fileID: 8300000, guid: ade563e4ac11d42409c7750862deae44, type: 3}
   - {fileID: 8300000, guid: fdebaf5d923ebb041a542ee68b41f92d, type: 3}
-  Playlist_CG_AVG_03: []
+  Playlist_CG_AVG_07: []
 --- !u!1 &1268049010
 GameObject:
   m_ObjectHideFlags: 0
