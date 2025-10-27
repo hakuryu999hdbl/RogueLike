@@ -2501,7 +2501,19 @@ public class Player : MonoBehaviour
 
         if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
-            isInteracting = true;
+            if (speed == 0 && !isDodging && !isAttacking)//移动与按下闪避按下攻击键中无法打开
+            {
+                isInteracting = true;
+            }
+            else
+            {
+                UIManager.instance._RoomGenerator.ShowInformationOfStage(6);
+
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+
+
+            
         }
 
     }
@@ -3391,7 +3403,6 @@ public class Player : MonoBehaviour
 
 
     #endregion
-
 
 
 

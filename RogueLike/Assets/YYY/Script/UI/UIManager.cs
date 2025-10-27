@@ -1069,7 +1069,7 @@ public class UIManager : MonoBehaviour
 
 
     [Header("主菜单界面层级")]
-    public int CurrentChooseList = 0;//-7战败投降界面  -6战败被抓住凌辱  -5三选一界面   -4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面   11调教所选择界面  12感谢名单界面
+    public int CurrentChooseList = 0;//-8局内商店界面  -7战败投降界面  -6战败被抓住凌辱  -5三选一界面   -4游戏界面  -3暂停菜单    -2确认是否删除所有存档  -1确认是否删除存档  0主菜单界面   1捏人界面   2存档界面   3设置界面  4语言选择界面   5CG界面   6CG鉴赏中   7游戏模式选择   8剧情章节选择  9剧情AVG界面   10结算界面   11调教所选择界面  12感谢名单界面
     public int CurrentMode = 0;//0 进入CG界面  1捏人/进入游戏
     public int HomePagecurrentIndex = 0;//0 开始游戏  1 CG鉴赏  2 设置  3 退出
     public int CreatNewcurrentIndex = 0;//0 名称 1 眼睛  2 头  3 种族  4 职业  5 确定
@@ -3676,6 +3676,13 @@ public class UIManager : MonoBehaviour
         {
             // 可选：退出菜单、返回上一级等
 
+            //局内商店界面
+            if (CurrentChooseList == -8)
+            {
+                Invoke("CloseShop", 0.1f);
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+
 
             //战败投降界面
             if (CurrentChooseList == -7)
@@ -4232,6 +4239,46 @@ public class UIManager : MonoBehaviour
         if (UseVoice) { AudioManager.instance.AudioPlay(AudioManager.instance.SE_Reji); }
 
     }
+
+    public GameObject ShowShopCavans;
+
+    public void OpenShopMenu() 
+    {
+        player.characterSkin.HideSkeleton();
+        MainCamera.SetInteger("View", 0);
+        Common_All.SetActive(false);
+        ShowShopCavans.SetActive(true);
+        player.isInputBlocked = true;//切断玩家的方向攻击等输入
+
+      
+
+        CurrentChooseList = -8;//局内商店界面
+
+        //player.CheckDemonMode();//从魔族化变回
+
+    }
+
+    [Obsolete]
+    public void CloseShop()
+    {
+        player.characterSkin.ShowSkeleton();
+        MainCamera.SetInteger("View", 2);
+        Common_All.SetActive(true);
+        ShowShopCavans.SetActive(false);
+        player.isInputBlocked = false;//恢复玩家的方向攻击等输入
+
+
+        CurrentChooseList = -4;
+
+
+        // ✅ 恢复交互提示
+        RBQ rbq = FindObjectOfType<RBQ>(); // 只要场景里存在当前商店RBQ就行
+        if (rbq != null)
+        {
+            rbq.ReenablePrompt(player);
+        }
+    }
+
 
     #endregion
 

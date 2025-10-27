@@ -304,9 +304,9 @@ public class WallMap : MonoBehaviour
             if (!HasShop && !isBossRoom)
             {
                 //ToDo：藏商店
-                //SetShop();//在房间中央设置商店
+                SetShop();//在房间中央设置商店
 
-                Instantiate(_RoomGenerator.MagicCircle, transform.position, Quaternion.identity);
+                //Instantiate(_RoomGenerator.MagicCircle, transform.position, Quaternion.identity);
 
                 UIManager.instance.ShowBonusCavans();//开启三选一界面，只能开一次
 
