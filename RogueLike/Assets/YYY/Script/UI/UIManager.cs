@@ -325,7 +325,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제3장 함정 탈출";
                         break;
                 }
-                Invoke("PlayBossMusic", 1f);
+                Invoke("PlayDungeonBGM", 1f);
                 break;
 
 
@@ -382,7 +382,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제5장 뜻밖의 조우";
                         break;
                 }
-                Invoke("PlayBossMusic", 1f);
+                Invoke("PlayRuinsBGM", 1f);
                 break;
 
 
@@ -467,7 +467,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제8장 늦은 복수";
                         break;
                 }
-                Invoke("PlayBossMusic", 1f);
+                Invoke("PlayRuinsBGM", 1f);
                 break;
 
             case "Story_09":
@@ -522,7 +522,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제10장 지하 결전";
                         break;
                 }
-                Invoke("PlayBossMusic", 1f);
+                Invoke("PlayRuinsBGM", 1f);
                 break;
 
 
@@ -578,7 +578,7 @@ public class UIManager : MonoBehaviour
                         _Stage_Information.text = "제12장 황제";
                         break;
                 }
-                Invoke("PlayBossMusic", 1f);
+                Invoke("PlayRuinsBGM", 1f);
                 break;
 
             case "Arena":
@@ -687,8 +687,7 @@ public class UIManager : MonoBehaviour
 
                 Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 1;//游街和处刑广场
-                //_RoomGenerator.SkyBoxNumber = 2;//白雾
-                _RoomGenerator.SkyBoxNumber = 1;//早上
+                _RoomGenerator.SkyBoxNumber = 2;//白雾
 
                 Invoke("PlayDungeonBGM", 1f);
                 break;
@@ -705,10 +704,8 @@ public class UIManager : MonoBehaviour
 
                 Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = 1;//游街和处刑广场
-
-
-                //_RoomGenerator.SkyBoxNumber = 0;//夜晚
                 _RoomGenerator.SkyBoxNumber = 2;//白雾
+
 
                 Invoke("PlayDungeonBGM", 1f);
                 break;

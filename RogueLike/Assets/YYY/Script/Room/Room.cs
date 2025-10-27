@@ -142,11 +142,12 @@ public class Room : MonoBehaviour
                     Invoke("SetSelene", 1f);
                 }
 
-
+                BGM.instance.Stop();
+                UIManager.instance.PlayBossMusic();//Boss出现才有声音
                 isCreateBoss = true;
             }
 
-          
+       
 
 
         }//生成Boss

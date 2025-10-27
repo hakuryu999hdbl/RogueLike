@@ -18967,13 +18967,14 @@ MonoBehaviour:
   audioS: {fileID: 475258304}
   isPlaying: 0
   BossMusicList:
-  - {fileID: 8300000, guid: 8422386db828e4d4b9d64cb56e7139bd, type: 3}
+  - {fileID: 8300000, guid: f68e5663dcda72f4083b21b5c8d568d9, type: 3}
   DungeonMusicList:
   - {fileID: 8300000, guid: 2f77fc3399b912649a0c38711ded12bf, type: 3}
   - {fileID: 8300000, guid: be969f190779df4409670d6a8bdc2443, type: 3}
   - {fileID: 8300000, guid: 33eb713f82124364b98ca2127bce65f2, type: 3}
   RuinsMusicList:
   - {fileID: 8300000, guid: 8422386db828e4d4b9d64cb56e7139bd, type: 3}
+  - {fileID: 8300000, guid: 610d3f7177b4b4840b4c1d83cc8c7113, type: 3}
   BackgroundMusicList:
   - {fileID: 8300000, guid: c67136ce69040654eb8a9f8817b35f37, type: 3}
 --- !u!1 &479598372
@@ -44436,7 +44437,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 2
   m_Text: "Dimension   Mystia   GuanLe   Ina_Miyo   OTL_OTL   \u711A\u685C   Shymidnightfox  
-    Raffine\n"
+    Raffine   MaszaKZ   Ed_boy\r\n"
 --- !u!222 &1112346650
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -51501,6 +51502,7 @@ GameObject:
   - component: {fileID: 1259119161}
   - component: {fileID: 1259119160}
   - component: {fileID: 1259119159}
+  - component: {fileID: 1259119163}
   m_Layer: 5
   m_Name: Boss
   m_TagString: Untagged
@@ -51599,6 +51601,103 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1259119157}
   m_CullTransparentMesh: 1
+--- !u!82 &1259119163
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1259119157}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 726cef9543c29cc4eaeea675479e5b40, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 4f964160bcd357e498c15a8b6c0f3a4a, type: 3}
+  m_Resource: {fileID: 8300000, guid: 4f964160bcd357e498c15a8b6c0f3a4a, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1264326721
 GameObject:
   m_ObjectHideFlags: 0
@@ -51910,7 +52009,15 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 01971f540472553438962fbc898e18a4, type: 3}
   - {fileID: 8300000, guid: ade563e4ac11d42409c7750862deae44, type: 3}
   - {fileID: 8300000, guid: fdebaf5d923ebb041a542ee68b41f92d, type: 3}
-  Playlist_CG_AVG_07: []
+  Playlist_CG_AVG_07:
+  - {fileID: 8300000, guid: 549e7b4bcf80708458a3d97c2c9902b8, type: 3}
+  - {fileID: 8300000, guid: 11223cabc63135f4fad90eaae755fede, type: 3}
+  - {fileID: 8300000, guid: 842e458e87e7cd044843b09eb975e5da, type: 3}
+  - {fileID: 8300000, guid: 8b299932958d41d41ab3a9ba890e8592, type: 3}
+  - {fileID: 8300000, guid: b9dbd1c73c514224997f3527d5c387cd, type: 3}
+  - {fileID: 8300000, guid: 68317d76a9aa0ab48a6c5a1cd72b62a3, type: 3}
+  - {fileID: 8300000, guid: 0d5944fd6094f2e489a05b111ac6e680, type: 3}
+  - {fileID: 8300000, guid: bdd38f63faa8e76408ffc9996bf9094f, type: 3}
 --- !u!1 &1268049010
 GameObject:
   m_ObjectHideFlags: 0

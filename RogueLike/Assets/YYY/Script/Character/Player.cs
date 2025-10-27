@@ -165,6 +165,8 @@ public class Player : MonoBehaviour
         {
             //法师近战攻击力急剧缩减
             strike.Damage = -data.meleeDamage / 5;
+
+            strike.TypeOfAttack = 0;//法师近战不能有属性
         }
 
      
@@ -3006,6 +3008,10 @@ public class Player : MonoBehaviour
                 {
                     Invoke(nameof(ArenaMode_ShowBestWave), 1.5f);
                 }
+
+                //死亡后BGM也变
+                BGM.instance.Stop();
+                BGM.instance.AudioPlayDungeonMusic(-1);
 
                 return;
             }

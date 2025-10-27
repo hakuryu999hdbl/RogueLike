@@ -100,6 +100,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_2"));
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_4"));
+                textAssets.Add(107, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_7"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_1"));
@@ -123,7 +124,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_2"));
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_4"));
-
+                textAssets.Add(107, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_7"));
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_1"));
                 textAssets.Add(1002, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_2"));
@@ -146,6 +147,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_English/E_CG_2"));
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_English/E_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_English/E_CG_4"));
+                textAssets.Add(107, Resources.Load<TextAsset>("TXT_English/E_CG_7"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_English/E_Story_1"));
@@ -169,6 +171,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Korean/K_CG_2"));
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Korean/K_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Korean/K_CG_4"));
+                textAssets.Add(107, Resources.Load<TextAsset>("TXT_Korean/K_CG_7"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Korean/K_Story_1"));
@@ -464,6 +467,7 @@ public class DialogSystem : MonoBehaviour
                 break;
             case "Red":
                 text.color = Color.red; // 红色(首席战斗修女)
+                Playlist_Voice();
                 index++;
                 break;
 
@@ -742,7 +746,7 @@ public class DialogSystem : MonoBehaviour
     public void Playlist_Voice()
     {
 
-        if (animation_number == 101|| animation_number == 102)
+        if (animation_number == 101|| animation_number == 102 || animation_number == 107)
         {
             // 1) 选择「当前台词列表」
             switch (animation_number)
@@ -753,7 +757,7 @@ public class DialogSystem : MonoBehaviour
                 case 102:
                     Playlist = Playlist_CG_AVG_02;//泄欲车
                     break;
-                case 103:
+                case 107:
                     Playlist = Playlist_CG_AVG_07;//肉圣物净化
                     break;
             }

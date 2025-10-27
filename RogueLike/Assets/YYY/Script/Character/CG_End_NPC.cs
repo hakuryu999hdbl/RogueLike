@@ -26,15 +26,15 @@ public class CG_End_NPC : MonoBehaviour
                     Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
                     Girl_hatIndex = 1;
 
-                    //狗笼肉货堆积
+                  
                     anim.SetFloat("InputX", -1);
                     anim.SetFloat("InputY", 0);
                     anim.Play("RBQ_Punish_Cage_2");
-                }
+                }  //狗笼肉货堆积
 
                 if (GameFlowData.nextScene == "CG_AVG_01"|| GameFlowData.nextScene == "CG_AVG_02")
                 {
-                    //男性站立 正面
+                  
                     anim.SetFloat("InputX", 0);
                     anim.SetFloat("InputY", -1);
                     anim.Play("Man_Default_Idle");
@@ -42,9 +42,26 @@ public class CG_End_NPC : MonoBehaviour
                     Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
                     Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
                     Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
-                }
 
-               
+                }  //男性站立 正面
+
+                if (GameFlowData.nextScene == "CG_AVG_07")
+                {
+
+
+                    YYY_headIndex = Random.Range(1, 5);  //黑发主要
+                    YYY_eyesIndex = Random.Range(1, 14);  // 1~13
+                    YYY_bodyIndex = 7;//惩戒修女
+                    int[] YYY_pool2 = { 2, 4, 5, 6, 7, 11, 12 };
+                    YYY_legsIndex = YYY_pool2[UnityEngine.Random.Range(0, YYY_pool2.Length)];//和修女服搭配的丝袜
+                    YYY_hatIndex = 7;//惩戒修女头巾
+
+                    SetSkin();
+                    anim.SetFloat("InputX", 0);
+                    anim.SetFloat("InputY", -1);
+                    anim.Play("Girl_Default_Idle");
+                }  //惩戒修女  正面
+
                 break;
 
 
@@ -69,15 +86,16 @@ public class CG_End_NPC : MonoBehaviour
                     Girl_legsIndex = Random.Range(10, 13);//剑士射手法师
                     Girl_hatIndex = 1;
 
-                    //狗笼肉货堆积
+                
                     anim.SetFloat("InputX", -1);
                     anim.SetFloat("InputY", 0);
                     anim.Play("RBQ_Punish_Cage_2");
-                }
+
+                }//狗笼肉货堆积
 
                 if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
                 {
-                    //男性站立 侧面
+                    
                     anim.SetFloat("InputX", -1);
                     anim.SetFloat("InputY", 0);
                     anim.Play("Man_Default_Idle");
@@ -85,9 +103,25 @@ public class CG_End_NPC : MonoBehaviour
                     Man_headIndex = Random.Range(1, 5);//除去 皇子和皇帝
                     Man_bodyIndex = Random.Range(1, 5);//除去 皇子和皇帝
                     Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
-                }
+                }//男性站立 侧面
 
- 
+                if (GameFlowData.nextScene == "CG_AVG_07")
+                {
+
+
+                    YYY_headIndex = Random.Range(1, 5);  //黑发主要
+                    YYY_eyesIndex = Random.Range(1, 14);  // 1~13
+                    YYY_bodyIndex = 7;//惩戒修女
+                    int[] YYY_pool2 = { 2, 4, 5, 6, 7, 11, 12 };
+                    YYY_legsIndex = YYY_pool2[UnityEngine.Random.Range(0, YYY_pool2.Length)];//和修女服搭配的丝袜
+                    YYY_hatIndex = 7;//惩戒修女头巾
+
+                    SetSkin();
+                    anim.SetFloat("InputX", -1);
+                    anim.SetFloat("InputY", 0);
+                    anim.Play("Girl_Default_Idle");
+                }  //惩戒修女  正面
+
                 break;
 
             case 2:
@@ -95,7 +129,7 @@ public class CG_End_NPC : MonoBehaviour
 
                 if (GameFlowData.nextScene == "CG_AVG_03")
                 {
-                    //性奴商人站立 正面
+                  
                     anim.SetFloat("InputX", 0);
                     anim.SetFloat("InputY", -1);
                     anim.Play("NPC_Man_SlaveTrader");
@@ -103,19 +137,36 @@ public class CG_End_NPC : MonoBehaviour
                     Man_headIndex = 4;
                     Man_bodyIndex = 3;
                     Man_hatIndex = 4;
-                }
+                }  //性奴商人站立 正面
 
 
                 if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
                 {
-                    //女性宣读  正面
+                  
                     anim.SetFloat("InputX", 0);
                     anim.SetFloat("InputY", -1);
                     anim.Play("NPC_Girl_Read");
-                }
+                }  //守卫队长宣读  正面
+
+                if (GameFlowData.nextScene == "CG_AVG_07")
+                {
 
 
-             
+                    YYY_headIndex = 4;
+                    YYY_eyesIndex = 6;
+                    YYY_bodyIndex = 7;
+                    YYY_legsIndex = 7;
+
+                    YYY_hatIndex = 6;//首席战斗修女冠
+
+                    weaponIndex = 3;//重弩 双刃斧 火焰法杖
+
+                    SetSkin();
+                    anim.SetFloat("InputX", 0);
+                    anim.SetFloat("InputY", -1);
+                    anim.Play("NPC_Girl_Read");
+                }  //首席战斗修女宣读  正面
+
                 break;
 
             case 3:
@@ -123,7 +174,7 @@ public class CG_End_NPC : MonoBehaviour
 
                 if (GameFlowData.nextScene == "CG_AVG_03")
                 {
-                    //男性站立 侧面
+                   
                     anim.SetFloat("InputX", -1);
                     anim.SetFloat("InputY", 0);
                     anim.Play("Man_Default_Idle");
@@ -131,17 +182,37 @@ public class CG_End_NPC : MonoBehaviour
                     Man_headIndex = 4;
                     Man_bodyIndex = 3;
                     Man_hatIndex = 4;
-                }
+
+                } //性奴商人站立 侧面
 
                 if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
                 {
-                    //女性宣读  侧面
+                   
                     anim.SetFloat("InputX", -1);
                     anim.SetFloat("InputY", 0);
                     anim.Play("NPC_Girl_Read");
-                }
+                } //守卫队长宣读  侧面
 
-              
+                if (GameFlowData.nextScene == "CG_AVG_07")
+                {
+
+
+                    YYY_headIndex = 4;
+                    YYY_eyesIndex = 6;
+                    YYY_bodyIndex = 7;
+                    YYY_legsIndex = 7;
+
+                    YYY_hatIndex = 6;//首席战斗修女冠
+
+                    weaponIndex = 3;//重弩 双刃斧 火焰法杖
+
+                    SetSkin();
+ 
+                    anim.SetFloat("InputX", -1);
+                    anim.SetFloat("InputY", 0);
+                    anim.Play("NPC_Girl_Read");
+
+                }  //首席战斗修女宣读  侧面
                 break;
 
             case 4:
@@ -153,11 +224,11 @@ public class CG_End_NPC : MonoBehaviour
 
                 if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
                 {
-                    //女性坐姿  正面
+                   
                     anim.SetFloat("InputX", 0);
                     anim.SetFloat("InputY", -1);
                     anim.Play("NPC_Girl_Sit");
-                }   
+                } //女性坐姿  正面
                 break;
 
 
@@ -170,11 +241,11 @@ public class CG_End_NPC : MonoBehaviour
 
                 if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
                 {
-                    //女性坐姿  侧面
+                    
                     anim.SetFloat("InputX", 1);
                     anim.SetFloat("InputY", 0);
                     anim.Play("NPC_Girl_Sit");
-                }
+                }//女性坐姿  侧面
                 break;
         }
 
