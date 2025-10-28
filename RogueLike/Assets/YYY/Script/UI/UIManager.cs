@@ -3111,6 +3111,23 @@ public class UIManager : MonoBehaviour
         {
             Vector2 dir = ctx.ReadValue<Vector2>();
 
+            //局内商店
+            if (CurrentChooseList == -8)
+            {
+
+                // 当前菜单项内的上下切换
+                if (dir.y > 0.5f)
+                {
+
+                    MoveSelection_Shop(-1);            // y>0 往上 -> 索引减
+                }
+                else if (dir.y < -0.5f)
+                {
+
+                    MoveSelection_Shop(+1);            // y<0 往下 -> 索引加
+                }
+            }
+
             //三选一界面
             if (CurrentChooseList == -5)
             {
@@ -3453,11 +3470,24 @@ public class UIManager : MonoBehaviour
 
     }//打字的时候锁住上下移动
 
+    [Obsolete]
     private void OnConfirm(InputAction.CallbackContext ctx)
     {
         if (player.isInputBlocked)
         {
             // 可选：进入下一级菜单、确认开始游戏等
+
+
+            //局内商店
+            if (CurrentChooseList == -8)
+            {
+                // 防止空列表或空按钮
+                if (shopItemButtons.Count > 0 && shopItemButtons[shopCurrentIndex] != null)
+                {
+                    TryBuyItem(shopItemButtons[shopCurrentIndex]); // 你已有的购买函数
+                }
+
+            }
 
             //战败投降界面
             if (CurrentChooseList == -7)
@@ -4214,7 +4244,7 @@ public class UIManager : MonoBehaviour
     /// 商店与更改金币位置
     /// </summary>
     #region
-    [Header("商店与金币")]
+    [Header("金币")]
     public Text MoneyText;
     public Text MoneyText_2;
     public void ChangeMoney(int amount, bool UseVoice = true)
@@ -4240,10 +4270,14 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public GameObject ShowShopCavans;
 
-    public void OpenShopMenu() 
+    [Header("商店界面")]
+    public GameObject ShowShopCavans;
+    private RBQ currentRBQ; // 在 UIManager 顶部声明
+    public void OpenShopMenu(RBQ rbq) 
     {
+        currentRBQ = rbq; // ✅ 记录当前商店
+
         player.characterSkin.HideSkeleton();
         MainCamera.SetInteger("View", 0);
         Common_All.SetActive(false);
@@ -4255,6 +4289,9 @@ public class UIManager : MonoBehaviour
         CurrentChooseList = -8;//局内商店界面
 
         //player.CheckDemonMode();//从魔族化变回
+
+        // 👇 新增
+        BuildShopFromRBQ(rbq);
 
     }
 
@@ -4279,6 +4316,228 @@ public class UIManager : MonoBehaviour
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+    public Transform shopItemParent;
+    public GameObject shopItemPrefab; // 预制体：带按钮、图标、价格Text、描述Text
+    public List<ShopItemUI> shopItemButtons = new List<ShopItemUI>();
+    public Text shopDescription;
+    int shopCurrentIndex = 0;
+
+    #region   手机上点击高亮选中，然后可购买
+    public Button buyButton; // ✅ 购买按钮（UI上新建一个按钮并拖进来）
+                             // 当点击商品按钮时（来自 ShopItemUI）
+    public void SelectShopByUI(ShopItemUI clicked)
+    {
+        if (clicked == null) return;
+
+        int idx = shopItemButtons.IndexOf(clicked);
+        if (idx < 0) return;
+
+        shopCurrentIndex = idx;
+        UpdateHighlight_Shop();
+        shopDescription.text = clicked.data.description;
+
+        // ✅ 让购买按钮亮起
+        if (buyButton) buyButton.interactable = true;
+    }
+    public void OnBuyButtonClick()
+    {
+        // 防止误触
+        if (shopItemButtons.Count == 0) return;
+        if (shopCurrentIndex < 0 || shopCurrentIndex >= shopItemButtons.Count) return;
+
+        var item = shopItemButtons[shopCurrentIndex];
+        if (item == null) return;
+
+        TryBuyItem(item);
+    }
+    #endregion
+
+
+    public void BuildShopFromRBQ(RBQ rbq)
+    {
+        // 清空旧UI
+        foreach (Transform child in shopItemParent)
+            Destroy(child.gameObject);
+
+        shopItemButtons.Clear();
+
+        // 创建UI
+        foreach (var item in rbq.shopItems)
+        {
+            GameObject btn = Instantiate(shopItemPrefab, shopItemParent);
+            ShopItemUI ui = btn.GetComponent<ShopItemUI>();
+            ui.Setup(item);
+            shopItemButtons.Add(ui);
+        }
+
+        // 默认选中第一个
+        //if (shopItemButtons.Count > 0)
+        //{
+        //    shopCurrentIndex = 0;
+        //    UpdateShopHighlight();
+        //    shopDescription.text = shopItemButtons[0].data.description;
+        //}
+
+        // 初始选中
+        if (shopItemButtons.Count > 0)
+        {
+            shopCurrentIndex = 0;
+            UpdateHighlight_Shop();
+            shopDescription.text = shopItemButtons[shopCurrentIndex].data.description;
+        }
+        else
+        {
+            shopCurrentIndex = 0;
+            shopDescription.text = "";
+        }
+    }
+
+    void MoveSelection_Shop(int direction /* +1=向下, -1=向上 */)
+    {
+        if (shopItemButtons.Count == 0) return;
+
+        // 取消旧高亮
+        shopItemButtons[shopCurrentIndex].SetHighlight(false);
+
+        int max = shopItemButtons.Count;
+        for (int i = 1; i <= max; i++)
+        {
+            int newIndex = (shopCurrentIndex + direction * i + max) % max;
+            if (shopItemButtons[newIndex] != null && shopItemButtons[newIndex].gameObject.activeSelf)
+            {
+                shopCurrentIndex = newIndex;
+                break;
+            }
+        }
+
+        // 更新高亮与说明
+        UpdateHighlight_Shop();
+        shopDescription.text = shopItemButtons[shopCurrentIndex].data.description;
+    }
+
+    void UpdateHighlight_Shop()
+    {
+        for (int i = 0; i < shopItemButtons.Count; i++)
+        {
+            if (shopItemButtons[i] == null) continue;
+            shopItemButtons[i].SetHighlight(i == shopCurrentIndex);
+        }
+    }
+
+    [Obsolete]
+    public void TryBuyItem(ShopItemUI itemUI)
+    {
+        int money = PlayerPrefs.GetInt("Money", 0);
+        var data = itemUI.data;
+        Player player = UIManager.instance.player;
+
+        if (money < data.price)
+        {
+            Debug.Log("金币不足");
+            _RoomGenerator.ShowInformationOfStage(-2);
+            player.frameEvents._Attack_pai1();
+            return;
+        }
+
+        // 扣钱
+        ChangeMoney(-data.price);
+
+        switch (data.type)
+        {
+            case ShopItemData.ItemType.Sword:
+                player.PickupWeapon(data.index, 0);
+                player.CurrentWeaponPower += data.value;
+                player.SaveCurrent();
+                break;
+
+            case ShopItemData.ItemType.Pistol:
+                player.PickupWeapon(data.index, 1);
+                player.CurrentWeaponPower += data.value;
+                player.SaveCurrent();
+                break;
+
+            case ShopItemData.ItemType.Staff:
+                player.PickupWeapon(data.index, 2);
+                player.CurrentWeaponPower += data.value;
+                player.SaveCurrent();
+                break;
+
+            case ShopItemData.ItemType.Clothes:
+                player.YYY_bodyIndex = data.index;
+                player.CurrentArmorDefence += data.value;
+                player.SaveCurrent();
+                player.SetSkin();//衣服需要更换
+                break;
+
+            case ShopItemData.ItemType.Stockings:
+                player.YYY_legsIndex = data.index;
+                player.CurrentStockingDefence += data.value;
+                player.SaveCurrent();
+                player.SetSkin();//衣服需要更换
+                break;
+
+            case ShopItemData.ItemType.Slave:
+
+                //_RoomGenerator.SetFriend(0);
+                currentRBQ.SaveFriend();
+                CloseShop(); // 或者留在界面
+                break;
+
+            case ShopItemData.ItemType.Potion:
+                player.RestoreHealth(data.value);
+                break;
+        }
+
+        // 声音、反馈
+        player.frameEvents._SE_Clothes();
+
+        // 移除商品按钮
+        Destroy(itemUI.gameObject);
+        shopItemButtons.Remove(itemUI);
+
+        // ✅ 同步货架库存（让 RBQ 实体隐藏）
+        if (currentRBQ != null)
+        {
+            currentRBQ.RemoveItemFromShelf(data.type);
+        }
+
+
+
+
+        // UI 移除
+        int removedIndex = shopItemButtons.IndexOf(itemUI);
+        Destroy(itemUI.gameObject);
+        shopItemButtons.Remove(itemUI);
+
+        // 购买后如果空了就关闭商店；否则校正当前索引并刷新高亮/说明
+        if (shopItemButtons.Count == 0)
+        {
+            shopDescription.text = "";
+            CloseShop(); // 或者留在界面
+        }
+        else
+        {
+            // 让选中落到“刚移除的那个位置”，若超界则回退一位
+            if (removedIndex < 0) removedIndex = 0;
+            if (removedIndex >= shopItemButtons.Count) removedIndex = shopItemButtons.Count - 1;
+            shopCurrentIndex = removedIndex;
+
+            UpdateHighlight_Shop();
+            shopDescription.text = shopItemButtons[shopCurrentIndex].data.description;
+        }
+
+
+    }
 
     #endregion
 

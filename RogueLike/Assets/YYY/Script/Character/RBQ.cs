@@ -34,10 +34,14 @@ public class RBQ : MonoBehaviour
         //寻找RoomGenerator
         _RoomGenerator = GameObject.FindGameObjectWithTag("RoomGenerator").GetComponent<RoomGenerator>();
 
-        if (RBQState == 0) { RBQState = Random.Range(1,3); }//如果一开始没有赋值，那么随机
+        if (RBQState == 0) { RBQState = Random.Range(1, 3); }//如果一开始没有赋值，那么随机
 
         // 根据方向旋转（可选，或控制朝向动画片段）
         ApplyFacingRotation();
+
+
+        //随机皮肤
+        SetRandomSkin();
 
         // 随机动画
         switch (RBQState)
@@ -50,7 +54,7 @@ public class RBQ : MonoBehaviour
 
                 if (GameFlowData.nextScene == "Story_01" || GameFlowData.nextScene == "Story_02")
                 { CurrentRapeType = Random.Range(3, 5); }//暂时先这样
-                else if (GameFlowData.nextScene == "Story_04" || GameFlowData.nextScene == "Story_06") 
+                else if (GameFlowData.nextScene == "Story_04" || GameFlowData.nextScene == "Story_06")
                 {
                     CurrentRapeType = Random.Range(3, 5);
                 }
@@ -58,7 +62,7 @@ public class RBQ : MonoBehaviour
                 {
                     CurrentRapeType = Random.Range(1, 7);//7，9，11关
                 }
-               
+
 
                 switch (CurrentRapeType)
                 {
@@ -87,9 +91,9 @@ public class RBQ : MonoBehaviour
 
                 bool CanGasping = true;
 
-                if (CurrentRapeType==3|| CurrentRapeType == 4) 
+                if (CurrentRapeType == 3 || CurrentRapeType == 4)
                 {
-                    if (inputX==1&&inputY==0)
+                    if (inputX == 1 && inputY == 0)
                     {
                         //朝右的有帧事件发出声音不能循环叫声
                         CanGasping = false;
@@ -122,19 +126,18 @@ public class RBQ : MonoBehaviour
                 //Check.SetActive(true);
 
                 //商店随机武器
-                GenerateRandomWeapons();
+                //GenerateRandomWeapons();
 
-
+                GenerateShopItems();
                 break;
         }
 
 
 
-       
 
 
-        //随机皮肤
-        SetRandomSkin();
+
+
 
 
     }
@@ -162,7 +165,7 @@ public class RBQ : MonoBehaviour
                 inputX = 0; inputY = -1;
                 break;
         }
-        
+
         // 动画传入方向
         anim.SetFloat("InputX", inputX);
         anim.SetFloat("InputY", inputY);
@@ -296,8 +299,8 @@ public class RBQ : MonoBehaviour
 
 
 
-  
-            if (RBQState == 3 )//商店状态下这里不要触发取下
+
+            if (RBQState == 3)//商店状态下这里不要触发取下
             {
 
                 if (playerInRange != null)
@@ -346,7 +349,7 @@ public class RBQ : MonoBehaviour
             {
                 Debug.Log("打开商店");
 
-                UIManager.instance.OpenShopMenu();
+                UIManager.instance.OpenShopMenu(this);//把自己的商品信息传过去
 
                 playerInRange.transform.position = transform.position;
 
@@ -407,7 +410,7 @@ public class RBQ : MonoBehaviour
                             {
                                 TortureDevice2.GetComponent<Plant>().SetImage(9);//侧面
                             }
-                           
+
                             break;
 
                         case 4:
@@ -782,6 +785,45 @@ public class RBQ : MonoBehaviour
     }
 
 
+    public void SaveFriend()
+    {
+
+        GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
+        Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
+        //enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
+        enemy.CanChangeSkin = false;
+        StartCoroutine(DelayedApplySkin(enemy));
+        enemy.ChangeClass(0);
+
+
+        enemy.ConvertToFriend();
+
+
+
+        enemy.ReadyToSayThankYou();//谢谢声（让产生的队友说）
+
+        // 消失自己(如果销毁的太快就容易传不进去)
+        Destroy(gameObject, 0.2f);
+
+
+        Check_Slave.SetActive(false);//隐藏踏板
+
+
+
+        //生成刑架
+        GameObject TortureDevice = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
+        TortureDevice.GetComponent<Plant>().SetImage(8);
+
+        WeaponChangeDevice.transform.SetParent(null);//保留架子
+
+
+
+        // 购买反馈
+        Debug.Log("成功解放一个奴隶！");
+    }//商店购买奴隶传入
+
+
+
     private IEnumerator DelayedApplySkin(Enemy enemy)
     {
         yield return new WaitForSeconds(0.1f); // 延迟 0.1 秒后赋值
@@ -867,8 +909,8 @@ public class RBQ : MonoBehaviour
                 YYY_headIndex = Random.Range(1, 13);  // 除去皇女
                 YYY_eyesIndex = Random.Range(1, 14);  // 1~13
 
-                //目前已有的中挑选，除去王女和黑魔导士
-                int[] validIndexes = { 2, 4, 6, 7, 10, 11, 12 };
+                //目前已有的中挑选，
+                int[] validIndexes = { 2, 3, 4, 5, 6, 7, 10, 11, 12 };
                 YYY_bodyIndex = validIndexes[Random.Range(0, validIndexes.Length)];
                 YYY_legsIndex = validIndexes[Random.Range(0, validIndexes.Length)];
 
@@ -941,6 +983,7 @@ public class RBQ : MonoBehaviour
         weaponIndex = _weaponIndex;
 
         SetSkin();
+
     }
 
     public void SetSkin()
@@ -1097,6 +1140,144 @@ public class RBQ : MonoBehaviour
     }
 
 
+
+
+
+
+
+
+
+
+    public List<ShopItemData> shopItems = new List<ShopItemData>();
+
+    public void GenerateShopItems()
+    {
+        shopItems.Clear();
+
+
+        int lang = PlayerPrefs.GetInt("language");
+
+
+
+        // ⚔️ 武器类
+        if (Random.value < 0.7f)
+        {
+            ShopItemData sword = new ShopItemData();
+            sword.type = ShopItemData.ItemType.Sword;
+            sword.index = Random.Range(1, 11);
+            sword.value = Random.Range(1, 10);
+            sword.price = sword.value * 10;
+            Weapon_Sword.sprite = database.SwordSprites[sword.index - 1];
+            sword.displayName = ItemLocalization.GetName(ShopItemData.ItemType.Sword, sword.index, lang);
+            sword.description = ItemLocalization.GetDescription(ShopItemData.ItemType.Sword, sword.index, lang);
+            shopItems.Add(sword);
+        }
+
+        if (Random.value < 0.7f)
+        {
+            ShopItemData gun = new ShopItemData();
+            gun.type = ShopItemData.ItemType.Pistol;
+            gun.index = Random.Range(1, 11);
+            gun.value = Random.Range(1, 10);
+            gun.price = gun.value * 10;
+            Weapon_Pistol.sprite = database.PistolSprites[gun.index - 1];
+            gun.displayName = ItemLocalization.GetName(ShopItemData.ItemType.Pistol, gun.index, lang);
+            gun.description = ItemLocalization.GetDescription(ShopItemData.ItemType.Pistol, gun.index, lang);
+            shopItems.Add(gun);
+        }
+
+        if (Random.value < 0.7f)
+        {
+            ShopItemData staff = new ShopItemData();
+            staff.type = ShopItemData.ItemType.Staff;
+            staff.index = Random.Range(1, 11);
+            staff.value = Random.Range(1, 10);
+            staff.price = staff.value * 10;
+            Weapon_Staff.sprite = database.StaffSprites[staff.index - 1];
+            staff.displayName = ItemLocalization.GetName(ShopItemData.ItemType.Staff, staff.index, lang);
+            staff.description = ItemLocalization.GetDescription(ShopItemData.ItemType.Staff, staff.index, lang);
+            shopItems.Add(staff);
+        }
+
+
+
+        //衣服必定有
+        ShopItemData clothes = new ShopItemData();
+        clothes.type = ShopItemData.ItemType.Clothes;
+        clothes.index = YYY_bodyIndex;
+        clothes.value = Random.Range(1, 10);
+        clothes.price = clothes.value * 10;
+        //clothes.icon = database.ClothesSprites[clothes.index - 1];
+
+        clothes.displayName = ItemLocalization.GetName(ShopItemData.ItemType.Clothes, clothes.index, lang);
+        clothes.description = ItemLocalization.GetDescription(ShopItemData.ItemType.Clothes,clothes.index, lang);
+        shopItems.Add(clothes);
+
+
+
+
+        //丝袜必定有
+        ShopItemData stockings = new ShopItemData();
+        stockings.type = ShopItemData.ItemType.Stockings;
+        stockings.index = YYY_legsIndex;
+        stockings.value = Random.Range(1, 10);
+        stockings.price = stockings.value * 10;
+        //stockings.icon = database.ClothesSprites[stockings.index - 1];
+
+        stockings.displayName = ItemLocalization.GetName(ShopItemData.ItemType.Stockings, stockings.index, lang);
+        stockings.description = ItemLocalization.GetDescription(ShopItemData.ItemType.Stockings, stockings.index, lang);
+        shopItems.Add(stockings);
+
+
+
+        //性奴隶必定有
+        ShopItemData slave = new ShopItemData();
+        slave.type = ShopItemData.ItemType.Slave;
+        slave.displayName = "性奴";
+        slave.description = "获得一个新的性奴队友";
+        slave.price = 300;
+        shopItems.Add(slave);
+
+
+    }
+
+    public void RemoveItemFromShelf(ShopItemData.ItemType type)
+    {
+        // 从数据列表中移除该商品
+        shopItems.RemoveAll(x => x.type == type);
+
+        // 同时隐藏现场展示用的 Sprite
+        switch (type)
+        {
+            case ShopItemData.ItemType.Sword:
+                if (Weapon_Sword) Weapon_Sword.gameObject.SetActive(false);
+                break;
+
+            case ShopItemData.ItemType.Pistol:
+                if (Weapon_Pistol) Weapon_Pistol.gameObject.SetActive(false);
+                break;
+
+            case ShopItemData.ItemType.Staff:
+                if (Weapon_Staff) Weapon_Staff.gameObject.SetActive(false);
+                break;
+
+            case ShopItemData.ItemType.Clothes:
+                YYY_bodyIndex = 1;
+                SetSkin();
+                break;
+
+            case ShopItemData.ItemType.Stockings:
+                YYY_legsIndex = 1;
+                SetSkin();
+                break;
+
+            case ShopItemData.ItemType.Slave:
+                if (Check_Slave) Check_Slave.SetActive(false);
+                break;
+        }
+
+        Debug.Log("RBQ 货架移除了物品：" + type);
+    }
     #endregion
 
 
