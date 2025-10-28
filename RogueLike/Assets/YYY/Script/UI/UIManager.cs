@@ -2010,7 +2010,7 @@ public class UIManager : MonoBehaviour
                 //战斗中无法开始
 
 
-                if (GameFlowData.BulletCanThroughtWall == false)
+                if (GameFlowData.BulletCanThroughtWall == false || player.speed == 0)//你知道为什么要这里加这个吗，因为手机端，点开菜单按钮是可以绕开的
                 {
                     if (!isPause)
                     {

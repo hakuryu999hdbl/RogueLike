@@ -527,6 +527,8 @@ public class Player : MonoBehaviour
         if (speed != 0||isDodging||isAttacking)
         {
             UIManager.instance.LockOfMenu.SetActive(true);
+
+            isInteracting = false;//只要我处于移动中就不能交互
         }
         else
         {
@@ -679,7 +681,7 @@ public class Player : MonoBehaviour
     int moveSpeed = 0;//改动画器用的
 
     public Rigidbody2D rbody;//声明刚体
-    float speed = 2; // 基础移动速度 （站0 走2 跑4）
+    public float speed = 2; // 基础移动速度 （站0 走2 跑4）
 
     public GameObject Arrow;//小地图朝向
 
@@ -2632,7 +2634,19 @@ public class Player : MonoBehaviour
 
         if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
-            isInteracting = true;
+
+            if (speed == 0 && !isDodging && !isAttacking)//移动与按下闪避按下攻击键中无法打开
+            {
+                isInteracting = true;
+            }
+            else
+            {
+                UIManager.instance._RoomGenerator.ShowInformationOfStage(6);
+
+                AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
+            }
+
+
         }
     }
     public void ButtonSetInteractOver()
