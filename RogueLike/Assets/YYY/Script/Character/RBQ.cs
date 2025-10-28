@@ -26,8 +26,9 @@ public class RBQ : MonoBehaviour
 
     private float inputX, inputY;
 
-    [Header("尸体隐藏标志")]
+    [Header("尸体隐藏标志/商店展示标记")]
     public GameObject UI_Player_Icon;
+    public GameObject UI_Shop_Icon;
 
     void Start()
     {
@@ -107,14 +108,13 @@ public class RBQ : MonoBehaviour
 
 
 
-                Destroy(Check.gameObject);
                 break;
             case 2:
                 //尸体
                 int rand = Random.Range(0, tortureAnimations.Length);
                 anim.Play(tortureAnimations[rand]);
 
-                Destroy(Check.gameObject);
+            
                 Destroy(UI_Player_Icon.gameObject);//尸体隐藏标志
 
 
@@ -123,12 +123,11 @@ public class RBQ : MonoBehaviour
                 //商店肉货
                 anim.Play("RBQ_Display_Idle_Front");
 
-                //Check.SetActive(true);
-
-                //商店随机武器
-                //GenerateRandomWeapons();
-
                 GenerateShopItems();
+
+
+                Destroy(UI_Player_Icon.gameObject);//商店更换标志
+                UI_Shop_Icon.SetActive(true);
                 break;
         }
 
@@ -459,319 +458,6 @@ public class RBQ : MonoBehaviour
 
 
 
-            if (RBQState == 3 && other.GetComponent<Player>().isInteracting)//点击交互键
-            {
-                //拉相机 打开商店界面
-
-
-                //if (!InteractOneTime&&GameFlowData.BulletCanThroughtWall==false)//战斗期间无法打开商店
-                //{
-                //
-                //    Debug.Log("打开商店");
-                //
-                //    UIManager.instance.OpenShopMenu();
-                //
-                //
-                //    other.transform.position = transform.position;
-                //
-                //
-                //    Prompt_Take.SetActive(false);
-                //
-                //    other.GetComponent<Player>().InteractingButton.SetActive(false);
-                //    other.GetComponent<Player>().isInteracting = false;
-                //
-                //    // 防止重复触发
-                //    InteractOneTime = true;
-                //}
-
-
-
-
-
-
-
-
-                //if (!InteractOneTime)
-                //{
-                //    Player _Player = other.GetComponent<Player>();
-
-                //    int currentMoney = PlayerPrefs.GetInt("Money", 0);
-
-
-
-
-
-                //    switch (CurrentType)
-                //    {
-                //        case RBQItemTrigger.ItemType.Sword:
-                //            if (SwordIndex > 0)
-                //            {
-
-                //                int itemPrice = swordPower * 10;
-                //                if (currentMoney >= itemPrice)
-                //                {
-                //                    // 减钱并更新 UI  
-                //                    UIManager.instance.ChangeMoney(-itemPrice);
-
-                //                    // 给玩家加属性
-                //                    _Player.PickupWeapon(SwordIndex, 0); // 剑，剑士
-                //                    int WeaponAtk = _Player.CurrentWeaponPower;
-                //                    WeaponAtk += swordPower;
-                //                    _Player.CurrentWeaponPower = WeaponAtk;
-                //                    _Player.SaveCurrent();
-
-
-                //                    //隐藏
-                //                    SwordIndex = 0;
-                //                    Weapon_Sword.sprite = null;
-                //                    Weapon_Sword.gameObject.SetActive(false);
-
-                //                    Check_Sword.SetActive(false);//隐藏踏板
-
-                //                }
-                //                else
-                //                {
-                //                    // 播放提示音或显示提示文字
-                //                    Debug.Log("金币不足！");
-                //                    frameEvents._Attack_pai1();
-                //                    _RoomGenerator.ShowInformationOfStage(-2);
-                //                }
-
-                //            }
-                //            break;
-                //        case RBQItemTrigger.ItemType.Pistol:
-                //            if (PistolIndex > 0)
-                //            {
-
-                //                int itemPrice = pistolPower * 10;
-                //                if (currentMoney >= itemPrice)
-                //                {
-                //                    // 减钱并更新 UI  
-                //                    UIManager.instance.ChangeMoney(-itemPrice);
-
-                //                    // 给玩家加属性
-                //                    _Player.PickupWeapon(PistolIndex, 1);//枪，射手
-                //                    int WeaponAtk = _Player.CurrentWeaponPower;
-                //                    WeaponAtk += pistolPower;
-                //                    _Player.CurrentWeaponPower = WeaponAtk;
-                //                    _Player.SaveCurrent();
-
-
-                //                    //隐藏
-                //                    PistolIndex = 0;
-                //                    Weapon_Pistol.sprite = null;
-                //                    Weapon_Pistol.gameObject.SetActive(false);
-
-                //                    Check_Pistol.SetActive(false);//隐藏踏板
-
-                //                }
-                //                else
-                //                {
-                //                    // 播放提示音或显示提示文字
-                //                    Debug.Log("金币不足！");
-                //                    frameEvents._Attack_pai1();
-                //                    _RoomGenerator.ShowInformationOfStage(-2);
-                //                }
-
-
-                //            }
-                //            break;
-                //        case RBQItemTrigger.ItemType.Staff:
-                //            if (StaffIndex > 0)
-                //            {
-
-                //                int itemPrice = staffPower * 10;
-                //                if (currentMoney >= itemPrice)
-                //                {
-                //                    // 减钱并更新 UI  
-                //                    UIManager.instance.ChangeMoney(-itemPrice);
-
-                //                    // 给玩家加属性
-                //                    _Player.PickupWeapon(StaffIndex, 2);//杖，法师
-                //                    int WeaponAtk = _Player.CurrentWeaponPower;
-                //                    WeaponAtk += staffPower;
-                //                    _Player.CurrentWeaponPower = WeaponAtk;
-                //                    _Player.SaveCurrent();
-
-
-                //                    //隐藏
-                //                    StaffIndex = 0;
-                //                    Weapon_Staff.sprite = null;
-                //                    Weapon_Staff.gameObject.SetActive(false);
-
-                //                    Check_Staff.SetActive(false);//隐藏踏板
-
-                //                }
-                //                else
-                //                {
-                //                    // 播放提示音或显示提示文字
-                //                    Debug.Log("金币不足！");
-                //                    frameEvents._Attack_pai1();
-                //                    _RoomGenerator.ShowInformationOfStage(-2);
-                //                }
-
-                //            }
-                //            break;
-
-                //        case RBQItemTrigger.ItemType.Clothes:
-                //            if (ClothesIndex > 0)
-                //            {
-
-                //                int itemPrice = clothesDef * 10;
-                //                if (currentMoney >= itemPrice)
-                //                {
-                //                    // 减钱并更新 UI  
-                //                    UIManager.instance.ChangeMoney(-itemPrice);
-
-                //                    // 给玩家加属性
-                //                    _Player.YYY_bodyIndex = this.YYY_bodyIndex; _Player.SetSkin();
-                //                    int ArmorDef = _Player.CurrentArmorDefence;
-                //                    ArmorDef += clothesDef;
-                //                    _Player.CurrentArmorDefence = ArmorDef;
-                //                    _Player.SaveCurrent();
-
-                //                    //RBQ上尸体显示裸体
-                //                    YYY_bodyIndex = 1;
-                //                    SetSkin();
-
-
-                //                    //隐藏
-                //                    Check_Clothes.SetActive(false);//隐藏踏板
-
-                //                    ClothesIndex = 0;
-
-                //                }
-                //                else
-                //                {
-                //                    // 播放提示音或显示提示文字
-                //                    Debug.Log("金币不足！");
-                //                    frameEvents._Attack_pai1();
-                //                    _RoomGenerator.ShowInformationOfStage(-2);
-                //                }
-
-
-
-
-                //            }
-
-                //            break;
-                //        case RBQItemTrigger.ItemType.Stockings:
-                //            if (StockingIndex > 0)
-                //            {
-                //                int itemPrice = stockingsDef * 10;
-                //                if (currentMoney >= itemPrice)
-                //                {
-                //                    // 减钱并更新 UI  
-                //                    UIManager.instance.ChangeMoney(-itemPrice);
-
-                //                    // 给玩家加属性
-                //                    _Player.YYY_legsIndex = this.YYY_legsIndex; _Player.SetSkin();
-                //                    int StockingDef = _Player.CurrentStockingDefence;
-                //                    StockingDef += stockingsDef;
-                //                    _Player.CurrentStockingDefence = StockingDef;
-                //                    _Player.SaveCurrent();
-
-                //                    //RBQ上尸体显示裸体
-                //                    YYY_legsIndex = 1;
-                //                    SetSkin();
-
-
-                //                    //隐藏
-                //                    Check_Stocking.SetActive(false);//隐藏踏板
-
-                //                    StockingIndex = 0;
-
-                //                }
-                //                else
-                //                {
-                //                    // 播放提示音或显示提示文字
-                //                    Debug.Log("金币不足！");
-                //                    frameEvents._Attack_pai1();
-                //                    _RoomGenerator.ShowInformationOfStage(-2);
-                //                }
-
-
-
-
-
-                //            }
-
-                //            break;
-                //        case RBQItemTrigger.ItemType.Slave:
-                //            if (currentMoney >= slavePrice)
-                //            {
-                //                // 减钱并更新 UI  
-                //                UIManager.instance.ChangeMoney(-slavePrice);
-
-                //                //奖励一个队友
-                //                GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
-                //                Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
-                //                //enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
-                //                enemy.CanChangeSkin = false;
-                //                StartCoroutine(DelayedApplySkin(enemy));
-                //                enemy.ChangeClass(0);
-
-
-                //                enemy.ConvertToFriend();
-
-
-
-                //                enemy.ReadyToSayThankYou();//谢谢声（让产生的队友说）
-
-                //                // 消失自己(如果销毁的太快就容易传不进去)
-                //                Destroy(gameObject, 0.2f);
-
-
-                //                Check_Slave.SetActive(false);//隐藏踏板
-
-
-
-                //                //生成刑架
-                //                GameObject TortureDevice = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
-                //                TortureDevice.GetComponent<Plant>().SetImage(8);
-
-                //                WeaponChangeDevice.transform.SetParent(null);//保留架子
-
-
-
-                //            }
-                //            else
-                //            {
-                //                // 播放提示音或显示提示文字
-                //                Debug.Log("金币不足！");
-                //                frameEvents._Attack_pai1();
-                //                _RoomGenerator.ShowInformationOfStage(-2);
-                //            }
-
-
-
-                //            break;
-                //    }
-
-                //    HidePrompt();
-
-
-                //    _Player.ResetCombo();//买完东西后一定要重置动画
-
-
-
-
-                //    other.GetComponent<Player>().frameEvents._SE_Clothes();
-
-                //    InteractOneTime = true;
-                //    Invoke("DelayCanTake", 0.5f);
-
-                //    Prompt_Take.SetActive(false);
-
-
-                //    other.GetComponent<Player>().InteractingButton.SetActive(false);
-                //    other.GetComponent<Player>().isInteracting = false;
-
-                //}
-
-
-            }
-
 
 
         }
@@ -805,8 +491,6 @@ public class RBQ : MonoBehaviour
         // 消失自己(如果销毁的太快就容易传不进去)
         Destroy(gameObject, 0.2f);
 
-
-        Check_Slave.SetActive(false);//隐藏踏板
 
 
 
@@ -1015,138 +699,8 @@ public class RBQ : MonoBehaviour
     public SpriteRenderer Weapon_Sword;
     public SpriteRenderer Weapon_Pistol;
     public SpriteRenderer Weapon_Staff;
-
-    public int SwordIndex;
-    public int PistolIndex;
-    public int StaffIndex;
-
-    public int ClothesIndex = 1;//防止买两次
-    public int StockingIndex = 1;//防止买两次
-
-    //价格与增加数值
-    public int swordPower;
-    public int pistolPower;
-    public int staffPower;
-    public int clothesDef;
-    public int stockingsDef;
-    public int slavePrice;
-
     public SkinPartsDatabase database;
-    public void GenerateRandomWeapons()
-    {
-        // 以一定概率生成每种武器（例如70%概率生成）
-        SwordIndex = Random.value < 0.7f ? Random.Range(1, database.SwordSprites.Length + 1) : 0;
-        PistolIndex = Random.value < 0.7f ? Random.Range(1, database.PistolSprites.Length + 1) : 0;
-        StaffIndex = Random.value < 0.7f ? Random.Range(1, database.StaffSprites.Length + 1) : 0;
-
-        Weapon_Sword.sprite = SwordIndex > 0 ? database.SwordSprites[SwordIndex - 1] : null;
-        Weapon_Sword.gameObject.SetActive(SwordIndex > 0); if (SwordIndex <= 0) { Check_Sword.SetActive(false); } else { swordPower = Random.Range(1, 10); }
-
-        Weapon_Pistol.sprite = PistolIndex > 0 ? database.PistolSprites[PistolIndex - 1] : null;
-        Weapon_Pistol.gameObject.SetActive(PistolIndex > 0); if (PistolIndex <= 0) { Check_Pistol.SetActive(false); } else { pistolPower = Random.Range(1, 10); }
-
-        Weapon_Staff.sprite = StaffIndex > 0 ? database.StaffSprites[StaffIndex - 1] : null;
-        Weapon_Staff.gameObject.SetActive(StaffIndex > 0); if (StaffIndex <= 0) { Check_Staff.SetActive(false); } else { staffPower = Random.Range(1, 10); }
-
-
-
-
-        clothesDef = Random.Range(1, 10);
-        stockingsDef = Random.Range(1, 10);
-
-        slavePrice = Random.Range(60, 101);
-    }
-
-
-    [Header("商店显示")]
-    public Text promptText;//显示当前选中商品
-    public GameObject promptCanvas;//商品标签
-
-
-    public Text priceText; //显示价格的
-    public Text bonusText; //显示加成
-
-
-    public RBQItemTrigger.ItemType CurrentType;//当前玩家踩在哪里
-
-    public GameObject Check;//商品检测站位
-    public GameObject Check_Sword, Check_Pistol, Check_Staff, Check_Clothes, Check_Stocking, Check_Slave;//对应踏板
-
-
     public GameObject WeaponChangeDevice;//在被摧毁之前移出来
-
-
-
-
-
-    public void ShowItemPrompt(RBQItemTrigger.ItemType type)
-    {
-        promptCanvas.SetActive(true);
-
-        CurrentType = type;
-
-        int lang = PlayerPrefs.GetInt("language", 0); // 默认日文
-
-        switch (type)
-        {
-            case RBQItemTrigger.ItemType.Sword:
-                promptText.text = GetLocalizedText(lang, "剑", "剣", "劍", "Sword", "검");
-                bonusText.text = $"+{swordPower} Atk";
-                priceText.text = $"{swordPower * 10}";
-                break;
-            case RBQItemTrigger.ItemType.Pistol:
-                promptText.text = GetLocalizedText(lang, "枪", "銃", "槍", "Gun", "총");
-                bonusText.text = $"+{pistolPower} Atk";
-                priceText.text = $"{pistolPower * 10}";
-                break;
-            case RBQItemTrigger.ItemType.Staff:
-                promptText.text = GetLocalizedText(lang, "杖", "杖", "杖", "Staff", "지팡이");
-                bonusText.text = $"+{staffPower} Atk";
-                priceText.text = $"{staffPower * 10}";
-                break;
-            case RBQItemTrigger.ItemType.Clothes:
-                promptText.text = GetLocalizedText(lang, "衣服", "服", "衣服", "Clothes", "옷");
-                bonusText.text = $"+{clothesDef} Def";
-                priceText.text = $"{clothesDef * 10}";
-                break;
-            case RBQItemTrigger.ItemType.Stockings:
-                promptText.text = GetLocalizedText(lang, "丝袜", "ストッキング", "絲襪", "Stockings", "스타킹");
-                bonusText.text = $"+{stockingsDef} Def";
-                priceText.text = $"{stockingsDef * 10}";
-                break;
-            case RBQItemTrigger.ItemType.Slave:
-                promptText.text = GetLocalizedText(lang, "奴隶", "奴隷", "奴隸", "Slave", "노예");
-                bonusText.text = "";
-                priceText.text = $"{slavePrice}";
-                break;
-        }
-    }
-
-    private string GetLocalizedText(int lang, string cn, string jp, string tw, string en, string kr)
-    {
-        switch (lang)
-        {
-            case 0: return jp;
-            case 1: return cn;
-            case 2: return tw;
-            case 3: return en;
-            case 4: return kr;
-            default: return en;
-        }
-    }
-    public void HidePrompt()
-    {
-        promptCanvas.SetActive(false);
-    }
-
-
-
-
-
-
-
-
-
 
     public List<ShopItemData> shopItems = new List<ShopItemData>();
 
@@ -1233,8 +787,8 @@ public class RBQ : MonoBehaviour
         //性奴隶必定有
         ShopItemData slave = new ShopItemData();
         slave.type = ShopItemData.ItemType.Slave;
-        slave.displayName = "性奴";
-        slave.description = "获得一个新的性奴队友";
+        slave.displayName = ItemLocalization.GetName(ShopItemData.ItemType.Slave, slave.index, lang);
+        slave.description = ItemLocalization.GetDescription(ShopItemData.ItemType.Slave, slave.index, lang);
         slave.price = 300;
         shopItems.Add(slave);
 
@@ -1272,7 +826,7 @@ public class RBQ : MonoBehaviour
                 break;
 
             case ShopItemData.ItemType.Slave:
-                if (Check_Slave) Check_Slave.SetActive(false);
+
                 break;
         }
 

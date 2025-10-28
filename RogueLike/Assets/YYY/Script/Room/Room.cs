@@ -127,7 +127,7 @@ public class Room : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)//检测到玩家显示
     {
 
-        if (collision.gameObject.tag == "Player"&&isBossRoom)
+        if (collision.gameObject.tag == "Player"&&isBossRoom && WaitOneTimeForSetBoss)//因为三番五次会遇到初始刷Boss，所以我将前1秒踩入不会刷Boss
         {
             if (!isCreateBoss) 
             {
@@ -181,8 +181,10 @@ public class Room : MonoBehaviour
                 box.offset = new Vector2(1f, 0f);
             }
         }
-       
+
+        WaitOneTimeForSetBoss = true;
+
     }
 
-
+    bool WaitOneTimeForSetBoss = false;//因为三番五次会遇到初始刷Boss，所以我将前1秒踩入不会刷Boss
 }
