@@ -209,7 +209,7 @@ public class Enemy : MonoBehaviour
 
                     case 7:
                         BecomeBoss_DarkMage();
-                        InvokeRepeating(nameof(BossSkill_CallDarkness), 5f, 10f);
+                        InvokeRepeating(nameof(BossSkill_ToPlayerPlace), 5f, 10f);
 
                         break;
 
@@ -3693,7 +3693,7 @@ public class Enemy : MonoBehaviour
             return;
         }//玩家死后不再召唤
 
-        ShowMagicEffect();//显示魔法阵召唤
+
 
         //告诉自己生成的RBQ出生WallMap
         GameObject NewEnemy = Instantiate(Darkness_Enemy, transform.position, Quaternion.identity);
@@ -3720,6 +3720,24 @@ public class Enemy : MonoBehaviour
 
         Invoke(nameof(BossSkill_ToDarknessPlace), 1f);
     }
+
+    public void BossSkill_ToPlayerPlace() 
+    {
+        if (player.currentHealth <= 0)
+        {
+            return;
+        }//玩家死后不再传送
+
+        //传送到玩家身边释放暗影
+        GateEffect.SetActive(true);
+        transform.position = player.transform.position;
+
+        Invoke(nameof(BossSkill_CallDarkness), 1f);
+
+
+        ShowMagicEffect();//显示魔法阵召唤
+    }
+
     //Boss技能  传送到暗影位置
     public void BossSkill_ToDarknessPlace() 
     {

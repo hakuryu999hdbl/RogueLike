@@ -304,7 +304,7 @@ public class WallMap : MonoBehaviour
             if (!HasShop && !isBossRoom)
             {
                 //ToDo：藏商店
-                SetShop();//在房间中央设置商店
+                //SetShop();//在房间中央设置商店
 
                 //Instantiate(_RoomGenerator.MagicCircle, transform.position, Quaternion.identity);
 
@@ -327,6 +327,8 @@ public class WallMap : MonoBehaviour
 
     public bool isCanWinRoom = false;//当此房间的敌人（Boss）全部消灭，玩家获胜
 
+
+   
 
 
 
@@ -441,6 +443,11 @@ public class WallMap : MonoBehaviour
         //NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;//RBQ需要知道wallMap是因为自己生下的Enemy需要知道
         NewEnemy.GetComponentInChildren<RBQ>().RBQState = 3;
     }
+    public void SetMagicCircle()
+    {
+        Instantiate(_RoomGenerator.MagicCircle, transform.position, Quaternion.identity);
+    }
+
 
     public void CheckEnemyList()
     {

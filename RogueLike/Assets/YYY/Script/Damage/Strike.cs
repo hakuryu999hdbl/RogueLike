@@ -83,10 +83,13 @@ public class Strike : MonoBehaviour
 
                 if (isCritial) { collision.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
 
+                // ===== 局内短期Buff整数倍率 =====
+                int buffMult = 1; // 默认倍率 = 1
+                if (GameFlowData.Sword_Buff >= 2)
+                    buffMult = GameFlowData.Sword_Buff;
+                appliedDamage *= buffMult; // 💥 应用整数倍率
+
                 collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
-
-               
-
             }
 
             
@@ -133,4 +136,5 @@ public class Strike : MonoBehaviour
 
     }
 
+  
 }

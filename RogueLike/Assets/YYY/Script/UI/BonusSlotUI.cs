@@ -19,6 +19,12 @@ public class BonusSlotUI : MonoBehaviour
         NewSlave,
         NewSoldier,
 
+        Shop,
+        MagicCircle,
+        Sword_Buff,
+        Pistol_Buff,
+        Staff_Buff,
+
         // …以后随时扩展
     }
     public BonusType type;
@@ -291,6 +297,111 @@ public class BonusSlotUI : MonoBehaviour
                         break;
                 }
                 break;
+
+            case BonusType.Shop:
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        description = "前方で奴隷商人を見つけた。性奴だけでなく、武器や装備も取り扱っているようだ。";
+                        break;
+                    case 1: // 简体
+                        description = "你们在前面发现一个奴隶商人，除了性奴之外还贩卖一些武器和装备。";
+                        break;
+                    case 2: // 繁体
+                        description = "你們在前方發現一名奴隸商人，他除了販售性奴外，似乎也在販賣武器與裝備。";
+                        break;
+                    case 3: // 英语
+                        description = "You encounter a slave merchant ahead. He trades not only in slaves but also in weapons and equipment.";
+                        break;
+                    case 4: // 韩语
+                        description = "앞쪽에서 노예 상인을 발견했다. 그는 성노예뿐 아니라 무기와 장비도 거래하는 듯하다.";
+                        break;
+                }
+                break;
+
+            case BonusType.MagicCircle:
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        description = "前方に生命を回復する魔法陣を発見した。しかし、その力は長くは続かない。";
+                        break;
+                    case 1: // 简体
+                        description = "你们在前面发现一个回复生命的魔法阵，但是魔法阵不会持续太久。";
+                        break;
+                    case 2: // 繁体
+                        description = "你們在前方發現一個恢復生命的魔法陣，但它的力量似乎不會持續太久。";
+                        break;
+                    case 3: // 英语
+                        description = "You discover a healing magic circle ahead, but its power won’t last for long.";
+                        break;
+                    case 4: // 韩语
+                        description = "앞쪽에서 생명을 회복하는 마법진을 발견했다. 하지만 그 힘은 오래 지속되지 않는다.";
+                        break;
+                }
+                break;
+
+            case BonusType.Sword_Buff:
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        description = "通りすがりの魔族の少女があなたたちの近接武器に魔法をかけてくれた。\n<color=#ADD8E6>短時間、あなたと仲間の近接攻撃力が大幅に上昇する。</color>";
+                        break;
+                    case 1: // 简体
+                        description = "一位路过的魔族少女给你们的近战武器附魔。\n<color=#ADD8E6>短期你和你的队友近战伤害大幅上升</color>，当前层数：" + GameFlowData.Sword_Buff;
+                        break;
+                    case 2: // 繁体
+                        description = "一位路過的魔族少女替你們的近戰武器施加了附魔。\n<color=#ADD8E6>短時間內，你與隊友的近戰傷害大幅提升。</color>";
+                        break;
+                    case 3: // 英语
+                        description = "A passing demon girl enchants your melee weapons.\n<color=#ADD8E6>For a short time, you and your allies deal greatly increased melee damage.</color>";
+                        break;
+                    case 4: // 韩语
+                        description = "지나가던 마족 소녀가 너희의 근접 무기에 마법을 걸었다.\n<color=#ADD8E6>잠시 동안 너와 동료의 근접 공격력이 크게 상승한다.</color>";
+                        break;
+                }
+                break;
+
+            case BonusType.Pistol_Buff:
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        description = "通りすがりの懲戒シスターがあなたたちの射撃武器に祝福を与えた。\n<color=#ADD8E6>短時間、あなたと仲間の射撃攻撃力が大幅に上昇する。</color>";
+                        break;
+                    case 1: // 简体
+                        description = "一位路过的惩戒修女给你们的射击武器附魔。\n<color=#ADD8E6>短期你和你的队友射击伤害大幅上升</color>" + GameFlowData.Pistol_Buff;
+                        break;
+                    case 2: // 繁体
+                        description = "一位路過的懲戒修女替你們的射擊武器施加了附魔。\n<color=#ADD8E6>短時間內，你與隊友的射擊傷害大幅提升。</color>";
+                        break;
+                    case 3: // 英语
+                        description = "A passing Penitent Sister blesses your ranged weapons.\n<color=#ADD8E6>For a short time, you and your allies deal greatly increased ranged damage.</color>";
+                        break;
+                    case 4: // 韩语
+                        description = "지나가던 징벌 수녀가 너희의 사격 무기에 축복을 내렸다.\n<color=#ADD8E6>잠시 동안 너와 동료의 사격 피해가 크게 증가한다.</color>";
+                        break;
+                }
+                break;
+
+            case BonusType.Staff_Buff:
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        description = "通りすがりの懲戒シスターがあなたたちの杖に魔力を込めた。\n<color=#ADD8E6>短時間、あなたと仲間の魔法攻撃力が大幅に上昇する。</color>";
+                        break;
+                    case 1: // 简体
+                        description = "一位路过的惩戒修女给你们的法杖武器附魔。\n<color=#ADD8E6>短期你和你的队友法术伤害大幅上升</color>" + GameFlowData.Staff_Buff;
+                        break;
+                    case 2: // 繁体
+                        description = "一位路過的懲戒修女替你們的法杖施加了附魔。\n<color=#ADD8E6>短時間內，你與隊友的法術傷害大幅提升。</color>";
+                        break;
+                    case 3: // 英语
+                        description = "A passing Penitent Sister imbues your staves with magic.\n<color=#ADD8E6>For a short time, you and your allies deal greatly increased spell damage.</color>";
+                        break;
+                    case 4: // 韩语
+                        description = "지나가던 징벌 수녀가 너희의 지팡이에 마력을 주입했다.\n<color=#ADD8E6>잠시 동안 너와 동료의 마법 피해가 크게 증가한다.</color>";
+                        break;
+                }
+                break;
         }
 
         
@@ -458,6 +569,48 @@ public class BonusSlotUI : MonoBehaviour
                 break;
             case BonusType.NewSoldier:
                 UIManager.instance._RoomGenerator.SetFriend(1);
+                break;
+
+          
+
+            case BonusType.Shop:
+                UIManager.instance._RoomGenerator.playerRoom.SetShop();
+                break;
+
+
+            case BonusType.MagicCircle:
+                UIManager.instance._RoomGenerator.playerRoom.SetMagicCircle();
+                break;
+
+            case BonusType.Sword_Buff:
+
+                if (GameFlowData.Sword_Buff == 0)
+                    GameFlowData.Sword_Buff = 2; // 初次激活为2
+                else
+                    GameFlowData.Sword_Buff++;   // 之后每次+1
+
+                UIManager.instance.UpdateBuffUI();
+
+                break;
+            case BonusType.Pistol_Buff:
+
+                if (GameFlowData.Pistol_Buff == 0)
+                    GameFlowData.Pistol_Buff = 2;// 初次激活为2
+                else
+                    GameFlowData.Pistol_Buff++;// 之后每次+1
+
+                UIManager.instance.UpdateBuffUI();
+
+                break;
+            case BonusType.Staff_Buff:
+
+                if (GameFlowData.Staff_Buff == 0)
+                    GameFlowData.Staff_Buff = 2;// 初次激活为2
+                else
+                    GameFlowData.Staff_Buff++;// 之后每次+1
+
+                UIManager.instance.UpdateBuffUI();
+
                 break;
         }
 

@@ -202,6 +202,14 @@ public class Shooting : MonoBehaviour
                
 
                     if (isCritial) { other.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
+
+
+                    // ===== 局内短期Buff整数倍率 =====
+                    int buffMult = 1; // 默认倍率 = 1
+                    if (GameFlowData.Pistol_Buff >= 2)
+                        buffMult = GameFlowData.Pistol_Buff;
+                    appliedDamage *= buffMult; // 💥 应用整数倍率
+
                     other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);
                     break;
 

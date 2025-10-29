@@ -763,7 +763,7 @@ public class UIManager : MonoBehaviour
 
 
         //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
-        LockStage();
+        //LockStage();
 
 
 
@@ -1225,7 +1225,7 @@ public class UIManager : MonoBehaviour
 
     [Header("角斗场最高纪录")]
     public Text BestWave;
-    void Show_bestWave() 
+    void Show_bestWave()
     {
 
         int bestWave = PlayerPrefs.GetInt("Arena_Wave", 0);
@@ -2010,7 +2010,7 @@ public class UIManager : MonoBehaviour
                 //战斗中无法开始
 
 
-                if (GameFlowData.BulletCanThroughtWall == false || player.speed == 0)//你知道为什么要这里加这个吗，因为手机端，点开菜单按钮是可以绕开的
+                if (GameFlowData.BulletCanThroughtWall == false && player.speed == 0)//你知道为什么要这里加这个吗，因为手机端，点开菜单按钮是可以绕开的
                 {
                     if (!isPause)
                     {
@@ -2176,6 +2176,11 @@ public class UIManager : MonoBehaviour
 
         Show_bestWave();//显示决斗场最高记录
 
+
+        //隐藏buff
+        SwordBuffIcon.gameObject.SetActive(false);
+        PistolBuffIcon.gameObject.SetActive(false);
+        StaffBuffIcon.gameObject.SetActive(false);
 
 
     }//读取，显示存档
@@ -4034,7 +4039,7 @@ public class UIManager : MonoBehaviour
     {
         CanChooseItem = true;
 
-        
+
 
     }
 
@@ -4062,16 +4067,24 @@ public class UIManager : MonoBehaviour
 
         for (int i = 0; i < max; i++)
         {
-            int rand;
-            do
-            {
-                rand = UnityEngine.Random.Range(0, BonusButtons.Count);
+            //int rand;
+            //do
+            //{
+            //    rand = UnityEngine.Random.Range(0, BonusButtons.Count);
+            //
+            //} while (usedIndex.Contains(rand));
+            //usedIndex.Add(rand);
+            //
+            //BonusButtons[rand].gameObject.SetActive(true);
+            //BonusButtons[rand].ReNewBonus(); // 重新生成数值 & 描述
 
-            } while (usedIndex.Contains(rand));
+
+
+            int rand = GetWeightedRandomIndex(usedIndex);
             usedIndex.Add(rand);
 
             BonusButtons[rand].gameObject.SetActive(true);
-            BonusButtons[rand].ReNewBonus(); // 重新生成数值 & 描述
+            BonusButtons[rand].ReNewBonus();
         }
 
         // 设置初始选中项 = 第一个显示的奖励
@@ -4097,6 +4110,50 @@ public class UIManager : MonoBehaviour
         }
 
     }
+
+
+
+    private int GetWeightedRandomIndex(List<int> usedIndex)
+    {
+        // 权重数组（可自行调整）
+        // index 10 = 奴隶市场, index 11 = 回血魔法阵
+        float[] weights = new float[BonusButtons.Count];
+        for (int i = 0; i < weights.Length; i++)
+        {
+            weights[i] = 1f; // 默认权重1
+        }
+
+        // 提高这两个选项的出现率
+        if (weights.Length > 11) weights[11] = 3f; // 奴隶市场 ×3几率
+        if (weights.Length > 10) weights[10] = 3f; // 回血 ×3几率
+
+        // 去掉已经抽中的项
+        foreach (int idx in usedIndex)
+        {
+            weights[idx] = 0f;
+        }
+
+        // 计算总权重
+        float totalWeight = 0f;
+        for (int i = 0; i < weights.Length; i++)
+            totalWeight += weights[i];
+
+        // 抽取
+        float randomValue = UnityEngine.Random.value * totalWeight;
+        float cumulative = 0f;
+
+        for (int i = 0; i < weights.Length; i++)
+        {
+            cumulative += weights[i];
+            if (randomValue <= cumulative)
+                return i;
+        }
+
+        // 保底返回
+        return 0;
+    }//单独提高指定选项
+
+
 
 
 
@@ -4140,6 +4197,7 @@ public class UIManager : MonoBehaviour
     }
 
     #endregion
+
 
     /// <summary>
     /// 血条等各种值
@@ -4240,6 +4298,58 @@ public class UIManager : MonoBehaviour
     #endregion
 
 
+
+    /// <summary>
+    /// Buff等小图标显示
+    /// </summary>
+    #region
+    [Header("Buff等小图标显示")]
+    public Image SwordBuffIcon;
+    public Text SwordBuffText;
+    public Image PistolBuffIcon;
+    public Text PistolBuffText;
+    public Image StaffBuffIcon;
+    public Text StaffBuffText;
+
+    public void UpdateBuffUI()
+    {
+        // 剑士Buff
+        if (GameFlowData.Sword_Buff >= 2)
+        {
+            SwordBuffIcon.gameObject.SetActive(true);
+            SwordBuffText.text = GameFlowData.Sword_Buff.ToString();
+        }
+        else
+        {
+            SwordBuffIcon.gameObject.SetActive(false);
+        }
+
+        // 枪手Buff
+        if (GameFlowData.Pistol_Buff >= 2)
+        {
+            PistolBuffIcon.gameObject.SetActive(true);
+            PistolBuffText.text = GameFlowData.Pistol_Buff.ToString();
+        }
+        else
+        {
+            PistolBuffIcon.gameObject.SetActive(false);
+        }
+
+        // 法师Buff
+        if (GameFlowData.Staff_Buff >= 2)
+        {
+            StaffBuffIcon.gameObject.SetActive(true);
+            StaffBuffText.text = GameFlowData.Staff_Buff.ToString();
+        }
+        else
+        {
+            StaffBuffIcon.gameObject.SetActive(false);
+        }
+    }
+
+    #endregion
+
+
     /// <summary>
     /// 商店与更改金币位置
     /// </summary>
@@ -4274,7 +4384,7 @@ public class UIManager : MonoBehaviour
     [Header("商店界面")]
     public GameObject ShowShopCavans;
     private RBQ currentRBQ; // 在 UIManager 顶部声明
-    public void OpenShopMenu(RBQ rbq) 
+    public void OpenShopMenu(RBQ rbq)
     {
         currentRBQ = rbq; // ✅ 记录当前商店
 
@@ -4284,7 +4394,7 @@ public class UIManager : MonoBehaviour
         ShowShopCavans.SetActive(true);
         player.isInputBlocked = true;//切断玩家的方向攻击等输入
 
-      
+
 
         CurrentChooseList = -8;//局内商店界面
 
@@ -4684,4 +4794,6 @@ public class UIManager : MonoBehaviour
         dialogueRoutine = null;
     }
     #endregion
+
+
 }

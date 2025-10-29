@@ -94,6 +94,14 @@ public class Spell : MonoBehaviour
 
                     if (isCritial) { collision.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
 
+                    //持续性伤害不能有暴击
+                    // ===== 局内短期Buff整数倍率 =====
+                    int buffMult = 1; // 默认倍率 = 1
+                    if (GameFlowData.Staff_Buff >= 2)
+                        buffMult = GameFlowData.Staff_Buff;
+                    appliedDamage *= buffMult; // 💥 应用整数倍率
+
+
                     collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
 
@@ -176,8 +184,7 @@ public class Spell : MonoBehaviour
                 if (collision.gameObject.GetComponent<Enemy>() != null && DamageToEnemy)
                 {
 
-
-                    //持续性伤害不能有暴击
+                    //持续伤害不能适用于buff
 
                     collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 

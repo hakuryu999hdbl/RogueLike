@@ -187,4 +187,19 @@ public class Room : MonoBehaviour
     }
 
     bool WaitOneTimeForSetBoss = false;//因为三番五次会遇到初始刷Boss，所以我将前1秒踩入不会刷Boss
+
+
+
+ 
+    public void SetShop()
+    {
+        GameObject NewEnemy = Instantiate(UIManager.instance._RoomGenerator.RBQ, transform.position, Quaternion.identity);
+        //NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;//RBQ需要知道wallMap是因为自己生下的Enemy需要知道
+        NewEnemy.GetComponentInChildren<RBQ>().RBQState = 3;
+    }
+
+    public void SetMagicCircle()
+    {
+        Instantiate(UIManager.instance._RoomGenerator.MagicCircle, transform.position, Quaternion.identity);
+    }
 }

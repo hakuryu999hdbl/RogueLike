@@ -56,7 +56,9 @@ public class GameFlowData : MonoBehaviour
 
     public static　int RoomLevel;//房间刷敌数和难度随着越后越来越难
 
-
+    public static int Sword_Buff;
+    public static int Pistol_Buff;
+    public static int Staff_Buff;
 }
 public static class SlavePricing
 {
