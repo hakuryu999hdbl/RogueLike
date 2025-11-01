@@ -177,7 +177,7 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("Chapter_13", 1);
 
         //GameFlowData.nextScene = "Arena";
-        //GameFlowData.nextScene = "Story_03";//测试Boss使用
+        GameFlowData.nextScene = "Story_08";//测试Boss使用
         //GameFlowData.nextScene = "CG_AVG_04";//测试CG使用
 
         switch (GameFlowData.nextScene)
@@ -4124,7 +4124,7 @@ public class UIManager : MonoBehaviour
         }
 
         // 提高这两个选项的出现率
-        if (weights.Length > 11) weights[11] = 3f; // 奴隶市场 ×3几率
+        if (weights.Length > 9) weights[9] = 3f; // 奴隶市场 ×3几率
         if (weights.Length > 10) weights[10] = 3f; // 回血 ×3几率
 
         // 去掉已经抽中的项

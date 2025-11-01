@@ -31,7 +31,7 @@ public class Spell : MonoBehaviour
 
 
         baseDamage = Damage; // 保存原始值
-        appliedDamage = baseDamage + Random.Range(-50, 50); // 例如±10范围
+        appliedDamage = baseDamage + Random.Range(-5, 5); // 例如±10范围
 
         if (isCritial)
         {

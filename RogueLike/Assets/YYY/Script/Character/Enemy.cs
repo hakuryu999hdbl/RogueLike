@@ -160,6 +160,10 @@ public class Enemy : MonoBehaviour
                             //随机延后喘息声
                             Invoke("Delay_Breath_Voice", Random.Range(1, 2.5f));
 
+
+                            //快速攻击
+                            attackCooldown = 0.3f;
+
                         }//肉铠只能走  且固定Hat皮肤
 
 
@@ -171,14 +175,16 @@ public class Enemy : MonoBehaviour
                     case 1:
                         BecomeBoss_Captain();
 
-                        if(GameFlowData.nextScene!= "Story_01")
-                        {
-                            // 每隔 5 秒执行一次 Boss技能 召集士兵
-                            InvokeRepeating(nameof(BossSkill_CallSoldier), 3f, 5f);
+                        //if(GameFlowData.nextScene!= "Story_01")
+                        //{
+                        //    // 每隔 5 秒执行一次 Boss技能 召集士兵
+                        //    InvokeRepeating(nameof(BossSkill_CallSoldier), 3f, 5f);
+                        //
+                        //}//第一关的守卫队长不召集敌人
 
-                        }//第一关的守卫队长不召集敌人
 
-                       
+                        //快速攻击
+                        attackCooldown = 0.3f;
 
                         break;
                     case 2:
@@ -218,6 +224,12 @@ public class Enemy : MonoBehaviour
 
                         // 每隔 5 秒执行一次 Boss技能 召集肉铠
                         InvokeRepeating(nameof(BossSkill_CallFleshArmor), 5f, 10f);
+
+
+
+                        //快速攻击
+                        attackCooldown = 0.3f;
+
                         break;
 
                     case 9:
@@ -229,6 +241,10 @@ public class Enemy : MonoBehaviour
                             InvokeRepeating(nameof(BossSkill_CallSoldier_Girl), 5f, 10f);
 
                         }//第六关的首席战斗修女不召集敌人
+
+
+                        //快速攻击
+                        attackCooldown = 0.3f;
 
                         break;
                 }
@@ -1427,8 +1443,12 @@ public class Enemy : MonoBehaviour
         {
             attackTimer += Time.deltaTime;
 
-            if (Class == EnemyClass.FleshArmor||BossNumber==1 ) { attackTimer = attackCooldown; }//守卫队长和肉铠一靠近就攻击
-            if (BossNumber == 9 && CombatNunLife<=1) { attackTimer = attackCooldown; }//首席战斗修女 在射手/近战情况下 立刻攻击
+            //if ((Class == EnemyClass.FleshArmor||BossNumber==1) && !isInAttackDelay) 
+            //{
+            //    //attackTimer = attackCooldown; 
+            //    attackTimer += Time.deltaTime * 3f; // 冷却速度加快3倍
+            //}//守卫队长和肉铠一靠近就攻击
+            //if (BossNumber == 9 && CombatNunLife<=1) { attackTimer = attackCooldown; }//首席战斗修女 在射手/近战情况下 立刻攻击
 
 
             if (attackTimer >= attackCooldown)
@@ -1511,6 +1531,8 @@ public class Enemy : MonoBehaviour
 
     void Attack_Start()
     {
+        //if (IsInvoking(nameof(Attack_Cancel))) return;//防止多个 Attack_Cancel() 同时排队
+
         InvokeRepeating(nameof(FlashWarning), 0f, 0.1f);
 
 
@@ -1599,6 +1621,26 @@ public class Enemy : MonoBehaviour
 
 
         ReSetAttack();
+
+        // ✅【关键补充】——强制恢复移动状态
+        //if (aiPath != null)
+        //{
+        //    aiPath.canMove = true;       // 重新允许寻路
+        //    aiPath.canSearch = true;     // 重新启动AI搜索目标
+        //}
+        //
+        //isPatrol = true; // 或者你项目中对应的移动标志
+        //isAttack = false;
+        //isDie = false; // 防止误判死亡状态锁住动画
+        //
+        //// ✅【防御状态修复】如果动画还卡在攻击动作，强制转Idle
+        //var st = anim.GetCurrentAnimatorStateInfo(0);
+        //if (st.IsName("attack_1") || st.IsName("Attack_1") ||
+        //    st.IsName("Attack_2") || st.IsName("Attack_3") || st.IsName("Attack_4"))
+        //{
+        //    anim.Play(GetAnimPrefix() + "Idle", 0, 0);
+        //}
+
     }
 
     public void AttackVoice()
