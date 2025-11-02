@@ -91,7 +91,7 @@ public static class ItemLocalization
 
             // ======= 特殊 =======
             case ShopItemData.ItemType.Slave:
-                return Lang(language, "性奴隷", "性奴", "性奴", "Slave", "성노예");
+                return Lang(language, "性奴隷二人組", "两名性奴隶", "兩名性奴隸", "2 Slaves", "성노예 2명");
         }
 
         return "???";

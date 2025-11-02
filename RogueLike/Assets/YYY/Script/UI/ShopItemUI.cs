@@ -16,7 +16,34 @@ public class ShopItemUI : MonoBehaviour
         //icon.sprite = d.icon;
         nameText.text = d.displayName;
         priceText.text = d.price.ToString();
-        valueText.text = "  +" + d.value.ToString();
+
+
+        if (d.value == 0) { valueText.text = "".ToString(); }//性奴没有增强表示
+        else 
+        {
+            string prefix = "";
+
+            switch (d.type)
+            {
+                case ShopItemData.ItemType.Sword:
+                case ShopItemData.ItemType.Pistol:
+                case ShopItemData.ItemType.Staff:
+                    prefix = "ATK +";
+                    break;
+
+                case ShopItemData.ItemType.Clothes:
+                case ShopItemData.ItemType.Stockings:
+                    prefix = "DEF +";
+                    break;
+
+                case ShopItemData.ItemType.Slave:
+                    prefix = ""; // 性奴无加成
+                    break;
+            }
+
+            valueText.text = "  " + prefix + d.value.ToString();
+        }
+        
 
         highlight.SetActive(false);
     }

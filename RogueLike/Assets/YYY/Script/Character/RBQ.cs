@@ -54,14 +54,14 @@ public class RBQ : MonoBehaviour
 
 
                 if (GameFlowData.nextScene == "Story_01" || GameFlowData.nextScene == "Story_02")
-                { CurrentRapeType = Random.Range(3, 5); }//暂时先这样
+                { CurrentRapeType = 7; }//暂时先这样
                 else if (GameFlowData.nextScene == "Story_04" || GameFlowData.nextScene == "Story_06")
                 {
                     CurrentRapeType = Random.Range(3, 5);
                 }
                 else
                 {
-                    CurrentRapeType = Random.Range(1, 7);//7，9，11关
+                    CurrentRapeType = Random.Range(1, 8);//7，9，11关
                 }
 
 
@@ -84,6 +84,9 @@ public class RBQ : MonoBehaviour
                         break;
                     case 6:
                         anim.Play("RBQ_Punish_Monster_Rape_Side");//变异体强奸
+                        break;
+                    case 7:
+                        anim.Play("RBQ_Punish_Crucifixion");//修女榨精
                         break;
                 }
 
@@ -190,12 +193,16 @@ public class RBQ : MonoBehaviour
         {
             if (RBQState == 1 && !isCreateEnemy)
             {
+                // 随机或固定左右偏移量
+                Vector3 basePos = transform.position;
+
+
                 //出现敌人,停止拷问，冲向玩家
-                GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
+                GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, basePos + new Vector3(-0.6f, 0f, 0f), Quaternion.identity);
                 Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
                 //enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
                 enemy.CanChangeSkin = false;
-                StartCoroutine(DelayedApplySkin(enemy));
+                StartCoroutine(DelayedApplySkin(enemy));//RBQ产生拷问敌人
                 enemy.ChangeClass(1);
 
 
@@ -218,12 +225,18 @@ public class RBQ : MonoBehaviour
                         anim.Play("RBQ_Punish_ShameWagon_2");//泄欲车
                         break;
                     case 5:
-                        //还是自己
+
+                        anim.Play("RBQ_Punish_Rape_2");//触手拘束
+
                         enemy.ChangeClass(7);//触手拘束
                         break;
                     case 6:
                         anim.Play("RBQ_Punish_Rape_2");//变异体强奸
                         enemy.ChangeClass(4);//产生变异体
+                        break;
+                    case 7:
+                        anim.Play("RBQ_Punish_Crucifixion_2");//修女榨精
+                        enemy.ChangeClass(0);//产生惩戒修女
                         break;
                 }
 
@@ -376,7 +389,7 @@ public class RBQ : MonoBehaviour
                     Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
                     //enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
                     enemy.CanChangeSkin = false;
-                    StartCoroutine(DelayedApplySkin(enemy));
+                    StartCoroutine(DelayedApplySkin_2(enemy));//RBQ产生奴隶同伴
                     enemy.ChangeClass(0);
 
 
@@ -473,16 +486,29 @@ public class RBQ : MonoBehaviour
 
     public void SaveFriend()
     {
+        // 随机或固定左右偏移量
+        Vector3 basePos = transform.position;
 
-        GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
+
+        GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, basePos + new Vector3(-0.6f, 0f, 0f), Quaternion.identity);
         Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
         //enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
         enemy.CanChangeSkin = false;
-        StartCoroutine(DelayedApplySkin(enemy));
+        StartCoroutine(DelayedApplySkin_2(enemy));//商店购买两个奴隶
         enemy.ChangeClass(0);
-
-
         enemy.ConvertToFriend();
+
+
+        GameObject NewEnemy2 = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
+        Enemy enemy2 = NewEnemy2.transform.Find("Enemy").GetComponent<Enemy>();
+        //enemy.wallmap = wallmap;//告诉自己生成的Enemy出生点WallMap
+        enemy2.CanChangeSkin = false;
+        StartCoroutine(DelayedApplySkin(enemy2));//商店购买两个奴隶
+        enemy2.ChangeClass(0);
+
+
+        enemy2.ConvertToFriend();
+
 
 
 
@@ -495,7 +521,7 @@ public class RBQ : MonoBehaviour
 
 
         //生成刑架
-        GameObject TortureDevice = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
+        GameObject TortureDevice = Instantiate(Torture_Rack, basePos + new Vector3(0.6f, 0f, 0f), Quaternion.identity);
         TortureDevice.GetComponent<Plant>().SetImage(8);
 
         WeaponChangeDevice.transform.SetParent(null);//保留架子
@@ -512,15 +538,28 @@ public class RBQ : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f); // 延迟 0.1 秒后赋值
 
+        //把Girl的皮肤套入YYY里
         enemy.SaveCurrentSkin(
-            YYY_headIndex, YYY_eyesIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
-            Man_headIndex, Man_bodyIndex, Man_hatIndex,
-            Girl_headIndex, Girl_eyesIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
-            weaponIndex
-        );
-    }
+           Girl_headIndex, Girl_eyesIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
+           Man_headIndex, Man_bodyIndex, Man_hatIndex,
+           Girl_headIndex, Girl_eyesIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
+           weaponIndex
+       );
+    }//这个是产生敌人
+
+    private IEnumerator DelayedApplySkin_2(Enemy enemy)
+    {
+        yield return new WaitForSeconds(0.1f); // 延迟 0.1 秒后赋值
+
+         enemy.SaveCurrentSkin(
+             YYY_headIndex, YYY_eyesIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
+             Man_headIndex, Man_bodyIndex, Man_hatIndex,
+             Girl_headIndex, Girl_eyesIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
+             weaponIndex
+         );
 
 
+    }//这个是产生奴隶同伴
 
 
 

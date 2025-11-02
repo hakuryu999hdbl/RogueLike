@@ -177,7 +177,7 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("Chapter_13", 1);
 
         //GameFlowData.nextScene = "Arena";
-        GameFlowData.nextScene = "Story_08";//测试Boss使用
+        //GameFlowData.nextScene = "Story_08";//测试Boss使用
         //GameFlowData.nextScene = "CG_AVG_04";//测试CG使用
 
         switch (GameFlowData.nextScene)
@@ -1007,34 +1007,36 @@ public class UIManager : MonoBehaviour
                 PlayerPrefs.SetInt("CG_AVG_04", 1);//cg解锁
                 GameFlowData.nextScene = "CG_AVG_04";
                 break;
-
-
-
             case "Story_04":
+            case "Story_05":
+                //泄欲车结局
+                PlayerPrefs.SetInt("CG_AVG_02", 1);//cg解锁
+                GameFlowData.nextScene = "CG_AVG_02";
+                break;  
+        
+
+            case "Story_06":
+            case "Story_07":
+                //肉圣物结局
+                GameFlowData.nextScene = "CG_AVG_07";
+                break;
+            case "Story_08":
+                //青梅竹马团员结局
+
+                break;    
+           
+            case "Story_09":
+            case "Story_11":
                 //拍卖会结局
                 PlayerPrefs.SetInt("CG_AVG_03", 1);//cg解锁
                 GameFlowData.nextScene = "CG_AVG_03";
                 break;
 
-            case "Story_05":
+            case "Story_10":
+            case "Story_12":
                 //王女性玩具结局
 
                 break;
-
-            case "Story_06":
-            case "Story_07":
-                //肉圣物结局
-                break;
-            case "Story_08":
-                //青梅竹马团员结局
-
-                break;
-            case "Story_09":
-                //泄欲车结局
-                PlayerPrefs.SetInt("CG_AVG_02", 1);//cg解锁
-                GameFlowData.nextScene = "CG_AVG_02";
-                break;
-
         }
 
 

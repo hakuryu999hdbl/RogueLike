@@ -2643,15 +2643,16 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            if (isMage)
-            {
-                anim.Play(GetAnimPrefix() + "Spell_Block");
-            }
-            else
-            {
-                anim.Play(GetAnimPrefix() + "Shoot_Block");
-            }
+           //if (isMage)
+           //{
+           //    anim.Play(GetAnimPrefix() + "Spell_Block");
+           //}
+           //else
+           //{
+           //    anim.Play(GetAnimPrefix() + "Shoot_Block");
+           //}
 
+            anim.Play(GetAnimPrefix() + "Shoot_Block");
 
         }
 
