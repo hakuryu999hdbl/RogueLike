@@ -432,7 +432,7 @@ public class BonusSlotUI : MonoBehaviour
                 UIManager.instance.ChangeMoney(value);
                 break;
             case BonusType.Exp:
-                UIManager.instance.player.ChangeExperience(value);
+                UIManager.instance.player.ChangeExperience(value);//三选一界面给与经验
                 break;
 
 

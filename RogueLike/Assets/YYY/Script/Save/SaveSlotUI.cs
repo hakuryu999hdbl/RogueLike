@@ -409,8 +409,8 @@ public class SaveSlotUI : MonoBehaviour
     public static Color HealthColor(int hp)
     {
         var rules = new (int, Color)[] {
-            (1500, WHITE), (2000, BLUE), (5000, GREEN),
-            (8000, PURPLE), (10000, GOLD),
+            (1500, WHITE), (1700, BLUE), (2000, GREEN),
+            (2200, PURPLE), (2500, GOLD),
         };
         return PickColor(hp, rules, RED);
     }
@@ -419,8 +419,8 @@ public class SaveSlotUI : MonoBehaviour
     public static Color AttackColor(int atk)
     {
         var rules = new (int, Color)[] {
-            (100, WHITE), (200, BLUE), (500, GREEN),
-            (800, PURPLE), (1000, GOLD),
+            (100, WHITE), (150, BLUE), (170, GREEN),
+            (200, PURPLE), (250, GOLD),
         };
         return PickColor(atk, rules, RED);
     }
@@ -429,8 +429,8 @@ public class SaveSlotUI : MonoBehaviour
     public static Color WeaponColor(int wp)
     {
         var rules = new (int, Color)[] {
-            (300, WHITE), (500, BLUE), (800, GREEN),
-            (1000, PURPLE), (1500, GOLD),
+            (150, WHITE), (200, BLUE), (250, GREEN),
+            (300, PURPLE), (350, GOLD),
         };
         return PickColor(wp, rules, RED);
     }
@@ -439,8 +439,8 @@ public class SaveSlotUI : MonoBehaviour
     public static Color ArmorLikeColor(int def)
     {
         var rules = new (int, Color)[] {
-            (50, WHITE), (100, BLUE), (200, GREEN),
-            (500, PURPLE), (800, GOLD),
+            (50, WHITE), (100, BLUE), (150, GREEN),
+            (200, PURPLE), (250, GOLD),
         };
         return PickColor(def, rules, RED);
     }

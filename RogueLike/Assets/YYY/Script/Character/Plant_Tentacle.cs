@@ -61,6 +61,8 @@ public class Plant_Tentacle : MonoBehaviour
     {
         anim.SetBool("Die", false);
         Map_Icon.SetActive(true);//地图小标出现
+        tag = "Enemy";
+
 
         // 启动用触发器(防止被多次烧伤)
         GetComponent<Collider2D>().enabled = true;
@@ -70,9 +72,14 @@ public class Plant_Tentacle : MonoBehaviour
 
     //伤害显示
     public GameObject SmokeEffect;
+    public bool isScreaming;
+    public HudText HudText;
+
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】-1穿透  0无  1剑击特效  2闪电特效 
     {
-        if (anim.GetBool("Die") == false)
+        Debug.Log("触手收到攻击");
+
+        if (anim.GetBool("Die") == false&&!isScreaming)
         {
             Vector3 offset = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
             Vector3 spawnPosition = transform.position + offset;
@@ -93,7 +100,16 @@ public class Plant_Tentacle : MonoBehaviour
             }
 
 
-            Die();
+
+            isScreaming = true;
+
+            //显示伤害
+            HudText.HUD(amount);
+
+            //伤害冷却
+            Invoke("HurtOver", 0.2f);
+
+            Invoke("Die", 0.2f);
 
         }
 
@@ -104,9 +120,51 @@ public class Plant_Tentacle : MonoBehaviour
     {
         anim.SetBool("Die", true);
         Map_Icon.SetActive(false); // 地图小标暂时消失
+        //tag = "Untagged";
 
-        Invoke("CheckForPlayerAndRebirth", 5f); // 等待5秒后检查是否复活
+
+        //Invoke("CheckForPlayerAndRebirth", 5f); // 等待几秒后检查是否复活
+
+        Destroy(gameObject,1f);
     }
+
+
+    void HurtOver()
+    {
+        isScreaming = false;
+    }//有1秒左右的伤害冷却
+
+
+
+    [Header("暴击")]
+    public GameObject Critial;
+
+    public void CritialAttack()
+    {
+
+
+        Time.timeScale = 0;
+
+
+        Critial.SetActive(true);//显示暴击
+
+        UIManager.instance.player.ChangeCritical(-UIManager.instance.player.maxCritical);//暴击清零
+
+    }//暴击
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -164,7 +222,7 @@ public class Plant_Tentacle : MonoBehaviour
             }
 
             // 禁用触发器，避免重复触发(防止被多次烧伤)
-            GetComponent<Collider2D>().enabled = false;
+            //GetComponent<Collider2D>().enabled = false;
 
         }
 

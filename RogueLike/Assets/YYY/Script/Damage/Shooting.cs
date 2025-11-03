@@ -50,7 +50,8 @@ public class Shooting : MonoBehaviour
     public enum BulletOwnerType
     {
         Enemy,
-        Friend
+        Friend,
+        Player
     }
 
   
@@ -190,67 +191,109 @@ public class Shooting : MonoBehaviour
 
 
         // 判断目标是否是敌人阵营
-        if (ownerType == BulletOwnerType.Friend && other.CompareTag("Enemy"))
+        if (ownerType == BulletOwnerType.Friend || ownerType == BulletOwnerType.Player)//玩家射出的子弹需要检测精灵天赋
         {
-
-            switch (specialBullet)
+            if (other.CompareTag("Enemy"))
             {
-                //子弹，弓箭，冰弹
-                case 0:
-                case 1:
-                case 4:
-               
+                switch (specialBullet)
+                {
+                    //子弹，弓箭，冰弹
+                    case 0:
+                    case 1:
+                    case 4:
 
-                    if (isCritial) { other.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
+
+                        if (isCritial)
+                        {
+                            if (ownerType == BulletOwnerType.Player)
+                            {
+                                //精灵射击射击产生暴击【精准】
+                                if (specialBullet == 0 || specialBullet == 1)
+                                {
+
+                                    if (UIManager.instance.player.YYY_hatIndex == 2 || UIManager.instance.player.YYY_hatIndex == 3)
+                                    {
+                                        other.gameObject.GetComponent<Enemy>()?.CheckPrecisionShooting();
+                                        other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);
+
+                                        Destroy(gameObject);
+
+                                        return;
+                                    }
+                                }
+                            }//玩家射出的子弹需要检测精灵天赋
 
 
-                    // ===== 局内短期Buff整数倍率 =====
-                    int buffMult = 1; // 默认倍率 = 1
-                    if (GameFlowData.Pistol_Buff >= 2)
-                        buffMult = GameFlowData.Pistol_Buff;
-                    appliedDamage *= buffMult; // 💥 应用整数倍率
+                            other.gameObject.GetComponent<Enemy>()?.CritialAttack();
+                            other.gameObject.GetComponent<Plant_Tentacle>()?.CritialAttack();
 
-                    other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);
-                    break;
+                        }//触发暴击（最先结算可以pass防御判断）
 
-                //火球，雷球,风球,暗黑
-                case 2:
-                case 3:
-                case 6:
-                case -1:
-                    GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
-                    var s = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Spell>();
-                    s.DamageToEnemy = true;
-                    s.Init(PrefabsDamage, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
 
-                    Destroy(EffectPrefabs, 1f);
+                        // ===== 局内短期Buff整数倍率 =====
+                        int buffMult = 1; // 默认倍率 = 1
+                        if (GameFlowData.Pistol_Buff >= 2)
+                            buffMult = GameFlowData.Pistol_Buff;
+                        appliedDamage *= buffMult; // 💥 应用整数倍率
 
-                    break;
 
-                //毒球
-                case 5:
-                    GameObject EffectPrefabs2 = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
-                    var s2 = EffectPrefabs2.transform.Find("Attack_Collider").GetComponent<Spell>();
-                    s2.DamageToEnemy = true;
-                    s2.Init(PrefabsDamage/5, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
-                    //持续性伤害过强大幅削减
+                        other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);
+                        other.GetComponent<Plant_Tentacle>()?.ChangeHealth(appliedDamage, TypeOfAttack);
 
-                    Destroy(EffectPrefabs2, chargeTime);//蓄力越久留存越久
-                    Debug.Log("蓄力时间" + chargeTime);
-                    break;
 
+
+
+
+                        break;
+
+                    //火球，雷球,风球,暗黑
+                    case 2:
+                    case 3:
+                    case 6:
+                    case -1:
+                        GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
+                        var s = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Spell>();
+                        s.DamageToEnemy = true;
+                        s.Init(PrefabsDamage, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
+
+                        Destroy(EffectPrefabs, 1f);
+
+                        //触手只要能伤到就行了，Spell不用打
+                        other.GetComponent<Plant_Tentacle>()?.ChangeHealth(appliedDamage, TypeOfAttack);
+
+                        break;
+
+                    //毒球
+                    case 5:
+                        GameObject EffectPrefabs2 = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
+                        var s2 = EffectPrefabs2.transform.Find("Attack_Collider").GetComponent<Spell>();
+                        s2.DamageToEnemy = true;
+                        s2.Init(PrefabsDamage / 5, TypeOfAttack, isCritial, chargeTime);// ← 直接把算好的值传进去
+                                                                                        //持续性伤害过强大幅削减
+
+                        Destroy(EffectPrefabs2, chargeTime);//蓄力越久留存越久
+                        Debug.Log("蓄力时间" + chargeTime);
+
+
+                        //触手只要能伤到就行了，Spell不用打
+                        other.GetComponent<Plant_Tentacle>()?.ChangeHealth(appliedDamage, TypeOfAttack);
+
+                        break;
+
+                }
+
+
+
+                if (specialBullet != 6)
+                {
+                    Destroy(gameObject);
+                } //风能贯穿
+
+
+
+                return;
             }
-
            
-
-            if (specialBullet!=6) 
-            {
-                Destroy(gameObject);
-            } //风能贯穿
-
-
-
-            return;
         }
 
         if (ownerType == BulletOwnerType.Enemy && (other.CompareTag("Player") || other.CompareTag("Friend")))
@@ -366,15 +409,6 @@ public class Shooting : MonoBehaviour
 
 
                 Destroy(gameObject);
-            }
-
-
-
-            if (other.gameObject.GetComponent<Plant_Tentacle>() != null)
-            {
-
-                other.gameObject.GetComponent<Plant_Tentacle>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
-
             }
 
 

@@ -260,15 +260,15 @@ public class Enemy : MonoBehaviour
             CurrentWeaponPower = player.Level * Random.Range(10, 20);
             
             //近战攻击修改
-            MeleeDamage = 100 + player.Level * 20;
+            MeleeDamage = 100 + player.Level * 10;
             strike.Damage = -CurrentWeaponPower - MeleeDamage;
             //远程攻击修改
-            ShootDamage = CurrentWeaponPower + 100 + player.Level * 20;
+            ShootDamage = CurrentWeaponPower + 100 + player.Level * 10;
             //攻击修改
-            SpellDamage = CurrentWeaponPower + 100 + player.Level * 20;
+            SpellDamage = CurrentWeaponPower + 100 + player.Level * 10;
 
 
-            maxHealth += player.Level * 100;
+            maxHealth += player.Level * 200;
             currentHealth = maxHealth;
 
         }//如果已经赋值了队友，那么不随机
@@ -500,7 +500,7 @@ public class Enemy : MonoBehaviour
 
                     if (currentHealth <= 0)
                     {
-                        Die();
+                        Die();//灼烧死亡
                     }
                 }
             }//持续灼烧伤害
@@ -2255,16 +2255,17 @@ public class Enemy : MonoBehaviour
 
             if (amount < 0)
             {
-                if (isPatrol)
+                if (isPrecisionShooting)
                 {
                     Time.timeScale = 0;
-
+                
                     //显示暗杀
                     Assassinate.SetActive(true);
+                
+                    amount = -currentHealth-100;
 
-                    amount = -currentHealth;
-
-                }//暗杀
+                    isPrecisionShooting = false;//给那种多命敌人
+                }//精准处决
 
 
                 isPatrol = false;//受伤后立刻进入战斗
@@ -2335,7 +2336,7 @@ public class Enemy : MonoBehaviour
                 }//肉铠二状态
 
 
-                if (!isDie && currentHealth > 0 && amount != -currentHealth)
+                if (!isDie && currentHealth > 0 && amount != -currentHealth - 100)
                 {
                     //队友比敌人更加容易触发防御
                     if (tag == "Friend" && Random.Range(0, 2) == 0)
@@ -2523,7 +2524,7 @@ public class Enemy : MonoBehaviour
                     return;
                 }
 
-                Die();
+                Die();//一般死亡
 
                 return;
             }
@@ -2806,6 +2807,18 @@ public class Enemy : MonoBehaviour
 
     }//暴击
 
+    bool isPrecisionShooting = false;
+    public void CheckPrecisionShooting() 
+    {
+        if (currentHealth<=maxHealth/2 && Random.Range(0, 2) == 0)//敌人生命值在一半以下，50%几率一击必杀
+        {
+        
+            isPrecisionShooting = true;
+        
+        }
+
+    }//精准射击
+
     public void Knockdown()
     {
 
@@ -2842,6 +2855,7 @@ public class Enemy : MonoBehaviour
                     UIManager.instance.ShowDialogue("Boss_Captain_Die");
                     break;
                 case 2:
+                case 3:
                     UIManager.instance.ShowDialogue("Boss_Selene_Die");
                     break;
 
@@ -2864,7 +2878,21 @@ public class Enemy : MonoBehaviour
             //击杀敌人获得金币
             if (tag != "Friend")
             {
-                UIManager.instance.ChangeMoney(Random.Range(10, 50));
+                UIManager.instance.ChangeMoney(Random.Range(10, 30));
+
+                //人类高等精灵高等魔族具有【狩猎】
+                switch (player.YYY_hatIndex) 
+                {
+                    case 1:
+                    case 3:
+                    case 11:
+                        if (Random.Range(0, 2) == 0)
+                        {
+                            player.HuntingExperience();
+                        }
+                        break;
+                }
+
             }
 
             DieBonue = true;
@@ -3821,6 +3849,8 @@ public class Enemy : MonoBehaviour
         CancelInvoke(nameof(BossSkill_CallFleshArmor));
     }
     #endregion
+
+
 
     /// <summary>
     /// CG结局剧情控制

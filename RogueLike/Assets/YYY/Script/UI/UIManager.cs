@@ -2250,7 +2250,7 @@ public class UIManager : MonoBehaviour
 
 
         #region  人数上限锁
-        int maxSaves = 3; // 最大可创建奴隶数
+        int maxSaves = 4; // 最大可创建奴隶数
         // 判断数量上限
         if (saveCount >= maxSaves)
         {
@@ -3953,7 +3953,8 @@ public class UIManager : MonoBehaviour
     }
     public void OpenURL_Steam()
     {
-        Application.OpenURL("https://store.steampowered.com/search/?developer=FT%20Girl%20Studio");
+        //Application.OpenURL("https://store.steampowered.com/search/?developer=FT%20Girl%20Studio");
+        Application.OpenURL("https://store.steampowered.com/app/4086970/Crossdresser_Killer/");
 
         //钮按下后绿色选中也会过去
         HomePagecurrentIndex = 6;
@@ -3985,6 +3986,7 @@ public class UIManager : MonoBehaviour
     {
         Application.OpenURL("https://www.dlsite.com/maniax/announce/=/product_id/RJ01484541.html");
         Application.OpenURL("https://www.dmm.co.jp/dc/doujin/-/detail/=/cid=d_678786/?utm_source=twitter&utm_medium=social_tpost&utm_campaign=start&utm_term=d_678786&utm_content=doujin");
+        Application.OpenURL("https://store.steampowered.com/app/4086970/Crossdresser_Killer/");
     }
     #endregion
 

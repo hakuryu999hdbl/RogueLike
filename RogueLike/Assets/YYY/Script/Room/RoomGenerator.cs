@@ -622,7 +622,7 @@ public class RoomGenerator : MonoBehaviour
     public GameObject Enemy;
     public GameObject RBQ;
     public GameObject MagicCircle;
-
+    public GameObject Tentacle;
 
 
 

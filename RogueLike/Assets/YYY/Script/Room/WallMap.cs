@@ -230,13 +230,12 @@ public class WallMap : MonoBehaviour
                         break;
                     case "Story_08":
                     case "Story_09":
-                        SetEnemy(2);//第7，8，9关只有触手怪敌人
+                        SetEnemy(2);//第8，9关只有触手怪敌人
                         break;
 
                     default:
                     case "Story_10":
                     case "Story_11":
-                    case "Story_13":
                         SetEnemy();//地下城    随机敌人
                         break;
 
@@ -306,7 +305,7 @@ public class WallMap : MonoBehaviour
                 //ToDo：藏商店
                 //SetShop();//在房间中央设置商店
 
-                //Instantiate(_RoomGenerator.MagicCircle, transform.position, Quaternion.identity);
+                //Instantiate(_RoomGenerator.Tentacle, transform.position, Quaternion.identity);
 
                 UIManager.instance.ShowBonusCavans();//开启三选一界面，只能开一次
 

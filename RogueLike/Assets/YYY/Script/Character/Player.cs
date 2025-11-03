@@ -74,6 +74,7 @@ public class Player : MonoBehaviour
     [Header("当前操纵的存档名称")]
     public string currentSaveName; // 当前操作的存档名
 
+    public List<GameObject> RaceBuff = new List<GameObject>();//种族天赋小图标
 
     public void ApplySaveData(PlayerSaveData data, bool preserveHealth = false, float prevHealthRatio = -1f)
     {
@@ -216,6 +217,48 @@ public class Player : MonoBehaviour
                 Level_Icon.sprite = UIManager.instance.skinParts.LevelSprites[7];
                 break;
         }
+
+
+        //种族天赋小图标
+        foreach (GameObject Buff in RaceBuff)
+        {
+            Buff.SetActive(false);
+        }
+        switch (YYY_hatIndex)
+        {
+            case 1:
+                //人类天赋
+                RaceBuff[0].SetActive(true);//狩猎
+                break;
+            case 2:
+                //精灵天赋
+                RaceBuff[1].SetActive(true);//精准
+                break;
+            case 3:
+                //高等精灵天赋
+                RaceBuff[0].SetActive(true);//狩猎
+                RaceBuff[1].SetActive(true);//精准
+                break;
+            case 4:
+            case 10:
+                //兔族天赋
+                RaceBuff[2].SetActive(true);//敏捷
+                break;
+
+            case 11:
+                //高等魔族天赋
+                RaceBuff[0].SetActive(true);//狩猎
+                RaceBuff[3].SetActive(true);//魔族化
+                break;
+            case 12:
+                //魔族天赋
+                RaceBuff[3].SetActive(true);//魔族化
+                break;
+
+            default:
+                break;
+        }
+
 
     }//存档形式赋值皮肤数值
     void SetStrikeTypeOfAttack()
@@ -1694,7 +1737,7 @@ public class Player : MonoBehaviour
 
         //Debug.Log("远程玩家阶段最初蓄力时间" + Save_attackPressTime);//为什么这里不用attackPressTime，因为传过去一直都是0，没有办法只能记录一下再传记录的
 
-        s.Init(-ShootDamage-CurrentWeaponPower, -SpellDamage - CurrentWeaponPower, willCrit, Save_attackPressTime, special, direction, Shooting.BulletOwnerType.Friend);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
+        s.Init(-ShootDamage-CurrentWeaponPower, -SpellDamage - CurrentWeaponPower, willCrit, Save_attackPressTime, special, direction, Shooting.BulletOwnerType.Player);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
 
 
 
@@ -2242,7 +2285,9 @@ public class Player : MonoBehaviour
     {
         isOutOfStrength = false;
     }
- 
+
+
+    public GameObject Speed_UpEffect;
 
     IEnumerator Dodge(Vector2 direction, float dodgeSpeed, float dodgeDistance)
     {
@@ -2254,9 +2299,32 @@ public class Player : MonoBehaviour
             Invoke("ResetCombo", 1f);
         }
 
-        // 音效、体力扣除
+        // 音效
         frameEvents._SE_Clothes();
-        ChangeStrength(-100);
+     
+
+        //兔族一定几率不消耗体力
+        if (YYY_hatIndex == 4 || YYY_hatIndex == 10)
+        {
+
+            if (Random.Range(0,2)==0)
+            {
+                //兔族天赋，不扣除体力
+                Speed_UpEffect.SetActive(true);
+                ChangeStrength(50);
+            }
+            else
+            {
+                //体力扣除
+                ChangeStrength(-100);
+            }
+        }
+        else 
+        {
+            //体力扣除
+            ChangeStrength(-100);
+        }
+
 
 
         GhostPhantom.sprite = Phantom;
@@ -3322,6 +3390,13 @@ public class Player : MonoBehaviour
 
         //我不太清除频繁刷新会不会不太好……
         //UIManager.instance.RefreshSaveSlots();
+    }
+
+    public GameObject Hunting_Effect;
+    public void HuntingExperience() 
+    {
+        ChangeExperience(30);//额外经验
+        Hunting_Effect.SetActive(true);
     }
 
 

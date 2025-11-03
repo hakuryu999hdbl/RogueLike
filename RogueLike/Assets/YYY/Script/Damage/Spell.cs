@@ -58,6 +58,7 @@ public class Spell : MonoBehaviour
     //单次伤害
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
         if (!isStayDamage)
         {
 
@@ -89,10 +90,16 @@ public class Spell : MonoBehaviour
             if (collision.gameObject.tag == "Enemy")
             {
 
-                if (collision.gameObject.GetComponent<Enemy>() != null && DamageToEnemy)
+                if (DamageToEnemy)
                 {
 
-                    if (isCritial) { collision.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
+                    if (isCritial)
+                    {
+                        collision.gameObject.GetComponent<Enemy>()?.CritialAttack();
+                        //collision.gameObject.GetComponent<Plant_Tentacle>()?.CritialAttack();
+
+                    }//触发暴击（最先结算可以pass防御判断）
+
 
                     //持续性伤害不能有暴击
                     // ===== 局内短期Buff整数倍率 =====
@@ -102,8 +109,8 @@ public class Spell : MonoBehaviour
                     appliedDamage *= buffMult; // 💥 应用整数倍率
 
 
-                    collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
-
+                    collision.gameObject.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+                    //collision.gameObject.GetComponent<Plant_Tentacle>()?.ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
 
                 }
@@ -150,6 +157,8 @@ public class Spell : MonoBehaviour
     //持续性伤害
     private void OnTriggerStay2D(Collider2D collision)
     {
+
+
         if (isStayDamage)
         {
 
@@ -181,12 +190,12 @@ public class Spell : MonoBehaviour
             if (collision.gameObject.tag == "Enemy")
             {
 
-                if (collision.gameObject.GetComponent<Enemy>() != null && DamageToEnemy)
+                if (DamageToEnemy)
                 {
 
                     //持续伤害不能适用于buff
-
-                    collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+                    collision.gameObject.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+                    //collision.gameObject.GetComponent<Plant_Tentacle>()?.ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
 
 
@@ -224,13 +233,7 @@ public class Spell : MonoBehaviour
                     collision.gameObject.GetComponent<Plant>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
 
                 }
-
-                if (collision.gameObject.GetComponent<Plant_Tentacle>() != null)
-                {
-
-                    collision.gameObject.GetComponent<Plant_Tentacle>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
-
-                }
+             
             }
 
         }

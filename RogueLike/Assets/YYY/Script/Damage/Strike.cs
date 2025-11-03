@@ -78,10 +78,15 @@ public class Strike : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
  
-            if (collision.gameObject.GetComponent<Enemy>() != null && DamageToEnemy)
+            if (DamageToEnemy)
             {
 
-                if (isCritial) { collision.gameObject.GetComponent<Enemy>().CritialAttack(); }//触发暴击（最先结算可以pass防御判断）
+                if (isCritial) 
+                { 
+                    collision.gameObject.GetComponent<Enemy>()?.CritialAttack();
+                    collision.gameObject.GetComponent<Plant_Tentacle>()?.CritialAttack();
+
+                }//触发暴击（最先结算可以pass防御判断）
 
                 // ===== 局内短期Buff整数倍率 =====
                 int buffMult = 1; // 默认倍率 = 1
@@ -89,10 +94,13 @@ public class Strike : MonoBehaviour
                     buffMult = GameFlowData.Sword_Buff;
                 appliedDamage *= buffMult; // 💥 应用整数倍率
 
-                collision.gameObject.GetComponent<Enemy>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
+                collision.gameObject.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+                collision.gameObject.GetComponent<Plant_Tentacle>()?.ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
+
             }
 
-            
+         
         }
 
 
@@ -125,12 +133,7 @@ public class Strike : MonoBehaviour
 
             }
 
-            if (collision.gameObject.GetComponent<Plant_Tentacle>() != null)
-            {
-
-                collision.gameObject.GetComponent<Plant_Tentacle>().ChangeHealth(appliedDamage, TypeOfAttack);//普通伤害
-
-            }
+          
         }
 
 
