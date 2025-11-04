@@ -763,7 +763,7 @@ public class UIManager : MonoBehaviour
 
 
         //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
-        //LockStage();
+        LockStage();
 
 
 
@@ -2072,6 +2072,11 @@ public class UIManager : MonoBehaviour
                             StageInformation.SetActive(true);
 
                             isShowTitle = true;
+
+
+                            ResetBuffs();//开始的时候Buff全部清零
+
+
                         }//只展示一次关卡信息
 
 
@@ -2180,9 +2185,8 @@ public class UIManager : MonoBehaviour
 
 
         //隐藏buff
-        SwordBuffIcon.gameObject.SetActive(false);
-        PistolBuffIcon.gameObject.SetActive(false);
-        StaffBuffIcon.gameObject.SetActive(false);
+        ResetBuffs();
+
 
 
     }//读取，显示存档
@@ -4350,7 +4354,16 @@ public class UIManager : MonoBehaviour
             StaffBuffIcon.gameObject.SetActive(false);
         }
     }
+    public void ResetBuffs()
+    {
+        GameFlowData.Sword_Buff = 0;
+        GameFlowData.Pistol_Buff = 0;
+        GameFlowData.Staff_Buff = 0;
 
+        SwordBuffIcon.gameObject.SetActive(false);
+        PistolBuffIcon.gameObject.SetActive(false);
+        StaffBuffIcon.gameObject.SetActive(false);
+    }
     #endregion
 
 

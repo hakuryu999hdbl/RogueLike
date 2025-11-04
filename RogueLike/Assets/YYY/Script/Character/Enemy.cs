@@ -2258,8 +2258,8 @@ public class Enemy : MonoBehaviour
                 if (isPrecisionShooting)
                 {
                     Time.timeScale = 0;
-                
-                    //显示暗杀
+
+                    //显示暗杀（精准处决）
                     Assassinate.SetActive(true);
                 
                     amount = -currentHealth-100;
@@ -2351,11 +2351,6 @@ public class Enemy : MonoBehaviour
                         return;
                     }
 
-                    if (tag == "Enemy" && Class == EnemyClass.FleshArmor && TypeOfAttack==0)
-                    {
-                        Block();
-                        return;
-                    }//肉铠必定防御(除非受到法术属性攻击)
                 }
 
                 //防护检测
@@ -2532,7 +2527,7 @@ public class Enemy : MonoBehaviour
 
             //击倒再站起(和暴击结合)
 
-            if (!isDie && currentHealth > 0)
+            if (!isDie && currentHealth > 0 && TypeOfAttack !=0)//子弹无法击倒击伤敌人
             {
 
                 int DamageType = Random.Range(0, 2);

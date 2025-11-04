@@ -589,7 +589,7 @@ public class BonusSlotUI : MonoBehaviour
                 else
                     GameFlowData.Sword_Buff++;   // 之后每次+1
 
-                UIManager.instance.UpdateBuffUI();
+                UIManager.instance.UpdateBuffUI();//升级局内近战Buff
 
                 break;
             case BonusType.Pistol_Buff:
@@ -599,7 +599,7 @@ public class BonusSlotUI : MonoBehaviour
                 else
                     GameFlowData.Pistol_Buff++;// 之后每次+1
 
-                UIManager.instance.UpdateBuffUI();
+                UIManager.instance.UpdateBuffUI();//升级局内射击Buff
 
                 break;
             case BonusType.Staff_Buff:
@@ -609,7 +609,7 @@ public class BonusSlotUI : MonoBehaviour
                 else
                     GameFlowData.Staff_Buff++;// 之后每次+1
 
-                UIManager.instance.UpdateBuffUI();
+                UIManager.instance.UpdateBuffUI();//升级局内法术Buff
 
                 break;
         }

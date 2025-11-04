@@ -1737,7 +1737,28 @@ public class Player : MonoBehaviour
 
         //Debug.Log("远程玩家阶段最初蓄力时间" + Save_attackPressTime);//为什么这里不用attackPressTime，因为传过去一直都是0，没有办法只能记录一下再传记录的
 
-        s.Init(-ShootDamage-CurrentWeaponPower, -SpellDamage - CurrentWeaponPower, willCrit, Save_attackPressTime, special, direction, Shooting.BulletOwnerType.Player);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
+        int AllLongRangeDamage = -ShootDamage - CurrentWeaponPower;
+
+        //枪先天性伤害减半
+        if (special==0)
+        {
+            if (!willCrit)
+            {
+                AllLongRangeDamage /= 2;
+
+            }//如果不产生暴击，那么伤害需要减半
+        }
+        //弩虽然可以击退，但是伤害更低
+        if (special == 1) 
+        {
+            if (!willCrit)
+            {
+                AllLongRangeDamage /= 3;
+
+            }//如果不产生暴击，那么伤害需要减半
+        }
+
+        s.Init(AllLongRangeDamage, -SpellDamage - CurrentWeaponPower, willCrit, Save_attackPressTime, special, direction, Shooting.BulletOwnerType.Player);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
 
 
 
@@ -2796,7 +2817,7 @@ public class Player : MonoBehaviour
 
 
 
-    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】 -1暗黑  0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物   6击飞
+    public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】-3子弹伤害 -2弩弓伤害  -1暗黑  0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物   6击飞
     {
 
         if (isInvincible)

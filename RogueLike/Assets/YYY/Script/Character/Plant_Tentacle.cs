@@ -61,7 +61,7 @@ public class Plant_Tentacle : MonoBehaviour
     {
         anim.SetBool("Die", false);
         Map_Icon.SetActive(true);//地图小标出现
-        tag = "Enemy";
+        //tag = "Enemy";
 
 
         // 启动用触发器(防止被多次烧伤)
@@ -123,9 +123,9 @@ public class Plant_Tentacle : MonoBehaviour
         //tag = "Untagged";
 
 
-        //Invoke("CheckForPlayerAndRebirth", 5f); // 等待几秒后检查是否复活
+        Invoke("CheckForPlayerAndRebirth", 2f); // 等待几秒后检查是否复活
 
-        Destroy(gameObject,1f);
+        //Destroy(gameObject,1f);
     }
 
 

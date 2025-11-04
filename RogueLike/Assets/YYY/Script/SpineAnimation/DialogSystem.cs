@@ -807,35 +807,35 @@ public class DialogSystem : MonoBehaviour
                 GameFlowData.nextScene = "Story_03";            
                 break;
            case 1004:
-                GameFlowData.nextScene = "Story_04";
+                //GameFlowData.nextScene = "Story_04";
                 //ToDo :试玩版锁
-                //GameFlowData.nextScene = "";//返回主菜单(试玩版结束)
+                GameFlowData.nextScene = "";//返回主菜单(试玩版结束)
                 break;
-           case 1005:
-               GameFlowData.nextScene = "Story_05";
-               break;
-           case 1006:
-               GameFlowData.nextScene = "Story_06";
-               break;
-           case 1007:
-               GameFlowData.nextScene = "Story_07";
-               break;
-           case 1008:
-               GameFlowData.nextScene = "Story_08";
-               break;
-           case 1009:
-               GameFlowData.nextScene = "Story_09";
-               break;
-           case 1010:
-               GameFlowData.nextScene = "Story_10";
-               break;
-           case 1011:
-               GameFlowData.nextScene = "Story_11";
-               break;
-           case 1012:
-               GameFlowData.nextScene = "Story_12";
-               break;
-           case 1013:
+          // case 1005:
+          //     GameFlowData.nextScene = "Story_05";
+          //     break;
+          // case 1006:
+          //     GameFlowData.nextScene = "Story_06";
+          //     break;
+          // case 1007:
+          //     GameFlowData.nextScene = "Story_07";
+          //     break;
+          // case 1008:
+          //     GameFlowData.nextScene = "Story_08";
+          //     break;
+          // case 1009:
+          //     GameFlowData.nextScene = "Story_09";
+          //     break;
+          // case 1010:
+          //     GameFlowData.nextScene = "Story_10";
+          //     break;
+          // case 1011:
+          //     GameFlowData.nextScene = "Story_11";
+          //     break;
+          // case 1012:
+          //     GameFlowData.nextScene = "Story_12";
+          //     break;
+          //case 1013:
             case 101:
             case 102:
             case 103:
