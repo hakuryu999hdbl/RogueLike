@@ -139,7 +139,7 @@ public class Room : MonoBehaviour
                 //如果亚历克西斯在场，那么赛琳娜也在场
                 if (BossNumber == 5)
                 {
-                    Invoke("SetSelene", 1f);
+                    Invoke("SetSelene", 10f);
                 }
 
                 BGM.instance.Stop();

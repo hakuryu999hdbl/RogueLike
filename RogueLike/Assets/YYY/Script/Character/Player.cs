@@ -604,13 +604,9 @@ public class Player : MonoBehaviour
 
                     if (currentHealth <= 0)
                     {
-                        isDie = true;
 
-                        anim.Play(GetAnimPrefix() + "Default_Die_2");
 
-                        Critical.SetActive(false);
-
-                        UIManager.instance.Ending_UI();//毒烧伤损血死亡
+                        Die();//生命值为0死亡（剧毒/灼烧）
 
                         return;
                     }
@@ -3109,24 +3105,7 @@ public class Player : MonoBehaviour
 
             if (currentHealth <= 0)
             {
-                isDie = true;
-
-                anim.Play(GetAnimPrefix() + "Default_Die_2");
-
-                Critical.SetActive(false);
-
-                UIManager.instance.Ending_UI();//损血死亡
-
-                UIManager.instance._RoomGenerator.MissionIcon(false);
-
-                if (GameFlowData.nextScene=="Arena") 
-                {
-                    Invoke(nameof(ArenaMode_ShowBestWave), 1.5f);
-                }
-
-                //死亡后BGM也变
-                BGM.instance.Stop();
-                BGM.instance.AudioPlayDungeonMusic(-1);
+                Die();//生命值为0死亡
 
                 return;
             }
@@ -3240,6 +3219,30 @@ public class Player : MonoBehaviour
         }
 
     }//击倒
+
+
+    public void Die() 
+    {
+        isDie = true;
+
+        anim.Play(GetAnimPrefix() + "Default_Die_2");
+
+        Critical.SetActive(false);
+
+        UIManager.instance.Ending_UI();//损血死亡
+
+        UIManager.instance._RoomGenerator.MissionIcon(false);
+
+        if (GameFlowData.nextScene == "Arena")
+        {
+            Invoke(nameof(ArenaMode_ShowBestWave), 1.5f);
+        }
+
+        //死亡后BGM也变
+        BGM.instance.Stop();
+        BGM.instance.AudioPlayDungeonMusic(-1);
+    }
+
 
     void GetUp()
     {
@@ -3493,10 +3496,15 @@ public class Player : MonoBehaviour
 
     public void StartStruggle(int Number) 
     {
-        isDie = true;
-        //isInputBlocked = true;//切断玩家的方向攻击等输入
+        isRape = true;//这个是防止敌人上来直接Rape
+        isInputBlocked = true;//切断玩家的方向攻击等输入
 
-        switch(Number)
+
+        Die();//被触手缠住
+
+        currentHealth = 0;//这个很重要，因为要确保敌人碰到被触手缠住的你进入巡逻
+
+        switch (Number)
         {
             case 1:
                 anim.Play("CG/CG_TentacleWallFront_1");

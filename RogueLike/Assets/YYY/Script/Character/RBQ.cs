@@ -54,10 +54,13 @@ public class RBQ : MonoBehaviour
 
 
                 if (GameFlowData.nextScene == "Story_01" || GameFlowData.nextScene == "Story_02")
-                { CurrentRapeType = 7; }//暂时先这样
+                { 
+                    CurrentRapeType = Random.Range(1, 5); 
+
+                }//暂时先这样
                 else if (GameFlowData.nextScene == "Story_04" || GameFlowData.nextScene == "Story_06")
-                {
-                    CurrentRapeType = Random.Range(3, 5);
+                {                 
+                    CurrentRapeType = 7;
                 }
                 else
                 {

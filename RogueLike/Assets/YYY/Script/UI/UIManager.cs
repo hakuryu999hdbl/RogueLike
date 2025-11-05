@@ -763,7 +763,7 @@ public class UIManager : MonoBehaviour
 
 
         //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
-        LockStage();
+        //LockStage();
 
 
 
@@ -4728,6 +4728,15 @@ public class UIManager : MonoBehaviour
     public List<GameObject> Boss_CombatNun_Skill_In_Game_DialogueList;//首席战斗修女技能刷出台词
     public List<GameObject> Boss_CombatNun_Die_In_Game_DialogueList;//首席战斗修女死亡刷出台词
 
+
+    public List<GameObject> Boss_Alexis_In_Game_DialogueList;//皇太子亚历克西斯刷出台词
+    public List<GameObject> Boss_Alexis_Skill_In_Game_DialogueList;//皇太子亚历克西斯技能刷出台词
+    public List<GameObject> Boss_Alexis_Die_In_Game_DialogueList;//皇太子亚历克西斯死亡刷出台词
+
+
+    public List<GameObject> Boss_Morgan_In_Game_DialogueList;//宰相摩尔根刷出台词
+    public List<GameObject> Boss_Morgan_Skill_In_Game_DialogueList;//宰相摩尔根技能刷出台词
+
     private bool dialogueShowing = false;  // 是否有台词正在显示
     private GameObject currentDialogue = null; // 当前正在显示的台词
     private Coroutine dialogueRoutine = null;  // 当前协程引用
@@ -4770,6 +4779,13 @@ public class UIManager : MonoBehaviour
             case "Boss_CombatNun": pool = Boss_CombatNun_In_Game_DialogueList; break;
             case "Boss_CombatNun_Skill": pool = Boss_CombatNun_Skill_In_Game_DialogueList; break;
             case "Boss_CombatNun_Die": pool = Boss_CombatNun_Die_In_Game_DialogueList; break;
+
+            case "Boss_Alexis": pool = Boss_Alexis_In_Game_DialogueList; break;
+            case "Boss_Alexis_Skill": pool = Boss_Alexis_Skill_In_Game_DialogueList; break;
+            case "Boss_Alexis_Die": pool = Boss_Alexis_Die_In_Game_DialogueList; break;
+
+            case "Boss_Morgan": pool = Boss_Morgan_In_Game_DialogueList; break;
+            case "Boss_Morgan_Skill": pool = Boss_Morgan_Skill_In_Game_DialogueList; break;
         }
 
         if (pool == null || pool.Count == 0) return;

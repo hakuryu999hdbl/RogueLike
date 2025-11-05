@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
         StopDir = Random.Range(0.8f, 1.15f);
 
 
-
+        StartCoroutine(RandomWalkRun());//隔段时间随机走跑
 
 
 
@@ -46,7 +46,6 @@ public class Enemy : MonoBehaviour
             //visionType = EnemyType.ShortRangeEnemy;
 
             CurrentProfession = Random.Range(0, 2);//把CurrentProfession绑进去(法师只有女性可当)
-
 
 
 
@@ -97,7 +96,12 @@ public class Enemy : MonoBehaviour
                                     break;
                             }
 
+                            if(GameFlowData.nextScene == "Story_08")
+                            {
+                                Class = EnemyClass.RBQ;
 
+                            }//在对战摩尔根的时候，只有肉货和寄生虫肉便器
+                           
 
                         }//召集触手怪
                         if (BecomeFleshArmor)
@@ -168,6 +172,17 @@ public class Enemy : MonoBehaviour
 
 
 
+                        if (Class == EnemyClass.RBQ|| Class == EnemyClass.HermitCrab)
+                        {
+                            //随机延后喘息声
+                            Invoke("Delay_Breath_Voice", Random.Range(1, 2.5f));
+
+                            //isPatrol = true;
+
+                        }//肉货和寄生肉便器也有呻吟,而且不攻击只巡逻随机产卵
+
+
+
                         ChangeType(CurrentProfession);//把CurrentProfession绑进去
                         SetAttackRange();
 
@@ -175,12 +190,12 @@ public class Enemy : MonoBehaviour
                     case 1:
                         BecomeBoss_Captain();
 
-                        //if(GameFlowData.nextScene!= "Story_01")
-                        //{
-                        //    // 每隔 5 秒执行一次 Boss技能 召集士兵
-                        //    InvokeRepeating(nameof(BossSkill_CallSoldier), 3f, 5f);
-                        //
-                        //}//第一关的守卫队长不召集敌人
+                        if(GameFlowData.nextScene!= "Story_01")
+                        {
+                            // 每隔 5 秒执行一次 Boss技能 召集士兵
+                            InvokeRepeating(nameof(BossSkill_CallSoldier), 3f, 5f);
+                        
+                        }//第一关的守卫队长不召集敌人
 
 
                         //快速攻击
@@ -195,6 +210,13 @@ public class Enemy : MonoBehaviour
                         break;
                     case 4:
                         BecomeBoss_Morgan();
+
+                        //随机延后喘息声
+                        Invoke("Delay_Breath_Voice", Random.Range(1, 2.5f));
+
+                        // 每隔 5 秒执行一次 Boss技能 召集触手怪物
+                        InvokeRepeating(nameof(BossSkill_CallTentacleMonster), 3f, 5f);
+
                         break;
                     case 5:
                         BecomeBoss_Alexis();
@@ -203,6 +225,8 @@ public class Enemy : MonoBehaviour
                         // 每隔 5 秒执行一次 Boss技能 召集士兵
                         InvokeRepeating(nameof(BossSkill_CallSoldier), 5f, 10f);
 
+                        //快速攻击
+                        attackCooldown = 0.3f;
 
                         break;
                     case 6:
@@ -225,7 +249,8 @@ public class Enemy : MonoBehaviour
                         // 每隔 5 秒执行一次 Boss技能 召集肉铠
                         InvokeRepeating(nameof(BossSkill_CallFleshArmor), 5f, 10f);
 
-
+                        //随机延后喘息声
+                        Invoke("Delay_Breath_Voice", Random.Range(1, 2.5f));
 
                         //快速攻击
                         attackCooldown = 0.3f;
@@ -292,7 +317,7 @@ public class Enemy : MonoBehaviour
                 default:
                 case 0:
                     //一次出现很多小怪太吵限制一些
-                    if (Random.Range(0, 3) == 0)
+                    if (Random.Range(0, 4) == 3)
                     {
                         switch (Class)
                         {
@@ -319,6 +344,13 @@ public class Enemy : MonoBehaviour
                 case 3:
                     UIManager.instance.ShowDialogue("Boss_Selene");
                     break;
+                case 4:
+                    UIManager.instance.ShowDialogue("Boss_Morgan");
+                    break;
+                case 5:
+                    UIManager.instance.ShowDialogue("Boss_Alexis"); 
+                    break;
+
 
                 case 7:
                     UIManager.instance.ShowDialogue("Boss_DarkMage");
@@ -623,6 +655,31 @@ public class Enemy : MonoBehaviour
 
     float WaitTimer;//玩家不动等待时间
 
+
+
+
+    bool EnemyRunning = true;
+    IEnumerator RandomWalkRun()
+    {
+        while (true)
+        {
+
+            if (Class == EnemyClass.RBQ && currentHealth > 0 &&Random.Range(0,2)==1) { Attack_Start(); aiPath.canMove = false;Invoke(nameof(RBQCanMove), 1f); }//RBQ隔一会就产卵
+
+            EnemyRunning = !EnemyRunning;
+
+
+
+            // 等待下次切换（可随机间隔）
+            yield return new WaitForSeconds(Random.Range(1.5f, 3f));
+        }
+    }
+    void RBQCanMove() 
+    {
+        aiPath.canMove = true;
+        Attack_Cancel();
+    }
+
     private void BaseMove()
     {
 
@@ -664,8 +721,20 @@ public class Enemy : MonoBehaviour
                     if (tag != "Friend")
                     {
                         //目前战斗下全员跑
-                        moveSpeed = 2;
-                        aiPath.maxSpeed = RunSpeed;
+                        //moveSpeed = 2;
+                        //aiPath.maxSpeed = RunSpeed;
+
+                        if (EnemyRunning)
+                        {
+                            moveSpeed = 2;
+                            aiPath.maxSpeed = RunSpeed;
+                        }
+                        else
+                        {
+                            moveSpeed = 1;
+                            aiPath.maxSpeed = WalkSpeed;
+                          
+                        }
 
 
                     }
@@ -2335,6 +2404,13 @@ public class Enemy : MonoBehaviour
 
                 }//肉铠二状态
 
+                if (currentHealth <= maxHealth / 4 && Class == EnemyClass.RBQ)
+                {
+                    BecomeBoss_Elicia();
+
+
+                }//肉货二状态寄生虫钻出
+
 
                 if (!isDie && currentHealth > 0 && amount != -currentHealth - 100)
                 {
@@ -2351,7 +2427,7 @@ public class Enemy : MonoBehaviour
                         return;
                     }
 
-                }
+                }//防御
 
                 //防护检测
                 amount += CurrentArmorDefence;
@@ -2513,7 +2589,7 @@ public class Enemy : MonoBehaviour
                     return;
                 }
 
-                if (Class == EnemyClass.FleshArmor) //肉铠状态下不死，只有转换成Man死
+                if (Class == EnemyClass.FleshArmor|| Class == EnemyClass.RBQ) //肉货和肉铠状态下不死，只有转换成Man死
                 {
                     currentHealth = 100;//保留生命值，防止触发了别的currentHealth <= 0
                     return;
@@ -2854,6 +2930,10 @@ public class Enemy : MonoBehaviour
                     UIManager.instance.ShowDialogue("Boss_Selene_Die");
                     break;
 
+                case 5:
+                    UIManager.instance.ShowDialogue("Boss_Alexis_Die");
+                    break;
+
                 case 7:
                     UIManager.instance.ShowDialogue("Boss_DarkMage_Die");
                     break;
@@ -2926,6 +3006,14 @@ public class Enemy : MonoBehaviour
                 if (BossNumber != 0)
                 {
                     wallmap.isCanWinRoom = true;//Boss房间的敌人被消灭的时候触发
+                }
+
+
+                //只有艾莉西亚第八关比较特殊，因为场景里有消灭不完的触手Enemy，所以直接获胜
+                if (BossNumber == 4) 
+                {
+                    //完成关卡，结算画面
+                    UIManager.instance._RoomGenerator.ShowResult();
                 }
 
             }
@@ -3234,10 +3322,21 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        maxHealth *= 7;
+        maxHealth *= 2;
         currentHealth = maxHealth;
 
     }//Boss 莫尔根侯爵（艾莉西亚躯体）
+
+    public void BecomeBoss_Elicia()
+    {
+        Attack_Cancel();//重置攻击
+
+        Class = EnemyClass.HermitCrab;
+        anim.Play("HermitCrab_Default_Idle");
+
+        currentHealth = maxHealth;
+        HudText.HUD(maxHealth);
+    }//艾莉西亚二状态，寄生虫钻出
 
     public GameObject Egg;
     public void BossSkill_Childbirth()
@@ -3245,9 +3344,13 @@ public class Enemy : MonoBehaviour
 
         GameObject effectPrefabs_2 = Instantiate(Egg, transform.position, transform.rotation);
         Egg.GetComponent<Plant_Tentacle>().isEgg = true;
-        Destroy(effectPrefabs_2, 10f);
+        Egg.GetComponent<Plant_Tentacle>().CheckEnemyAfter3Time();//3秒后毁灭的同时还要检查全体Enemytag
+        //Destroy(effectPrefabs_2, 3f);
 
     }//艾莉西亚产卵
+
+
+
 
 
     public void BecomeBoss_Selene()
@@ -3416,7 +3519,7 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        maxHealth *= 10;
+        maxHealth *= 7;
         currentHealth = maxHealth;
 
     }//Boss 多米纳斯
@@ -3461,7 +3564,7 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        maxHealth *= 4;
+        maxHealth *= 3;
         currentHealth = maxHealth;
 
         HudText.HUD(maxHealth);
@@ -3563,12 +3666,12 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        //maxHealth += 1000;
+        maxHealth += 1000;
         currentHealth = maxHealth;
 
         HudText.HUD(maxHealth);
 
-    }//Boss 士兵队长
+    }//Boss 首席战斗修女
 
 
     #region 王女赛琳娜技能
@@ -3710,16 +3813,22 @@ public class Enemy : MonoBehaviour
 
     void BossSkill_CallTentacleMonster()
     {
-        //如果场景内敌人少于4个，再召唤一群触手怪
+        //如果场景内敌人少于10个，再召唤一群触手怪
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies.Length <= 4)
+        if (enemies.Length <= 10)
         {
             wallmap.SetEnemy(2);//未知Boss召唤触手怪
             RoomGenerator.ShowInformationOfStage(-1);//敌人增援
         }
 
-       
+        switch (BossNumber)
+        {
+            case 4:
+                UIManager.instance.ShowDialogue("Boss_Morgan_Skill");
+                break;
+        }
+
     }
 
 

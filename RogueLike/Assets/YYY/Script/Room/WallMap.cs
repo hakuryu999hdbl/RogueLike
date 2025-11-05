@@ -77,20 +77,30 @@ public class WallMap : MonoBehaviour
 
         if (other.CompareTag("Friend")|| other.CompareTag("Enemy"))
         {
-            other.GetComponent<Enemy>().wallmap = this;
-
-
-            if (other.GetComponent<Enemy>().BossNumber!=0) 
+            if (other.GetComponent<Enemy>() != null)
             {
+                other.GetComponent<Enemy>().wallmap = this;
 
-                isBossRoom = true;
+
+                if (other.GetComponent<Enemy>().BossNumber != 0)
+                {
+
+                    isBossRoom = true;
 
 
-            }//让Boss反向迫使wallMap知道自己是Boss房
+                }//让Boss反向迫使wallMap知道自己是Boss房
+            }
+         
+
 
 
             //Debug.Log("敌人队友读取wallmap");
+
         }//队友敌人立刻读取当下WallMap最新信息
+
+
+
+
 
 
     }//玩家进入显示房间小地图
@@ -119,6 +129,8 @@ public class WallMap : MonoBehaviour
     public int isClean = 0;//0未打开  1刷敌   2清零
     public bool isBossRoom = false;//在Boss房里敌人不刷
     public bool isArena = false;//角斗场的无限刷敌
+
+    public GameObject FadeTentacle;
 
     public void OnlyLockDoor() 
     {
@@ -243,6 +255,30 @@ public class WallMap : MonoBehaviour
 
 
 
+                if (GameFlowData.nextScene== "Story_09" || GameFlowData.nextScene == "Story_11")//红雾会产生触手 
+                {
+                    foreach (Transform point in spawnPoints)
+                    {
+
+                        // 随机偏移范围
+                        Vector2 offset = new Vector2(
+                            Random.Range(-0.5f, 0.5f),
+                            Random.Range(-0.5f, 0.5f)
+                        );
+
+                        // 应用偏移
+                        Vector3 spawnPos = point.position + (Vector3)offset;
+
+                        GameObject Tentacle =Instantiate(_RoomGenerator.Tentacle, spawnPos, Quaternion.identity);
+
+                        Tentacle.GetComponent<Plant_Tentacle>().wallmap = this;
+
+
+                    }
+
+
+                    if (FadeTentacle != null){ FadeTentacle.SetActive(true); }
+                }
 
 
                 SetRBQ();
@@ -306,6 +342,11 @@ public class WallMap : MonoBehaviour
                 //SetShop();//在房间中央设置商店
 
                 //Instantiate(_RoomGenerator.Tentacle, transform.position, Quaternion.identity);
+
+
+
+              
+
 
                 UIManager.instance.ShowBonusCavans();//开启三选一界面，只能开一次
 
@@ -436,16 +477,16 @@ public class WallMap : MonoBehaviour
 
     }
 
-    public void SetShop() 
-    {
-        GameObject NewEnemy = Instantiate(_RoomGenerator.RBQ, transform.position, Quaternion.identity);
-        //NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;//RBQ需要知道wallMap是因为自己生下的Enemy需要知道
-        NewEnemy.GetComponentInChildren<RBQ>().RBQState = 3;
-    }
-    public void SetMagicCircle()
-    {
-        Instantiate(_RoomGenerator.MagicCircle, transform.position, Quaternion.identity);
-    }
+    //public void SetShop() 
+    //{
+    //    GameObject NewEnemy = Instantiate(_RoomGenerator.RBQ, transform.position, Quaternion.identity);
+    //    //NewEnemy.GetComponentInChildren<RBQ>().wallmap = this;//RBQ需要知道wallMap是因为自己生下的Enemy需要知道
+    //    NewEnemy.GetComponentInChildren<RBQ>().RBQState = 3;
+    //}
+    //public void SetMagicCircle()
+    //{
+    //    Instantiate(_RoomGenerator.MagicCircle, transform.position, Quaternion.identity);
+    //}
 
 
     public void CheckEnemyList()

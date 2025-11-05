@@ -8,7 +8,9 @@ public class Plant_Tentacle : MonoBehaviour
     public Animator anim;
     public GameObject Map_Icon;//被干掉后会地图小标暂时消失
     public bool isHang;//是不是在空中的触手
-  
+
+    public WallMap wallmap;//死后检查
+
     private void Start()
     {
         if (isFade)
@@ -26,8 +28,9 @@ public class Plant_Tentacle : MonoBehaviour
         
 
     }
-    public bool isFade = false;
-    public bool isEgg = false;
+    public bool isFade = false;//是否是装饰触手
+    public bool isEgg = false;//是否是蛋的形式
+    public bool isInvincible = false;//是否是循环出现的触手
     public void ToEgg() 
     {
         anim.Play("Egg_In");
@@ -125,7 +128,44 @@ public class Plant_Tentacle : MonoBehaviour
 
         Invoke("CheckForPlayerAndRebirth", 2f); // 等待几秒后检查是否复活
 
-        //Destroy(gameObject,1f);
+
+        if (!isInvincible) 
+        {
+
+
+            Invoke(nameof(Destroy),1f);
+
+           
+           
+
+        }
+
+    }
+    public void CheckEnemyAfter3Time() 
+    {
+        Invoke(nameof(Destroy), 3f);
+    }//生成的触手3秒后毁灭
+
+
+    private bool isDestroyed = false;
+    private void Destroy()
+    {
+        if (isDestroyed) return; // ✅ 避免重复调用
+        isDestroyed = true;
+
+
+        if (wallmap != null)
+        {
+            Debug.Log("调用 wallmap.CheckEnemyList()");
+            wallmap.CheckEnemyList();
+
+        }
+        else
+        {
+            Debug.LogWarning("wallmap 是 null，无法调用 CheckEnemyList()");
+        }
+
+        Destroy(gameObject);
     }
 
 
@@ -199,30 +239,30 @@ public class Plant_Tentacle : MonoBehaviour
 
             if (anim.GetBool("Die") == false)
             {
-                //if (isHang)
-                //{
-                //    collision.gameObject.GetComponent<Player>().StartStruggle(2); //Debug.Log("玩家踩入触手陷阱");
-                //}
-                //else
-                //{
-                //    collision.gameObject.GetComponent<Player>().StartStruggle(1); //Debug.Log("玩家踩入触手陷阱");
-                //}
-                //
-                //
-                //Die();
-                //
-                //
-                //
-                //collision.transform.position = transform.position;//触手拉过来
+                if (isHang)
+                {
+                    collision.gameObject.GetComponent<Player>().StartStruggle(2); //Debug.Log("玩家踩入触手陷阱");
+                }
+                else
+                {
+                    collision.gameObject.GetComponent<Player>().StartStruggle(1); //Debug.Log("玩家踩入触手陷阱");
+                }
 
 
-                collision.gameObject.GetComponent<Player>().ChangeHealth(-200,0);
+
+
+                collision.transform.position = transform.position;//触手拉过来
+                Destroy(gameObject);
+
+
+
+                //collision.gameObject.GetComponent<Player>().ChangeHealth(-200,0);
 
 
             }
 
             // 禁用触发器，避免重复触发(防止被多次烧伤)
-            //GetComponent<Collider2D>().enabled = false;
+            GetComponent<Collider2D>().enabled = false;
 
         }
 
