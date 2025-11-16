@@ -4737,6 +4737,9 @@ public class UIManager : MonoBehaviour
     public List<GameObject> Boss_Morgan_In_Game_DialogueList;//宰相摩尔根刷出台词
     public List<GameObject> Boss_Morgan_Skill_In_Game_DialogueList;//宰相摩尔根技能刷出台词
 
+    public List<GameObject> Boss_Dominus_Skill_In_Game_DialogueList;//皇帝多米纳斯技能刷出台词
+    public List<GameObject> Boss_Dominus_Die_In_Game_DialogueList;//皇帝多米纳斯死亡刷出台词
+
     private bool dialogueShowing = false;  // 是否有台词正在显示
     private GameObject currentDialogue = null; // 当前正在显示的台词
     private Coroutine dialogueRoutine = null;  // 当前协程引用
@@ -4786,6 +4789,9 @@ public class UIManager : MonoBehaviour
 
             case "Boss_Morgan": pool = Boss_Morgan_In_Game_DialogueList; break;
             case "Boss_Morgan_Skill": pool = Boss_Morgan_Skill_In_Game_DialogueList; break;
+
+            case "Boss_Dominus_Skill": pool = Boss_Dominus_Skill_In_Game_DialogueList; break;
+            case "Boss_Dominus_Die": pool = Boss_Dominus_Die_In_Game_DialogueList; break;
         }
 
         if (pool == null || pool.Count == 0) return;

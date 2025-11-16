@@ -68,11 +68,11 @@ public class Enemy : MonoBehaviour
                         if (BecomeSoldier_Man)
                         {
                             Class = EnemyClass.Man;
-                        }//召集男性士兵
+                        }//召集男性士兵（守卫队长/皇太子/1~3关）
                         if (BecomeSoldier_Girl)
                         {
                             Class = EnemyClass.Girl;
-                        }//召集女性士兵
+                        }//召集女性士兵（首席战斗修女/5~7关）
                        
                         if (BecomeTentacleMonster)
                         {
@@ -103,11 +103,11 @@ public class Enemy : MonoBehaviour
                             }//在对战摩尔根的时候，只有肉货和寄生虫肉便器
                            
 
-                        }//召集触手怪
+                        }//召集触手怪（宰相摩尔根和多米纳斯/9~11关）
                         if (BecomeFleshArmor)
                         { 
                             Class = EnemyClass.FleshArmor;
-                        }//召集肉铠
+                        }//召集肉铠（典狱长）
 
 
 
@@ -135,7 +135,7 @@ public class Enemy : MonoBehaviour
                         }//一部分远程女射手变成女法师
 
 
-                        if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor)
+                        if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor || Class == EnemyClass.Demon)
                         {
 
                             CurrentProfession = 0;
@@ -165,10 +165,22 @@ public class Enemy : MonoBehaviour
                             Invoke("Delay_Breath_Voice", Random.Range(1, 2.5f));
 
 
-                            //快速攻击
-                            attackCooldown = 0.3f;
+                  
 
                         }//肉铠只能走  且固定Hat皮肤
+
+
+
+                        if (Class == EnemyClass.Demon)
+                        {
+                            RunSpeed = Random.Range(1, 3);
+                            WalkSpeed = Random.Range(1, 3);
+
+                     
+
+                            
+
+                        }//恶魔只能走 
 
 
 
@@ -198,8 +210,8 @@ public class Enemy : MonoBehaviour
                         }//第一关的守卫队长不召集敌人
 
 
-                        //快速攻击
-                        attackCooldown = 0.3f;
+
+                        attackCooldown = 0.3f;//守卫队长 快速攻击
 
                         break;
                     case 2:
@@ -225,20 +237,24 @@ public class Enemy : MonoBehaviour
                         // 每隔 5 秒执行一次 Boss技能 召集士兵
                         InvokeRepeating(nameof(BossSkill_CallSoldier), 5f, 10f);
 
-                        //快速攻击
-                        attackCooldown = 0.3f;
+
+                        attackCooldown = 0.3f;//皇太子亚历克西斯 快速攻击
 
                         break;
                     case 6:
                         BecomeBoss_Dominus();
 
                         // 每隔 5 秒执行一次 Boss技能 召集触手怪物
-                        //InvokeRepeating(nameof(BossSkill_CallTentacleMonster), 3f, 5f);
+                        InvokeRepeating(nameof(BossSkill_CallTentacleMonster), 3f, 5f);
+
+                        attackCooldown = 0.3f;//多米纳斯 快速攻击
 
                         break;
 
                     case 7:
                         BecomeBoss_DarkMage();
+
+                        //召唤暗影
                         InvokeRepeating(nameof(BossSkill_ToPlayerPlace), 5f, 10f);
 
                         break;
@@ -252,8 +268,9 @@ public class Enemy : MonoBehaviour
                         //随机延后喘息声
                         Invoke("Delay_Breath_Voice", Random.Range(1, 2.5f));
 
-                        //快速攻击
-                        attackCooldown = 0.3f;
+
+                        attackCooldown = 0.3f;//典狱长 快速攻击
+
 
                         break;
 
@@ -268,8 +285,8 @@ public class Enemy : MonoBehaviour
                         }//第六关的首席战斗修女不召集敌人
 
 
-                        //快速攻击
-                        attackCooldown = 0.3f;
+       
+                        attackCooldown = 0.3f;//首席战斗修女 快速攻击
 
                         break;
                 }
@@ -378,12 +395,12 @@ public class Enemy : MonoBehaviour
         switch (visionType)
         {
             case EnemyType.ShortRangeEnemy:
-                attackCooldown = 1f;
+                //attackCooldown = 1f;
                 enemyVision.circleCollider2D.radius = 1.5f;
                 break;
 
             case EnemyType.LongRangeEnemy:
-                attackCooldown = 1f;
+                //attackCooldown = 1f;
                 enemyVision.circleCollider2D.radius = 4f;
                 break;
         }
@@ -972,6 +989,7 @@ public class Enemy : MonoBehaviour
 
                         case EnemyClass.Man:
                         case EnemyClass.FleshArmor:
+                        case EnemyClass.Demon:
 
                             switch (Random.Range(1, 6))
                             {
@@ -1156,6 +1174,7 @@ public class Enemy : MonoBehaviour
         HermitCrab,
         RBQ,
         FleshArmor,
+        Demon,
     }
     public void ChangeClass(int c)
     {
@@ -1194,6 +1213,9 @@ public class Enemy : MonoBehaviour
             case 10:
                 Class = EnemyClass.FleshArmor;
                 break;
+            case 11:
+                Class = EnemyClass.Demon;
+                break;
         }
     }
 
@@ -1225,6 +1247,8 @@ public class Enemy : MonoBehaviour
                 return "RBQ_";
             case EnemyClass.FleshArmor:
                 return "FleshArmor_";
+            case EnemyClass.Demon:
+                return "Demon_";
             // 未来扩展：Tentacle, Demon 等
             default:
                 return "";
@@ -1301,7 +1325,7 @@ public class Enemy : MonoBehaviour
     {
         if (currentHealth > 0)
         {
-            if (Class == EnemyClass.Succubus || Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor) { anim.Play(GetAnimPrefix() + "Default_Idle"); return; }//只有魔族和变异体需要更改
+            if (Class == EnemyClass.Succubus || Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor || Class == EnemyClass.Demon) { anim.Play(GetAnimPrefix() + "Default_Idle"); return; }//只有魔族和变异体需要更改
 
             switch (visionType)
             {
@@ -1608,7 +1632,7 @@ public class Enemy : MonoBehaviour
         //队友使用玩家的攻击动画
         if (tag == "Friend")
         {
-            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor)
+            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor || Class == EnemyClass.Demon)
             {
                 anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
             }
@@ -1637,7 +1661,7 @@ public class Enemy : MonoBehaviour
         else
         {
 
-            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor)
+            if (Class == EnemyClass.Monster || Class == EnemyClass.Tentacle_Monster || Class == EnemyClass.Tentacle_Bug || Class == EnemyClass.Tentacle_Bag || Class == EnemyClass.Tentacle_HermitCrab || Class == EnemyClass.HermitCrab || Class == EnemyClass.RBQ || Class == EnemyClass.FleshArmor || Class == EnemyClass.Demon)
             {
                 anim.Play(GetAnimPrefix() + "attack_1", 0, 0);
             }
@@ -1752,6 +1776,7 @@ public class Enemy : MonoBehaviour
                 break;
             case EnemyClass.Man:
             case EnemyClass.FleshArmor:
+            case EnemyClass.Demon:
                 frameEvents._Man_attack();//男性
                 break;
 
@@ -2324,6 +2349,10 @@ public class Enemy : MonoBehaviour
 
             if (amount < 0)
             {
+                if (isIndestructible){ return; }//处于无敌状态不会被击伤
+
+
+
                 if (isPrecisionShooting)
                 {
                     Time.timeScale = 0;
@@ -2380,7 +2409,14 @@ public class Enemy : MonoBehaviour
 
 
                 } //赛琳娜瞬移技能
-                if (BossNumber == 7&&Random.Range(0,3)==0){ BossSkill_ToDarknessPlace(); return; }//黑魔导士传送暗影位置
+                if (BossNumber == 7&&Random.Range(0,3)==2)
+                {
+                    OpenIndestructible();//黑魔导士受伤1/3几率免疫伤害传送房间中央，并获得0.5秒无敌
+
+                    BossSkill_ToDarknessPlace(); 
+
+                    return;
+                }//黑魔导士传送暗影位置
 
                 if (currentHealth <= maxHealth / 4 && Class == EnemyClass.FleshArmor)
                 {
@@ -2411,6 +2447,27 @@ public class Enemy : MonoBehaviour
 
                 }//肉货二状态寄生虫钻出
 
+                if (currentHealth <= maxHealth / 4 && Class == EnemyClass.Demon)
+                {
+                    Class = EnemyClass.Man;
+                    Attack_Cancel();//重置攻击
+
+                    anim.Play("Man_Strike_Idle");//转换
+
+
+                    CurrentProfession = 0;
+                    ChangeType(CurrentProfession);//把CurrentProfession绑进去
+                    SetAttackRange();
+
+                    
+                    currentHealth = maxHealth;
+
+                    HudText.HUD(maxHealth);
+
+                    RunSpeed = 5;//瞬间提速
+
+
+                }//恶魔二状态
 
                 if (!isDie && currentHealth > 0 && amount != -currentHealth - 100)
                 {
@@ -2428,6 +2485,10 @@ public class Enemy : MonoBehaviour
                     }
 
                 }//防御
+
+
+             
+
 
                 //防护检测
                 amount += CurrentArmorDefence;
@@ -2589,7 +2650,7 @@ public class Enemy : MonoBehaviour
                     return;
                 }
 
-                if (Class == EnemyClass.FleshArmor|| Class == EnemyClass.RBQ) //肉货和肉铠状态下不死，只有转换成Man死
+                if (Class == EnemyClass.FleshArmor|| Class == EnemyClass.RBQ || Class == EnemyClass.Demon) //恶魔，肉货和肉铠状态下不死，只有转换成Man死
                 {
                     currentHealth = 100;//保留生命值，防止触发了别的currentHealth <= 0
                     return;
@@ -2607,7 +2668,14 @@ public class Enemy : MonoBehaviour
             {
 
                 int DamageType = Random.Range(0, 2);
+
                 if (TypeOfAttack == 6) { DamageType = 1; }//必定刮飞
+
+                if (Class == EnemyClass.FleshArmor || Class == EnemyClass.Demon)
+                {
+                    DamageType = 0;
+                }//这两种不会被击飞，但是被击中会停止移动
+
 
                 if (DamageType == 0)
                 {
@@ -2781,6 +2849,7 @@ public class Enemy : MonoBehaviour
                         break;
                     case EnemyClass.Man:
                     case EnemyClass.FleshArmor:
+                    case EnemyClass.Demon:
                         switch (Random.Range(0, 4))
                         {
                             case 0:
@@ -2860,6 +2929,7 @@ public class Enemy : MonoBehaviour
     public GameObject Assassinate;//暗杀
     public void CritialAttack()
     {
+        if (isIndestructible) { return; }//处于无敌状态不会被击伤
 
         if (BossNumber != 0 && BossSkillCoolDown_Move!) { return; }//Boss战中，在瞬移冷却中才能被重击到
 
@@ -2932,6 +3002,10 @@ public class Enemy : MonoBehaviour
 
                 case 5:
                     UIManager.instance.ShowDialogue("Boss_Alexis_Die");
+                    break;
+
+                case 6:
+                    UIManager.instance.ShowDialogue("Boss_Dominus_Die");
                     break;
 
                 case 7:
@@ -3226,8 +3300,8 @@ public class Enemy : MonoBehaviour
 
         Debug.Log($"{gameObject.name} has switched to Enemy.");
 
-        //队友攻击冷却
-        attackCooldown = 0.2f;
+
+        attackCooldown = 0.2f;//队友 快速攻击
     }
     #endregion
 
@@ -3494,7 +3568,7 @@ public class Enemy : MonoBehaviour
 
         SetSkin();
 
-        Class = EnemyClass.Man;
+        Class = EnemyClass.Demon;
 
         CurrentProfession = 0;
         ChangeType(CurrentProfession);//把CurrentProfession绑进去
@@ -3680,26 +3754,27 @@ public class Enemy : MonoBehaviour
     float BossSkillCoolDown_Timer = 3f;
     void BossSkill_Move()
     {
+        if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
 
-        if (!isRape)
-        {
-            wallmap.ChangeTargetPlace(gameObject);
 
-            GateEffect.SetActive(false);
-            GateEffect.SetActive(true);
-            Invoke("BossSkill_Move_CoolDown", BossSkillCoolDown_Timer);
-            BossSkillCoolDown_Timer += 1;//Boss的技能启动时间逐渐增加
+        wallmap.ChangeTargetPlace(gameObject);
 
-            ShootBullet();//闪避的同时攻击
+        GateEffect.SetActive(false);
+        GateEffect.SetActive(true);
+        Invoke("BossSkill_Move_CoolDown", BossSkillCoolDown_Timer);
+        BossSkillCoolDown_Timer += 1;//Boss的技能启动时间逐渐增加
 
-            BossSkill_ChangeMagic(Random.Range(2, 6));
+        ShootBullet();//闪避的同时攻击
 
-        }//针对王女Boss的Rape捕获锁
+        BossSkill_ChangeMagic(Random.Range(2, 6));
 
 
     }
     void BossSkill_Move_CoolDown()
     {
+        if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
+
+
         BossSkillCoolDown_Move = false;
 
         //魔族化后快速闪避快速近身
@@ -3751,7 +3826,7 @@ public class Enemy : MonoBehaviour
     }
     #endregion
 
-    #region  守卫队长技能  典狱长技能   首席战斗修女技能   皇太子亚历克西斯技能
+    #region  守卫队长技能  典狱长技能   首席战斗修女技能   皇太子亚历克西斯技能   宰相摩尔根技能    皇帝多米纳斯技能 
     //Boss技能  召集
     public bool BecomeSoldier_Man = false;//男性士兵
     public bool BecomeTentacleMonster = false;//触手怪物
@@ -3760,6 +3835,9 @@ public class Enemy : MonoBehaviour
 
     void BossSkill_CallSoldier()
     {
+
+        if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
+
 
         //如果场景内敌人少于4个，再召唤一群士兵
 
@@ -3788,6 +3866,8 @@ public class Enemy : MonoBehaviour
 
     void BossSkill_CallSoldier_Girl()
     {
+        if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
+
 
         //如果场景内敌人少于4个，再召唤一群士兵
 
@@ -3813,6 +3893,9 @@ public class Enemy : MonoBehaviour
 
     void BossSkill_CallTentacleMonster()
     {
+        if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
+
+
         //如果场景内敌人少于10个，再召唤一群触手怪
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -3827,6 +3910,10 @@ public class Enemy : MonoBehaviour
             case 4:
                 UIManager.instance.ShowDialogue("Boss_Morgan_Skill");
                 break;
+
+            case 6:
+                UIManager.instance.ShowDialogue("Boss_Dominus_Skill");
+                break;
         }
 
     }
@@ -3834,6 +3921,9 @@ public class Enemy : MonoBehaviour
 
     void BossSkill_CallFleshArmor() 
     {
+        if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
+
+
         //如果场景内敌人少于4个，再召唤一群肉铠
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -3858,32 +3948,26 @@ public class Enemy : MonoBehaviour
     #region  黑魔导士技能
     //Boss技能  追逐暗影
     public GameObject Darkness_Enemy;
+    public bool isIndestructible = false;//无敌
+    public GameObject Invincible_Mark;//处于无敌中标志
 
-    GameObject Darkness_Enemy_1, Darkness_Enemy_2;//短暂的记录自己生成的暗影
+    GameObject Darkness_Enemy_1;//短暂的记录自己生成的暗影
     public void BossSkill_CallDarkness() 
     {
+        if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
 
-        if (player.currentHealth <= 0) 
-        {
-            return;
-        }//玩家死后不再召唤
 
 
 
         //告诉自己生成的RBQ出生WallMap
         GameObject NewEnemy = Instantiate(Darkness_Enemy, transform.position, Quaternion.identity);
         NewEnemy.GetComponent<AIDestinationSetter>().target = player.transform;
-        NewEnemy.GetComponentInChildren<Spell>().Init(-20*player.Level,-1, false, 0);
+        NewEnemy.GetComponentInChildren<Spell>().Init(-50*player.Level,-1, false, 0);
         Darkness_Enemy_1 = NewEnemy;
         Destroy(NewEnemy, 0.7f);
 
 
-        GameObject NewEnemy2 = Instantiate(Darkness_Enemy, wallmap.transform.position, Quaternion.identity);
-        NewEnemy2.GetComponent<AIDestinationSetter>().target = player.transform;
-        NewEnemy2.GetComponentInChildren<Spell>().Init(-20 * player.Level, -1, false, 0);
-        Darkness_Enemy_2 = NewEnemy2;
 
-        Destroy(NewEnemy2, 0.7f);
 
 
         switch (BossNumber)
@@ -3893,56 +3977,55 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        Invoke(nameof(BossSkill_ToDarknessPlace), 1f);
+        Invoke(nameof(BossSkill_ToDarknessPlace), 2f);
+
+
     }
 
     public void BossSkill_ToPlayerPlace() 
     {
-        if (player.currentHealth <= 0)
-        {
-            return;
-        }//玩家死后不再传送
+        if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
 
         //传送到玩家身边释放暗影
         GateEffect.SetActive(true);
         transform.position = player.transform.position;
 
-        Invoke(nameof(BossSkill_CallDarkness), 1f);
+        Invoke(nameof(BossSkill_CallDarkness), 0.7f);
 
 
         ShowMagicEffect();//显示魔法阵召唤
+
+        OpenIndestructible();//黑魔导士每隔10秒，传送到玩家身边,0.5秒后召唤暗影近战攻击，2秒后传送回房间中央，这2.5秒期间无敌
     }
 
     //Boss技能  传送到暗影位置
     public void BossSkill_ToDarknessPlace() 
     {
-        GateEffect.SetActive(true);
-        if (Random.Range(0, 2) == 0)
-        {
-            if (Darkness_Enemy_1 != null)
-            {
-                transform.position = Darkness_Enemy_1.transform.position;
-            }
-            else
-            {
-                transform.position = wallmap.transform.position;
-            }
-           
-        }
-        else
-        {
-            if (Darkness_Enemy_2 != null)
-            {
-                transform.position = Darkness_Enemy_2.transform.position;
-            }
-            else
-            {
-                transform.position = wallmap.transform.position;
-            }
+        if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
 
-        }
-       
+        GateEffect.SetActive(true);
+
+
+
+        transform.position = wallmap.transform.position;
+
+
+        Invoke(nameof(CloseIndestructible), 0.5f);
     }
+
+
+    void OpenIndestructible() 
+    {
+        isIndestructible = true;
+        Invincible_Mark.SetActive(true);
+    }
+
+    void CloseIndestructible()
+    {
+        isIndestructible = false;
+        Invincible_Mark.SetActive(false);
+    }
+
     #endregion
 
     void OnDestroy()
