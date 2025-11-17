@@ -1569,6 +1569,7 @@ MonoBehaviour:
   - {fileID: 2434129601215260783}
   - {fileID: 1104986930769744855}
   SetOtherEnemy: 2
+  Dominus: {fileID: 5352310797343992206}
 --- !u!1 &534122661746035851
 GameObject:
   m_ObjectHideFlags: 0
@@ -19908,8 +19909,9 @@ MonoBehaviour:
   ShowColor: {fileID: 0}
   Enemy: {fileID: 6987948351437209287, guid: 91df628e27ab1ae488b2f947d3d59f07, type: 3}
   isBossRoom: 1
-  BossNumber: 6
+  BossNumber: 0
   isCreateBoss: 0
+  isDominusBossRoom: 1
   box: {fileID: 1977477479580785059}
 --- !u!61 &1977477479580785059
 BoxCollider2D:
@@ -51703,6 +51705,7 @@ MonoBehaviour:
   - {fileID: 204685002542241270}
   - {fileID: 6696536938788798547}
   SetOtherEnemy: 0
+  Dominus: {fileID: 0}
 --- !u!1 &6555549974019111680
 GameObject:
   m_ObjectHideFlags: 0
@@ -53681,10 +53684,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   J: "\u30C9\u30DF\u30CA\u30B9\uFF1D\u30F4\u30A1\u30EB\u30C9\u30EA\u30F3"
-  C_1: "\u591A\u7C73\u7EB3\u65AF"
-  C_2: "\u591A\u7C73\u7D0D\u65AF"
-  E: Dominus Valdrin
-  K: "\uB3C4\uBBF8\uB204\uC2A4 \uBC1C\uB4DC\uB9B0"
+  C_1: "\u7687\u5E1D\u591A\u7C73\u7EB3\u65AF"
+  C_2: "\u7687\u5E1D\u591A\u7C73\u7D0D\u65AF"
+  E: Emperor Dominus
+  K: "\uB3C4\uBBF8\uB204\uC2A4 \uD669\uC81C"
   isTyped: 0
 --- !u!114 &2545524548909820070
 MonoBehaviour:

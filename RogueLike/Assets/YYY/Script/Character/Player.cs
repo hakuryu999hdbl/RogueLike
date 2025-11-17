@@ -3228,6 +3228,7 @@ public class Player : MonoBehaviour
         anim.Play(GetAnimPrefix() + "Default_Die_2");
 
         Critical.SetActive(false);
+        Invincible_Mark.SetActive(false);
 
         UIManager.instance.Ending_UI();//损血死亡
 
@@ -3241,6 +3242,9 @@ public class Player : MonoBehaviour
         //死亡后BGM也变
         BGM.instance.Stop();
         BGM.instance.AudioPlayDungeonMusic(-1);
+
+
+        StopMakeChild();//关掉不停产卵功能
     }
 
 
@@ -3518,6 +3522,62 @@ public class Player : MonoBehaviour
       
     }
 
+
+    [Header("产卵")]
+    public GameObject Egg;
+    public GameObject Shadow;
+    public int FollowDamage;//0蛋  1影子
+
+    public Coroutine makeChildCoroutine;
+    public void StartMakeChild()
+    {
+        makeChildCoroutine = StartCoroutine(RandomlyTriggerMakeChild()); // 存储协程引用
+    }
+
+    public IEnumerator RandomlyTriggerMakeChild()
+    {
+        while (true)
+        {
+            // 随机等待时间（例如0.5到2秒之间）
+            float randomInterval = Random.Range(2f, 5f);
+            yield return new WaitForSeconds(randomInterval);
+
+            Childbirth();
+        }
+    }
+    public void Childbirth()
+    {
+
+        //GameObject Plant = Instantiate(Egg, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+
+        switch (FollowDamage) 
+        {
+            case 0:
+                GameObject Plant = Instantiate(Egg, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0f, 0f, 0f));
+                //// 将蛋沿着 Z 轴方向上升一点
+                Plant.transform.position += new Vector3(0, 0, -0.3f);
+                break;
+            case 1:
+                GameObject Plant2 = Instantiate(Shadow, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0f, 0f, 0f));
+                //// 将蛋沿着 Z 轴方向上升一点
+                Plant2.transform.position += new Vector3(0, 0, -0.3f);
+                break;
+        }
+
+      
+
+        //Destroy(Plant, 10f);//生下来的单不能太多
+    }
+
+    public void StopMakeChild()
+    {
+        if (makeChildCoroutine != null) // 确保协程引用有效
+        {
+            StopCoroutine(makeChildCoroutine); // 使用协程引用来停止协程
+            makeChildCoroutine = null; // 重置引用以避免重复调用
+            Debug.Log("关掉不停产卵");
+        }
+    }
 
 
     #endregion

@@ -2974,6 +2974,9 @@ MonoBehaviour:
   Hunting_Effect: {fileID: 1856272651}
   isFrozen: 0
   isBurning: 0
+  Egg: {fileID: 4824349615525433210, guid: 956762a3c001d524080efa17caf3971d, type: 3}
+  Shadow: {fileID: 3150298355007024579, guid: 06b7595fc9d2e934ca364632fc1d4f9d, type: 3}
+  FollowDamage: 0
 --- !u!4 &65564742
 Transform:
   m_ObjectHideFlags: 0

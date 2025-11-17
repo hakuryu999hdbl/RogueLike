@@ -124,6 +124,11 @@ public class Room : MonoBehaviour
     public int BossNumber;
     public bool isCreateBoss = false;//Boss只能刷一次
 
+    [Header("多米纳斯召唤模式")]
+    public bool isDominusBossRoom = false;         // inspector 勾选：这是皇帝最终战的房间                                               
+  
+
+
     private void OnTriggerEnter2D(Collider2D collision)//检测到玩家显示
     {
 
@@ -131,10 +136,24 @@ public class Room : MonoBehaviour
         {
             if (!isCreateBoss) 
             {
+              
+
+
                 // 在该点生成敌人
                 GameObject NewEnemy = Instantiate(Enemy, transform.position, Quaternion.identity);
                 Enemy enemyScript = NewEnemy.GetComponentInChildren<Enemy>();
-                enemyScript.BossNumber = BossNumber;
+                if (isDominusBossRoom)
+                {
+                    enemyScript.BecomeShadow();//召唤物
+ 
+                }
+                else
+                {
+                    enemyScript.BossNumber = BossNumber;       
+                }
+               
+
+               
 
                 //如果亚历克西斯在场，那么赛琳娜也在场
                 if (BossNumber == 5)
@@ -144,6 +163,8 @@ public class Room : MonoBehaviour
 
                 BGM.instance.Stop();
                 UIManager.instance.PlayBossMusic();//Boss出现才有声音
+
+
                 isCreateBoss = true;
             }
 

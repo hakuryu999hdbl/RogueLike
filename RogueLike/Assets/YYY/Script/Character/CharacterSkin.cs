@@ -69,6 +69,24 @@ public class CharacterSkin : MonoBehaviour
         skeletonAnimation.Skeleton.A = 1f; // 完全不透明
     }
 
+    public void SetBlack()
+    {
+        skeletonAnimation.Skeleton.SetColor(new Color(0f, 0f, 0f, 1f));
+
+    }//变黑
+
+    public void SetRed()
+    {
+        //skeletonAnimation.Skeleton.SetColor(new Color(1f, 0f, 0f, 1f));
+        skeletonAnimation.Skeleton.SetColor(new Color(0.3f, 0f, 0f, 1f));
+
+    }//变红
+
+    public void ResetColor()
+    {
+        skeletonAnimation.Skeleton.SetColor(Color.white);
+
+    }//恢复原来颜色
 
     #endregion
 

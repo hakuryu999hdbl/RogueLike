@@ -387,7 +387,7 @@ public class WallMap : MonoBehaviour
     public int SetOtherEnemy;//0不设置其他敌人  1设置男性士兵   2设置触手怪物   3女敌人   4肉铠
 
     //基础房间刷怪  Boss召唤刷怪   Boss房额外刷怪
-    public void SetEnemy(int EnemySkin=0)// 0随机  1男性士兵   2触手怪物  3女敌人  4肉铠
+    public void SetEnemy(int EnemySkin = 0)// 0随机  1男性士兵   2触手怪物  3女敌人  4肉铠
     {
         //上限
         int enemyToSpawn = Random.Range(1, 3);
@@ -402,10 +402,10 @@ public class WallMap : MonoBehaviour
         enemyToSpawn += GameFlowData.RoomLevel;
         Debug.Log("此房间敌人数量" + enemyToSpawn + "玩家进入房间数" + GameFlowData.RoomLevel);
 
-        if (enemyToSpawn > 7) { enemyToSpawn = 7; }
+        if (enemyToSpawn > 4) { enemyToSpawn = 4; }
 
 
-
+        if (isBossRoom) { enemyToSpawn = 1; }//Boss关卡，敌人只能刷1个
 
 
         for (int i = 0; i < enemyToSpawn; i++)
@@ -523,7 +523,7 @@ public class WallMap : MonoBehaviour
 
     #endregion
 
-
+    public GameObject Dominus;//多米纳斯纸板
 
     public void ChangeTargetPlace(GameObject MoveTarget)
     {

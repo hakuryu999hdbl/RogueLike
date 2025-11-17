@@ -54,6 +54,8 @@ public class Enemy : MonoBehaviour
             if (CanChangeSkin)
             {
 
+
+
                 switch (BossNumber)
                 {
                     default:
@@ -64,6 +66,10 @@ public class Enemy : MonoBehaviour
                         SetRandomSkin();
                         // 随机从 Enum 中选择一个值
                         Class = (EnemyClass)Random.Range(0, System.Enum.GetValues(typeof(EnemyClass)).Length);
+
+                        //小怪中暂时不出现Demon(不知道为什么会对多米纳斯召唤物产生影响)
+                        //if (Class == EnemyClass.Demon){ Class = EnemyClass.Man; }
+
 
                         if (BecomeSoldier_Man)
                         {
@@ -94,7 +100,7 @@ public class Enemy : MonoBehaviour
                                 case 4:
                                     Class = EnemyClass.Tentacle_HermitCrab;
                                     break;
-                            }
+                            }//多米纳斯Boss战
 
                             if(GameFlowData.nextScene == "Story_08")
                             {
@@ -122,7 +128,7 @@ public class Enemy : MonoBehaviour
                         //Class = EnemyClass.HermitCrab;
                         //Class = EnemyClass.RBQ;
                         //Class = EnemyClass.FleshArmor;
-
+                        //Class = EnemyClass.Demon;
 
 
 
@@ -211,8 +217,6 @@ public class Enemy : MonoBehaviour
 
 
 
-                        attackCooldown = 0.3f;//守卫队长 快速攻击
-
                         break;
                     case 2:
                         BecomeBoss_Selene();
@@ -238,7 +242,7 @@ public class Enemy : MonoBehaviour
                         InvokeRepeating(nameof(BossSkill_CallSoldier), 5f, 10f);
 
 
-                        attackCooldown = 0.3f;//皇太子亚历克西斯 快速攻击
+                     
 
                         break;
                     case 6:
@@ -247,7 +251,7 @@ public class Enemy : MonoBehaviour
                         // 每隔 5 秒执行一次 Boss技能 召集触手怪物
                         InvokeRepeating(nameof(BossSkill_CallTentacleMonster), 3f, 5f);
 
-                        attackCooldown = 0.3f;//多米纳斯 快速攻击
+                     
 
                         break;
 
@@ -269,7 +273,7 @@ public class Enemy : MonoBehaviour
                         Invoke("Delay_Breath_Voice", Random.Range(1, 2.5f));
 
 
-                        attackCooldown = 0.3f;//典狱长 快速攻击
+                    
 
 
                         break;
@@ -286,7 +290,7 @@ public class Enemy : MonoBehaviour
 
 
        
-                        attackCooldown = 0.3f;//首席战斗修女 快速攻击
+                       
 
                         break;
                 }
@@ -1062,8 +1066,11 @@ public class Enemy : MonoBehaviour
                     //隐藏血条
                     HudText.gameObject.SetActive(false);
 
+                    //变白(多米纳斯召唤物)
+                    characterSkin.ResetColor();
 
-
+                    //停止召唤物
+                    StopPressureField();
 
                     #region
                     // 只获取 YYY 部位的皮肤
@@ -2642,19 +2649,125 @@ public class Enemy : MonoBehaviour
 
             if (currentHealth <= 0)
             {
-                if (BossNumber==9&& CombatNunLife>0)//首席战斗修女不会死，直到把3个状态打完
+                if (isDominusSummon)//如果是多米纳斯的召唤物，那么不会死去，且切换下一个形态
+                {
+
+                    //每次复生都回到中央
+                    GateEffect.SetActive(true);
+                    transform.position = wallmap.transform.position;
+
+
+                    //if (currentSummonIndex >= dominusSummonBossList.Count)
+                    //{
+                    //    currentHealth = maxHealth;
+                    //    HudText.HUD(maxHealth);
+                    //    UpdateHealthBar(currentHealth, maxHealth);
+                    //
+                    //    // 没有可以再召唤的 Boss 了，准备让皇帝本体登场
+                    //    BecomeBoss_Dominus();
+                    //    InvokeRepeating(nameof(BossSkill_CallTentacleMonster), 3f, 5f);// 每隔 5 秒执行一次 Boss技能 召集触手怪物
+                    //
+                    //    characterSkin.ResetColor();
+                    //    return;
+                    //}
+
+                    if (dominusSummonBossList.Count > 0)
+                    {
+                        // 直接取第一个（按顺序）
+                        BossNumber = dominusSummonBossList[0];
+
+                        // 用完就移除
+                        dominusSummonBossList.RemoveAt(0);
+                    }
+                    else
+                    {
+                        // 列表空了 → 召唤皇帝本体
+                        BossNumber = 6;
+                    }
+
+                    currentSummonIndex++;
+
+
+                    // 在执行新的 Boss 初始化前，先取消所有旧的 Invoke
+                    //CancelInvoke();
+                    //CancelInvoke(nameof(BossSkill_CallSoldier));
+                    //CancelInvoke(nameof(BossSkill_CallSoldier_Girl));
+                    //CancelInvoke(nameof(BossSkill_CallFleshArmor));
+                    //CancelInvoke(nameof(BossSkill_ToPlayerPlace));
+                    //CancelInvoke(nameof(Delay_Breath_Voice));
+
+                    switch (BossNumber) 
+                    {
+                        case 1:
+                            BecomeBoss_Captain();
+                            InvokeRepeating(nameof(BossSkill_CallSoldier), 5f, 10f);  // 每隔 10 秒执行一次 Boss技能 召集士兵                           
+                            break;
+
+                        case 6:
+                            BecomeBoss_Dominus();
+                            InvokeRepeating(nameof(BossSkill_CallTentacleMonster), 5f, 10f);// 每隔 10 秒执行一次 Boss技能 召集触手怪物
+                            characterSkin.ResetColor();
+                            isDominusSummon = false;
+                            if (wallmap.Dominus != null){ Destroy(wallmap.Dominus);}
+
+                            break;
+
+
+                        case 7:
+                            BecomeBoss_DarkMage();
+                            InvokeRepeating(nameof(BossSkill_ToPlayerPlace), 5f, 10f);//召唤暗影
+                            break;
+
+
+                        case 8:
+                            BecomeBoss_Warden();       
+                            InvokeRepeating(nameof(BossSkill_CallFleshArmor), 5f, 10f);// 每隔 10 秒执行一次 Boss技能 召集肉铠
+                            Invoke("Delay_Breath_Voice", Random.Range(1, 2.5f)); //随机延后喘息声
+                            break;
+
+
+                        case 9:                                            
+                            BecomeBoss_CombatNun();
+                            InvokeRepeating(nameof(BossSkill_CallSoldier_Girl), 5f, 10f);// 每隔 10 秒执行一次 Boss技能 召集惩戒修女
+                            break;
+                    }
+
+                    if (BossNumber != 6)
+                    {
+                        BecomeShadow();//每次复生之后召唤
+                    }
+                    
+
+                    Invoke("DelayDialogue", Random.Range(0.5f, 2.5f));//召唤物台词
+
+                    isCallEnemy = false;//重刷
+                    anim.Play(GetAnimPrefix() + "Default_Idle");//每次切换完立即播放
+                    return;
+                }
+
+
+
+                if (BossNumber == 2)
+                {
+                    currentHealth = 100;//保留生命值，防止触发了别的currentHealth <= 0
+                    return;
+                }//防止玩家攻击力过高，一上来就把王女打死
+
+
+
+                if (BossNumber==9&& CombatNunLife>0)
                 {
                     currentHealth = maxHealth;//保留生命值，防止触发了别的currentHealth <= 0
                     CombatNunLife -= 1;
                     BecomeBoss_CombatNun();
                     return;
-                }
+                }//首席战斗修女不会死，直到把3个状态打完
 
-                if (Class == EnemyClass.FleshArmor|| Class == EnemyClass.RBQ || Class == EnemyClass.Demon) //恶魔，肉货和肉铠状态下不死，只有转换成Man死
+                if (Class == EnemyClass.FleshArmor|| Class == EnemyClass.RBQ || Class == EnemyClass.Demon) 
                 {
                     currentHealth = 100;//保留生命值，防止触发了别的currentHealth <= 0
                     return;
-                }
+                }//恶魔，肉货和肉铠状态下不死，只有转换成Man死
 
                 Die();//一般死亡
 
@@ -3311,10 +3424,15 @@ public class Enemy : MonoBehaviour
     /// </summary>
     #region
     [Header("Boss技能")]
-    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5魔族化皇太子   6魔族化皇帝    7魔族黑魔法法师   8典狱长  9首席战斗修女
+    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5皇太子   6皇帝    7黑魔导士   8典狱长  9首席战斗修女
 
     public void BecomeBoss_Captain()
     {
+
+        attackCooldown = 0.3f;//守卫队长 快速攻击
+
+
+
         YYY_headIndex = 6;
         YYY_eyesIndex = 6;
         YYY_bodyIndex = 10;
@@ -3354,8 +3472,8 @@ public class Enemy : MonoBehaviour
 
         maxHealth *= 3;
         currentHealth = maxHealth;
-
-    }//Boss 士兵队长
+        UpdateHealthBar(currentHealth, maxHealth);
+    }//Boss 士兵队长  3
 
     public void BecomeBoss_Morgan()
     {
@@ -3398,8 +3516,14 @@ public class Enemy : MonoBehaviour
 
         maxHealth *= 2;
         currentHealth = maxHealth;
+        UpdateHealthBar(currentHealth, maxHealth);
 
-    }//Boss 莫尔根侯爵（艾莉西亚躯体）
+
+
+        player.FollowDamage = 0;
+        player.StartMakeChild();//开始在玩家脚下生触手
+
+    }//Boss 莫尔根侯爵（艾莉西亚躯体）2
 
     public void BecomeBoss_Elicia()
     {
@@ -3409,20 +3533,11 @@ public class Enemy : MonoBehaviour
         anim.Play("HermitCrab_Default_Idle");
 
         currentHealth = maxHealth;
+        UpdateHealthBar(currentHealth, maxHealth);
         HudText.HUD(maxHealth);
-    }//艾莉西亚二状态，寄生虫钻出
+    }//Boss 艾莉西亚二状态，寄生虫钻出  1
 
-    public GameObject Egg;
-    public void BossSkill_Childbirth()
-    {
-
-        GameObject effectPrefabs_2 = Instantiate(Egg, transform.position, transform.rotation);
-        Egg.GetComponent<Plant_Tentacle>().isEgg = true;
-        Egg.GetComponent<Plant_Tentacle>().CheckEnemyAfter3Time();//3秒后毁灭的同时还要检查全体Enemytag
-        //Destroy(effectPrefabs_2, 3f);
-
-    }//艾莉西亚产卵
-
+  
 
 
 
@@ -3470,8 +3585,9 @@ public class Enemy : MonoBehaviour
 
         maxHealth *= 3;
         currentHealth = maxHealth;
+        UpdateHealthBar(currentHealth, maxHealth);
 
-    }//Boss 赛琳娜
+    }//Boss 赛琳娜  3
 
     public void BecomeBoss_Selene_2()
     {
@@ -3515,12 +3631,15 @@ public class Enemy : MonoBehaviour
 
         maxHealth = 1000;
         currentHealth = maxHealth;
-
+        UpdateHealthBar(currentHealth, maxHealth);
         HudText.HUD(maxHealth);
 
-    }//Boss 魔族化赛琳娜
+    }//Boss 魔族化赛琳娜  1
     public void BecomeBoss_Alexis()
     {
+
+        attackCooldown = 0.3f;//皇太子亚历克西斯 快速攻击
+
         Man_headIndex = 5;//皇子
         Man_bodyIndex = 5;//皇子
         Man_hatIndex = 5;//魔族角
@@ -3554,12 +3673,16 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        maxHealth *= 5;
+        maxHealth *= 4;
         currentHealth = maxHealth;
+        UpdateHealthBar(currentHealth, maxHealth);
 
-    }//Boss 亚历克西斯
+    }//Boss 亚历克西斯  4
+
     public void BecomeBoss_Dominus()
     {
+        attackCooldown = 0.3f;//多米纳斯 快速攻击
+
         Man_headIndex = 6;//皇帝
         Man_bodyIndex = 6;//皇帝
         Man_hatIndex = 5;//魔族角
@@ -3593,14 +3716,18 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        maxHealth *= 7;
-        currentHealth = maxHealth;
 
-    }//Boss 多米纳斯
+        maxHealth *= 4;
+        currentHealth = maxHealth;
+        UpdateHealthBar(currentHealth, maxHealth);
+
+        StartPressureField();//开始在自己脚下生气场
+
+    }//Boss 多米纳斯  4
 
     public void BecomeBoss_DarkMage()
     {
-
+        attackCooldown = 1f;//暗影法师 慢速攻击
 
         YYY_headIndex = 5;  // 粉毛
         YYY_eyesIndex = 11;
@@ -3638,17 +3765,20 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        maxHealth *= 3;
+        maxHealth *= 2;
         currentHealth = maxHealth;
-
+        UpdateHealthBar(currentHealth, maxHealth);
         HudText.HUD(maxHealth);
 
-    }//Boss 黑魔法法师
+        player.FollowDamage = 1;
+        player.StartMakeChild();//开始在玩家脚下生触手
+
+    }//Boss 黑魔法法师   2
 
     public void BecomeBoss_Warden() 
     {
-       
 
+        attackCooldown = 0.3f;//典狱长 快速攻击
 
         YYY_headIndex = Random.Range(1, 13);  // 除去皇女
         YYY_eyesIndex = Random.Range(1, 14);  // 1~13
@@ -3695,14 +3825,17 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        maxHealth *= 5;
+        maxHealth *= 4;
         currentHealth = maxHealth;
-
-    }//Boss典狱长
+        UpdateHealthBar(currentHealth, maxHealth);
+    }//Boss典狱长  4
 
     int CombatNunLife = 2;//先法师 再射手 最后近战  血越打越厚
     public void BecomeBoss_CombatNun()
     {
+        attackCooldown = 0.3f;//首席战斗修女 快速攻击
+
+
         YYY_headIndex = 4;
         YYY_eyesIndex = 6;
         YYY_bodyIndex = 7;
@@ -3740,12 +3873,12 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        maxHealth += 1000;
+        maxHealth += 500;
         currentHealth = maxHealth;
-
+        UpdateHealthBar(currentHealth, maxHealth);
         HudText.HUD(maxHealth);
 
-    }//Boss 首席战斗修女
+    }//Boss 首席战斗修女  ＋1/2  ＋1/2  ＋1/2
 
 
     #region 王女赛琳娜技能
@@ -3833,21 +3966,23 @@ public class Enemy : MonoBehaviour
     public bool BecomeSoldier_Girl = false;//女性士兵
     public bool BecomeFleshArmor = false;//肉铠
 
+
+    public bool isCallEnemy = false;//这类召集能力，只能召一次
     void BossSkill_CallSoldier()
     {
 
         if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
 
-
+        
         //如果场景内敌人少于4个，再召唤一群士兵
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies.Length <= 4)
+        if (enemies.Length <= 4&&!isCallEnemy)
         {
             wallmap.SetEnemy(1);//守卫队长召集男性士兵
             RoomGenerator.ShowInformationOfStage(-1);//敌人增援
 
-         
+            isCallEnemy = true;
         }
 
         switch (BossNumber)
@@ -3872,12 +4007,12 @@ public class Enemy : MonoBehaviour
         //如果场景内敌人少于4个，再召唤一群士兵
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies.Length <= 4)
+        if (enemies.Length <= 4 && !isCallEnemy)
         {
             wallmap.SetEnemy(3);//首席战斗修女召集惩戒修女
             RoomGenerator.ShowInformationOfStage(-1);//敌人增援
 
-
+            isCallEnemy = true;
         }
 
         switch (BossNumber)
@@ -3899,10 +4034,12 @@ public class Enemy : MonoBehaviour
         //如果场景内敌人少于10个，再召唤一群触手怪
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies.Length <= 10)
+        if (enemies.Length <= 4 && !isCallEnemy)
         {
             wallmap.SetEnemy(2);//未知Boss召唤触手怪
             RoomGenerator.ShowInformationOfStage(-1);//敌人增援
+
+            isCallEnemy = true;
         }
 
         switch (BossNumber)
@@ -3927,12 +4064,12 @@ public class Enemy : MonoBehaviour
         //如果场景内敌人少于4个，再召唤一群肉铠
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies.Length <= 4)
+        if (enemies.Length <= 4 && !isCallEnemy)
         {
             wallmap.SetEnemy(4);//召集肉铠
             RoomGenerator.ShowInformationOfStage(-1);//敌人增援
 
-
+            isCallEnemy = true;
         }
 
         switch (BossNumber)
@@ -3942,6 +4079,108 @@ public class Enemy : MonoBehaviour
                 break;
         }
     }
+
+    #endregion
+
+    #region  皇帝多米纳斯的召唤物  多米纳斯的压制气场
+    public bool isDominusSummon = false;   // 是否是皇帝的影子召唤
+    public void BecomeShadow() 
+    {
+        isDominusSummon = true;
+        characterSkin.SetBlack();
+
+
+      
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0:
+                Name.text = "ドミナスの召喚体";   // 日语
+                break;
+            case 1:
+                Name.text = "多米纳斯的召唤物";   // 简体中文
+                break;
+            case 2:
+                Name.text = "多米納斯的召喚物";   // 繁體中文
+                break;
+            case 3:
+                Name.text = "Dominus’s Summoned Entity";   // 英语
+                break;
+            case 4:
+                Name.text = "도미누스의 소환체";   // 韓語
+                break;
+        }
+
+        //保持低血量
+        maxHealth = 2000;
+        currentHealth = maxHealth;
+        UpdateHealthBar(currentHealth, maxHealth);
+        HudText.HUD(maxHealth);
+
+
+
+     
+
+    }
+    // 召唤用 Boss 列表
+    public List<int> dominusSummonBossList = new List<int> {1, 8, 9, 7 };
+    private int currentSummonIndex = 0;           // 已经用了几个
+
+
+
+    [Header("皇帝压制领域节点预制体")]
+    public GameObject pressureNodePrefab;
+    // 用于在皇帝脚下生成的黑红魔力震荡节点
+
+
+    private Coroutine pressureFieldCoroutine;
+
+    //启动皇帝的【压制领域】
+    public void StartPressureField()
+    {
+        pressureFieldCoroutine = StartCoroutine(PressureFieldRoutine());
+    }
+
+    // 不规律的压制节点生成循环
+    public IEnumerator PressureFieldRoutine()
+    {
+        while (true)
+        {
+            // 2～5 秒随机时间，模拟无法预测的魔力震荡
+            float randomInterval = Random.Range(2f, 5f);
+            yield return new WaitForSeconds(randomInterval);
+
+            SpawnPressureNode(); // 生成一次魔力震荡节点
+        }
+    }
+
+    // 在皇帝脚下生成压制节点
+    public void SpawnPressureNode()
+    {
+        GameObject node = Instantiate(
+        pressureNodePrefab,
+        transform.position,
+        Quaternion.identity
+    );
+
+        // 先指定父物体
+        node.transform.SetParent(transform);
+
+        // 再调整局部坐标（相对 Enemy 的偏移）
+        node.transform.localPosition += new Vector3(0f, 0f, -0.3f);
+    }
+    // 停止压制领域（死亡、剧情切换、形态变化时）
+    public void StopPressureField()
+    {
+        if (pressureFieldCoroutine != null)
+        {
+            StopCoroutine(pressureFieldCoroutine);
+            pressureFieldCoroutine = null;
+
+            Debug.Log("皇帝压制领域已停止");
+        }
+    }
+
+
 
     #endregion
 
@@ -4028,12 +4267,30 @@ public class Enemy : MonoBehaviour
 
     #endregion
 
+    #region  艾莉西亚技能
+    public GameObject Egg;
+    public void BossSkill_Childbirth()
+    {
+
+        GameObject effectPrefabs_2 = Instantiate(Egg, transform.position, transform.rotation);
+        Egg.GetComponent<Plant_Tentacle>().isEgg = true;
+
+        Destroy(effectPrefabs_2, 3f);
+
+    }//艾莉西亚产卵
+    #endregion
     void OnDestroy()
     {
         // Boss死亡时停止召唤
+
         CancelInvoke(nameof(BossSkill_CallSoldier));
         CancelInvoke(nameof(BossSkill_CallTentacleMonster));
+        CancelInvoke(nameof(BossSkill_CallSoldier_Girl));
         CancelInvoke(nameof(BossSkill_CallFleshArmor));
+        CancelInvoke(nameof(BossSkill_ToPlayerPlace));
+        CancelInvoke(nameof(Delay_Breath_Voice));
+
+        StopPressureField();
     }
     #endregion
 

@@ -17,13 +17,14 @@ public class Plant_Tentacle : MonoBehaviour
         {
             anim.Play("Tentacle_Wall_Fade_In");
         }
-        else if (isEgg)
+        else if (!isEgg)
         {
-            ToEgg();
+
+            Invoke("Birth", Random.Range(1, 3));//随机出现时间，给与层次不齐的感觉
         }
         else
         {
-            Invoke("Birth", Random.Range(1, 5));//随机出现时间，给与层次不齐的感觉
+            ToEgg();
         }
         
 
@@ -35,6 +36,9 @@ public class Plant_Tentacle : MonoBehaviour
     {
         anim.Play("Egg_In");
         Rebirth();
+
+
+        Invoke("Birth", 7);//7秒后，蛋长成触手
     }
 
     void Birth()
@@ -131,20 +135,10 @@ public class Plant_Tentacle : MonoBehaviour
 
         if (!isInvincible) 
         {
-
-
-            Invoke(nameof(Destroy),1f);
-
-           
-           
-
+            Invoke(nameof(Destroy),1f);//一般破坏
         }
 
     }
-    public void CheckEnemyAfter3Time() 
-    {
-        Invoke(nameof(Destroy), 3f);
-    }//生成的触手3秒后毁灭
 
 
     private bool isDestroyed = false;
