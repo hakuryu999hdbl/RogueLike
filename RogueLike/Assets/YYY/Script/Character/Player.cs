@@ -3525,7 +3525,6 @@ public class Player : MonoBehaviour
 
     [Header("产卵")]
     public GameObject Egg;
-    public GameObject Shadow;
     public int FollowDamage;//0蛋  1影子
 
     public Coroutine makeChildCoroutine;
@@ -3549,18 +3548,17 @@ public class Player : MonoBehaviour
     {
 
         //GameObject Plant = Instantiate(Egg, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
-
+        GameObject Plant = Instantiate(Egg, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0f, 0f, 0f));
+        //// 将蛋沿着 Z 轴方向上升一点
+        Plant.transform.position += new Vector3(0, 0, -0.3f);
+        Plant_Attack plant_Attack = Plant.GetComponent<Plant_Attack>();
         switch (FollowDamage) 
         {
             case 0:
-                GameObject Plant = Instantiate(Egg, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0f, 0f, 0f));
-                //// 将蛋沿着 Z 轴方向上升一点
-                Plant.transform.position += new Vector3(0, 0, -0.3f);
+                plant_Attack.FollowDamage = 0;
                 break;
             case 1:
-                GameObject Plant2 = Instantiate(Shadow, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0f, 0f, 0f));
-                //// 将蛋沿着 Z 轴方向上升一点
-                Plant2.transform.position += new Vector3(0, 0, -0.3f);
+                plant_Attack.FollowDamage = 1;
                 break;
         }
 

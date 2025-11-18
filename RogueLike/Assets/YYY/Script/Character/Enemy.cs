@@ -4167,6 +4167,14 @@ public class Enemy : MonoBehaviour
 
         // 再调整局部坐标（相对 Enemy 的偏移）
         node.transform.localPosition += new Vector3(0f, 0f, -0.3f);
+
+
+        Plant_Attack plant_Attack = node.GetComponent<Plant_Attack>();
+        plant_Attack.FollowDamage = 2;
+
+
+
+
     }
     // 停止压制领域（死亡、剧情切换、形态变化时）
     public void StopPressureField()
