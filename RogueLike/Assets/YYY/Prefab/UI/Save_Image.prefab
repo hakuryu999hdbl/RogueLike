@@ -1071,11 +1071,19 @@ MonoBehaviour:
   Clothes: {fileID: 4799342644362595533}
   Longhair: {fileID: 4933143733536582725}
   Ponytail: {fileID: 6563076561043876364}
+  Level_Icon: {fileID: 1893194244139262850}
   Weapon_Icon: {fileID: 5479352581417551637}
+  Clothes_Icon: {fileID: 354665109420668591}
+  Stocking_Icon: {fileID: 4281522095909589670}
   Sword: {fileID: 21300000, guid: 8a94126ae11e6274aa60fb446c3de550, type: 3}
   Arrow: {fileID: 21300000, guid: 4db5a1a6ee7ba8c45a7d43c359709f82, type: 3}
   Staff: {fileID: 21300000, guid: 4aa7673219dcb8b4983f730d1a0eefbf, type: 3}
-  Level_Icon: {fileID: 1893194244139262850}
+  None: {fileID: 21300000, guid: e7dbb2c157ef8fd4e9d86420c36a6ac7, type: 3}
+  targets:
+  - {fileID: 7848364752798450954}
+  - {fileID: 5864216414009757468}
+  - {fileID: 1141689402937616551}
+  - {fileID: 7215766154175506632}
   Data:
     characterName: 
     eyesIndex: 0
@@ -1095,6 +1103,9 @@ MonoBehaviour:
     armorDef: 0
     stockingDef: 0
     lastSavedTime: 
+    firstSavedDate: 
+    serviceCount: 0
+    defeatCount: 0
   highlightFrame: {fileID: 7004055314322624410}
   _Player: {fileID: 0}
   player: {fileID: 0}

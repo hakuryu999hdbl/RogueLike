@@ -2189,6 +2189,17 @@ public class UIManager : MonoBehaviour
 
 
 
+        // 1) 每日登录触发：若是新的一天 -> 给所有存档+接客并返回总收益
+        if (DailyLogin.TryGrantForToday(perServiceReward, out int added, out int income))
+        {
+            if (income > 0)
+                ChangeMoney(income); // ★ 发钱一次
+        }
+
+        // 3)（可选）如果当前在调教所界面，显示今日统计绿字
+        UpdateCgDailyTexts();
+
+
     }//读取，显示存档
 
     #region 当前选中的是不是露娜
@@ -2329,8 +2340,9 @@ public class UIManager : MonoBehaviour
 
     }//点击【＋】就会随机存档
 
-    public void RefreshSaveSlots()//新增存档，新增存档时更换名字，新增存档时更换皮肤，删除存档
+    public void RefreshSaveSlots()//新增存档，新增存档时更换名字，新增存档时更换皮肤，删除存档,播放CG
     {
+
         saveSlots.Clear();  // 清空之前列表
 
         // 清除已有的
@@ -2786,6 +2798,17 @@ public class UIManager : MonoBehaviour
         }
 
         CG_BackButton.SetActive(true);//显示CG观赏后退按钮
+
+        //增加接客侍奉次数记录
+        //player.currentSaveName = currentSelectedSlot.Data.characterName;//先带进去,让存档
+        //player.ServiceCount();
+        //
+        ////唯一需要实时更新的
+        //RefreshSaveSlots();
+
+        //currentSelectedSlot.Choose();
+        //currentSelectedSlot.CurrentArmorDefence.text = currentSelectedSlot.Data.serviceCount.ToString();
+        //currentSelectedSlot.SetInfo(currentSelectedSlot.Data, skinParts);
     }
 
     #endregion
@@ -4834,5 +4857,145 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    /// 每日自动接客
+    /// </summary>
+    #region
+    public static class DailyLogin
+    {
+        const string LAST_LOGIN_KEY = "LastLoginDate";
+        const string TODAY_COUNT_KEY = "TodayServiceAdded";
+        const string TODAY_INCOME_KEY = "TodayServiceIncome";
+        const string TODAY_STATS_DATE_KEY = "TodayStatsDate";
 
+        static string Today() => System.DateTime.Now.ToString("yyyy-MM-dd");
+
+        public static bool IsNewDay()
+        {
+            string last = PlayerPrefs.GetString(LAST_LOGIN_KEY, "");
+            return last != Today();
+        }
+
+        /// <summary>
+        /// 结算：若是新的一天，则为所有存档随机 +0~3 接客，返回总新增与总收益，并写入 PlayerPrefs。
+        /// </summary>
+        public static bool TryGrantForToday(int perServiceReward, out int totalAdded, out int totalIncome)
+        {
+            totalAdded = 0;
+            totalIncome = 0;
+
+            if (!IsNewDay())
+            {
+                // 同一天重复进入：从 PlayerPrefs 取回已记的统计，方便 UI 显示
+                if (PlayerPrefs.GetString(TODAY_STATS_DATE_KEY, "") == Today())
+                {
+                    totalAdded = PlayerPrefs.GetInt(TODAY_COUNT_KEY, 0);
+                    totalIncome = PlayerPrefs.GetInt(TODAY_INCOME_KEY, 0);
+                }
+                return false;
+            }
+
+            string folder = Application.persistentDataPath + "/Saves/";
+            if (Directory.Exists(folder))
+            {
+                foreach (var file in Directory.GetFiles(folder, "save_*.json"))
+                {
+                    var json = File.ReadAllText(file);
+                    var data = JsonUtility.FromJson<PlayerSaveData>(json);
+                    if (data == null || string.IsNullOrEmpty(data.characterName)) continue;
+
+                    int add = UnityEngine.Random.Range(0, 4); // 0~3
+                    if (add > 0)
+                    {
+                        if (data.serviceCount < 0) data.serviceCount = 0;
+                        data.serviceCount += add;
+                        File.WriteAllText(file, JsonUtility.ToJson(data, true));
+                    }
+                    totalAdded += add;
+                }
+            }
+
+            totalIncome = Mathf.Max(0, totalAdded * Mathf.Max(0, perServiceReward));
+
+            // 标记今天 & 记录今日统计
+            PlayerPrefs.SetString(LAST_LOGIN_KEY, Today());
+            PlayerPrefs.SetString(TODAY_STATS_DATE_KEY, Today());
+            PlayerPrefs.SetInt(TODAY_COUNT_KEY, totalAdded);
+            PlayerPrefs.SetInt(TODAY_INCOME_KEY, totalIncome);
+            PlayerPrefs.Save();
+
+            return true;
+        }
+
+        /// <summary>读取今日统计（非新的一天也可用来显示 UI）。</summary>
+        public static void GetTodayStats(out int totalAdded, out int totalIncome)
+        {
+            if (PlayerPrefs.GetString(TODAY_STATS_DATE_KEY, "") == Today())
+            {
+                totalAdded = PlayerPrefs.GetInt(TODAY_COUNT_KEY, 0);
+                totalIncome = PlayerPrefs.GetInt(TODAY_INCOME_KEY, 0);
+            }
+            else
+            {
+                totalAdded = 0; totalIncome = 0;
+            }
+        }
+    }
+
+    // 配置：每次接客的收益（你也可以从配置表/难度读取）
+    [SerializeField] int perServiceReward = 30;
+
+    // 如果你只在“调教所界面（GameFlowData.nextScene == CG）”显示绿字：
+    // 拖引用两个 Text（绿色样式）
+    [SerializeField] UnityEngine.UI.Text cgServiceCountText;
+    [SerializeField] UnityEngine.UI.Text cgServiceIncomeText;
+
+   
+    public void UpdateCgDailyTexts()
+    {
+        bool isCG = string.Equals(GameFlowData.nextScene, "CG", System.StringComparison.OrdinalIgnoreCase);
+
+        if (cgServiceCountText != null) cgServiceCountText.gameObject.SetActive(isCG);
+        if (cgServiceIncomeText != null) cgServiceIncomeText.gameObject.SetActive(isCG);
+
+        if (!isCG) return;
+
+        DailyLogin.GetTodayStats(out int added, out int income);
+        int lang = PlayerPrefs.GetInt("language", 1);
+
+        string sCount, sIncome;
+        switch (lang)
+        {
+            case 0: // JP
+                sCount = $"本日の接客数：{added}人";
+                sIncome = $"本日の収益：+{income}";
+                break;
+            case 1: // ZH-CN
+                sCount = $"今天总接客数：{added}人";
+                sIncome = $"今天总接客收益：＋{income}";
+                break;
+            case 2: // ZH-TW
+                sCount = $"今日總接客數：{added}人";
+                sIncome = $"今日收益：＋{income}";
+                break;
+            case 3: // EN
+                sCount = $"Today's services: {added}";
+                sIncome = $"Today's income: +{income}";
+                break;
+            case 4: // KO
+                sCount = $"오늘 접객 수: {added}명";
+                sIncome = $"오늘 수입: +{income}";
+                break;
+            default:
+                sCount = $"今天总接客数：{added}人";
+                sIncome = $"今天总接客收益：＋{income}";
+                break;
+        }
+
+        if (cgServiceCountText) cgServiceCountText.text = sCount;
+        if (cgServiceIncomeText) cgServiceIncomeText.text = sIncome;
+    }
+
+
+    #endregion
 }

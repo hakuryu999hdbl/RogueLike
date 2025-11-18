@@ -33,4 +33,11 @@ public class PlayerSaveData
     public int stockingDef;
 
     public string lastSavedTime; // 存档时间记录
+
+
+    //调教所数值
+    public string firstSavedDate;   // 第一次创建的日期（YYYY-MM-DD）
+
+    public int serviceCount;        // 接客次数
+    public int defeatCount;         // 战败次数
 }

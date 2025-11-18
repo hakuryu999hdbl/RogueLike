@@ -44,9 +44,11 @@ public class SaveSlotUI : MonoBehaviour
     public Image Longhair;
     public Image Ponytail;
     [Header("武器小图标切换")]
-    public Image Weapon_Icon;
-    public Sprite Sword, Arrow, Staff;
     public Image Level_Icon;
+    public Image Weapon_Icon,Clothes_Icon,Stocking_Icon;
+    public Sprite Sword, Arrow, Staff; public Sprite None;//用于不表示
+
+    public List<GameObject> targets;
 
     [Header("存档数值本身")]
     public PlayerSaveData Data;//大家需要通过UIManager找你
@@ -69,6 +71,7 @@ public class SaveSlotUI : MonoBehaviour
     public void SetInfo(PlayerSaveData data, SkinPartsDatabase database)
     {
         Data = data;
+
 
         //需要展示名称，暂时记录
         WeaponID = Data.weaponIndex;
@@ -189,6 +192,72 @@ public class SaveSlotUI : MonoBehaviour
                 Level_Icon.sprite = database.LevelSprites[7];
                 break;
         }
+
+
+
+
+        if (GameFlowData.nextScene == "CG")
+        {
+            switch (PlayerPrefs.GetInt("language"))
+            {
+                case 0: // Japanese
+                    CurrentWeapon.text = "監禁調教日数";
+                    CurrentArmor.text = "接客奉仕回数";
+                    CurrentStocking.text = "敗北凌辱回数";
+                    break;
+
+                case 1: // Simplified Chinese
+                    CurrentWeapon.text = "监禁调教天数";
+                    CurrentArmor.text = "接客侍奉次数";
+                    CurrentStocking.text = "战败凌辱次数";
+                    break;
+
+                case 2: // Traditional Chinese
+                    CurrentWeapon.text = "監禁調教天數";
+                    CurrentArmor.text = "接客侍奉次數";
+                    CurrentStocking.text = "戰敗凌辱次數";
+                    break;
+
+                case 3: // English
+                    CurrentWeapon.text = "Captivity Days";
+                    CurrentArmor.text = "Service Count";
+                    CurrentStocking.text = "Defeat/Humiliation Count";
+                    break;
+
+                case 4: // Korean
+                    CurrentWeapon.text = "감금 조교 일수";
+                    CurrentArmor.text = "접객 봉사 횟수";
+                    CurrentStocking.text = "패배 능욕 횟수";
+                    break;
+
+            }
+
+
+            int jailDays = SaveManager.DateUtil.DaysSinceYYYYMMDD(data.firstSavedDate);
+            CurrentWeaponPower.text = jailDays.ToString();//监禁天数
+            CurrentArmorDefence.text = Data.serviceCount.ToString();//接客次数
+            CurrentStockingDefence.text = Data.defeatCount.ToString();//战败次数
+
+
+
+            //这些数字保持白色
+            CurrentWeapon.color = Color.white;
+            CurrentArmor.color = Color.white;
+            CurrentStocking.color = Color.white;
+            CurrentWeaponPower.color = Color.white;
+            CurrentArmorDefence.color = Color.white;
+            CurrentStockingDefence.color = Color.white;
+
+
+            Weapon_Icon.sprite = None;
+            Clothes_Icon.sprite = None;
+            Stocking_Icon.sprite = None;
+
+            //把上方数值也隐藏
+            foreach (var go in targets)
+                if (go) go.SetActive(false);
+        }  
+
 
         highlightFrame.SetActive(false); // 初始隐藏
     }//导入皮肤
@@ -447,6 +516,9 @@ public class SaveSlotUI : MonoBehaviour
 
 
     #endregion
+
+
+
 
     #endregion
 

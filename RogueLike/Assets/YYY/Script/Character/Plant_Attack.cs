@@ -43,14 +43,16 @@ public class Plant_Attack : MonoBehaviour
         switch(FollowDamage) 
         {
             case 0:
-                anim.gameObject.SetActive(true);
+               
                 anim.Play("Tentacle_Attack");
                 DustEffect.SetActive(true);
                 break;
             case 1:
+                anim.gameObject.SetActive(false);
                 Shadow.SetActive(true);
                 break;
             case 2:
+                anim.gameObject.SetActive(false);
                 DustEffect.SetActive(true);
                 break;
         }

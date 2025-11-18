@@ -3223,28 +3223,36 @@ public class Player : MonoBehaviour
 
     public void Die() 
     {
-        isDie = true;
 
-        anim.Play(GetAnimPrefix() + "Default_Die_2");
-
-        Critical.SetActive(false);
-        Invincible_Mark.SetActive(false);
-
-        UIManager.instance.Ending_UI();//损血死亡
-
-        UIManager.instance._RoomGenerator.MissionIcon(false);
-
-        if (GameFlowData.nextScene == "Arena")
+        if (!isDie) //只触发一次
         {
-            Invoke(nameof(ArenaMode_ShowBestWave), 1.5f);
+            anim.Play(GetAnimPrefix() + "Default_Die_2");
+
+            Critical.SetActive(false);
+            Invincible_Mark.SetActive(false);
+
+            UIManager.instance.Ending_UI();//损血死亡
+
+            UIManager.instance._RoomGenerator.MissionIcon(false);
+
+            if (GameFlowData.nextScene == "Arena")
+            {
+                Invoke(nameof(ArenaMode_ShowBestWave), 1.5f);
+            }
+
+            //死亡后BGM也变
+            BGM.instance.Stop();
+            BGM.instance.AudioPlayDungeonMusic(-1);
+
+
+            StopMakeChild();//关掉不停产卵功能
+
+            //增加战败凌辱次数记录
+            DefeatCount();
+
+            isDie = true;
         }
-
-        //死亡后BGM也变
-        BGM.instance.Stop();
-        BGM.instance.AudioPlayDungeonMusic(-1);
-
-
-        StopMakeChild();//关掉不停产卵功能
+       
     }
 
 
@@ -3580,6 +3588,24 @@ public class Player : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// 增加战败凌辱/侍奉次数等数值
+    /// </summary>
+    #region
+    public void DefeatCount()
+    {
+        PlayerSaveData data = SaveManager.Load(currentSaveName);
+        data.defeatCount += 1;
+        //ApplySaveData(data);//升级将更新后的值重新带入
+        SaveManager.Save(data);
+    }
+    public void ServiceCount() 
+    {
 
-
+        PlayerSaveData data = SaveManager.Load(currentSaveName);
+        data.serviceCount += 1;
+        //ApplySaveData(data);//升级将更新后的值重新带入
+        SaveManager.Save(data);
+    }
+    #endregion
 }

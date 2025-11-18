@@ -15,6 +15,12 @@ public static class SaveManager
         if (!Directory.Exists(saveFolder))
             Directory.CreateDirectory(saveFolder);
 
+
+        // 仅在缺失时补一次，避免后续覆盖
+        if (string.IsNullOrEmpty(data.firstSavedDate))
+            data.firstSavedDate = DateTime.Now.ToString("yyyy-MM-dd");
+
+
         data.lastSavedTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         string json = JsonUtility.ToJson(data, true);
         string path = saveFolder + "save_" + data.characterName + ".json";
@@ -144,5 +150,20 @@ public static class SaveManager
             }
         }
         return result;
+    }
+
+
+    /// <summary>
+    /// 计算监禁天数小工具
+    /// </summary>
+    public static class DateUtil
+    {
+        public static int DaysSinceYYYYMMDD(string yyyyMMdd)
+        {
+            if (string.IsNullOrEmpty(yyyyMMdd)) return 0;
+            if (DateTime.TryParse(yyyyMMdd, out var d))
+                return Mathf.Max(0, (int)(DateTime.Now.Date - d.Date).TotalDays);
+            return 0;
+        }
     }
 }
