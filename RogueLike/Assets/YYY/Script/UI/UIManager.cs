@@ -2200,6 +2200,12 @@ public class UIManager : MonoBehaviour
         UpdateCgDailyTexts();
 
 
+
+        // 读取当前难度，默认 0（简单）
+        currentDifficulty = PlayerPrefs.GetInt(PREF_KEY, 0);
+        UpdateDifficultyUI();
+
+
     }//读取，显示存档
 
     #region 当前选中的是不是露娜
@@ -3424,6 +3430,19 @@ public class UIManager : MonoBehaviour
                     UpdateModePage_Highlight();
 
 
+                }
+
+
+                // 当前菜单项内的上下切换
+                if (dir.y > 0.5f)
+                {
+
+                    NextDifficulty();
+                }
+                else if (dir.y < -0.5f)
+                {
+
+                    PrevDifficulty();
                 }
             }
 
@@ -4998,4 +5017,67 @@ public class UIManager : MonoBehaviour
 
 
     #endregion
+
+
+    /// <summary>
+    /// 切换难度
+    /// </summary>
+    #region
+    [Header("难度显示 Text")]
+    public GameObject  easyText;       // Easy
+    public GameObject commonText;     // Common / Normal
+    public GameObject difficultText;  // Difficult / Hard
+
+
+    private int currentDifficulty; // 0:Easy 1:Common 2:Difficult
+    private const string PREF_KEY = "Difficulty";
+
+
+
+    public void NextDifficulty()
+    {
+        currentDifficulty++;
+        if (currentDifficulty > 2) currentDifficulty = 0; // 循环
+        PlayerPrefs.SetInt(PREF_KEY, currentDifficulty);
+        PlayerPrefs.Save();
+        UpdateDifficultyUI();
+    }
+
+
+    public void PrevDifficulty()
+    {
+        currentDifficulty--;
+        if (currentDifficulty < 0) currentDifficulty = 2; // 循环
+        PlayerPrefs.SetInt(PREF_KEY, currentDifficulty);
+        PlayerPrefs.Save();
+        UpdateDifficultyUI();
+    }
+
+
+    private void UpdateDifficultyUI()
+    {
+       
+        switch (currentDifficulty)
+        {
+            case 0: // Easy
+                easyText.SetActive(true);
+                commonText.SetActive(false);
+                difficultText.SetActive(false);
+                break;
+
+            case 1: // Common
+                easyText.SetActive(false);
+                commonText.SetActive(true);
+                difficultText.SetActive(false);
+                break;
+
+            case 2: // Difficult
+                easyText.SetActive(false);
+                commonText.SetActive(false);
+                difficultText.SetActive(true);
+                break;
+        }
+    }
+    #endregion
+
 }

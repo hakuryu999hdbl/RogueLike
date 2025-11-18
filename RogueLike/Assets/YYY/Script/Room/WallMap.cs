@@ -405,7 +405,7 @@ public class WallMap : MonoBehaviour
         if (enemyToSpawn > 4) { enemyToSpawn = 4; }
 
 
-        if (isBossRoom) { enemyToSpawn = 1; }//Boss关卡，敌人只能刷1个
+        if (isBossRoom&& PlayerPrefs.GetInt("Difficulty")==0) { enemyToSpawn = 1; }//Boss关卡，敌人只能刷1个,简单难度下
 
 
         for (int i = 0; i < enemyToSpawn; i++)

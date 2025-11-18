@@ -303,19 +303,75 @@ public class Enemy : MonoBehaviour
             //ToDo:削减敌人攻击力加成
             //根据玩家当前的等级赋予敌人生命值，攻击力等
 
-            CurrentWeaponPower = player.Level * Random.Range(10, 20);
-            
-            //近战攻击修改
-            MeleeDamage = 100 + player.Level * 10;
-            strike.Damage = -CurrentWeaponPower - MeleeDamage;
-            //远程攻击修改
-            ShootDamage = CurrentWeaponPower + 100 + player.Level * 10;
-            //攻击修改
-            SpellDamage = CurrentWeaponPower + 100 + player.Level * 10;
+            //CurrentWeaponPower = player.Level * Random.Range(10, 20);
+            //
+            ////近战攻击修改
+            //MeleeDamage = 100 + player.Level * 10;
+            //strike.Damage = -CurrentWeaponPower - MeleeDamage;
+            ////远程攻击修改
+            //ShootDamage = CurrentWeaponPower + 100 + player.Level * 10;
+            ////攻击修改
+            //SpellDamage = CurrentWeaponPower + 100 + player.Level * 10;
+            //
+            //
+            //maxHealth += player.Level * 200;
+            //currentHealth = maxHealth;
 
 
-            maxHealth += player.Level * 200;
+
+
+
+
+            // ==== 难度系数 ==== 
+            int difficulty = PlayerPrefs.GetInt("Difficulty", 0); // 0=简单,1=一般,2=困难
+
+            float damageMul = 1f;
+            float hpMul = 1f;
+
+            switch (difficulty)
+            {
+                case 0: // 简单
+                    damageMul = 0.7f;
+                    hpMul = 0.8f;
+                    break;
+
+                case 1: // 一般
+                    damageMul = 1f;
+                    hpMul = 1f;
+                    break;
+
+                case 2: // 困难
+                    damageMul = 1.3f;
+                    hpMul = 1.3f;
+                    break;
+            }
+
+            // ==== 原有公式 + 难度加成 ====
+            // 注意：这里先算“基础值”，最后乘难度，再四舍五入成 int
+
+            // 武器基础威力（给远程/法术用）
+            int baseWeaponPower = player.Level * Random.Range(10, 20);
+            CurrentWeaponPower = Mathf.RoundToInt(baseWeaponPower * damageMul);
+
+            // 近战伤害
+            int baseMelee = 100 + player.Level * 10;
+            MeleeDamage = Mathf.RoundToInt(baseMelee * damageMul);
+            strike.Damage = -(CurrentWeaponPower + MeleeDamage);  // 仍然是负数扣血
+
+            // 远程攻击
+            int baseShoot = baseWeaponPower + 100 + player.Level * 10;
+            ShootDamage = Mathf.RoundToInt(baseShoot * damageMul);
+
+            // 法术攻击
+            int baseSpell = baseWeaponPower + 100 + player.Level * 10;
+            SpellDamage = Mathf.RoundToInt(baseSpell * damageMul);
+
+            // 生命值（先在基础上加等级再乘 hpMul）
+            int baseHpGain = player.Level * 200;
+            maxHealth += Mathf.RoundToInt(baseHpGain * hpMul);
             currentHealth = maxHealth;
+
+
 
         }//如果已经赋值了队友，那么不随机
 
@@ -3135,12 +3191,57 @@ public class Enemy : MonoBehaviour
             }
 
 
-            //敌人受伤玩家获取经验
-            player.ChangeExperience(100);
+           
             //击杀敌人获得金币
             if (tag != "Friend")
             {
-                UIManager.instance.ChangeMoney(Random.Range(10, 30));
+
+                int difficulty = PlayerPrefs.GetInt("Difficulty", 0); // 0=Easy,1=Common,2=Difficult
+                float rewardMultiplier = 1f;
+
+                // 根据难度决定收益倍率
+                switch (difficulty)
+                {
+                    case 0: rewardMultiplier = 1f; break; // 简单
+                    case 1: rewardMultiplier = 1.5f; break; // 一般
+                    case 2: rewardMultiplier = 2f; break; // 困难
+                }
+
+                // Boss死亡处理
+                switch (BossNumber)
+                {
+                    case 0:
+                        //一般敌人
+                        player.ChangeExperience((int)(100 * rewardMultiplier));
+                        UIManager.instance.ChangeMoney((int)(Random.Range(10, 30) * rewardMultiplier));
+                        break;
+
+                    case 1:
+                    case 4:
+                    case 5:
+                    case 8:
+                        //一般Boss
+                        player.ChangeExperience((int)(500 * rewardMultiplier));
+                        UIManager.instance.ChangeMoney((int)(Random.Range(50, 150) * rewardMultiplier));
+                        break;
+
+                    case 2:
+                    case 3:
+                    case 7:
+                    case 9:
+                        //特殊Boss
+                        player.ChangeExperience((int)(1000 * rewardMultiplier));
+                        UIManager.instance.ChangeMoney((int)(Random.Range(100, 300) * rewardMultiplier));
+                        break;
+
+                    case 6:
+                        //最终Boss
+                        player.ChangeExperience((int)(1500 * rewardMultiplier));
+                        UIManager.instance.ChangeMoney((int)(Random.Range(150, 450) * rewardMultiplier));
+                        break;
+                }
+
+
 
                 //人类高等精灵高等魔族具有【狩猎】
                 switch (player.YYY_hatIndex) 
@@ -3973,6 +4074,8 @@ public class Enemy : MonoBehaviour
 
         if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
 
+
+        if (PlayerPrefs.GetInt("Difficulty") == 2) { isCallEnemy = false; }//困难模式下无限刷
         
         //如果场景内敌人少于4个，再召唤一群士兵
 
@@ -4004,6 +4107,8 @@ public class Enemy : MonoBehaviour
         if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
 
 
+        if (PlayerPrefs.GetInt("Difficulty") == 2) { isCallEnemy = false; }//困难模式下无限刷
+
         //如果场景内敌人少于4个，再召唤一群士兵
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -4030,6 +4135,8 @@ public class Enemy : MonoBehaviour
     {
         if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
 
+
+        if (PlayerPrefs.GetInt("Difficulty") == 2) { isCallEnemy = false; }//困难模式下无限刷
 
         //如果场景内敌人少于10个，再召唤一群触手怪
 
@@ -4060,6 +4167,8 @@ public class Enemy : MonoBehaviour
     {
         if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
 
+
+        if (PlayerPrefs.GetInt("Difficulty") == 2) { isCallEnemy = false; }//困难模式下无限刷
 
         //如果场景内敌人少于4个，再召唤一群肉铠
 
