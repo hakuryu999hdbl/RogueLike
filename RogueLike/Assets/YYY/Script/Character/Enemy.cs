@@ -4454,6 +4454,7 @@ public class Enemy : MonoBehaviour
                 break;
 
             case "CG_AVG_07":
+            case "CG_AVG_08":
                 anim.SetBool("is_Girl_CarryUp_Side", true);//惩戒修女牵着
                 break;
         }
@@ -4509,7 +4510,9 @@ public class Enemy : MonoBehaviour
             case "CG_AVG_07":
                 anim.Play("RBQ_Punish_Crucifixion_2");//倒十字肉圣物  
                 break;
-
+            case "CG_AVG_08":
+                anim.Play("RBQ_Punish_Hang_2");//鞭打榨精
+                break;
         }
 
         switch (SideOrFront)
@@ -4632,6 +4635,11 @@ public class Enemy : MonoBehaviour
 
                 }
                 break;
+
+            case "CG_AVG_08":
+                anim.Play("RBQ_Punish_Hang");//鞭打榨精
+
+                break;
         }
 
     }//正面强奸
@@ -4729,6 +4737,11 @@ public class Enemy : MonoBehaviour
                         break;
                   
                 }
+
+                break;
+
+            case "CG_AVG_08":
+                anim.Play("RBQ_Punish_Hang");//鞭打榨精
 
                 break;
         }

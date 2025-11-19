@@ -77,6 +77,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Japanese/J_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Japanese/J_CG_4"));
                 textAssets.Add(107, Resources.Load<TextAsset>("TXT_Japanese/J_CG_7"));
+                textAssets.Add(108, Resources.Load<TextAsset>("TXT_Japanese/J_CG_8"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Japanese/J_Story_1"));
@@ -101,6 +102,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_4"));
                 textAssets.Add(107, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_7"));
+                textAssets.Add(108, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_8"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_1"));
@@ -125,6 +127,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_4"));
                 textAssets.Add(107, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_7"));
+                textAssets.Add(108, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_8"));
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_1"));
                 textAssets.Add(1002, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_2"));
@@ -148,6 +151,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_English/E_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_English/E_CG_4"));
                 textAssets.Add(107, Resources.Load<TextAsset>("TXT_English/E_CG_7"));
+                textAssets.Add(108, Resources.Load<TextAsset>("TXT_English/E_CG_8"));
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_English/E_Story_1"));
@@ -172,6 +176,8 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Korean/K_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Korean/K_CG_4"));
                 textAssets.Add(107, Resources.Load<TextAsset>("TXT_Korean/K_CG_7"));
+                textAssets.Add(108, Resources.Load<TextAsset>("TXT_Korean/K_CG_8"));
+
 
 
                 textAssets.Add(1001, Resources.Load<TextAsset>("TXT_Korean/K_Story_1"));
@@ -502,7 +508,7 @@ public class DialogSystem : MonoBehaviour
 
 
             case "Gold":
-                text.color = new Color(1.0f, 0.84f, 0.0f, 1.0f); // 金色（叛变战姬大队长）
+                text.color = new Color(1.0f, 0.84f, 0.0f, 1.0f); // 金色（性奴）
                 index++;
                 break;
 
@@ -741,12 +747,13 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] List<AudioClip> Playlist_CG_AVG_02;//泄欲车
 
     [SerializeField] List<AudioClip> Playlist_CG_AVG_07;//肉圣物净化
+    [SerializeField] List<AudioClip> Playlist_CG_AVG_08;//榨精鞭刑
     int VoiceIndex = 0;
 
     public void Playlist_Voice()
     {
 
-        if (animation_number == 101|| animation_number == 102 || animation_number == 107)
+        if (animation_number == 101|| animation_number == 102 || animation_number == 107 || animation_number == 108)
         {
             // 1) 选择「当前台词列表」
             switch (animation_number)
@@ -759,6 +766,9 @@ public class DialogSystem : MonoBehaviour
                     break;
                 case 107:
                     Playlist = Playlist_CG_AVG_07;//肉圣物净化
+                    break;
+                case 108:
+                    Playlist = Playlist_CG_AVG_08;//榨精鞭刑
                     break;
             }
 
@@ -841,6 +851,7 @@ public class DialogSystem : MonoBehaviour
             case 103:
             case 104:
             case 107:
+            case 108:
                 GameFlowData.nextScene = "";//返回主菜单
                 break;
         }

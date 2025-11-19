@@ -17652,7 +17652,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &383355724
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18135,7 +18135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &389814644
 RectTransform:
   m_ObjectHideFlags: 0
@@ -57866,6 +57866,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 68317d76a9aa0ab48a6c5a1cd72b62a3, type: 3}
   - {fileID: 8300000, guid: 0d5944fd6094f2e489a05b111ac6e680, type: 3}
   - {fileID: 8300000, guid: bdd38f63faa8e76408ffc9996bf9094f, type: 3}
+  Playlist_CG_AVG_08:
+  - {fileID: 8300000, guid: 524d346d3a7867f4bbe43a68f89ddfa4, type: 3}
+  - {fileID: 8300000, guid: 5820c20ab2dab424aa00b79f516ffe40, type: 3}
+  - {fileID: 8300000, guid: e4274aaf4a34e3648b8de362f34d0643, type: 3}
+  - {fileID: 8300000, guid: ed80fd20b68bb4747b4b7fb73fa317fb, type: 3}
 --- !u!1 &1268049010
 GameObject:
   m_ObjectHideFlags: 0
@@ -74273,7 +74278,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1654553338
 RectTransform:
   m_ObjectHideFlags: 0
@@ -89017,7 +89022,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ver.0.0.6
+  m_Text: Ver.0.0.7
 --- !u!222 &1991218265
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -93588,7 +93593,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3881087803549984437, guid: ec536a7718376554185e4a856d5ae230, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3881087803549984439, guid: ec536a7718376554185e4a856d5ae230, type: 3}
       propertyPath: handleRange

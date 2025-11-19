@@ -32,7 +32,7 @@ public class CG_End_NPC : MonoBehaviour
                     anim.Play("RBQ_Punish_Cage_2");
                 }  //狗笼肉货堆积
 
-                if (GameFlowData.nextScene == "CG_AVG_01"|| GameFlowData.nextScene == "CG_AVG_02")
+                if (GameFlowData.nextScene == "CG_AVG_01"|| GameFlowData.nextScene == "CG_AVG_02" || GameFlowData.nextScene == "CG_AVG_08")
                 {
                   
                     anim.SetFloat("InputX", 0);
@@ -93,7 +93,7 @@ public class CG_End_NPC : MonoBehaviour
 
                 }//狗笼肉货堆积
 
-                if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02")
+                if (GameFlowData.nextScene == "CG_AVG_01" || GameFlowData.nextScene == "CG_AVG_02" || GameFlowData.nextScene == "CG_AVG_08")
                 {
                     
                     anim.SetFloat("InputX", -1);
@@ -105,7 +105,7 @@ public class CG_End_NPC : MonoBehaviour
                     Man_hatIndex = Random.Range(1, 5);//除去 魔族角和绷带
                 }//男性站立 侧面
 
-                if (GameFlowData.nextScene == "CG_AVG_07")
+                if (GameFlowData.nextScene == "CG_AVG_07" )
                 {
 
 
@@ -148,7 +148,7 @@ public class CG_End_NPC : MonoBehaviour
                     anim.Play("NPC_Girl_Read");
                 }  //守卫队长宣读  正面
 
-                if (GameFlowData.nextScene == "CG_AVG_07")
+                if (GameFlowData.nextScene == "CG_AVG_07" || GameFlowData.nextScene == "CG_AVG_08")
                 {
 
 
@@ -193,7 +193,7 @@ public class CG_End_NPC : MonoBehaviour
                     anim.Play("NPC_Girl_Read");
                 } //守卫队长宣读  侧面
 
-                if (GameFlowData.nextScene == "CG_AVG_07")
+                if (GameFlowData.nextScene == "CG_AVG_07" || GameFlowData.nextScene == "CG_AVG_08")
                 {
 
 

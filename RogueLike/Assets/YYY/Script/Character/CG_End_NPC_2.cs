@@ -14,6 +14,7 @@ public class CG_End_NPC_2 : MonoBehaviour
         switch (GameFlowData.nextScene)
         {
             case "CG_AVG_07":
+            case "CG_AVG_08":
                 People.SetActive(false);
                 CombatNun.SetActive(true);
                 break;

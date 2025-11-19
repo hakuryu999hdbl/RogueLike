@@ -59,8 +59,16 @@ public class RBQ : MonoBehaviour
 
                 }//暂时先这样
                 else if (GameFlowData.nextScene == "Story_04" || GameFlowData.nextScene == "Story_06")
-                {                 
-                    CurrentRapeType = 7;
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        CurrentRapeType = 7;
+                    }
+                    else
+                    {
+                        CurrentRapeType = Random.Range(1, 5);
+                    }
+                    
                 }
                 else
                 {
@@ -98,11 +106,20 @@ public class RBQ : MonoBehaviour
 
                 bool CanGasping = true;
 
-                if (CurrentRapeType == 3 || CurrentRapeType == 4)
+                if (CurrentRapeType == 3 || CurrentRapeType == 4 || CurrentRapeType == 1)
                 {
                     if (inputX == 1 && inputY == 0)
                     {
                         //朝右的有帧事件发出声音不能循环叫声
+                        CanGasping = false;
+                    }
+                }
+
+                if ( CurrentRapeType == 1)
+                {
+                    if (inputX == 0 && inputY == 1)
+                    {
+                        //朝上的有帧事件发出声音不能循环叫声
                         CanGasping = false;
                     }
                 }
@@ -409,8 +426,8 @@ public class RBQ : MonoBehaviour
                         case 1:
 
                             //吊缚鞭打
-                            GameObject TortureDevice = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
-                            TortureDevice.GetComponent<Plant>().SetImage(0);
+                            //GameObject TortureDevice = Instantiate(Torture_Rack, transform.position, Quaternion.identity);
+                            //TortureDevice.GetComponent<Plant>().SetImage(0);
                             break;
                         case 3:
 

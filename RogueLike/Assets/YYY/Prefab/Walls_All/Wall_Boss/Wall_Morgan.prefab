@@ -10084,6 +10084,7 @@ MonoBehaviour:
   isBossRoom: 1
   BossNumber: 4
   isCreateBoss: 0
+  isDominusBossRoom: 0
   box: {fileID: 5342969621659193513}
 --- !u!61 &5342969621659193513
 BoxCollider2D:
@@ -13661,6 +13662,7 @@ MonoBehaviour:
   - {fileID: 9062742016481674539}
   - {fileID: 8719193868850238006}
   SetOtherEnemy: 2
+  Dominus: {fileID: 0}
 --- !u!1 &5723951565116085598
 GameObject:
   m_ObjectHideFlags: 0
@@ -21294,6 +21296,7 @@ MonoBehaviour:
   - {fileID: 6011501510759498083}
   - {fileID: 6811439906289539691}
   SetOtherEnemy: 0
+  Dominus: {fileID: 0}
 --- !u!1 &7526991915394679715
 GameObject:
   m_ObjectHideFlags: 0

@@ -248,6 +248,7 @@ MonoBehaviour:
   isBossRoom: 0
   BossNumber: 0
   isCreateBoss: 0
+  isDominusBossRoom: 0
   box: {fileID: 3955521470790606958}
 --- !u!61 &3955521470790606958
 BoxCollider2D:

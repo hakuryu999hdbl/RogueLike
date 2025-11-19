@@ -713,7 +713,6 @@ public class UIManager : MonoBehaviour
             case "CG_AVG_04":
             case "CG_AVG_05":
             case "CG_AVG_06":
-            case "CG_AVG_08":
                 //拉出AVG
                 PlayAVG("CG_04");
                 To_AVGScene();
@@ -745,6 +744,24 @@ public class UIManager : MonoBehaviour
 
 
                 _RoomGenerator.SkyBoxNumber = 2;//白雾
+
+                Invoke("PlayDungeonBGM", 1f);
+                break;
+
+            case "CG_AVG_08":
+                //拉出AVG
+                PlayAVG("CG_08");
+                To_AVGScene();
+
+                //隐藏存档界面，拉摄像机,隐藏玩家
+                Invoke("DelayHideSaveCavans", 0.3f);
+
+
+                Invoke("DelayShowRoomGenerator", 0.1f);
+                _RoomGenerator.roomNumber = -2;//惩戒修会圣堂
+
+
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
 
                 Invoke("PlayDungeonBGM", 1f);
                 break;
@@ -2901,6 +2918,9 @@ public class UIManager : MonoBehaviour
                 break;
             case "CG_07":
                 dialogSystem.animation_number = 107;
+                break;
+            case "CG_08":
+                dialogSystem.animation_number = 108;
                 break;
 
             case "Chapter_01":

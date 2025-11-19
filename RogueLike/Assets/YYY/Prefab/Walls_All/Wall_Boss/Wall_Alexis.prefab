@@ -583,12 +583,14 @@ MonoBehaviour:
   isClean: 2
   isBossRoom: 0
   isArena: 0
+  FadeTentacle: {fileID: 0}
   isCanWinRoom: 0
   EnemyCount: 0
   spawnPoints:
   - {fileID: 1504292889511815996}
   - {fileID: 2245738413603084642}
   SetOtherEnemy: 0
+  Dominus: {fileID: 0}
 --- !u!1 &611768082156358903
 GameObject:
   m_ObjectHideFlags: 0
@@ -7892,6 +7894,7 @@ MonoBehaviour:
   isClean: 0
   isBossRoom: 1
   isArena: 0
+  FadeTentacle: {fileID: 0}
   isCanWinRoom: 0
   EnemyCount: 0
   spawnPoints:
@@ -7899,6 +7902,7 @@ MonoBehaviour:
   - {fileID: 6657019013629656663}
   - {fileID: 8767685833343009451}
   SetOtherEnemy: 1
+  Dominus: {fileID: 0}
 --- !u!1 &1620779921434504164
 GameObject:
   m_ObjectHideFlags: 0
@@ -92585,6 +92589,7 @@ MonoBehaviour:
   isBossRoom: 1
   BossNumber: 5
   isCreateBoss: 0
+  isDominusBossRoom: 0
   box: {fileID: 4661888000759729790}
 --- !u!61 &4661888000759729790
 BoxCollider2D:
