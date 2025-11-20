@@ -14,6 +14,45 @@ public class CG_End_NPC : MonoBehaviour
 
         switch (AnimtorNumber) 
         {
+            case -3:
+                if (GameFlowData.nextScene == "Story_05"|| GameFlowData.nextScene == "Story_08")
+                {
+
+
+                    anim.Play("RBQ_Torture_EggBirth");
+                    anim.SetFloat("InputX", 0);
+                    anim.SetFloat("InputY", -1);
+
+
+                } //女性受罚产卵  正面
+                break;
+
+            case -2:
+                if (GameFlowData.nextScene == "Story_05")
+                {
+
+                    anim.Play("RBQ_Torture_EggBirth");
+                    anim.SetFloat("InputX", -1);
+                    anim.SetFloat("InputY", 0);
+
+                    //switch (Random.Range(0, 2)) 
+                    //{
+                    //    case 0:
+                    //        anim.Play("RBQ_Torture_EggBirth");
+                    //        anim.SetFloat("InputX", 0);
+                    //        anim.SetFloat("InputY", -1);
+                    //        break;
+                    //    case 1:
+                    //        anim.Play("RBQ_Torture_EggBirth");
+                    //        anim.SetFloat("InputX", 1);
+                    //        anim.SetFloat("InputY", 0);
+                    //        break;
+                    //}
+
+
+                } //女性受罚  正面
+                break;
+
 
             case -1:
 

@@ -54,6 +54,17 @@ public class RoomGenerator : MonoBehaviour
         Invoke("Scan", 0.2f);//这样因该能等到全部生成完
 
 
+        //结局CG腐蝕胎巢
+        if (roomNumber == -3)
+        {
+            Instantiate(CG_CorruptedWombNest, new Vector3(0, 0, 0), Quaternion.identity);
+
+            cg_Manager = CG_CorruptedWombNest.GetComponent<CG_Manager>();
+
+            return;
+        }
+
+
         //结局CG惩戒修会圣堂
         if (roomNumber == -2)
         {
@@ -437,6 +448,7 @@ public class RoomGenerator : MonoBehaviour
     public GameObject CG_HallofDiscipline;//惩戒回廊
     public GameObject CG_ExecutionSquare;//处刑广场
     public GameObject CG_Torture;//调教室
+    public GameObject CG_CorruptedWombNest;//腐蝕胎巢
 
     public GameObject BossRoom_Captain;//卫兵队长Boss战
     public GameObject BossRoom_Selene;//王女Boss战

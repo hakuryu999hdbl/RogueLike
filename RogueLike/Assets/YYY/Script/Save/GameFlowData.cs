@@ -15,7 +15,7 @@ public class GameFlowData : MonoBehaviour
     //【CG_AVG_05】进入CG结局剧情5 王女性玩具
     //【CG_AVG_06】进入CG结局剧情6 魔界试验体
     //【CG_AVG_07】进入CG结局剧情7 肉圣物
-    //【CG_AVG_08】进入CG结局剧情8 快乐牢
+    //【CG_AVG_08】进入CG结局剧情8 榨精鞭刑
 
 
 

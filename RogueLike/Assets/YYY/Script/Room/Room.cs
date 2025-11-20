@@ -110,6 +110,10 @@ public class Room : MonoBehaviour
             case "Story_09":
                 BossNumber = 8;//典狱长
                 break;
+
+            case "Story_11":
+                BossNumber = 5;//皇太子亚历克西斯
+                break;
         }
 
 

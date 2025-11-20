@@ -2803,11 +2803,11 @@ public class Enemy : MonoBehaviour
 
 
 
-                if (BossNumber == 2)
-                {
-                    currentHealth = 100;//保留生命值，防止触发了别的currentHealth <= 0
-                    return;
-                }//防止玩家攻击力过高，一上来就把王女打死
+                //if (BossNumber == 2)
+                //{
+                //    currentHealth = 100;//保留生命值，防止触发了别的currentHealth <= 0
+                //    return;
+                //}//防止玩家攻击力过高，一上来就把王女打死
 
 
 
@@ -4506,6 +4506,11 @@ public class Enemy : MonoBehaviour
             case "CG_AVG_04":
                 anim.Play("RBQ_Torture_CutDown");//四肢切断挂饰   
                 break;
+
+            case "CG_AVG_06":
+                anim.Play("RBQ_Torture_EggBirth");//产卵   
+                break;
+
 
             case "CG_AVG_07":
                 anim.Play("RBQ_Punish_Crucifixion_2");//倒十字肉圣物  

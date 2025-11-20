@@ -711,8 +711,7 @@ public class UIManager : MonoBehaviour
                 break;
 
             case "CG_AVG_04":
-            case "CG_AVG_05":
-            case "CG_AVG_06":
+            case "CG_AVG_05":  
                 //拉出AVG
                 PlayAVG("CG_04");
                 To_AVGScene();
@@ -729,6 +728,26 @@ public class UIManager : MonoBehaviour
 
                 Invoke("PlayDungeonBGM", 1f);
                 break;
+
+
+            case "CG_AVG_06":
+                //拉出AVG
+                PlayAVG("CG_06");
+                To_AVGScene();
+
+                //隐藏存档界面，拉摄像机,隐藏玩家
+                Invoke("DelayHideSaveCavans", 0.3f);
+
+
+                Invoke("DelayShowRoomGenerator", 0.1f);
+                _RoomGenerator.roomNumber = -3;//腐蝕胎巢
+
+
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
+
+                Invoke("PlayDungeonBGM", 1f);
+                break;
+
 
             case "CG_AVG_07":
                 //拉出AVG
@@ -1035,14 +1054,22 @@ public class UIManager : MonoBehaviour
             case "Story_06":
             case "Story_07":
                 //肉圣物结局
+                PlayerPrefs.SetInt("CG_AVG_07", 1);//cg解锁
                 GameFlowData.nextScene = "CG_AVG_07";
                 break;
             case "Story_08":
-                //青梅竹马团员结局
-
+                //魔界生物试验体结局
+                PlayerPrefs.SetInt("CG_AVG_06", 1);//cg解锁
+                GameFlowData.nextScene = "CG_AVG_06";
                 break;    
            
             case "Story_09":
+                //集体鞭打结局
+                PlayerPrefs.SetInt("CG_AVG_08", 1);//cg解锁
+                GameFlowData.nextScene = "CG_AVG_08";
+                break;
+
+
             case "Story_11":
                 //拍卖会结局
                 PlayerPrefs.SetInt("CG_AVG_03", 1);//cg解锁
@@ -2915,6 +2942,9 @@ public class UIManager : MonoBehaviour
                 break;
             case "CG_04":
                 dialogSystem.animation_number = 104;
+                break;
+            case "CG_06":
+                dialogSystem.animation_number = 106;
                 break;
             case "CG_07":
                 dialogSystem.animation_number = 107;

@@ -16,7 +16,7 @@ public class RBQ : MonoBehaviour
 
     [Header("基础数值")]
     public Animator anim;//接入Spine动画机
-    private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle", "RBQ_Torture_CutDown", "RBQ_Punish_Cage_Left_2" };
+    private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle", "RBQ_Torture_CutDown","RBQ_Torture_EggBirth", "RBQ_Punish_Cage_Left_2" };
 
     public int RBQState = 0;//0单人拘束 1双人拷问中  2尸体  3肉货
     bool isCreateEnemy = false;//是否产生过敌人
@@ -137,7 +137,44 @@ public class RBQ : MonoBehaviour
                 int rand = Random.Range(0, tortureAnimations.Length);
                 anim.Play(tortureAnimations[rand]);
 
-            
+
+                //if (GameFlowData.nextScene == "Story_01" || GameFlowData.nextScene == "Story_02")
+                //{
+                //    CurrentRapeType = 5;
+                //
+                //}//暂时先这样
+                //else if (GameFlowData.nextScene == "Story_04" || GameFlowData.nextScene == "Story_06")
+                //{
+                //    CurrentRapeType = Random.Range(1,3);
+                //
+                //}
+                //else
+                //{
+                //    CurrentRapeType = Random.Range(1, 6);//7，9，11关
+                //}
+                //
+                //
+                //switch (CurrentRapeType)
+                //{
+                //    case 1:
+                //        anim.Play("RBQ_Torture_Impale");//扎穿
+                //        break;
+                //    case 2:
+                //        anim.Play("RBQ_Torture_Strangle");//勒死
+                //        break;
+                //    case 3:
+                //        anim.Play("RBQ_Torture_CutDown");//四肢切断
+                //        break;
+                //    case 4:
+                //        anim.Play("RBQ_Punish_Cage_Left_2");//狗笼
+                //        break;
+                //    case 5:         
+                //        anim.Play("RBQ_Torture_EggBirth");//产卵
+                //        break;
+                //}
+
+
+
                 Destroy(UI_Player_Icon.gameObject);//尸体隐藏标志
 
 
