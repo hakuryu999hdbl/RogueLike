@@ -711,7 +711,6 @@ public class UIManager : MonoBehaviour
                 break;
 
             case "CG_AVG_04":
-            case "CG_AVG_05":  
                 //拉出AVG
                 PlayAVG("CG_04");
                 To_AVGScene();
@@ -722,6 +721,25 @@ public class UIManager : MonoBehaviour
 
                 Invoke("DelayShowRoomGenerator", 0.1f);
                 _RoomGenerator.roomNumber = -1;//惩戒回廊
+
+
+                _RoomGenerator.SkyBoxNumber = 3;//红雾
+
+                Invoke("PlayDungeonBGM", 1f);
+                break;
+
+
+            case "CG_AVG_05":
+                //拉出AVG
+                PlayAVG("CG_05");
+                To_AVGScene();
+
+                //隐藏存档界面，拉摄像机,隐藏玩家
+                Invoke("DelayHideSaveCavans", 0.3f);
+
+
+                Invoke("DelayShowRoomGenerator", 0.1f);
+                _RoomGenerator.roomNumber = -4;//赛琳娜王座
 
 
                 _RoomGenerator.SkyBoxNumber = 3;//红雾
@@ -1039,37 +1057,42 @@ public class UIManager : MonoBehaviour
                 GameFlowData.nextScene = "CG_AVG_01";
                 break;
             case "Story_03":
+            case "Story_12":
                 //肉铠结局
                 PlayerPrefs.SetInt("CG_AVG_04", 1);//cg解锁
                 GameFlowData.nextScene = "CG_AVG_04";
                 break;
+
             case "Story_04":
-            case "Story_05":
                 //泄欲车结局
                 PlayerPrefs.SetInt("CG_AVG_02", 1);//cg解锁
                 GameFlowData.nextScene = "CG_AVG_02";
-                break;  
-        
+                break;
+
 
             case "Story_06":
-            case "Story_07":
                 //肉圣物结局
                 PlayerPrefs.SetInt("CG_AVG_07", 1);//cg解锁
                 GameFlowData.nextScene = "CG_AVG_07";
                 break;
-            case "Story_08":
-                //魔界生物试验体结局
-                PlayerPrefs.SetInt("CG_AVG_06", 1);//cg解锁
-                GameFlowData.nextScene = "CG_AVG_06";
-                break;    
-           
-            case "Story_09":
+
+
+            case "Story_07":
                 //集体鞭打结局
                 PlayerPrefs.SetInt("CG_AVG_08", 1);//cg解锁
                 GameFlowData.nextScene = "CG_AVG_08";
                 break;
 
 
+            case "Story_08":
+                //魔界生物试验体结局
+                PlayerPrefs.SetInt("CG_AVG_06", 1);//cg解锁
+                GameFlowData.nextScene = "CG_AVG_06";
+                break;
+
+
+
+            case "Story_09":
             case "Story_11":
                 //拍卖会结局
                 PlayerPrefs.SetInt("CG_AVG_03", 1);//cg解锁
@@ -1077,9 +1100,10 @@ public class UIManager : MonoBehaviour
                 break;
 
             case "Story_10":
-            case "Story_12":
+            case "Story_05":
                 //王女性玩具结局
-
+                PlayerPrefs.SetInt("CG_AVG_05", 1);//cg解锁
+                GameFlowData.nextScene = "CG_AVG_05";
                 break;
         }
 
@@ -2943,6 +2967,9 @@ public class UIManager : MonoBehaviour
             case "CG_04":
                 dialogSystem.animation_number = 104;
                 break;
+            case "CG_05":
+                dialogSystem.animation_number = 105;
+                break;
             case "CG_06":
                 dialogSystem.animation_number = 106;
                 break;
@@ -3141,6 +3168,9 @@ public class UIManager : MonoBehaviour
         deleteAction.started += OnDelete;
         pauseAction.started += OnPause;
         menuAction.started += OnMenu;
+
+
+        SetMouse();
 
 
         // 延迟启用
@@ -4760,6 +4790,7 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+
     /// <summary>
     /// 区域背景音乐
     /// </summary>
@@ -4926,6 +4957,7 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
+
     /// <summary>
     /// 每日自动接客
     /// </summary>
@@ -5019,7 +5051,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] UnityEngine.UI.Text cgServiceCountText;
     [SerializeField] UnityEngine.UI.Text cgServiceIncomeText;
 
-   
+
     public void UpdateCgDailyTexts()
     {
         bool isCG = string.Equals(GameFlowData.nextScene, "CG", System.StringComparison.OrdinalIgnoreCase);
@@ -5074,7 +5106,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     #region
     [Header("难度显示 Text")]
-    public GameObject  easyText;       // Easy
+    public GameObject easyText;       // Easy
     public GameObject commonText;     // Common / Normal
     public GameObject difficultText;  // Difficult / Hard
 
@@ -5106,7 +5138,7 @@ public class UIManager : MonoBehaviour
 
     private void UpdateDifficultyUI()
     {
-       
+
         switch (currentDifficulty)
         {
             case 0: // Easy
@@ -5129,5 +5161,84 @@ public class UIManager : MonoBehaviour
         }
     }
     #endregion
+
+
+    /// <summary>
+    /// 显示隐藏鼠标
+    /// </summary>
+    #region
+
+    private InputAction mouseDeltaAction;// 鼠标移动
+    private InputAction mouseClickAction;// 鼠标点击（可选）
+
+    void SetMouse()
+    {
+        mouseDeltaAction = inputActions.FindAction("MouseDelta"); // 下面会说怎么加
+        mouseClickAction = inputActions.FindAction("MouseClick"); // 可选
+
+        mouseDeltaAction.performed += OnMouseMove;
+        mouseClickAction.performed += OnMouseClick;
+
+        mouseDeltaAction?.Enable();
+        mouseClickAction?.Enable();
+
+
+
+        //藏鼠标控制
+        moveAction.performed += OnKeyboardOrGamepadInput;
+        confirmAction.performed += OnKeyboardOrGamepadInput;
+        cancelAction.started += OnKeyboardOrGamepadInput;
+        createAction.started += OnKeyboardOrGamepadInput;
+        deleteAction.started += OnKeyboardOrGamepadInput;
+        pauseAction.started += OnKeyboardOrGamepadInput;
+        menuAction.started += OnKeyboardOrGamepadInput;
+
+
+
+
+
+    }
+
+
+    // 键盘 / 手柄操作 → 隐藏鼠标
+    private void OnKeyboardOrGamepadInput(InputAction.CallbackContext ctx)
+    {
+        var device = ctx.control.device;
+
+        // 只在键盘/手柄时才隐藏鼠标
+        //if (device is Keyboard || device is Gamepad)
+        //{
+        //    Cursor.visible = false;
+        //    Cursor.lockState = CursorLockMode.Locked; // 或 Locked/Confined，看你游戏需求
+        //}
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked; // 或 Locked/Confined，看你游戏需求
+
+    }
+
+
+
+    // 鼠标移动 → 显示鼠标
+    private void OnMouseMove(InputAction.CallbackContext ctx)
+    {
+        Vector2 delta = ctx.ReadValue<Vector2>();
+        if (delta.sqrMagnitude > 0.01f)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
+
+
+    // 鼠标点击也可以当成“切回鼠标模式”
+    private void OnMouseClick(InputAction.CallbackContext ctx)
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    #endregion
+
 
 }

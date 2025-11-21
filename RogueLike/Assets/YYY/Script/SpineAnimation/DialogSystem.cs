@@ -76,6 +76,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Japanese/J_CG_2"));
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Japanese/J_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Japanese/J_CG_4"));
+                textAssets.Add(105, Resources.Load<TextAsset>("TXT_Japanese/J_CG_5"));
                 textAssets.Add(106, Resources.Load<TextAsset>("TXT_Japanese/J_CG_6"));
                 textAssets.Add(107, Resources.Load<TextAsset>("TXT_Japanese/J_CG_7"));
                 textAssets.Add(108, Resources.Load<TextAsset>("TXT_Japanese/J_CG_8"));
@@ -102,6 +103,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_2"));
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_4"));
+                textAssets.Add(105, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_5"));
                 textAssets.Add(106, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_6"));
                 textAssets.Add(107, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_7"));
                 textAssets.Add(108, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_CG_8"));
@@ -128,6 +130,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_2"));
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_4"));
+                textAssets.Add(105, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_5"));
                 textAssets.Add(106, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_6"));
                 textAssets.Add(107, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_7"));
                 textAssets.Add(108, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_CG_8"));
@@ -153,6 +156,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_English/E_CG_2"));
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_English/E_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_English/E_CG_4"));
+                textAssets.Add(105, Resources.Load<TextAsset>("TXT_English/E_CG_5"));
                 textAssets.Add(106, Resources.Load<TextAsset>("TXT_English/E_CG_6"));
                 textAssets.Add(107, Resources.Load<TextAsset>("TXT_English/E_CG_7"));
                 textAssets.Add(108, Resources.Load<TextAsset>("TXT_English/E_CG_8"));
@@ -179,6 +183,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(102, Resources.Load<TextAsset>("TXT_Korean/K_CG_2"));
                 textAssets.Add(103, Resources.Load<TextAsset>("TXT_Korean/K_CG_3"));
                 textAssets.Add(104, Resources.Load<TextAsset>("TXT_Korean/K_CG_4"));
+                textAssets.Add(105, Resources.Load<TextAsset>("TXT_Korean/K_CG_5"));
                 textAssets.Add(106, Resources.Load<TextAsset>("TXT_Korean/K_CG_6"));
                 textAssets.Add(107, Resources.Load<TextAsset>("TXT_Korean/K_CG_7"));
                 textAssets.Add(108, Resources.Load<TextAsset>("TXT_Korean/K_CG_8"));
@@ -337,9 +342,18 @@ public class DialogSystem : MonoBehaviour
                       
                         break;
 
+                    case "CG_AVG_05":
+
+                        //王女性玩具
+                        UIManager.instance.MainCamera.Play("CG_Camera2_01");
+                        Invoke("DaleyDelayCreatSetFriend_RBQ", 0.2f);
+                        Invoke("DaleyArrangeRBQ", 3.5f);
+
+                        break;
+
                     case "CG_AVG_06":
 
-                        //肉铠刑架
+                        //吊缚产卵
                         UIManager.instance.MainCamera.Play("CG_Camera2_01");
                         Invoke("DaleyDelayCreatSetFriend_RBQ", 0.2f);
                         Invoke("DaleyArrangeRBQ", 3.5f);
@@ -761,7 +775,7 @@ public class DialogSystem : MonoBehaviour
 
     [SerializeField] List<AudioClip> Playlist_CG_AVG_01;//头枷轮奸
     [SerializeField] List<AudioClip> Playlist_CG_AVG_02;//泄欲车
-
+    [SerializeField] List<AudioClip> Playlist_CG_AVG_05;//王女性玩具
     [SerializeField] List<AudioClip> Playlist_CG_AVG_07;//肉圣物净化
     [SerializeField] List<AudioClip> Playlist_CG_AVG_08;//榨精鞭刑
     int VoiceIndex = 0;
@@ -769,7 +783,7 @@ public class DialogSystem : MonoBehaviour
     public void Playlist_Voice()
     {
 
-        if (animation_number == 101|| animation_number == 102 || animation_number == 107 || animation_number == 108)
+        if (animation_number == 101|| animation_number == 102 || animation_number == 105 || animation_number == 107 || animation_number == 108)
         {
             // 1) 选择「当前台词列表」
             switch (animation_number)
@@ -779,6 +793,9 @@ public class DialogSystem : MonoBehaviour
                     break;
                 case 102:
                     Playlist = Playlist_CG_AVG_02;//泄欲车
+                    break;
+                case 105:
+                    Playlist = Playlist_CG_AVG_05;//王女性玩具
                     break;
                 case 107:
                     Playlist = Playlist_CG_AVG_07;//肉圣物净化
@@ -866,6 +883,7 @@ public class DialogSystem : MonoBehaviour
             case 102:
             case 103:
             case 104:
+            case 105:
             case 106:
             case 107:
             case 108:

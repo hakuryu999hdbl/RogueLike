@@ -14,6 +14,21 @@ public class CG_End_NPC : MonoBehaviour
 
         switch (AnimtorNumber) 
         {
+
+            case -4:
+                if (GameFlowData.nextScene == "CG_AVG_05")
+                {
+
+
+                    anim.Play("CG/CG_InsultSide_1");
+
+                    //anim.SetFloat("InputX", 0);
+                    //anim.SetFloat("InputY", -1);
+
+
+                } //王女踩踏虐阳
+                break;
+
             case -3:
                 if (GameFlowData.nextScene == "Story_05"|| GameFlowData.nextScene == "Story_08")
                 {

@@ -6917,6 +6917,7 @@ MonoBehaviour:
   CG_ExecutionSquare: {fileID: 5553637100842546407, guid: 3608f1ee0386f9342b4b6824eabe2c5e, type: 3}
   CG_Torture: {fileID: 955405008988503922, guid: e589abdfa807777498cb13ac613cb2e5, type: 3}
   CG_CorruptedWombNest: {fileID: 9144241089786918883, guid: 46e52d428c63ba249ab290a9488cb8c6, type: 3}
+  CG_SeleneThrone: {fileID: 203576361490759501, guid: 910073f244f596942bbd637035d0912f, type: 3}
   BossRoom_Captain: {fileID: 6099597642990222334, guid: 0bc923f14a83b3942a3d28eeadb13477, type: 3}
   BossRoom_Selene: {fileID: 5331488944230009891, guid: 8a0e4120cb89ab044bea79b02d48b743, type: 3}
   BossRoom_Morgan: {fileID: 5258756073442312113, guid: 75494aa9b5c4a3b49816d21fb9b5e325, type: 3}
@@ -57854,6 +57855,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 01971f540472553438962fbc898e18a4, type: 3}
   - {fileID: 8300000, guid: ade563e4ac11d42409c7750862deae44, type: 3}
   - {fileID: 8300000, guid: fdebaf5d923ebb041a542ee68b41f92d, type: 3}
+  Playlist_CG_AVG_05:
+  - {fileID: 8300000, guid: f15b0ce5c163ade4b9d4449d6fe7bbab, type: 3}
+  - {fileID: 8300000, guid: 0a4ccb2295676ef45b18e41b5abbb08b, type: 3}
+  - {fileID: 8300000, guid: e0fb73918012b3c41b802153b0054def, type: 3}
+  - {fileID: 8300000, guid: 171c0d7ef9a1fa34d8c7bf7444e6dca1, type: 3}
+  - {fileID: 8300000, guid: 50fff9b36e269734f808d4a05e966be3, type: 3}
+  - {fileID: 8300000, guid: ca56c74784b93c748a178a7e058c5165, type: 3}
   Playlist_CG_AVG_07:
   - {fileID: 8300000, guid: 549e7b4bcf80708458a3d97c2c9902b8, type: 3}
   - {fileID: 8300000, guid: 11223cabc63135f4fad90eaae755fede, type: 3}

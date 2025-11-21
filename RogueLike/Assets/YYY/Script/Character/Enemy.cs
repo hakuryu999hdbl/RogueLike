@@ -2479,7 +2479,7 @@ public class Enemy : MonoBehaviour
                     BossSkill_ToDarknessPlace(); 
 
                     return;
-                }//黑魔导士传送暗影位置
+                }//黑魔导士传送房间随机位置
 
                 if (currentHealth <= maxHealth / 4 && Class == EnemyClass.FleshArmor)
                 {
@@ -4042,6 +4042,10 @@ public class Enemy : MonoBehaviour
             }
 
             Invoke("Attack_Cancel", 0.5f);
+
+
+            Invoke(nameof(BossSkill_ToDarknessPlace), 2f);//2秒后传送回房间随机位置
+
             return;
         }
 
@@ -4333,7 +4337,7 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        Invoke(nameof(BossSkill_ToDarknessPlace), 2f);
+        Invoke(nameof(BossSkill_ToDarknessPlace), 2f);//2秒后传送回房间随机位置
 
 
     }
@@ -4344,7 +4348,9 @@ public class Enemy : MonoBehaviour
 
         //传送到玩家身边释放暗影
         GateEffect.SetActive(true);
-        transform.position = player.transform.position;
+        //transform.position = player.transform.position;
+
+        RoomGenerator.ChangeTargetPlace(gameObject, -1);
 
         Invoke(nameof(BossSkill_CallDarkness), 0.7f);
 
@@ -4362,8 +4368,9 @@ public class Enemy : MonoBehaviour
         GateEffect.SetActive(true);
 
 
+        wallmap.ChangeTargetPlace(gameObject);//传送到房间随机位置
 
-        transform.position = wallmap.transform.position;
+        //transform.position = wallmap.transform.position;
 
 
         Invoke(nameof(CloseIndestructible), 0.5f);
@@ -4507,6 +4514,8 @@ public class Enemy : MonoBehaviour
                 anim.Play("RBQ_Torture_CutDown");//四肢切断挂饰   
                 break;
 
+
+
             case "CG_AVG_06":
                 anim.Play("RBQ_Torture_EggBirth");//产卵   
                 break;
@@ -4515,6 +4524,8 @@ public class Enemy : MonoBehaviour
             case "CG_AVG_07":
                 anim.Play("RBQ_Punish_Crucifixion_2");//倒十字肉圣物  
                 break;
+
+            case "CG_AVG_05":
             case "CG_AVG_08":
                 anim.Play("RBQ_Punish_Hang_2");//鞭打榨精
                 break;
