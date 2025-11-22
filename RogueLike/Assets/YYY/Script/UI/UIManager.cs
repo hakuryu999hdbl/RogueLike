@@ -102,9 +102,9 @@ public class UIManager : MonoBehaviour
         //Debug.Log("目前的游戏模式解锁状态【Dungeon】" + PlayerPrefs.GetInt("Chapter_Dungeon"));//0未解锁  1解锁
 
 
-        Debug.Log("目前角斗场最高波次" + PlayerPrefs.GetInt("Arena_Wave"));
-
-
+        //Debug.Log("目前角斗场最高波次" + PlayerPrefs.GetInt("Arena_Wave"));
+        //Debug.Log("目前地下城连胜次数" + PlayerPrefs.GetInt("Dungeon_Streak"));
+        //Debug.Log("目前地下城最高连胜记录" + PlayerPrefs.GetInt("Dungeon_BestStreak"));
 
 
 
@@ -612,17 +612,18 @@ public class UIManager : MonoBehaviour
             case "Dungeon":
                 ToSavePageButton(1);
                 Invoke("DelayShowRoomGenerator", 0.1f);
-                _RoomGenerator.roomNumber = 7;
+                _RoomGenerator.roomNumber = 4;
                 _RoomGenerator.SkyBoxNumber = UnityEngine.Random.Range(0, 4);//随机
-                if (UnityEngine.Random.Range(0, 2) == 0)
-                {
+                _RoomGenerator.RoomType = 0;//Wall
 
-                    _RoomGenerator.RoomType = 0;//Wall
-                }
-                else
-                {
-                    _RoomGenerator.RoomType = 1;//Dungeon
-                }
+                //if (UnityEngine.Random.Range(0, 2) == 0)
+                //{
+                //    _RoomGenerator.RoomType = 0;//Wall
+                //}
+                //else
+                //{
+                //    _RoomGenerator.RoomType = 1;//Dungeon
+                //}
 
                 switch (PlayerPrefs.GetInt("language"))
                 {
@@ -1528,6 +1529,13 @@ public class UIManager : MonoBehaviour
 
             _RoomGenerator.ShowInformationOfStage(7);
         }
+
+        if (GameFlowData.nextScene == "Dungeon")
+        {
+            _RoomGenerator.ShowInformationOfStage(11);
+        }
+    
+
     }
 
 
@@ -2251,6 +2259,7 @@ public class UIManager : MonoBehaviour
 
         Show_bestWave();//显示决斗场最高记录
 
+        Show_DungeonRecord();//显示地下城最高记录
 
         //隐藏buff
         ResetBuffs();
@@ -5240,5 +5249,84 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+
+    /// <summary>
+    /// 地下城模式连胜
+    /// </summary>
+    #region
+    [Header("地下城连胜纪录")]
+    public Text DungeonRecordText;
+
+    void Show_DungeonRecord()
+    {
+        int currentStreak = PlayerPrefs.GetInt("Dungeon_Streak", 0);
+        int bestStreak = PlayerPrefs.GetInt("Dungeon_BestStreak", 0);
+
+        string colorTag = "#FFD700"; // 金色，和角斗场保持一致
+        int lang = PlayerPrefs.GetInt("language");
+
+        switch (lang)
+        {
+            case 0: // 日语
+                DungeonRecordText.text =
+                    $"連勝：<color={colorTag}>{currentStreak}</color>　/　最高：<color={colorTag}>{bestStreak}</color>";
+                break;
+
+            case 1: // 简体中文
+                DungeonRecordText.text =
+                    $"连胜：<color={colorTag}>{currentStreak}</color>　/　最高：<color={colorTag}>{bestStreak}</color>";
+                break;
+
+            case 2: // 繁体中文
+                DungeonRecordText.text =
+                    $"連勝：<color={colorTag}>{currentStreak}</color>　/　最高：<color={colorTag}>{bestStreak}</color>";
+                break;
+
+            case 3: // 英语
+                DungeonRecordText.text =
+                    $"Current: <color={colorTag}>{currentStreak}</color> / Best: <color={colorTag}>{bestStreak}</color>";
+                break;
+
+            case 4: // 韩语
+                DungeonRecordText.text =
+                    $"현재 연승: <color={colorTag}>{currentStreak}</color> / 최고: <color={colorTag}>{bestStreak}</color>";
+                break;
+        }
+    }
+
+
+    public void Dungeon_Streak_AddOne() 
+    {
+        int streak = PlayerPrefs.GetInt("Dungeon_Streak", 0) + 1;
+        PlayerPrefs.SetInt("Dungeon_Streak", streak);
+
+        int best = PlayerPrefs.GetInt("Dungeon_BestStreak", 0);
+        if (streak > best)
+            PlayerPrefs.SetInt("Dungeon_BestStreak", streak);
+
+        PlayerPrefs.Save();
+
+        Debug.Log($"地下城连胜：{streak}  最高纪录：{PlayerPrefs.GetInt("Dungeon_BestStreak")}");
+
+      
+    }
+    public void Dungeon_Streak_ToZero()
+    {
+        int streak = PlayerPrefs.GetInt("Dungeon_Streak", 0);
+        Debug.Log("地下城死亡，连胜从 " + streak + " → 0");
+
+        PlayerPrefs.SetInt("Dungeon_Streak", 0);
+        PlayerPrefs.Save();
+
+        Invoke(nameof(ShowDungeon_Streak), 1.5f);
+    }
+
+    void ShowDungeon_Streak() 
+    {
+        _RoomGenerator.ShowInformationOfStage(12);
+    }
+
+
+    #endregion
 
 }

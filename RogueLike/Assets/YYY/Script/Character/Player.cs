@@ -3250,6 +3250,14 @@ public class Player : MonoBehaviour
             //增加战败凌辱次数记录
             DefeatCount();
 
+            //地下城连胜被打断
+            if (GameFlowData.nextScene == "Dungeon")
+            {
+                UIManager.instance.Dungeon_Streak_ToZero();
+
+            }
+
+
             isDie = true;
         }
        

@@ -84,11 +84,14 @@ public class Room : MonoBehaviour
             // case "Arena":
             //
             //     break;
-            // case "Dungeon":
-            //
-            //     break;
+
 
             default:
+            case "Dungeon":
+                 BossNumber = Random.Range(1, 10);//随机Boss
+                 break;
+
+            
             case "Story_01":
             case "Story_02":
                 BossNumber = 1;//守卫队长

@@ -82,7 +82,7 @@ public class WallMap : MonoBehaviour
                 other.GetComponent<Enemy>().wallmap = this;
 
 
-                if (other.GetComponent<Enemy>().BossNumber != 0)
+                if (other.GetComponent<Enemy>().BossNumber != 0 && GameFlowData.nextScene != "Arena")//如果不改掉这个，那么在角斗场模式中，简单模式下敌人只刷一个太过于简单
                 {
 
                     isBossRoom = true;
@@ -176,26 +176,44 @@ public class WallMap : MonoBehaviour
                     case 1:
                     case 2:
                         SetEnemy(1);//角斗场刷男性敌人
-
                         break;
 
                     case 3:
+                        SetBoss(1);//角斗场刷Boss守卫队长
+                        break;
+
                     case 4:
                     case 5:
                         SetEnemy(3);//角斗场刷女性敌人
-
                         break;
 
                     case 6:
+                        SetBoss(9);//角斗场刷Boss首席战斗修女
+                        break;
+
                     case 7:
                     case 8:
                         SetEnemy(2);//角斗场刷触手敌人
-
                         break;
 
-                      default:
-                        SetEnemy();//角斗场全类型敌人
+                    case 9:
+                        SetBoss(8);//角斗场刷Boss典狱长
+                        break;
 
+                    //case 12:
+                    //    SetBoss(2);//角斗场刷Boss王女
+                    //    break;
+                    //
+                    //case 13:
+                    //    SetBoss(5);//角斗场刷Boss皇太子
+                    //    break;
+                    //
+                    //case 16:
+                    //    SetBoss(6);//角斗场刷Boss皇帝
+                    //    break;
+
+                    default:
+                        SetEnemy();//角斗场全类型敌人
                         break;
                 }
             }
@@ -489,6 +507,17 @@ public class WallMap : MonoBehaviour
     //}
 
 
+    public void SetBoss(int BossNumber) 
+    {
+        // 在该点生成敌人
+        GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
+        Enemy enemyScript = NewEnemy.GetComponentInChildren<Enemy>();
+
+        enemyScript.BossNumber = BossNumber;
+
+    }
+
+
     public void CheckEnemyList()
     {
         // 只要场景中还有任意带 "Enemy" 标签的激活对象，就不解锁 
@@ -515,6 +544,16 @@ public class WallMap : MonoBehaviour
             {
                 //完成关卡，结算画面
                 _RoomGenerator.ShowResult();
+
+
+                //地下城连胜模式
+                if (GameFlowData.nextScene == "Dungeon")
+                {
+                    UIManager.instance.Dungeon_Streak_AddOne();
+                }
+
+
+
             }
 
         }
@@ -523,6 +562,19 @@ public class WallMap : MonoBehaviour
 
     #endregion
 
+
+
+
+
+
+
+
+
+
+    /// <summary>
+    /// Boss技能相关
+    /// </summary>
+    #region
     public GameObject Dominus;//多米纳斯纸板
 
     public void ChangeTargetPlace(GameObject MoveTarget)
@@ -544,4 +596,5 @@ public class WallMap : MonoBehaviour
 
 
     }
+    #endregion
 }

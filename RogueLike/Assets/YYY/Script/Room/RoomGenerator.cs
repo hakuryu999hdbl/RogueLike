@@ -935,7 +935,7 @@ public class RoomGenerator : MonoBehaviour
     public Text _Stage_Information;
 
 
-    public void ShowInformationOfStage(int Information)//-3已达最大奴隶数量！ -2金币不够  -1敌人增援   0新的CG解锁    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单  9第X波
+    public void ShowInformationOfStage(int Information)//-3已达最大奴隶数量！ -2金币不够  -1敌人增援   0新的CG解锁    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单  9第X波   10角斗场最高记录    11地下城当高纪录    12地下城当前记录终结，最高纪录
     {
         switch (Information) 
         {
@@ -1223,7 +1223,7 @@ public class RoomGenerator : MonoBehaviour
                 break;
 
 
-            case 10: //最高记录
+            case 10: //角斗场最高记录
 
                 int bestWave = PlayerPrefs.GetInt("Arena_Wave", 0);
                 string colorTag = "#FFD700"; // 金黄色，可改为红色 "#FF4444"、蓝色 "#00BFFF" 等
@@ -1247,6 +1247,62 @@ public class RoomGenerator : MonoBehaviour
                         break;
                 }
                 break;
+
+            case 11: //地下城当前纪录 
+                int currentStreak = PlayerPrefs.GetInt("Dungeon_Streak", 0);
+                string colorA = "#FFD700";
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        _Stage_Information.text = $"現在の地下城連勝：<color={colorA}>{currentStreak}</color>";
+                        break;
+                    case 1: // 简体中文
+                        _Stage_Information.text = $"当前地下城连胜纪录：<color={colorA}>{currentStreak}</color>";
+                        break;
+                    case 2: // 繁体中文
+                        _Stage_Information.text = $"當前地下城連勝紀錄：<color={colorA}>{currentStreak}</color>";
+                        break;
+                    case 3: // 英语
+                        _Stage_Information.text = $"Current Dungeon Streak: <color={colorA}>{currentStreak}</color>";
+                        break;
+                    case 4: // 韩语
+                        _Stage_Information.text = $"현재 던전 연승: <color={colorA}>{currentStreak}</color>";
+                        break;
+                }
+                break;
+
+            case 12: //地下城当前记录终结，最高纪录
+                int streak = PlayerPrefs.GetInt("Dungeon_Streak", 0);
+                int best2 = PlayerPrefs.GetInt("Dungeon_BestStreak", 0);
+                string colorB = "#FFD700";
+
+                switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        _Stage_Information.text =
+                            $"連勝 <color={colorB}>{streak}</color> で終結\n最高記録：<color={colorB}>{best2}</color> 連勝";
+                        break;
+                    case 1: // 简体中文
+                        _Stage_Information.text =
+                            $"本次连胜在 <color={colorB}>{streak}</color> 终结\n最高纪录：<color={colorB}>{best2}</color> 连胜";
+                        break;
+                    case 2: // 繁体中文
+                        _Stage_Information.text =
+                            $"本次連勝於 <color={colorB}>{streak}</color> 終結\n最高紀錄：<color={colorB}>{best2}</color> 連勝";
+                        break;
+                    case 3: // 英语
+                        _Stage_Information.text =
+                            $"Streak ended at <color={colorB}>{streak}</color>\nBest Record: <color={colorB}>{best2}</color>";
+                        break;
+                    case 4: // 韩语
+                        _Stage_Information.text =
+                            $"이번 연승은 <color={colorB}>{streak}</color>에서 종료\n최고 기록: <color={colorB}>{best2}</color>연승";
+                        break;
+                }
+
+                break;
+
         }
 
 
