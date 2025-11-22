@@ -106,6 +106,8 @@ public class UIManager : MonoBehaviour
         //Debug.Log("目前地下城连胜次数" + PlayerPrefs.GetInt("Dungeon_Streak"));
         //Debug.Log("目前地下城最高连胜记录" + PlayerPrefs.GetInt("Dungeon_BestStreak"));
 
+        Debug.Log("目前高等精灵是否解锁" + PlayerPrefs.GetInt("HighElf"));//0未解锁  1解锁
+        Debug.Log("目前高等魔族是否解锁" + PlayerPrefs.GetInt("HighDemon"));//0未解锁  1解锁
 
 
         //地下城和角斗场模式解锁
@@ -997,6 +999,8 @@ public class UIManager : MonoBehaviour
         PlayerPrefs.SetInt("Chapter_Arena", 1);
         PlayerPrefs.SetInt("Chapter_Dungeon", 1);
 
+        PlayerPrefs.SetInt("HighElf", 1);
+        PlayerPrefs.SetInt("HighDemon", 1);
 
         ReLoadScene();
     }
@@ -1515,17 +1519,36 @@ public class UIManager : MonoBehaviour
         if (GameFlowData.nextScene == "Story_12") { PlayerPrefs.SetInt("Chapter_13", 1); }
 
         // 特殊解锁逻辑
-        if (GameFlowData.nextScene == "Story_05")
+
+
+        if (GameFlowData.nextScene == "Story_03" && PlayerPrefs.GetInt("HighElf")==0)
+        {
+            PlayerPrefs.SetInt("HighElf", 1);
+            _RoomGenerator.ShowInformationOfStage(13);
+            //Debug.Log("高等精灵可选");
+        }
+
+
+        if (GameFlowData.nextScene == "Story_05" && PlayerPrefs.GetInt("Chapter_Arena")==0)
         {
             PlayerPrefs.SetInt("Chapter_Arena", 1);
-            Debug.Log("解锁竞技场模式");
+            //Debug.Log("解锁竞技场模式");
 
             _RoomGenerator.ShowInformationOfStage(7);
         }
-        if (GameFlowData.nextScene == "Story_12")
+
+        if (GameFlowData.nextScene == "Story_07" && PlayerPrefs.GetInt("HighDemon") == 0)
+        {
+            PlayerPrefs.SetInt("HighDemon", 1);
+            _RoomGenerator.ShowInformationOfStage(13);
+            //Debug.Log("高等魔族可选");
+        }
+
+
+        if (GameFlowData.nextScene == "Story_12" && PlayerPrefs.GetInt("Chapter_Dungeon") == 0)
         {
             PlayerPrefs.SetInt("Chapter_Dungeon", 1);
-            Debug.Log("解锁地下城模式");
+            //Debug.Log("解锁地下城模式");
 
             _RoomGenerator.ShowInformationOfStage(7);
         }
@@ -1533,8 +1556,9 @@ public class UIManager : MonoBehaviour
         if (GameFlowData.nextScene == "Dungeon")
         {
             _RoomGenerator.ShowInformationOfStage(11);
+            //Debug.Log("当前地下城模式连胜增加");
         }
-    
+
 
     }
 
@@ -1614,7 +1638,7 @@ public class UIManager : MonoBehaviour
 
     public Text IntroduceOfRace;//介绍文本
 
-    #region 耳朵与种族绑定
+    #region 种族概览
     public enum RaceOption
     {
         Human = 0,      // 人类
@@ -1622,8 +1646,8 @@ public class UIManager : MonoBehaviour
         HighElf = 2,    // 高等精灵
         RabbitBlack = 3,// 北方兔族（黑）
         RabbitWhite = 4,// 南方兔族（白）
-        Demon = 6,      // 魔族
-        HighDemon = 5   // 高等魔族
+        Demon = 5,      // 魔族
+        HighDemon = 6   // 高等魔族
     }
 
     [SerializeField] private int raceOptionIndex = 0; // 0..6
@@ -1637,9 +1661,39 @@ public class UIManager : MonoBehaviour
             case RaceOption.HighElf: player.YYY_hatIndex = 3; IntroduceOfRace.text = RACE_DESC[Lang, 2]; break;
             case RaceOption.RabbitBlack: player.YYY_hatIndex = 4; IntroduceOfRace.text = RACE_DESC[Lang, 3]; break; // 黑色兔耳
             case RaceOption.RabbitWhite: player.YYY_hatIndex = 10; IntroduceOfRace.text = RACE_DESC[Lang, 4]; break; // 白色兔耳
-            case RaceOption.Demon: player.YYY_hatIndex = 11; IntroduceOfRace.text = RACE_DESC[Lang, 5]; break;
-            case RaceOption.HighDemon: player.YYY_hatIndex = 12; IntroduceOfRace.text = RACE_DESC[Lang, 6]; break;
+            case RaceOption.Demon: player.YYY_hatIndex = 12; IntroduceOfRace.text = RACE_DESC[Lang, 5]; break;
+            case RaceOption.HighDemon: player.YYY_hatIndex = 11; IntroduceOfRace.text = RACE_DESC[Lang, 6]; break;
         }
+    }
+
+    private int GetNextRaceIndex(int currentIndex, int delta)
+    {
+        // delta = +1 表示向右（下一个），delta = -1 表示向左（上一个）
+        int idx = currentIndex;
+
+        // 最多循环 7 次（种族总数），防止极端情况死循环
+        for (int i = 0; i < 7; i++)
+        {
+            idx += delta;
+
+            if (idx > 6) idx = 0;
+            if (idx < 0) idx = 6;
+
+            RaceOption ro = (RaceOption)idx;
+
+            // 如果还没解锁就跳过
+            if (ro == RaceOption.HighElf && PlayerPrefs.GetInt("HighElf", 0) == 0)
+                continue;
+
+            if (ro == RaceOption.HighDemon && PlayerPrefs.GetInt("HighDemon", 0) == 0)
+                continue;
+
+            // 找到一个可用种族
+            return idx;
+        }
+
+        // 理论上不会走到这里，兜底返回原值
+        return currentIndex;
     }
     #endregion
 
@@ -1677,8 +1731,9 @@ public class UIManager : MonoBehaviour
         //ChangeSkin(ref player.YYY_hatIndex, 1, 4, -1);
         if (IsLuna(player.currentSaveName) == false)
         {
-            raceOptionIndex++; if (raceOptionIndex > 6) { raceOptionIndex = 0; }
-            if (raceOptionIndex < 0) { raceOptionIndex = 6; }
+            raceOptionIndex = GetNextRaceIndex(raceOptionIndex, +1);
+            //raceOptionIndex++; if (raceOptionIndex > 6) { raceOptionIndex = 0; }
+            //if (raceOptionIndex < 0) { raceOptionIndex = 6; }
 
             ApplyRaceSelectionSimple();
             AfterAnySelectionChanged();
@@ -1691,8 +1746,9 @@ public class UIManager : MonoBehaviour
         //ChangeSkin(ref player.YYY_hatIndex, 1, 4, +1); 
         if (IsLuna(player.currentSaveName) == false)
         {
-            raceOptionIndex--; if (raceOptionIndex > 6) { raceOptionIndex = 0; }
-            if (raceOptionIndex < 0) { raceOptionIndex = 6; }
+            raceOptionIndex = GetNextRaceIndex(raceOptionIndex, -1);
+            //raceOptionIndex--; if (raceOptionIndex > 6) { raceOptionIndex = 0; }
+            //if (raceOptionIndex < 0) { raceOptionIndex = 6; }
 
             ApplyRaceSelectionSimple();
             AfterAnySelectionChanged();
@@ -1767,8 +1823,8 @@ public class UIManager : MonoBehaviour
             case 3: return (int)RaceOption.HighElf;
             case 4: return (int)RaceOption.RabbitBlack;
             case 10: return (int)RaceOption.RabbitWhite;
-            case 11: return (int)RaceOption.Demon;
-            case 12: return (int)RaceOption.HighDemon;
+            case 12: return (int)RaceOption.Demon;
+            case 11: return (int)RaceOption.HighDemon;
             // 兼容舊檔：5..9 以前的兔族耳，統一歸為黑兔
             default:
                 if (hat >= 5 && hat <= 9) return (int)RaceOption.RabbitBlack;
@@ -2348,7 +2404,7 @@ public class UIManager : MonoBehaviour
 
 
         #region  人数上限锁
-        int maxSaves = 4; // 最大可创建奴隶数
+        int maxSaves = 15; // 最大可创建奴隶数
         // 判断数量上限
         if (saveCount >= maxSaves)
         {

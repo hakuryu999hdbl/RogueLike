@@ -524,11 +524,12 @@ public class Player : MonoBehaviour
         Man_bodyIndex = 2;
         Man_hatIndex = Random.Range(1, 3);
 
-        Girl_headIndex = Random.Range(1, 14);  // 1~13
+        Girl_headIndex = Random.Range(1, 5);  //黑发主要
         Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = Random.Range(10, 13);
-        Girl_legsIndex = Random.Range(10, 13);
-        Girl_hatIndex = Random.Range(1, 14);
+        Girl_bodyIndex = 7;//惩戒修女
+        int[] Girl_pool = { 2, 4, 5, 6, 7, 11, 12 };
+        Girl_legsIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];//和修女服搭配的丝袜
+        Girl_hatIndex = 7;//惩戒修女头巾
 
 
         //还是需要在专门生成露娜的时候需要设置值
@@ -1024,11 +1025,12 @@ public class Player : MonoBehaviour
         Man_bodyIndex = 2;
         Man_hatIndex = Random.Range(1, 3);
 
-        Girl_headIndex = Random.Range(1, 14);  // 1~13
+        Girl_headIndex = Random.Range(1, 5);  //黑发主要
         Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = Random.Range(10, 13);
-        Girl_legsIndex = Random.Range(10, 13);
-        Girl_hatIndex = Random.Range(1, 14);
+        Girl_bodyIndex = 7;//惩戒修女
+        int[] Girl_pool = { 2, 4, 5, 6, 7, 11, 12 };
+        Girl_legsIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];//和修女服搭配的丝袜
+        Girl_hatIndex = 7;//惩戒修女头巾
 
         SetSkin();
     }//CG鉴赏的时候，敌人皮肤是不存到存档的，所以更新一下
@@ -1096,9 +1098,9 @@ public class Player : MonoBehaviour
         YYY_bodyIndex = Random.Range(10, 13);CurrentProfession = YYY_bodyIndex - 10;//剑士射手法师
         YYY_legsIndex = Random.Range(10, 13);//剑士射手法师
 
-        int[] YYY_pool = { 1, 2, 3, 4, 10, 11, 12 };
-        YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
-
+        //int[] YYY_pool = { 1, 2, 3, 4, 10, 11, 12 };
+        //YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
+        YYY_hatIndex = 1;//玩家随机的都是人类，防止一下子跳到没解锁种族
 
 
 
