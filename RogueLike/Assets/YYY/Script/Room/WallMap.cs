@@ -301,7 +301,7 @@ public class WallMap : MonoBehaviour
 
                 SetRBQ();
 
-                
+                SetItem();
             }
            
             isClean = 1;
@@ -506,6 +506,28 @@ public class WallMap : MonoBehaviour
     //    Instantiate(_RoomGenerator.MagicCircle, transform.position, Quaternion.identity);
     //}
 
+
+    public void SetItem() 
+    {
+
+        int enemyToSpawn = Mathf.Min(spawnPoints.Count, Random.Range(2, 6)); // 最多不超过可用点数量
+
+        for (int i = 0; i < enemyToSpawn; i++)
+        {
+            Transform spawnPoint = spawnPoints[i];
+
+            // 可选：添加一点小偏移避免完全贴边（也可以不加）
+            Vector2 offset = new Vector2(
+                Random.Range(-2f, 2f),
+                Random.Range(-2f, 2f)
+            );
+
+            Vector3 spawnPosition = spawnPoint.position + (Vector3)offset;
+            Instantiate(_RoomGenerator.Item, spawnPosition, Quaternion.identity);
+        }
+
+       // Instantiate(_RoomGenerator.Item, transform.position, Quaternion.identity);
+    }
 
     public void SetBoss(int BossNumber) 
     {

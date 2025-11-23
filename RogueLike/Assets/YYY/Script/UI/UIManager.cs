@@ -4225,6 +4225,10 @@ public class UIManager : MonoBehaviour
     {
         Application.OpenURL("https://www.patreon.com/c/FTGirl");
 
+        //按照Steam这边要求改成Pixiv
+        //Application.OpenURL("https://www.pixiv.net/users/38416908");
+
+
         //钮按下后绿色选中也会过去
         HomePagecurrentIndex = 5;
         UpdateHomePage_Highlight();

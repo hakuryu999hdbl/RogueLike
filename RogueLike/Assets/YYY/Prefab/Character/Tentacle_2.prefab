@@ -27,8 +27,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4821668276587144367}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -174,8 +174,10 @@ MonoBehaviour:
   anim: {fileID: 4843799346584383911}
   Map_Icon: {fileID: 9673292938848005}
   isHang: 1
+  wallmap: {fileID: 0}
   isFade: 0
   isEgg: 0
+  isInvincible: 0
   SmokeEffect: {fileID: 1622069723160390679, guid: 3cbb102f876966040a9c79278e3e6a63, type: 3}
   isScreaming: 0
   HudText: {fileID: 3222200335487344707}

@@ -645,7 +645,7 @@ public class RoomGenerator : MonoBehaviour
     public GameObject RBQ;
     public GameObject MagicCircle;
     public GameObject Tentacle;
-
+    public GameObject Item;
 
 
     public void SetEnemy()
