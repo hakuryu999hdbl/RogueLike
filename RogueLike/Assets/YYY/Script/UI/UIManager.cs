@@ -927,7 +927,7 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void SetCheatButton()
+    public void SetCheatButton(int ReLoad)//0刷新场景  1不刷（通关后打开）
     {
         PlayerPrefs.SetInt("CG_OnanismFront_1", 1);//目前保持第一个CG永远在
         PlayerPrefs.SetInt("CG_OnanismSide_1", 1);
@@ -1002,7 +1002,11 @@ public class UIManager : MonoBehaviour
         PlayerPrefs.SetInt("HighElf", 1);
         PlayerPrefs.SetInt("HighDemon", 1);
 
-        ReLoadScene();
+        if (ReLoad == 0)
+        {
+            ReLoadScene();
+        }
+
     }
 
     #endregion
@@ -1521,7 +1525,7 @@ public class UIManager : MonoBehaviour
         // 特殊解锁逻辑
 
 
-        if (GameFlowData.nextScene == "Story_03" && PlayerPrefs.GetInt("HighElf")==0)
+        if (GameFlowData.nextScene == "Story_03" && PlayerPrefs.GetInt("HighElf") == 0)
         {
             PlayerPrefs.SetInt("HighElf", 1);
             _RoomGenerator.ShowInformationOfStage(13);
@@ -1529,7 +1533,7 @@ public class UIManager : MonoBehaviour
         }
 
 
-        if (GameFlowData.nextScene == "Story_05" && PlayerPrefs.GetInt("Chapter_Arena")==0)
+        if (GameFlowData.nextScene == "Story_05" && PlayerPrefs.GetInt("Chapter_Arena") == 0)
         {
             PlayerPrefs.SetInt("Chapter_Arena", 1);
             //Debug.Log("解锁竞技场模式");
@@ -1552,6 +1556,14 @@ public class UIManager : MonoBehaviour
 
             _RoomGenerator.ShowInformationOfStage(7);
         }
+
+        if (GameFlowData.nextScene == "Story_12")
+        {
+            //击败皇帝解锁全部CG/模式/种族
+            SetCheatButton(1);
+        }
+
+
 
         if (GameFlowData.nextScene == "Dungeon")
         {
@@ -1870,11 +1882,11 @@ public class UIManager : MonoBehaviour
     private static readonly string[,] RACE_NAMES = new string[,]
     {
     // Human,     Elf,      HighElf,            RabbitBlack,              RabbitWhite,               Demon,     HighDemon
-    { "人間",    "エルフ",  "ハイエルフ",        "北方ラビット",     "南方ラビット",      "魔族",     "上位魔族" }, // JP
-    { "人类",    "精灵",    "高等精灵",          "北方兔族",         "南方兔族",          "魔族",     "高等魔族" }, // CN
-    { "人類",    "精靈",    "高等精靈",          "北方兔族",         "南方兔族",          "魔族",     "高等魔族" }, // TC
-    { "Human",   "Elf",     "High Elf",         "Northern Rabbit","Southern Rabbit", "Demon",   "High Demon" }, // EN
-    { "인간",    "엘프",    "하이 엘프",         "북부 토끼족",        "남부 토끼족",         "마족",     "상위 마족" }, // KR
+    { "人間",    "エルフ",  "<color=#ADD8E6>ハイエルフ</color>",        "北方ラビット",     "南方ラビット",      "魔族",     "<color=#ADD8E6>上位魔族</color>" }, // JP
+    { "人类",    "精灵",    "<color=#ADD8E6>高等精灵</color>",          "北方兔族",         "南方兔族",          "魔族",     "<color=#ADD8E6>高等魔族</color>" }, // CN
+    { "人類",    "精靈",    "<color=#ADD8E6>高等精靈</color>",          "北方兔族",         "南方兔族",          "魔族",     "<color=#ADD8E6>高等魔族</color>" }, // TC
+    { "Human",   "Elf",     "<color=#ADD8E6>High Elf</color>",         "Northern Rabbit","Southern Rabbit", "Demon",   "<color=#ADD8E6>High Demon</color>" }, // EN
+    { "인간",    "엘프",    "<color=#ADD8E6>하이 엘프</color>",         "북부 토끼족",        "남부 토끼족",         "마족",     "<color=#ADD8E6>상위 마족</color>" }, // KR
     };
 
     private static readonly string[,] CLASS_NAMES = new string[,]
@@ -1892,52 +1904,127 @@ public class UIManager : MonoBehaviour
     // 7个种族顺序：Human, Elf, HighElf, RabbitBlack, RabbitWhite, Demon, HighDemon
     private static readonly string[,] RACE_DESC = new string[,]
     {
-        { // JP
-            "大陸で最も好戦的な種族で、各地を征服し他種族を隷属させてきた。体力と近接攻撃に優れる。",
-            "射撃と魔法に長ける種族。森の城邦が滅ぼされて以降、人間に奴隷として監禁され、市場価格は中庸。",
-            "エルフの中でも稀少で、奴隷市場でも上物。強力な魔法適性を持ち、エルフ固有の術を行使できる。",
-            "兎族は市場に数が多いが価格は並。身軽だが体力は低く、回避と突進攻撃を得意とする。",
-            "人間が草原を征服して以降、兎族は大きく繁殖。温和な気質で身軽、体力は低いが回避と射撃に長ける。",
-            "深淵をルーツにもつ混血。闇と炎に親和し、近接と魔法に優れる。魔族化で生命吸収の能力を得る。",
-            "魔族の純血上位。強力な儀式と魔界召喚を操る。魔族化で生命吸収の能力を得る。"
-        },
-        { // CN(简体)
-            "整片大陆上最好战的种族，四处征服和奴役其他种族。她们在生命值与近战攻击上有优势。",
-            "擅长射击与法术的种族，在森林中的城邦被摧毁后她们被人类奴役监禁，性奴市场上的价格适中。",
-            "精灵中的珍稀品种，也是性奴市场上的上等货。具有强大的法术天赋，她们会释放精灵族独有法术。",
-            "兔族在性奴市场上数量巨大，但是价格一般。她们身手敏捷但生命值低下，擅长回避伤害和冲刺攻击。",
-            "在人类征服草原后兔族大量繁衍，她们天性温顺，身手敏捷，生命值低下但是擅长回避伤害和射击。",
-            "源于深渊的混血，亲和黑暗与火焰。她们对于近战攻击与法术伤害有优势，魔族化后可以拥有生命汲取能力。",
-            "魔族中的纯血上位者，掌握强力仪式与魔界生物的召唤。魔族化后可以拥有生命汲取能力。"
-        },
-        { // TC(繁體)
-            "整片大陸上最尚武的種族，四處征服並奴役其他種族。她們在生命值與近戰攻擊上有優勢。",
-            "擅長射擊與法術的種族，森林城邦被摧毀後被人類奴役監禁，性奴市場上的價格中等。",
-            "精靈中的稀有品種，也是性奴市場上的上乘貨。擁有強大的法術天賦，能施放精靈族特有法術。",
-            "兔族在性奴市場數量龐大，但價格普通。身手敏捷但生命值偏低，擅長回避傷害與衝刺攻擊。",
-            "在人類征服草原後繁衍甚多。天性溫順、身手敏捷，生命值偏低但擅長回避傷害與射擊。",
-            "源於深淵的混血，親和黑暗與火焰。近戰與法術皆有優勢，魔族化後可獲得生命汲取能力。",
-            "魔族中的純血上位者，精通強力儀式與魔界召喚。魔族化後可獲得生命汲取能力。"
-        },
-        { // EN
-            "The most warlike people on the continent, conquering and enslaving others. Strong HP and melee power.",
-            "Skilled with ranged weapons and magic. After their forest city-states fell, they were enslaved by humans; mid-tier price on the slave market.",
-            "A rare strain among elves and a premium on the slave market. Exceptional arcane talent; can cast elf-exclusive spells.",
-            "Numerous on the market at an average price. Agile but low HP; excels at evasion and dash attacks.",
-            "Multiplied after humans conquered the plains. Gentle by nature, agile, low HP yet good at evasion and shooting.",
-            "Hybrids born of the abyss, attuned to darkness and fire. Strong in melee and spells; demonic form grants life-steal.",
-            "Pure-blooded elites of demonkind, wielding potent rituals and infernal summons. Demonic form grants life-steal."
-        },
-        { // KR
-            "대륙에서 가장 호전적인 종족. 곳곳을 정복하고 타 종족을 노예화했다. 체력과 근접 공격에 강하다.",
-            "사격과 마법에 능한 종족. 숲의 도시국가가 멸망한 뒤 인간에게 노예로 감금되었고, 노예 시장 가격은 중간대.",
-            "엘프 중 희귀한 품종으로, 노예 시장의 상급 품. 강력한 마법 재능을 지녀 엘프 고유의 주문을 쓸 수 있다.",
-            "토끼족은 시장에 수가 많지만 가격은 보통. 민첩하나 체력이 낮고, 회피와 돌진 공격에 능하다.",
-            "인간이 초원을 정복한 뒤 크게 번성. 온순한 기질에 민첩하고, 체력은 낮지만 회피와 사격에 능하다.",
-            "심연에서 비롯된 혼혈. 어둠과 불에 친화적이며 근접과 마법이 모두 강하다. 마족화 시 생명 흡수 능력을 얻는다.",
-            "마족의 순혈 상위층. 강력한 의식과 마계 소환을 다룬다. 마족화 시 생명 흡수 능력을 얻는다."
-        }
-    };
+{ // JP
+"大陸で最も好戦的な種族。<color=#ADD8E6>体力</color>と<color=#ADD8E6>近接戦闘</color>に優れる。\n"+
+"<color=#FF8800>【狩猟】敵撃破時に追加経験値を得る可能性</color>",
+
+"射撃と魔法に長ける種族。現在は多くが人間に隷属している。\n"+
+"<color=#FF8800>【精密】射撃武器で低HPの敵を即死させる可能性</color>",
+
+"希少な高位エルフ。<color=#ADD8E6>魔法</color>と<color=#ADD8E6>近接</color>に優れる。\n"+
+"<color=#FF8800>【狩猟】敵撃破時に追加経験値を得る可能性</color>\n"+
+"<color=#FF8800>【精密】射撃武器で低HPの敵を即死させる可能性</color>",
+
+"数が多い兎族。敏捷だが体力が低く、<color=#ADD8E6>射撃</color>と<color=#ADD8E6>近接</color>が得意。\n"+
+"<color=#FF8800>【敏捷】回避/ダッシュが体力を消費しない場合があり、少量回復する</color>",
+
+"温和な兎族の一派。敏捷で体力は低いが、<color=#ADD8E6>魔法</color>と<color=#ADD8E6>射撃</color>に優れる。\n"+
+"<color=#FF8800>【敏捷】回避/ダッシュが体力を消費しない場合があり、少量回復する</color>",
+
+"深淵の混血。<color=#ADD8E6>体力</color>と<color=#ADD8E6>魔法</color>に優れ、魔族化が可能。\n"+
+"<color=#FF8800>【魔族化】最大HP1/4、攻撃力の1/4を吸収回復</color>",
+
+"純血の上位魔族。<color=#ADD8E6>魔法</color>に特化し、強力な儀式を操る。\n"+
+"<color=#FF8800>【狩猟】敵撃破時に追加経験値を得る可能性</color>\n"+
+"<color=#FF8800>【魔族化】最大HP1/4、攻撃力の1/4を吸収回復</color>"
+},
+{ // CN(简体)
+"整片大陆上最好战的种族，四处征服和奴役其他种族。她们在<color=#ADD8E6>生命值</color>与<color=#ADD8E6>近战</color>上有优势。\n" +
+"<color=#FF8800>【狩猎】在击败敌人后一定几率额外经验</color>",
+
+"<color=#ADD8E6>射击</color>与<color=#ADD8E6>生命值</color>上有优势的种族，在森林中的城邦被摧毁后她们被人类奴役监禁，性奴市场上的价格适中。\n"+
+"<color=#FF8800>【精准】使用射击武器时对于低生命值敌人有几率一击必杀</color>",
+
+"精灵中的珍稀品种，也是性奴市场上的上等货。具有强大的<color=#ADD8E6>法术</color>和<color=#ADD8E6>近战</color>天赋。\n"+
+"<color=#FF8800>【狩猎】在击败敌人后一定几率额外经验</color>\n"+
+ "<color=#FF8800>【精准】使用射击武器时对于低生命值敌人有几率一击必杀</color>",
+
+"兔族在性奴市场上数量巨大，但是价格一般。她们身手敏捷但生命值低下，擅长<color=#ADD8E6>射击</color>和<color=#ADD8E6>近战</color>。\n"+
+ "<color=#FF8800>【敏捷】闪避与冲刺时有几率不消耗体力，且恢复一定体力</color>",
+
+"在人类征服草原后兔族大量繁衍，她们天性温顺，身手敏捷，生命值低下但是擅长<color=#ADD8E6>法术</color>和<color=#ADD8E6>射击</color>。\n"+
+"<color=#FF8800>【敏捷】闪避与冲刺时有几率不消耗体力，且恢复一定体力</color>",
+
+"源于深渊的混血，亲和黑暗与火焰。她们对于<color=#ADD8E6>生命值</color>与<color=#ADD8E6>法术</color>有优势，魔族化后可以拥有生命汲取能力。\n"+
+"<color=#FF8800>【魔族化】生命值上限四分之一，吸收攻击力四分之一生命值</color>",
+
+"魔族中的纯血上位者，掌握强力仪式与魔界生物的召唤。在<color=#ADD8E6>法术</color>上有巨大优势。魔族化后可以拥有生命汲取能力。\n"+
+"<color=#FF8800>【狩猎】在击败敌人后一定几率额外经验</color>\n"+
+ "<color=#FF8800>【魔族化】生命值上限四分之一，吸收攻击力四分之一生命值</color>",
+},
+{ // TC
+"尚武的人類種族，在<color=#ADD8E6>生命</color>與<color=#ADD8E6>近戰</color>上佔優勢。\n"+
+"<color=#FF8800>【狩獵】擊敗敵人時有機率獲得額外經驗</color>",
+
+"擅長射擊與魔法，多數已被人類奴役。\n"+
+"<color=#FF8800>【精準】使用射擊武器對低生命值敵人有機率一擊必殺</color>",
+
+"稀有的高等精靈，精通<color=#ADD8E6>魔法</color>與<color=#ADD8E6>近戰</color>。\n"+
+"<color=#FF8800>【狩獵】擊敗敵人時有機率獲得額外經驗</color>\n"+
+"<color=#FF8800>【精準】使用射擊武器對低生命值敵人有機率一擊必殺</color>",
+
+"數量龐大的兔族，敏捷但生命值低，擅長<color=#ADD8E6>射擊</color>與<color=#ADD8E6>近戰</color>。\n"+
+"<color=#FF8800>【敏捷】閃避/衝刺時有機率不消耗體力並少量恢復</color>",
+
+"溫順且敏捷的兔族一支，擅長<color=#ADD8E6>魔法</color>與<color=#ADD8E6>射擊</color>。\n"+
+"<color=#FF8800>【敏捷】閃避/衝刺時有機率不消耗體力並少量恢復</color>",
+
+"深淵混血，擅長<color=#ADD8E6>生命</color>與<color=#ADD8E6>魔法</color>，可進入魔族化狀態。\n"+
+"<color=#FF8800>【魔族化】最大生命值四分之一，吸收攻擊力四分之一生命值</color>",
+
+"純血上位魔族，魔法強大並能操控儀式。\n"+
+"<color=#FF8800>【狩獵】擊敗敵人時有機率獲得額外經驗</color>\n"+
+"<color=#FF8800>【魔族化】最大生命值四分之一，吸收攻擊力四分之一生命值</color>"
+},
+{ // EN
+"Militant humans with strong <color=#ADD8E6>HP</color> and <color=#ADD8E6>Melee</color>.\n"+
+"<color=#FF8800>[Hunt] Chance to gain bonus EXP on kill</color>",
+
+"Skilled in ranged & magic, mostly enslaved.\n"+
+"<color=#FF8800>[Precision] Ranged attacks may insta-kill low-HP enemies</color>",
+
+"Rare high elves with strong <color=#ADD8E6>Magic</color> & <color=#ADD8E6>Melee</color>.\n"+
+"<color=#FF8800>[Hunt] Bonus EXP on kill</color>\n"+
+"<color=#FF8800>[Precision] Ranged insta-kill chance</color>",
+
+"Agile but low HP; excels in <color=#ADD8E6>Ranged</color> & <color=#ADD8E6>Melee</color>.\n"+
+"<color=#FF8800>[Agility] Dodge/Dash may cost no stamina and restore some</color>",
+
+"Gentle, agile rabbits; good with <color=#ADD8E6>Magic</color> & <color=#ADD8E6>Ranged</color>.\n"+
+"<color=#FF8800>[Agility] Dodge/Dash may cost no stamina and restore some</color>",
+
+"Abyssal hybrids with high <color=#ADD8E6>HP</color> & <color=#ADD8E6>Magic</color>.\n"+
+"<color=#FF8800>[Demon Form] Max HP = 25%; absorb 25% of attack as HP</color>",
+
+"Pure-blood upper demons focused on <color=#ADD8E6>Magic</color>.\n"+
+"<color=#FF8800>[Hunt] Bonus EXP on kill</color>\n"+
+"<color=#FF8800>[Demon Form] Max HP 25%, absorb 25% damage as HP</color>"
+},
+       { // KR
+"호전적인 인간족. <color=#ADD8E6>체력</color>과 <color=#ADD8E6>근접전</color>에 강함.\n"+
+"<color=#FF8800>[사냥] 적 처치 시 추가 경험치 획득 가능</color>",
+
+"사격과 마법에 능하며 다수는 노예 상태.\n"+
+"<color=#FF8800>[정밀] 사격 무기로 저HP 적을 즉사시킬 수 있음</color>",
+
+"희귀한 상위 엘프. <color=#ADD8E6>마법</color>과 <color=#ADD8E6>근접전</color> 모두 우수.\n"+
+"<color=#FF8800>[사냥] 처치 시 추가 경험치</color>\n"+
+"<color=#FF8800>[정밀] 저HP 적 즉사 가능</color>",
+
+"민첩하지만 체력이 낮아 <color=#ADD8E6>사격</color>과 <color=#ADD8E6>근접전</color>에 특화.\n"+
+"<color=#FF8800>[민첩] 회피/대시 시 스태미나가 소모되지 않고 회복 가능</color>",
+
+"순한 성격의 민첩한 토끼족. <color=#ADD8E6>마법</color>과 <color=#ADD8E6>사격</color>에 강함.\n"+
+"<color=#FF8800>[민첩] 회피/대시 시 스태미나 미소모 및 회복 가능</color>",
+
+"심연의 혼혈. <color=#ADD8E6>체력</color>과 <color=#ADD8E6>마법</color>에 우수하며 마족화 가능.\n"+
+"<color=#FF8800>[마족화] 최대 HP 1/4, 공격력 1/4만큼 흡혈</color>",
+
+"순혈 상위 마족. <color=#ADD8E6>마법</color>에 특화.\n"+
+"<color=#FF8800>[사냥] 처치 시 추가 경험치</color>\n"+
+"<color=#FF8800>[마족화] HP 1/4, 공격력 1/4 흡혈</color>"
+}
+};
     private static readonly string[] LUNA_LOCK = new string[]
   {
         "このキャラクターは外見・衣装・種族などを変更できません。",
@@ -5351,7 +5438,7 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public void Dungeon_Streak_AddOne() 
+    public void Dungeon_Streak_AddOne()
     {
         int streak = PlayerPrefs.GetInt("Dungeon_Streak", 0) + 1;
         PlayerPrefs.SetInt("Dungeon_Streak", streak);
@@ -5364,7 +5451,7 @@ public class UIManager : MonoBehaviour
 
         Debug.Log($"地下城连胜：{streak}  最高纪录：{PlayerPrefs.GetInt("Dungeon_BestStreak")}");
 
-      
+
     }
     public void Dungeon_Streak_ToZero()
     {
@@ -5377,7 +5464,7 @@ public class UIManager : MonoBehaviour
         Invoke(nameof(ShowDungeon_Streak), 1.5f);
     }
 
-    void ShowDungeon_Streak() 
+    void ShowDungeon_Streak()
     {
         _RoomGenerator.ShowInformationOfStage(12);
     }

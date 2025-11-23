@@ -2496,7 +2496,7 @@ public class Enemy : MonoBehaviour
 
 
                 } //赛琳娜瞬移技能
-                if (BossNumber == 7 && Random.Range(0, 5) == 4)
+                if (BossNumber == 7 && Random.Range(0, 4) == 3)
                 {
                     OpenIndestructible();//黑魔导士受伤1/3几率免疫伤害传送房间中央，并获得0.5秒无敌
 
@@ -4259,7 +4259,7 @@ public class Enemy : MonoBehaviour
 
     }
     // 召唤用 Boss 列表
-    public List<int> dominusSummonBossList = new List<int> { 1, 8, 9, 7 };
+    List<int> dominusSummonBossList = new List<int> { 1, 8, 9};
     private int currentSummonIndex = 0;           // 已经用了几个
 
 
