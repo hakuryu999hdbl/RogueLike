@@ -15,6 +15,20 @@ public class CG_End_NPC : MonoBehaviour
         switch (AnimtorNumber) 
         {
 
+            case -5:
+                if (GameFlowData.nextScene == "CG_AVG_04")
+                {
+
+
+                    anim.Play("CG/CG_FleshArmor_1");
+
+                    //anim.SetFloat("InputX", 0);
+                    //anim.SetFloat("InputY", -1);
+
+
+                } //肉铠发声
+                break;
+
             case -4:
                 if (GameFlowData.nextScene == "CG_AVG_05")
                 {

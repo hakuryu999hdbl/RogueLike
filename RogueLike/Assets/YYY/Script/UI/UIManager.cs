@@ -53,7 +53,7 @@ public class UIManager : MonoBehaviour
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleHermitCrabFront_1"));//0未解锁  1解锁
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleHermitCrabSide_1"));//0未解锁  1解锁
 
-        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleLeechSide_1"));//0未解锁  1解锁
+        //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_FleshArmor_1"));//0未解锁  1解锁
 
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_TentacleMonsterFront_1"));//0未解锁  1解锁
         //Debug.Log("目前的CG解锁状态【CG】" + PlayerPrefs.GetInt("CG_MonsterSide_1"));//0未解锁  1解锁
@@ -134,7 +134,7 @@ public class UIManager : MonoBehaviour
         //PlayerPrefs.SetInt("CG_TentacleHermitCrabFront_1", 1);
         //PlayerPrefs.SetInt("CG_TentacleHermitCrabSide_1", 1);
         //
-        //PlayerPrefs.SetInt("CG_TentacleLeechSide_1", 1);
+        //PlayerPrefs.SetInt("CG_FleshArmor_1", 1);
         //
         //PlayerPrefs.SetInt("CG_TentacleMonsterFront_1", 1);
         //PlayerPrefs.SetInt("CG_MonsterSide_1", 1);
@@ -873,7 +873,7 @@ public class UIManager : MonoBehaviour
         PlayerPrefs.SetInt("CG_TentacleHermitCrabFront_1", 0);
         PlayerPrefs.SetInt("CG_TentacleHermitCrabSide_1", 0);
 
-        PlayerPrefs.SetInt("CG_TentacleLeechSide_1", 0);
+        PlayerPrefs.SetInt("CG_FleshArmor_1", 0);
 
         PlayerPrefs.SetInt("CG_TentacleMonsterFront_1", 0);
         PlayerPrefs.SetInt("CG_MonsterSide_1", 0);
@@ -949,7 +949,7 @@ public class UIManager : MonoBehaviour
         PlayerPrefs.SetInt("CG_TentacleHermitCrabFront_1", 1);
         PlayerPrefs.SetInt("CG_TentacleHermitCrabSide_1", 1);
 
-        PlayerPrefs.SetInt("CG_TentacleLeechSide_1", 1);
+        PlayerPrefs.SetInt("CG_FleshArmor_1", 1);
 
         PlayerPrefs.SetInt("CG_TentacleMonsterFront_1", 1);
         PlayerPrefs.SetInt("CG_MonsterSide_1", 1);

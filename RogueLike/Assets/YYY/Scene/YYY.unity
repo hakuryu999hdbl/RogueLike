@@ -2976,6 +2976,10 @@ MonoBehaviour:
   isBurning: 0
   Egg: {fileID: 4824349615525433210, guid: 956762a3c001d524080efa17caf3971d, type: 3}
   FollowDamage: 0
+  meleeKills: 0
+  shootKills: 0
+  magicKills: 0
+  rescueCount: 0
 --- !u!4 &65564742
 Transform:
   m_ObjectHideFlags: 0
@@ -43040,7 +43044,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1474299230}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SetCheatButton
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -48986,11 +48990,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40e240f5b3ea6c44caecad7473b859be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  J: "\u6DEB\u6BD2\u56A2\u866B\u306B\u3088\u308B\u53D7\u7CBE"
-  C_1: "\u6DEB\u6BD2\u56CA\u866B\u79CD\u4ED8"
-  C_2: "\u6DEB\u6BD2\u56CA\u87F2\u7A2E\u4ED8"
-  E: Venom-Sac Parasite Impregnation
-  K: "\uC74C\uB3C5\uB0AD\uCDA9 \uC218\uC815"
+  J: "\u6CC4\u6B32\u8089\u93A7"
+  C_1: "\u6CC4\u6B32\u8089\u94E0"
+  C_2: "\u6D29\u617E\u8089\u93A7"
+  E: Flesh Armor
+  K: "\uC815\uC561 \uBC30\uCD9C \uC721\uAC11"
   isTyped: 0
 --- !u!114 &1098842847
 MonoBehaviour:
@@ -49025,7 +49029,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u6DEB\u6BD2\u56A2\u866B\u306B\u3088\u308B\u53D7\u7CBE"
+  m_Text: "\u6CC4\u6B32\u8089\u93A7"
 --- !u!222 &1098842848
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -49946,7 +49950,8 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 2
   m_Text: "Dimension   Mystia   GuanLe   Ina_Miyo   OTL_OTL   \u711A\u685C   Shymidnightfox  
-    Raffine   MaszaKZ   Ed_boy   Thekill\r\n"
+    Raffine   MaszaKZ   Ed_boy   Thekill   \u590F\u5361   Menze   \u3056\u3056\u3059\u305A\u3081\u3000\u3000\u3000LLL\u3000\u3000\u3000leather
+    lancet\r\n"
 --- !u!222 &1112346650
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -84131,7 +84136,7 @@ GameObject:
   - component: {fileID: 1865703752}
   - component: {fileID: 1865703751}
   m_Layer: 5
-  m_Name: CG_TentacleLeechSide_1
+  m_Name: CG_FleshArmor_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84170,7 +84175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133a72580d949584bbec3c206de34df9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cgKey: CG_TentacleLeechSide_1
+  cgKey: CG_FleshArmor_1
   highlightObj: {fileID: 160072277}
   unlocked: 0
   CG_Number: 0

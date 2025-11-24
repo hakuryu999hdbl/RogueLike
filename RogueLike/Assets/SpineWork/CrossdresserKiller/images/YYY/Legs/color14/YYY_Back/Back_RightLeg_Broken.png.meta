@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b03cce033c083374e96297791dde8552
+guid: 6e714e3f29508f849963272d4817d145
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6339452343089271793
-    second: Tentacle_Side_Nipple_0
+      213: -8183464119718489799
+    second: Back_RightLeg_Broken_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tentacle_Side_Nipple_0
+      name: Back_RightLeg_Broken_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 198
-        width: 150
-        height: 141
+        x: 2
+        y: 61
+        width: 275
+        height: 1541
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -127,8 +127,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f0c65ab8eadb508a0800000000000000
-      internalID: -6339452343089271793
+      spriteID: 9315600bdbe7e6e80800000000000000
+      internalID: -8183464119718489799
       vertices: []
       indices: 
       edges: []
@@ -144,7 +144,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Tentacle_Side_Nipple_0: -6339452343089271793
+      Back_RightLeg_Broken_0: -8183464119718489799
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

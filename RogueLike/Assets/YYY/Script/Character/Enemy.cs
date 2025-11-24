@@ -1033,7 +1033,7 @@ public class Enemy : MonoBehaviour
                     isRape = true;
 
                     // 生成 CG 预设体，负责真正的 Spine 动画
-                    GameObject cg = Instantiate(capturePrefab,player.transform.position, Quaternion.identity);//生成在玩家的为止(摄像机对准)
+                    GameObject cg = Instantiate(capturePrefab, player.transform.position, Quaternion.identity);//生成在玩家的为止(摄像机对准)
                     var cgSkin = cg.GetComponent<CharacterSkin>();
 
                     Animator cg_anim = cg.GetComponent<Animator>();
@@ -1060,7 +1060,6 @@ public class Enemy : MonoBehaviour
                             break;
 
                         case EnemyClass.Man:
-                        case EnemyClass.FleshArmor:
                         case EnemyClass.Demon:
 
                             switch (Random.Range(1, 6))
@@ -1089,6 +1088,12 @@ public class Enemy : MonoBehaviour
 
                             break;
 
+                        case EnemyClass.FleshArmor:
+
+                            cg_anim.Play("CG/CG_FleshArmor_1");
+                            if (PlayerPrefs.GetInt("CG/CG_FleshArmor_1") == 0) { PlayerPrefs.SetInt("CG/CG_FleshArmor_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+
+                            break;
 
                         case EnemyClass.Monster:
                             cg_anim.Play("CG/CG_MonsterSide_1");
@@ -4268,7 +4273,7 @@ public class Enemy : MonoBehaviour
 
     }
     // 召唤用 Boss 列表
-    List<int> dominusSummonBossList = new List<int> { 1, 8, 9};
+    List<int> dominusSummonBossList = new List<int> { 1, 8, 9 };
     private int currentSummonIndex = 0;           // 已经用了几个
 
 
