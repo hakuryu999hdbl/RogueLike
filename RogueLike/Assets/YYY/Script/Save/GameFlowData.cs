@@ -59,6 +59,11 @@ public class GameFlowData : MonoBehaviour
     public static int Sword_Buff;
     public static int Pistol_Buff;
     public static int Staff_Buff;
+
+
+    public static bool hasShownCoverThisRun = false;//开始封面是否已经显示过了
+
+
 }
 public static class SlavePricing
 {

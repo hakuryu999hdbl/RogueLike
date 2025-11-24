@@ -3280,6 +3280,15 @@ public class Enemy : MonoBehaviour
                         break;
                 }
 
+
+                //成就统计数
+                if (player.CurrentProfession == 0) player.meleeKills++;
+                if (player.CurrentProfession == 1) player.shootKills++;
+                if (player.CurrentProfession == 2) player.magicKills++;
+                // 判定成就
+                player.CheckCombatAchievements();
+
+
             }
 
             DieBonue = true;

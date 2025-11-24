@@ -1329,7 +1329,7 @@ public class RoomGenerator : MonoBehaviour
 
         Stage_Information.SetActive(true);
 
-        Debug.Log("显示信息");
+        //Debug.Log("显示信息");
     }
 
 
@@ -1357,6 +1357,30 @@ public class RoomGenerator : MonoBehaviour
 
        
         StartCoroutine(ResultDetailDelay());
+
+
+        switch (GameFlowData.nextScene) 
+        {
+            case "Story_01":
+                UIManager.instance.Achieventment_ACH_FIRST_MISSION();//【初めての潜入】第1章クリア
+                break;
+
+            case "Story_03":
+                UIManager.instance.Achieventment_ACH_UNLOCK_HIGHELF();//【高等精霊の目覚め】高等精霊のキャラクターを解放。【防止说DL版解锁后，Steam版再玩解锁不了】
+                break;
+
+            case "Story_05":
+                UIManager.instance.Achieventment_ACH_BEAT_PRINCESS();//【王女との対峙】王女セリーネ撃破
+                break;
+
+            case "Story_12":
+                UIManager.instance.Achieventment_ACH_SEE_TRUTH();//【真実の目撃者】帝国の正体を知る
+                break;
+        }
+
+
+
+
     }//获胜端口
 
     void TimeStop() 

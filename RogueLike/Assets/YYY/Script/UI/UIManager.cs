@@ -1015,6 +1015,34 @@ public class UIManager : MonoBehaviour
     /// 主菜单
     /// </summary>
     #region
+    [Header("封面图片")]
+    public GameObject coverPanel;   // 封面图片所在的 UI 根节点
+
+    void CheckcoverPanel()
+    {
+        if (GameFlowData.hasShownCoverThisRun)
+        {
+            // 本次已经显示过了，直接关闭封面
+            coverPanel.SetActive(false);
+        }
+        else
+        {
+            // 第一次运行：显示封面，并标记
+            GameFlowData.hasShownCoverThisRun = true;
+            coverPanel.SetActive(true);
+        }
+    }
+
+    public void OnCoverClicked()
+    {
+        coverPanel.SetActive(false);
+
+        AudioManager.instance.AudioPlay(AudioManager.instance.Attack_katana_draw);
+
+    } // 按钮点击用这个
+
+
+
     [Header("主菜单")]
     public GameObject Common_All;//移动血条等
     public GameObject NextButton;//播放结局动画
@@ -1530,6 +1558,7 @@ public class UIManager : MonoBehaviour
             PlayerPrefs.SetInt("HighElf", 1);
             _RoomGenerator.ShowInformationOfStage(13);
             //Debug.Log("高等精灵可选");
+           
         }
 
 
@@ -2424,6 +2453,8 @@ public class UIManager : MonoBehaviour
         // 读取当前难度，默认 0（简单）
         currentDifficulty = PlayerPrefs.GetInt(PREF_KEY, 0);
         UpdateDifficultyUI();
+
+        CheckcoverPanel();//封面只显示一次
 
 
     }//读取，显示存档
@@ -3379,6 +3410,15 @@ public class UIManager : MonoBehaviour
         lastInputTime2 = Time.time;
         #endregion
 
+        //按下任意键
+        if (coverPanel.activeSelf)
+        {
+            OnCoverClicked();
+            return;
+        }
+
+
+
         if (player.isInputBlocked && !isInputing)
         {
             Vector2 dir = ctx.ReadValue<Vector2>();
@@ -3758,6 +3798,17 @@ public class UIManager : MonoBehaviour
     [Obsolete]
     private void OnConfirm(InputAction.CallbackContext ctx)
     {
+        //按下任意键
+        if (coverPanel.activeSelf) 
+        {
+            OnCoverClicked();
+            return;
+        }
+
+
+
+
+
         if (player.isInputBlocked)
         {
             // 可选：进入下一级菜单、确认开始游戏等
@@ -3987,6 +4038,15 @@ public class UIManager : MonoBehaviour
 
     private void OnCancel(InputAction.CallbackContext ctx)
     {
+        //按下任意键
+        if (coverPanel.activeSelf)
+        {
+            OnCoverClicked();
+            return;
+        }
+
+
+
         if (player.isInputBlocked)
         {
             // 可选：退出菜单、返回上一级等
@@ -4108,6 +4168,14 @@ public class UIManager : MonoBehaviour
 
     private void OnCreate(InputAction.CallbackContext ctx)
     {
+        //按下任意键
+        if (coverPanel.activeSelf)
+        {
+            OnCoverClicked();
+            return;
+        }
+
+
         if (player.isInputBlocked)
         {
             // 可选：删除存档
@@ -4122,6 +4190,15 @@ public class UIManager : MonoBehaviour
 
     private void OnDelete(InputAction.CallbackContext ctx)
     {
+        //按下任意键
+        if (coverPanel.activeSelf)
+        {
+            OnCoverClicked();
+            return;
+        }
+
+
+
         if (player.isInputBlocked)
         {
             // 可选：删除存档
@@ -4136,6 +4213,15 @@ public class UIManager : MonoBehaviour
     }//键盘E    xbox手柄X       ps手柄□
     private void OnPause(InputAction.CallbackContext ctx)
     {
+
+        //按下任意键
+        if (coverPanel.activeSelf)
+        {
+            OnCoverClicked();
+            return;
+        }
+
+
         //捏人界面
         if (CurrentChooseList == 1)
         {
@@ -4172,6 +4258,16 @@ public class UIManager : MonoBehaviour
 
     private void OnMenu(InputAction.CallbackContext ctx)
     {
+
+        //按下任意键(好像报错)
+        //if (coverPanel.activeSelf)
+        //{
+        //    OnCoverClicked();
+        //    return;
+        //}
+
+
+
         //if (CurrentChooseList == -4 && CurrentChooseList == 2)
         //{
         //     
@@ -5476,4 +5572,60 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+
+    /// <summary>
+    /// 成就端口
+    /// </summary>
+    #region
+
+    public void Achieventment_ACH_FIRST_MISSION() 
+    {
+        Debug.Log("成就弹窗：ACH_FIRST_MISSION");
+
+    }//【初めての潜入】第1章クリア
+
+    public void Achieventment_ACH_BEAT_PRINCESS()
+    {
+        Debug.Log("成就弹窗：ACH_BEAT_PRINCESS");
+
+    }//【王女との対峙】王女セリーネ撃破
+
+    public void Achieventment_ACH_SEE_TRUTH()
+    {
+        Debug.Log("成就弹窗：ACH_SEE_TRUTH");
+
+    }//【真実の目撃者】帝国の正体を知る
+
+
+    public void Achieventment_ACH_MELEE_MASTER()
+    {
+        Debug.Log("成就弹窗：ACH_MELEE_MASTER");
+
+    }//【近接戦の達人】一局内で近接攻撃で敵を10体撃破。
+
+    public void Achieventment_ACH_SHOOT_MASTER()
+    {
+        Debug.Log("成就弹窗：ACH_SHOOT_MASTER");
+
+    }//【射撃術の達人】一局内で射撃攻撃で敵を10体撃破。
+
+    public void Achieventment_ACH_MAGIC_MASTER()
+    {
+        Debug.Log("成就弹窗：ACH_MAGIC_MASTER");
+
+    }//【魔術行使の達人】一局内で魔法攻撃で敵を10体撃破。
+
+    public void Achieventment_ACH_RESCUE_3()
+    {
+        Debug.Log("成就弹窗：ACH_RESCUE_3");
+
+    }//【救出の連鎖】一局内で奴隷を3人以上解放。
+
+    public void Achieventment_ACH_UNLOCK_HIGHELF()
+    {
+        Debug.Log("成就弹窗：ACH_UNLOCK_HIGHELF");
+
+    }//【高等精霊の目覚め】高等精霊のキャラクターを解放。
+
+    #endregion
 }

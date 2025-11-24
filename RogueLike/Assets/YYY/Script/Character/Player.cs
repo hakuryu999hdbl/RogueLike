@@ -3599,7 +3599,7 @@ public class Player : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// 增加战败凌辱/侍奉次数等数值
+    /// 增加战败凌辱/侍奉次数等数值   统计一局内近战/远程/法术击杀数  拯救数
     /// </summary>
     #region
     public void DefeatCount()
@@ -3617,5 +3617,31 @@ public class Player : MonoBehaviour
         //ApplySaveData(data);//升级将更新后的值重新带入
         SaveManager.Save(data);
     }
+
+    [Header("成就统计数")]
+    public int meleeKills = 0;
+    public int shootKills = 0;
+    public int magicKills = 0;
+
+    public int rescueCount = 0;
+
+
+    public void CheckCombatAchievements()
+    {
+        if (meleeKills >= 10) 
+        { UIManager.instance.Achieventment_ACH_MELEE_MASTER(); }
+
+        if (shootKills >= 10)
+        { UIManager.instance.Achieventment_ACH_SHOOT_MASTER(); }
+
+        if (magicKills >= 10)
+        { UIManager.instance.Achieventment_ACH_MAGIC_MASTER(); }
+
+        if (rescueCount >= 3)
+        { UIManager.instance.Achieventment_ACH_RESCUE_3(); }
+    }
+
+
+
     #endregion
 }

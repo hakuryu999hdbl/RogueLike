@@ -313,7 +313,7 @@ public class WallMap : MonoBehaviour
 
 
             GameFlowData.BulletCanThroughtWall = true;//只有在战斗的时候子弹可以穿墙
-            Debug.Log("子弹可穿墙" + GameFlowData.BulletCanThroughtWall);
+            //Debug.Log("子弹可穿墙" + GameFlowData.BulletCanThroughtWall);
         }
 
 
@@ -376,7 +376,7 @@ public class WallMap : MonoBehaviour
             _RoomGenerator.ShowInformationOfStage(2);
 
             GameFlowData.BulletCanThroughtWall = false;//只有在战斗的时候子弹可以穿墙
-            Debug.Log("子弹不可穿墙" + GameFlowData.BulletCanThroughtWall);
+            //Debug.Log("子弹不可穿墙" + GameFlowData.BulletCanThroughtWall);
         }
 
       

@@ -441,6 +441,11 @@ public class RBQ : MonoBehaviour
             {
                 if (!InteractOneTime)
                 {
+                    // 增加解救判定
+                    other.GetComponent<Player>().rescueCount++;
+                    other.GetComponent<Player>().CheckCombatAchievements();
+
+
                     //奖励一个队友
                     GameObject NewEnemy = Instantiate(_RoomGenerator.Enemy, transform.position, Quaternion.identity);
                     Enemy enemy = NewEnemy.transform.Find("Enemy").GetComponent<Enemy>();
