@@ -70,6 +70,11 @@ public static class ItemLocalization
                     case 5: return Lang(language, "緋紅のドレス", "绯红礼裙", "緋紅禮裙", "Crimson Dress", "진홍색 드레스");
                     case 6: return Lang(language, "ゴシックドレス", "哥特长裙", "哥特長裙", "Gothic Dress", "고딕 드레스");
                     case 7: return Lang(language, "シスター服", "修女服", "修女服", "Nun Habit", "수녀복");
+                    // ★ 新追加 4 件衣服
+                    case 8: return Lang(language, "白魔導礼装", "白魔仪礼服", "白魔儀禮服", "White Mage", "백마도 의례복");
+                    case 9: return Lang(language, "傭兵服", "女佣兵服", "女傭兵服", "Merc Wear", "여용병 복장");
+                    case 13: return Lang(language, "メイドスカート", "女仆短裙", "女僕短裙", "Maid Skirt", "메이드 스커트");
+                    case 14: return Lang(language, "金飾り白ランジェリー", "金饰白内衣", "金飾白內衣", "Gold Lingerie", "금장 흰 란제리");
                 }
                 break;
 
@@ -86,6 +91,11 @@ public static class ItemLocalization
                     case 5: return Lang(language, "黒いハイヒール", "黑色高跟鞋", "黑色高跟鞋", "Black Heels", "검은 하이힐");
                     case 6: return Lang(language, "黒のショートブーツ", "黑色短靴", "黑色短靴", "Short Boots", "단부츠");
                     case 7: return Lang(language, "白いニーハイソックス", "白丝过膝袜", "白絲過膝襪", "White Thigh-highs", "하얀 니삭스");
+                    // ★ 新追加 4 双丝袜
+                    case 8: return Lang(language, "オレンジ足掛けソックス", "橘色脚踩袜", "橘色腳踩襪", "Orange Stirrup", "오렌지 스타럽");
+                    case 9: return Lang(language, "黒足掛けソックス", "黑色脚踩袜", "黑色腳踩襪", "Black Stirrup", "검은 스타럽");
+                    case 13: return Lang(language, "黒ネットストッキング", "黑网袜", "黑網襪", "Fishnets", "망사 스타킹");
+                    case 14: return Lang(language, "白足掛けソックス", "白色脚踩袜", "白色腳踩襪", "White Stirrup", "하얀 스타럽");
                 }
                 break;
 
@@ -399,6 +409,37 @@ public static class ItemLocalization
                     "純白修女服，卻染有血跡。",
                     "A nun’s robe, pure yet stained.",
                     "수녀복. 순백이지만 피로 물들었다.");
+                    case 8:
+                        return Lang(language,
+                        "白魔導士の礼装。浄化と癒しの象徴。",
+                        "白魔导士的仪礼长袍，是净化与治愈的象征。",
+                        "白魔導士的儀禮長袍，是淨化與治癒的象徵。",
+                        "Ceremonial white mage robe, symbol of healing.",
+                        "백마도사의 예복. 정화와 치유의 상징이다。");
+
+                    case 9:
+                        return Lang(language,
+                        "幾多の戦場をくぐり抜けた女傭兵の戦装束。",
+                        "久经沙场的女佣兵战斗服，布料上满是磨损痕迹。",
+                        "久經沙場的女傭兵戰鬥服，布料上滿是磨損痕跡。",
+                        "Battle gear of a seasoned female mercenary.",
+                        "수많은 전장을 넘긴 여용병의 전투복이다。");
+
+                    case 13:
+                        return Lang(language,
+                        "動きやすい短めのメイドスカート。翻る裾が愛らしい。",
+                        "方便行动的短款女仆裙，掀起时格外惹眼。",
+                        "方便行動的短款女僕裙，掀起時格外惹眼。",
+                        "A short maid skirt made for quick, graceful service.",
+                        "움직이기 좋은 짧은 메이드 스커트. 팔랑이는 자락이 사랑스럽다。");
+
+                    case 14:
+                        return Lang(language,
+                        "金の装飾が施された白いランジェリー。隠すより魅せるための衣。",
+                        "金饰点缀的白色内衣，比起遮掩更像是展示身体的道具。",
+                        "金飾點綴的白色內衣，比起遮掩更像是展示身體的道具。",
+                        "White lingerie with gold trim, made to show rather than hide.",
+                        "금장 장식이 더해진 흰 란제리. 숨기기보다 드러내기 위한 옷이다。");
                 }
                 break;
 
@@ -469,6 +510,37 @@ public static class ItemLocalization
                     "白絲過膝襪，純潔的象徵。",
                     "White thigh-highs, symbol of purity.",
                     "하얀 니삭스. 순수의 상징.");
+                    case 8:
+                        return Lang(language,
+                        "明るいオレンジ色の足掛けソックス。元気で眩しい印象に。",
+                        "橘色脚踩袜，让整条腿看起来活泼而醒目。",
+                        "橘色腳踩襪，讓整條腿看起來活潑而醒目。",
+                        "Orange stirrup socks giving a lively, eye-catching look.",
+                        "밝은 오렌지색 발걸이 양말. 경쾌한 인상을 준다。");
+
+                    case 9:
+                        return Lang(language,
+                        "黒い足掛けソックス。脚線美をくっきりと強調する。",
+                        "黑色脚踩袜，清晰勾勒出腿部线条。",
+                        "黑色腳踩襪，清晰勾勒出腿部線條。",
+                        "Black stirrup socks that sharply define the legs.",
+                        "검은 발걸이 양말. 다리 라인을 또렷이 드러낸다。");
+
+                    case 13:
+                        return Lang(language,
+                        "網目のストッキング。露骨なほど挑発的な一品。",
+                        "大网眼黑丝袜，几乎称得上是公然挑逗。",
+                        "大網眼黑絲襪，幾乎稱得上是公然挑逗。",
+                        "Black fishnet stockings, openly provocative.",
+                        "검은 망사 스타킹. 노골적인 유혹이 묻어난다。");
+
+                    case 14:
+                        return Lang(language,
+                        "白い足掛けソックス。清純さの中に密かな色気を忍ばせる。",
+                        "白色脚踩袜，看似清纯，却暗藏一点危险的气息。",
+                        "白色腳踩襪，看似清純，卻暗藏一點危險的氣息。",
+                        "White stirrup socks, purity laced with a hint of allure.",
+                        "하얀 발걸이 양말. 순수함 속에 은근한 관능이 있다。");
                 }
                 break;
 

@@ -694,7 +694,7 @@ public class RBQ : MonoBehaviour
                 YYY_headIndex = Random.Range(1, 13);  // 除去皇女
                 YYY_eyesIndex = Random.Range(1, 14);  // 1~13
 
-                //目前已有的中挑选，
+                //目前已有的中挑选，//ToDo: 商店新增商品这里添加随机即可
                 int[] validIndexes = { 2, 3, 4, 5, 6, 7, 10, 11, 12 };
                 YYY_bodyIndex = validIndexes[Random.Range(0, validIndexes.Length)];
                 YYY_legsIndex = validIndexes[Random.Range(0, validIndexes.Length)];

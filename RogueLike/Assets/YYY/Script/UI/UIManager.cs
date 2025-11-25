@@ -1688,7 +1688,9 @@ public class UIManager : MonoBehaviour
         RabbitBlack = 3,// 北方兔族（黑）
         RabbitWhite = 4,// 南方兔族（白）
         Demon = 5,      // 魔族
-        HighDemon = 6   // 高等魔族
+        HighDemon = 6,   // 高等魔族
+        Oni = 7,        // 鬼族
+        Deer = 8        // 鹿族
     }
 
     [SerializeField] private int raceOptionIndex = 0; // 0..6
@@ -1704,32 +1706,32 @@ public class UIManager : MonoBehaviour
             case RaceOption.RabbitWhite: player.YYY_hatIndex = 10; IntroduceOfRace.text = RACE_DESC[Lang, 4]; break; // 白色兔耳
             case RaceOption.Demon: player.YYY_hatIndex = 12; IntroduceOfRace.text = RACE_DESC[Lang, 5]; break;
             case RaceOption.HighDemon: player.YYY_hatIndex = 11; IntroduceOfRace.text = RACE_DESC[Lang, 6]; break;
+            case RaceOption.Oni: player.YYY_hatIndex = 8; IntroduceOfRace.text = RACE_DESC[Lang, 7]; break; // 鬼族
+            case RaceOption.Deer: player.YYY_hatIndex = 5; IntroduceOfRace.text = RACE_DESC[Lang, 8]; break; // 鹿族
         }
     }
+
+    private const int RaceCount = 9;//种族总数
+    private const int RaceMaxIndex = RaceCount - 1;
 
     private int GetNextRaceIndex(int currentIndex, int delta)
     {
         // delta = +1 表示向右（下一个），delta = -1 表示向左（上一个）
         int idx = currentIndex;
 
-        // 最多循环 7 次（种族总数），防止极端情况死循环
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < RaceCount; i++)
         {
             idx += delta;
 
-            if (idx > 6) idx = 0;
-            if (idx < 0) idx = 6;
+            if (idx > RaceMaxIndex) idx = 0;
+            if (idx < 0) idx = RaceMaxIndex;
 
             RaceOption ro = (RaceOption)idx;
 
-            // 如果还没解锁就跳过
-            if (ro == RaceOption.HighElf && PlayerPrefs.GetInt("HighElf", 0) == 0)
-                continue;
+            // 只锁高等精灵 / 高等魔族，其他包括鬼族 / 鹿族默认可选
+            if (ro == RaceOption.HighElf && PlayerPrefs.GetInt("HighElf", 0) == 0) continue;
+            if (ro == RaceOption.HighDemon && PlayerPrefs.GetInt("HighDemon", 0) == 0) continue;
 
-            if (ro == RaceOption.HighDemon && PlayerPrefs.GetInt("HighDemon", 0) == 0)
-                continue;
-
-            // 找到一个可用种族
             return idx;
         }
 
@@ -1769,12 +1771,10 @@ public class UIManager : MonoBehaviour
 
     public void OnRaceLeft()
     {
-        //ChangeSkin(ref player.YYY_hatIndex, 1, 4, -1);
+
         if (IsLuna(player.currentSaveName) == false)
         {
             raceOptionIndex = GetNextRaceIndex(raceOptionIndex, +1);
-            //raceOptionIndex++; if (raceOptionIndex > 6) { raceOptionIndex = 0; }
-            //if (raceOptionIndex < 0) { raceOptionIndex = 6; }
 
             ApplyRaceSelectionSimple();
             AfterAnySelectionChanged();
@@ -1784,12 +1784,10 @@ public class UIManager : MonoBehaviour
     }
     public void OnRaceRight()
     {
-        //ChangeSkin(ref player.YYY_hatIndex, 1, 4, +1); 
+
         if (IsLuna(player.currentSaveName) == false)
         {
             raceOptionIndex = GetNextRaceIndex(raceOptionIndex, -1);
-            //raceOptionIndex--; if (raceOptionIndex > 6) { raceOptionIndex = 0; }
-            //if (raceOptionIndex < 0) { raceOptionIndex = 6; }
 
             ApplyRaceSelectionSimple();
             AfterAnySelectionChanged();
@@ -1866,9 +1864,14 @@ public class UIManager : MonoBehaviour
             case 10: return (int)RaceOption.RabbitWhite;
             case 12: return (int)RaceOption.Demon;
             case 11: return (int)RaceOption.HighDemon;
-            // 兼容舊檔：5..9 以前的兔族耳，統一歸為黑兔
+            case 8: return (int)RaceOption.Oni;   // 鬼族
+            case 5: return (int)RaceOption.Deer;  // 鹿族
+                
+
+            // 兼容舊檔：6,7,9 以前的兔族耳，統一歸為黑兔
             default:
-                if (hat >= 5 && hat <= 9) return (int)RaceOption.RabbitBlack;
+                if (hat == 6 || hat == 7 || hat == 9)
+                    return (int)RaceOption.RabbitBlack;
                 return (int)RaceOption.Human;
         }
     }
@@ -1911,11 +1914,11 @@ public class UIManager : MonoBehaviour
     private static readonly string[,] RACE_NAMES = new string[,]
     {
     // Human,     Elf,      HighElf,            RabbitBlack,              RabbitWhite,               Demon,     HighDemon
-    { "人間",    "エルフ",  "<color=#ADD8E6>ハイエルフ</color>",        "北方ラビット",     "南方ラビット",      "魔族",     "<color=#ADD8E6>上位魔族</color>" }, // JP
-    { "人类",    "精灵",    "<color=#ADD8E6>高等精灵</color>",          "北方兔族",         "南方兔族",          "魔族",     "<color=#ADD8E6>高等魔族</color>" }, // CN
-    { "人類",    "精靈",    "<color=#ADD8E6>高等精靈</color>",          "北方兔族",         "南方兔族",          "魔族",     "<color=#ADD8E6>高等魔族</color>" }, // TC
-    { "Human",   "Elf",     "<color=#ADD8E6>High Elf</color>",         "Northern Rabbit","Southern Rabbit", "Demon",   "<color=#ADD8E6>High Demon</color>" }, // EN
-    { "인간",    "엘프",    "<color=#ADD8E6>하이 엘프</color>",         "북부 토끼족",        "남부 토끼족",         "마족",     "<color=#ADD8E6>상위 마족</color>" }, // KR
+    { "人間",    "エルフ",  "<color=#ADD8E6>ハイエルフ</color>",        "北方ラビット",      "南方ラビット",      "魔族",     "<color=#ADD8E6>上位魔族</color>", "鬼族",  "鹿族" },   // JP
+    { "人类",    "精灵",    "<color=#ADD8E6>高等精灵</color>",          "北方兔族",          "南方兔族",          "魔族",     "<color=#ADD8E6>高等魔族</color>", "鬼族",  "鹿族" },   // CN
+    { "人類",    "精靈",    "<color=#ADD8E6>高等精靈</color>",          "北方兔族",          "南方兔族",          "魔族",     "<color=#ADD8E6>高等魔族</color>", "鬼族",  "鹿族" },   // TC
+    { "Human",   "Elf",     "<color=#ADD8E6>High Elf</color>",         "Northern Rabbit",  "Southern Rabbit", "Demon",   "<color=#ADD8E6>High Demon</color>","Oni", "Deer"  },     // EN
+    { "인간",    "엘프",    "<color=#ADD8E6>하이 엘프</color>",         "북부 토끼족",       "남부 토끼족",       "마족",     "<color=#ADD8E6>상위 마족</color>", "오니", "사슴족" }  // KR
     };
 
     private static readonly string[,] CLASS_NAMES = new string[,]
@@ -1930,19 +1933,20 @@ public class UIManager : MonoBehaviour
 
 
     #region  种族介绍提示
-    // 7个种族顺序：Human, Elf, HighElf, RabbitBlack, RabbitWhite, Demon, HighDemon
+    // 9 个种族顺序：Human, Elf, HighElf, RabbitBlack, RabbitWhite, Demon, HighDemon, Oni, Deer
     private static readonly string[,] RACE_DESC = new string[,]
     {
 { // JP
 "大陸で最も好戦的な種族。<color=#ADD8E6>体力</color>と<color=#ADD8E6>近接戦闘</color>に優れる。\n"+
 "<color=#FF8800>【狩猟】敵撃破時に追加経験値を得る可能性</color>",
 
-"射撃と魔法に長ける種族。現在は多くが人間に隷属している。\n"+
+"<color=#ADD8E6>射撃</color>と<color=#ADD8E6>体力</color>に長ける種族。現在は多くが人間に隷属している。\n"+
 "<color=#FF8800>【精密】射撃武器で低HPの敵を即死させる可能性</color>",
 
 "希少な高位エルフ。<color=#ADD8E6>魔法</color>と<color=#ADD8E6>近接</color>に優れる。\n"+
 "<color=#FF8800>【狩猟】敵撃破時に追加経験値を得る可能性</color>\n"+
-"<color=#FF8800>【精密】射撃武器で低HPの敵を即死させる可能性</color>",
+"<color=#FF8800>【精密】射撃武器で低HPの敵を即死させる可能性</color>\n"+
+"<color=#FF8800>【隠秘化】体力を消費して半透明化し、一時的に敵の視線をそらす</color>",
 
 "数が多い兎族。敏捷だが体力が低く、<color=#ADD8E6>射撃</color>と<color=#ADD8E6>近接</color>が得意。\n"+
 "<color=#FF8800>【敏捷】回避/ダッシュが体力を消費しない場合があり、少量回復する</color>",
@@ -1955,105 +1959,157 @@ public class UIManager : MonoBehaviour
 
 "純血の上位魔族。<color=#ADD8E6>魔法</color>に特化し、強力な儀式を操る。\n"+
 "<color=#FF8800>【狩猟】敵撃破時に追加経験値を得る可能性</color>\n"+
-"<color=#FF8800>【魔族化】最大HP1/4、攻撃力の1/4を吸収回復</color>"
+"<color=#FF8800>【魔族化】最大HP1/4、攻撃力の1/4を吸収回復</color>\n"+
+"<color=#FF8800>【自然】回復時に追加でHPを多く回復する</color>",
+
+"魔族の傍系で地底旧都の血を引く。男鬼族は屈強で醜く、女鬼族は希少で異様に美しい。<color=#ADD8E6>近接火力</color>に優れる。\n"+
+"<color=#FF8800>【剛毅】ガードしていなくても一度だけ攻撃を完全無効化する可能性</color>",
+
+"古い森の精霊に近しい種族。従順な鹿族の奴隷は幸運を呼ぶとされる。高い<color=#ADD8E6>体力</color>を誇る。\n"+
+"<color=#FF8800>【辟邪】凍結・毒・火傷・麻痺などの状態異常を無効化</color>\n"+
+"<color=#FF8800>【自然】回復時に追加でHPを多く回復する</color>"
 },
-{ // CN(简体)
-"整片大陆上最好战的种族，四处征服和奴役其他种族。她们在<color=#ADD8E6>生命值</color>与<color=#ADD8E6>近战</color>上有优势。\n" +
+
+// CN(简体)
+{
+"整片大陆上最好战的种族，四处征服和奴役其他种族。她们在<color=#ADD8E6>生命值</color>与<color=#ADD8E6>近战</color>上有优势。\n"+
 "<color=#FF8800>【狩猎】在击败敌人后一定几率额外经验</color>",
 
-"<color=#ADD8E6>射击</color>与<color=#ADD8E6>生命值</color>上有优势的种族，在森林中的城邦被摧毁后她们被人类奴役监禁，性奴市场上的价格适中。\n"+
-"<color=#FF8800>【精准】使用射击武器时对于低生命值敌人有几率一击必杀</color>",
+"<color=#ADD8E6>射击</color>与<color=#ADD8E6>生命值</color>上有优势的种族，多数被人类奴役。\n"+
+"<color=#FF8800>【精准】射击武器对低生命值敌人有几率一击必杀</color>",
 
-"精灵中的珍稀品种，也是性奴市场上的上等货。具有强大的<color=#ADD8E6>法术</color>和<color=#ADD8E6>近战</color>天赋。\n"+
-"<color=#FF8800>【狩猎】在击败敌人后一定几率额外经验</color>\n"+
- "<color=#FF8800>【精准】使用射击武器时对于低生命值敌人有几率一击必杀</color>",
+"精灵中的珍稀品种，具有强大的<color=#ADD8E6>法术</color>与<color=#ADD8E6>近战</color>能力。\n"+
+"<color=#FF8800>【狩猎】击败敌人后有几率额外经验</color>\n"+
+"<color=#FF8800>【精准】射击对低生命值敌人有几率一击必杀</color>\n"+
+"<color=#FF8800>【隐秘化】消耗体力隐身，短时间转移敌人视线</color>",
 
-"兔族在性奴市场上数量巨大，但是价格一般。她们身手敏捷但生命值低下，擅长<color=#ADD8E6>射击</color>和<color=#ADD8E6>近战</color>。\n"+
- "<color=#FF8800>【敏捷】闪避与冲刺时有几率不消耗体力，且恢复一定体力</color>",
+"数量众多且敏捷的兔族，生命值较低，擅长<color=#ADD8E6>射击</color>与<color=#ADD8E6>近战</color>。\n"+
+"<color=#FF8800>【敏捷】闪避/冲刺可能不消耗体力并恢复少量体力</color>",
 
-"在人类征服草原后兔族大量繁衍，她们天性温顺，身手敏捷，生命值低下但是擅长<color=#ADD8E6>法术</color>和<color=#ADD8E6>射击</color>。\n"+
-"<color=#FF8800>【敏捷】闪避与冲刺时有几率不消耗体力，且恢复一定体力</color>",
+"温顺的草原兔族，敏捷但生命值较低，擅长<color=#ADD8E6>法术</color>与<color=#ADD8E6>射击</color>。\n"+
+"<color=#FF8800>【敏捷】闪避/冲刺可能不消耗体力并恢复少量体力</color>",
 
-"源于深渊的混血，亲和黑暗与火焰。她们对于<color=#ADD8E6>生命值</color>与<color=#ADD8E6>法术</color>有优势，魔族化后可以拥有生命汲取能力。\n"+
-"<color=#FF8800>【魔族化】生命值上限四分之一，吸收攻击力四分之一生命值</color>",
+"深渊的混血，擅长<color=#ADD8E6>生命值</color>和<color=#ADD8E6>法术</color>，可进入魔族化。\n"+
+"<color=#FF8800>【魔族化】最大生命 25%，吸收攻击力 25% 生命值</color>",
 
-"魔族中的纯血上位者，掌握强力仪式与魔界生物的召唤。在<color=#ADD8E6>法术</color>上有巨大优势。魔族化后可以拥有生命汲取能力。\n"+
-"<color=#FF8800>【狩猎】在击败敌人后一定几率额外经验</color>\n"+
- "<color=#FF8800>【魔族化】生命值上限四分之一，吸收攻击力四分之一生命值</color>",
+"纯血上位魔族，擅长<color=#ADD8E6>法术</color>，能操控强力仪式。\n"+
+"<color=#FF8800>【狩猎】击败敌人后有额外经验概率</color>\n"+
+"<color=#FF8800>【魔族化】最大生命 25%，吸收攻击力 25% 生命值</color>\n"+
+"<color=#FF8800>【自然】恢复生命时额外恢复部分生命值</color>",
+
+"魔族的旁系，来源于地底旧都。男性鬼族强壮丑陋，女性鬼族稀少却异常貌美，擅长<color=#ADD8E6>近战</color>。\n"+
+"<color=#FF8800>【坚韧】一定几率在未防御时完全免疫一次伤害</color>",
+
+"与古老森林灵魂亲近的种族。传闻听话的鹿族女奴能带来好运，拥有高<color=#ADD8E6>生命值</color>。\n"+
+"<color=#FF8800>【辟邪】不会被冻结、中毒、灼烧、麻痹等异常状态</color>\n"+
+"<color=#FF8800>【自然】恢复生命时额外恢复部分生命值</color>"
 },
-{ // TC
+
+// TC(繁中)
+{
 "尚武的人類種族，在<color=#ADD8E6>生命</color>與<color=#ADD8E6>近戰</color>上佔優勢。\n"+
-"<color=#FF8800>【狩獵】擊敗敵人時有機率獲得額外經驗</color>",
+"<color=#FF8800>【狩獵】擊敗敵人後有機率獲得額外經驗</color>",
 
-"擅長射擊與魔法，多數已被人類奴役。\n"+
-"<color=#FF8800>【精準】使用射擊武器對低生命值敵人有機率一擊必殺</color>",
+"擅長<color=#ADD8E6>射擊</color>與<color=#ADD8E6>魔法</color>，多數已被人類奴役。\n"+
+"<color=#FF8800>【精準】射擊武器對低生命值敵人有機率一擊必殺</color>",
 
-"稀有的高等精靈，精通<color=#ADD8E6>魔法</color>與<color=#ADD8E6>近戰</color>。\n"+
-"<color=#FF8800>【狩獵】擊敗敵人時有機率獲得額外經驗</color>\n"+
-"<color=#FF8800>【精準】使用射擊武器對低生命值敵人有機率一擊必殺</color>",
+"稀有的高等精靈，擅長<color=#ADD8E6>魔法</color>與<color=#ADD8E6>近戰</color>。\n"+
+"<color=#FF8800>【狩獵】擊敗敵人後有額外經驗機率</color>\n"+
+"<color=#FF8800>【精準】射擊可對低HP敵人一擊必殺</color>\n"+
+"<color=#FF8800>【隱秘化】消耗體力進入隱身，短時間轉移敵人視線</color>",
 
-"數量龐大的兔族，敏捷但生命值低，擅長<color=#ADD8E6>射擊</color>與<color=#ADD8E6>近戰</color>。\n"+
-"<color=#FF8800>【敏捷】閃避/衝刺時有機率不消耗體力並少量恢復</color>",
+"大量的兔族，敏捷但生命值低，擅長<color=#ADD8E6>射擊</color>與<color=#ADD8E6>近戰</color>。\n"+
+"<color=#FF8800>【敏捷】閃避/衝刺有機率不消耗體力並恢復少量體力</color>",
 
-"溫順且敏捷的兔族一支，擅長<color=#ADD8E6>魔法</color>與<color=#ADD8E6>射擊</color>。\n"+
-"<color=#FF8800>【敏捷】閃避/衝刺時有機率不消耗體力並少量恢復</color>",
+"草原鹿族溫順敏捷，擅長<color=#ADD8E6>魔法</color>與<color=#ADD8E6>射擊</color>。\n"+
+"<color=#FF8800>【敏捷】閃避/衝刺可能不消耗體力並恢復體力</color>",
 
-"深淵混血，擅長<color=#ADD8E6>生命</color>與<color=#ADD8E6>魔法</color>，可進入魔族化狀態。\n"+
-"<color=#FF8800>【魔族化】最大生命值四分之一，吸收攻擊力四分之一生命值</color>",
+"來自深淵的混血種族，擅長<color=#ADD8E6>生命值</color>與<color=#ADD8E6>魔法</color>。\n"+
+"<color=#FF8800>【魔族化】最大生命值25%，攻擊吸血25%</color>",
 
-"純血上位魔族，魔法強大並能操控儀式。\n"+
-"<color=#FF8800>【狩獵】擊敗敵人時有機率獲得額外經驗</color>\n"+
-"<color=#FF8800>【魔族化】最大生命值四分之一，吸收攻擊力四分之一生命值</color>"
+"純血上位魔族，魔法能力極強。\n"+
+"<color=#FF8800>【狩獵】擊敗敵人可獲得額外經驗</color>\n"+
+"<color=#FF8800>【魔族化】HP25%，吸收攻擊力25%</color>\n"+
+"<color=#FF8800>【自然】生命恢復時額外回復</color>",
+
+"魔族旁系，來自地底舊都。男性鬼族粗暴，女性鬼族稀有且妖豔，擅長<color=#ADD8E6>近戰</color>。\n"+
+"<color=#FF8800>【堅韌】未防禦時有機率完全免疫一次傷害</color>",
+
+"與森林精靈親近的鹿族，常被視為帶來幸運的奴隸。擁有極高<color=#ADD8E6>生命值</color>。\n"+
+"<color=#FF8800>【辟邪】免疫凍結、中毒、灼燒、麻痺等異常</color>\n"+
+"<color=#FF8800>【自然】生命恢復時額外回復</color>"
 },
-{ // EN
-"Militant humans with strong <color=#ADD8E6>HP</color> and <color=#ADD8E6>Melee</color>.\n"+
-"<color=#FF8800>[Hunt] Chance to gain bonus EXP on kill</color>",
 
-"Skilled in ranged & magic, mostly enslaved.\n"+
-"<color=#FF8800>[Precision] Ranged attacks may insta-kill low-HP enemies</color>",
+// EN
+{
+"Militant humans with strong <color=#ADD8E6>HP</color> and <color=#ADD8E6>Melee</color>.\n"+
+"<color=#FF8800>[Hunt] Chance for bonus EXP on kill</color>",
+
+"Skilled in <color=#ADD8E6> ranged</color> &  <color=#ADD8E6>HP</color>, mostly enslaved.\n"+
+"<color=#FF8800>[Precision] Ranged may insta-kill low HP enemies</color>",
 
 "Rare high elves with strong <color=#ADD8E6>Magic</color> & <color=#ADD8E6>Melee</color>.\n"+
 "<color=#FF8800>[Hunt] Bonus EXP on kill</color>\n"+
-"<color=#FF8800>[Precision] Ranged insta-kill chance</color>",
+"<color=#FF8800>[Precision] Chance for ranged instant kill</color>\n"+
+"<color=#FF8800>[Veil] Consume stamina to become translucent and divert enemy attention briefly</color>",
 
 "Agile but low HP; excels in <color=#ADD8E6>Ranged</color> & <color=#ADD8E6>Melee</color>.\n"+
-"<color=#FF8800>[Agility] Dodge/Dash may cost no stamina and restore some</color>",
+"<color=#FF8800>[Agility] Dodge/Dash may cost no stamina & restore some</color>",
 
-"Gentle, agile rabbits; good with <color=#ADD8E6>Magic</color> & <color=#ADD8E6>Ranged</color>.\n"+
-"<color=#FF8800>[Agility] Dodge/Dash may cost no stamina and restore some</color>",
+"Gentle agile rabbits skilled in <color=#ADD8E6>Magic</color> & <color=#ADD8E6>Ranged</color>.\n"+
+"<color=#FF8800>[Agility] Dodge/Dash may cost no stamina & restore some</color>",
 
 "Abyssal hybrids with high <color=#ADD8E6>HP</color> & <color=#ADD8E6>Magic</color>.\n"+
-"<color=#FF8800>[Demon Form] Max HP = 25%; absorb 25% of attack as HP</color>",
+"<color=#FF8800>[Demon Form] Max HP 25%; absorb 25% damage as HP</color>",
 
-"Pure-blood upper demons focused on <color=#ADD8E6>Magic</color>.\n"+
+"Pure-blood upper demons specialized in <color=#ADD8E6>Magic</color>.\n"+
 "<color=#FF8800>[Hunt] Bonus EXP on kill</color>\n"+
-"<color=#FF8800>[Demon Form] Max HP 25%, absorb 25% damage as HP</color>"
+"<color=#FF8800>[Demon Form] Max HP 25%, absorb 25%</color>\n"+
+"<color=#FF8800>[Nature] Gain extra HP whenever healed</color>",
+
+"Offshoots of demons from an underground old capital. Males are strong & rough, females are rare and beautiful. Strong <color=#ADD8E6>Melee</color>.\n"+
+"<color=#FF8800>[Tenacity] May completely ignore one hit even without guarding</color>",
+
+"A race close to ancient forest spirits. A gentle deer slave is said to bring luck. High <color=#ADD8E6>HP</color>.\n"+
+"<color=#FF8800>[Ward] Immune to Freeze, Poison, Burn, Paralysis</color>\n"+
+"<color=#FF8800>[Nature] Gain extra HP whenever healed</color>"
 },
-       { // KR
+
+// KR
+{
 "호전적인 인간족. <color=#ADD8E6>체력</color>과 <color=#ADD8E6>근접전</color>에 강함.\n"+
-"<color=#FF8800>[사냥] 적 처치 시 추가 경험치 획득 가능</color>",
+"<color=#FF8800>[사냥] 처치 시 추가 경험치 획득 가능</color>",
 
 "사격과 마법에 능하며 다수는 노예 상태.\n"+
-"<color=#FF8800>[정밀] 사격 무기로 저HP 적을 즉사시킬 수 있음</color>",
-
-"희귀한 상위 엘프. <color=#ADD8E6>마법</color>과 <color=#ADD8E6>근접전</color> 모두 우수.\n"+
-"<color=#FF8800>[사냥] 처치 시 추가 경험치</color>\n"+
 "<color=#FF8800>[정밀] 저HP 적 즉사 가능</color>",
 
-"민첩하지만 체력이 낮아 <color=#ADD8E6>사격</color>과 <color=#ADD8E6>근접전</color>에 특화.\n"+
-"<color=#FF8800>[민첩] 회피/대시 시 스태미나가 소모되지 않고 회복 가능</color>",
-
-"순한 성격의 민첩한 토끼족. <color=#ADD8E6>마법</color>과 <color=#ADD8E6>사격</color>에 강함.\n"+
-"<color=#FF8800>[민첩] 회피/대시 시 스태미나 미소모 및 회복 가능</color>",
-
-"심연의 혼혈. <color=#ADD8E6>체력</color>과 <color=#ADD8E6>마법</color>에 우수하며 마족화 가능.\n"+
-"<color=#FF8800>[마족화] 최대 HP 1/4, 공격력 1/4만큼 흡혈</color>",
-
-"순혈 상위 마족. <color=#ADD8E6>마법</color>에 특화.\n"+
+"희귀한 상위 엘프. <color=#ADD8E6>마법</color>과 <color=#ADD8E6>근접전</color> 모두 강함.\n"+
 "<color=#FF8800>[사냥] 처치 시 추가 경험치</color>\n"+
-"<color=#FF8800>[마족화] HP 1/4, 공격력 1/4 흡혈</color>"
-}
-};
+"<color=#FF8800>[정밀] 저HP 즉사 가능</color>\n"+
+"<color=#FF8800>[은밀화] 체력을 소모하여 투명화하고 잠시 적의 시선을 돌린다</color>",
+
+"민첩하지만 체력이 낮아 <color=#ADD8E6>사격</color>과 <color=#ADD8E6>근접전</color>에 특화.\n"+
+"<color=#FF8800>[민첩] 회피/대시 시 스태미나 미소모 및 회복</color>",
+
+"순한 성격의 토끼족. <color=#ADD8E6>마법</color>과 <color=#ADD8E6>사격</color>에 강함.\n"+
+"<color=#FF8800>[민첩] 회피/대시 시 스태미나 미소모 및 회복</color>",
+
+"심연의 혼혈. <color=#ADD8E6>체력</color>과 <color=#ADD8E6>마법</color>이 뛰어나며 마족화 가능.\n"+
+"<color=#FF8800>[마족화] HP25%, 공격력25% 흡혈</color>",
+
+"순혈 상위 마족. <color=#ADD8E6>마법</color>에 특화됨.\n"+
+"<color=#FF8800>[사냥] 처치 시 추가 경험치</color>\n"+
+"<color=#FF8800>[마족화] HP25%, 흡혈25%</color>\n"+
+"<color=#FF8800>[자연] 회복 시 추가 HP 회복</color>",
+
+"마족의 방계로 지하 옛도시 출신. 남성은 거칠고 강하며 여성은 드물고 아름답다. 뛰어난 <color=#ADD8E6>근접전</color> 능력을 보유.\n"+
+"<color=#FF8800>[강인] 가드 없이도 한 번의 공격을 완전 무효화 가능</color>",
+
+"고대 숲의 정령과 가까운 종족. 순종적인 사슴족 노예는 행운을 가져온다고 함. 높은 <color=#ADD8E6>체력</color> 보유.\n"+
+"<color=#FF8800>[벽사] 빙결·중독·화상·마비 등 상태 이상 면역</color>\n"+
+"<color=#FF8800>[자연] 회복 시 추가 HP 회복</color>"
+},
+    };
     private static readonly string[] LUNA_LOCK = new string[]
   {
         "このキャラクターは外見・衣装・種族などを変更できません。",
@@ -2229,6 +2285,12 @@ public class UIManager : MonoBehaviour
                 break;
             case 11:
                 player.SpellDamage += 100;
+                break;
+            case 8:
+                player.MeleeDamage += 100;
+                break;
+            case 5:
+                player.maxHealth += 500;
                 break;
         }
 

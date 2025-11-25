@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-
+using Pathfinding;
 
 
 public class Player : MonoBehaviour
@@ -238,6 +238,7 @@ public class Player : MonoBehaviour
                 //高等精灵天赋
                 RaceBuff[0].SetActive(true);//狩猎
                 RaceBuff[1].SetActive(true);//精准
+                RaceBuff[7].SetActive(true);//隐秘化
                 break;
             case 4:
             case 10:
@@ -249,10 +250,20 @@ public class Player : MonoBehaviour
                 //高等魔族天赋
                 RaceBuff[0].SetActive(true);//狩猎
                 RaceBuff[3].SetActive(true);//魔族化
+                RaceBuff[6].SetActive(true);//自然
                 break;
             case 12:
                 //魔族天赋
                 RaceBuff[3].SetActive(true);//魔族化
+                break;
+            case 8:
+                //鬼族天赋
+                RaceBuff[4].SetActive(true);//坚韧
+                break;
+            case 5:
+                //鹿族天赋
+                RaceBuff[5].SetActive(true);//辟邪
+                RaceBuff[6].SetActive(true);//自然
                 break;
 
             default:
@@ -2092,6 +2103,89 @@ public class Player : MonoBehaviour
     /// 闪避系统
     /// </summary>
     #region
+
+    [Header("高等精灵的隐秘气息")]
+    public bool isHide = false;
+    public GameObject FakeFriend;          // 预制体（跟班）
+    private GameObject currentFakeFriend;  // 实际场上那只
+
+    private void TryStartHide()
+    {
+        // 体力不足
+        if (currentStrength<= 200)
+        {
+            frameEvents._SE_Glass();
+
+
+
+            //显示体力不足
+            HudText.SpecialText(0);
+
+
+            return;
+        }
+
+
+        isHide = true;
+        FakeFriend.transform.position = transform.position;
+
+        // 已经有 FakeFriend 在场就不重复生成（安全一点）
+        if (currentFakeFriend != null) return;
+        // 生成小跟班（诱饵）
+        currentFakeFriend = Instantiate(FakeFriend, transform.position, Quaternion.identity);
+       
+
+        Transform nearestEnemy = FindNearestEnemy();
+        if (nearestEnemy != null)
+        {
+            currentFakeFriend.GetComponent<AIDestinationSetter>().target = nearestEnemy;
+        }
+        else
+        {
+            // 找不到敌人，避免报错，目标设为自己或玩家
+            currentFakeFriend.GetComponent<AIDestinationSetter>().target = transform;
+        }
+
+
+
+        characterSkin.HalfShowSkeleton();
+
+    }
+    public void EndHide()
+    {
+       
+        isHide = false;
+        characterSkin.ShowSkeleton();
+
+        // 销毁诱饵
+        if (currentFakeFriend != null)
+        {
+            Destroy(currentFakeFriend);
+            currentFakeFriend = null;
+        }
+
+    }
+
+    Transform FindNearestEnemy()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        if (enemies.Length == 0) return null;
+
+        float minDist = Mathf.Infinity;
+        Transform nearest = null;
+
+        foreach (GameObject e in enemies)
+        {
+            float d = Vector3.Distance(transform.position, e.transform.position);
+            if (d < minDist)
+            {
+                minDist = d;
+                nearest = e.transform;
+            }
+        }
+        return nearest;
+    }
+
     [Header("闪避键按下")]
     public float dodgePressTime = 0f;      // 持续按下时长计时器
     public bool dodgeTriggered = false;    // 是否已经触发攻击动作（防止反复触发）
@@ -2143,7 +2237,22 @@ public class Player : MonoBehaviour
 
                         }
 
-                      
+                        //高等精灵隐秘
+                        if (YYY_hatIndex == 3)
+                        {
+                            if (isHide)
+                            {
+                                EndHide();
+                            }
+                            else
+                            {
+                                TryStartHide();
+                            }
+
+
+                            GateEffect.SetActive(true);//传送门特效
+                        }
+
 
 
 
@@ -2165,6 +2274,7 @@ public class Player : MonoBehaviour
 
 
     }
+  
 
     public void CheckDemonMode() 
     {
@@ -2172,7 +2282,12 @@ public class Player : MonoBehaviour
         {
             ChangeClass(0);
         }
-    }//当玩家切入菜单的时候一定要退出魔族化
+
+        if (isHide)
+        {
+            EndHide();
+        }
+    }//当玩家切入菜单的时候一定要退出魔族化,退出隐秘化
 
     void CheckDodge()
     {
@@ -2183,7 +2298,7 @@ public class Player : MonoBehaviour
             if (dodgePressTime > 0.2f)
             {
                 //魔族变身法阵
-                if (YYY_hatIndex == 11 || YYY_hatIndex == 12)
+                if (YYY_hatIndex == 11 || YYY_hatIndex == 12 || YYY_hatIndex == 3)
                 {
                     Demon_Effect.SetActive(true);
                 }
@@ -2193,13 +2308,26 @@ public class Player : MonoBehaviour
         else
         {
             //魔族变身法阵
-            if (YYY_hatIndex == 11 || YYY_hatIndex == 12)
+            if (YYY_hatIndex == 11 || YYY_hatIndex == 12 || YYY_hatIndex == 3)
             {
 
                 Demon_Effect.SetActive(false);
             }
         
         }
+
+
+        //高等精灵隐蔽（防止切换种族还留存靶子）
+        if (isHide)
+        {
+            //一旦隐秘化了之后，敌人一定几率追着靶子打，也有可能发现玩家
+            ChangeStrength(-4);
+        }
+        if (currentStrength <= 0)
+        {
+            EndHide();
+        }
+
     }
 
 
@@ -2797,6 +2925,10 @@ public class Player : MonoBehaviour
     public GameObject Demon_Effect;//恶魔特效
     public GameObject Dark_Space_Effect;//暗黑全屏特效
 
+    public GameObject Oni_Block_Effect;//鬼族无伤特效
+    public GameObject Deer_Block_Effect;//鹿族辟邪特效
+    public GameObject Deer_Nature_Effect;//鹿族额外回血特效
+
     public GameObject Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3;
 
     [Header("生命值")]
@@ -2817,6 +2949,13 @@ public class Player : MonoBehaviour
 
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式】-3子弹伤害 -2弩弓伤害  -1暗黑  0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物   6击飞
     {
+
+        if (isHide)
+        {
+            EndHide();
+        }//只要受到攻击马上恢复
+
+
 
         if (isInvincible)
         {
@@ -2866,43 +3005,60 @@ public class Player : MonoBehaviour
                     if (Random.value < blockChance)
                     {
 
-                        if (Class == PlayerClass.Succubus || isMage)
+                        if (YYY_hatIndex == 8)
                         {
-                            ProtectiveCoverEffect.SetActive(true);
+                            //鬼族直接不播放防御动画
 
-                            switch (Random.Range(0, 3))
+                            Oni_Block_Effect.SetActive(true);
+
+                            //充值1/2暴击
+                            ChangeCritical(maxCritical / 2);
+                        }
+                        else 
+                        {
+                            if (Class == PlayerClass.Succubus || isMage)
                             {
-                                case 0:
-                                    ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 0);
-                                    break;
-                                case 1:
-                                    ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 1);
-                                    break;
-                                case 2:
-                                    ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 2);
-                                    break;
+                                ProtectiveCoverEffect.SetActive(true);
+
+                                switch (Random.Range(0, 3))
+                                {
+                                    case 0:
+                                        ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 0);
+                                        break;
+                                    case 1:
+                                        ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 1);
+                                        break;
+                                    case 2:
+                                        ProtectiveCoverEffect.GetComponent<Animator>().SetInteger("Color", 2);
+                                        break;
+                                }
+
+                            }//只有魔族和法师需要特效（遮挡无防御动画）
+
+                            if (visionType == PlayerType.ShortRangePlayer)
+                            {
+                                anim.Play(GetAnimPrefix() + "Strike_Block");
+                            }
+                            else
+                            {
+
+                                if (isMage)
+                                {
+                                    //没有法师防御动画
+                                }
+                                else { anim.Play(GetAnimPrefix() + "Shoot_Block"); }
+
                             }
 
-                        }//只有魔族和法师需要特效（遮挡无防御动画）
-
-                        if (visionType == PlayerType.ShortRangePlayer)
-                        {
-                            anim.Play(GetAnimPrefix() + "Strike_Block");
-                        }
-                        else
-                        {
-
-                            if (isMage)
-                            {
-                                //没有法师防御动画
-                            }
-                            else { anim.Play(GetAnimPrefix() + "Shoot_Block"); }
-
+                            // 防御成功扣除体力
+                            ChangeStrength(-50);
                         }
 
 
-                        // 防御成功扣除体力
-                        ChangeStrength(-50);
+
+
+
+                   
            
            
                         switch (Random.Range(0, 3))
@@ -2973,6 +3129,20 @@ public class Player : MonoBehaviour
                 ChangeCritical(-maxCritical);//受伤暴击清零
 
             }//格挡
+
+
+
+            //[辟邪去除异常状态]
+            if (YYY_hatIndex==5) 
+            {
+                if(TypeOfAttack==-1|| TypeOfAttack == 2|| TypeOfAttack == 3|| TypeOfAttack == 4|| TypeOfAttack == 5 || TypeOfAttack == 6)
+                {
+                    TypeOfAttack = 0;
+
+                    Deer_Block_Effect.SetActive(true);
+                }
+            }
+
 
             //伤害类型
             switch (TypeOfAttack)
@@ -3195,7 +3365,23 @@ public class Player : MonoBehaviour
         //显示伤害
         HudText.HUD(amount);
 
+        if (YYY_hatIndex == 5|| YYY_hatIndex == 11)
+        {
+            Invoke(nameof(RestoreHealth_2), 1f);
+        }
+
     }//回血专用路径
+
+    public void RestoreHealth_2() 
+    {
+        currentHealth = Mathf.Clamp(currentHealth + 200, 0, maxHealth);
+        UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
+
+        //显示伤害
+        HudText.HUD(200);
+
+        Deer_Nature_Effect.SetActive(true);
+    }//具有【自然】种族的额外回血
 
 
     void HurtOver()

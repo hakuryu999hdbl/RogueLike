@@ -26,6 +26,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9a704a20b3bf48f42a2be1b15fbad934, type: 3}
   - {fileID: 21300000, guid: a3847b246e3452b4c8666bc4e98986dd, type: 3}
   - {fileID: 21300000, guid: b1e26a04f07e0e449a266255961ca916, type: 3}
+  - {fileID: 21300000, guid: 9117e5cb7dfc1404fb4ccb9e7b616a4b, type: 3}
   HairSprites:
   - {fileID: 21300000, guid: 72d48c101afd6e94b8ff7ef57a1ed85c, type: 3}
   - {fileID: 21300000, guid: 7800880328ff54e45b675337db2ad069, type: 3}
@@ -40,6 +41,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 109f5c31fef34a74289b6feccd744685, type: 3}
   - {fileID: 21300000, guid: 38776b60eda3e514991e4bf21c0d734f, type: 3}
   - {fileID: 21300000, guid: 48db8c3851ec1cb489ce3354a5ceb09f, type: 3}
+  - {fileID: 21300000, guid: 435cbff668e0a974da94f9bf659bdfc6, type: 3}
   EyesSprites:
   - {fileID: 21300000, guid: d115fbcdf134063488f318a569aac9fc, type: 3}
   - {fileID: 21300000, guid: 03955ff1b118c1a4bb6e9179eef6bec6, type: 3}
@@ -54,6 +56,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6e3016ac0186afc4cafc9921b23a1594, type: 3}
   - {fileID: 21300000, guid: ff4509c67720bf8499c652315acc6721, type: 3}
   - {fileID: 21300000, guid: 028e13c6ab0c7b24db413e037870d08c, type: 3}
+  - {fileID: 21300000, guid: d4ba8e00637907644b4efeaebebf6042, type: 3}
   MouseSprites:
   - {fileID: 21300000, guid: 05136baf591fc3a4796c1906e863d690, type: 3}
   - {fileID: 21300000, guid: 540ba1e6244b42846a7e54aafbc23824, type: 3}
@@ -68,6 +71,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b7c8065fc30876547a9325c7b20603af, type: 3}
   - {fileID: 21300000, guid: efa62ff3e079b374fb4dad7f15b75f8e, type: 3}
   - {fileID: 21300000, guid: f8915afbb3ac2ac41bd7d58e7401a85e, type: 3}
+  - {fileID: 21300000, guid: e09b6750993ed7d44876b1323c59e73b, type: 3}
   HeadSprites:
   - {fileID: 21300000, guid: 4098cbd5e31e9be42a03edd5bdee5e62, type: 3}
   - {fileID: 21300000, guid: ecf757a488e065f49a4339d1ceda3e5e, type: 3}
@@ -82,6 +86,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ebbdc178b3d03e742b7f129f9023f413, type: 3}
   - {fileID: 21300000, guid: 5f54197cdb383b14a88cba5c935bbf22, type: 3}
   - {fileID: 21300000, guid: 561c26b36328bbc4a97be357beb4ecbc, type: 3}
+  - {fileID: 21300000, guid: d10a9d5db18414c4180d855a7ebe6573, type: 3}
   ClothesSprites:
   - {fileID: 21300000, guid: de452a58b49885546877bb3bf3641c03, type: 3}
   - {fileID: 21300000, guid: d1a1e8fabdbbe5549abd1eddc6786a4e, type: 3}
@@ -96,6 +101,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7e1553e1149abe24684cd52cae18ad2a, type: 3}
   - {fileID: 21300000, guid: fa190210cf18f57479cb19268bc2f5f6, type: 3}
   - {fileID: 21300000, guid: 523c4cd403434d647bc2fb518879d31f, type: 3}
+  - {fileID: 21300000, guid: d17c5b3fa66f88a46b3ed08267e186cf, type: 3}
   LonghairSprites:
   - {fileID: 21300000, guid: 5c11714694e04cc44bfbdf0b5313c3bb, type: 3}
   - {fileID: 21300000, guid: 22444cb4a7166a64bb7946c1c3cc3051, type: 3}
@@ -110,6 +116,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 181fb670bb5a6264bb33e94b7b8e05f9, type: 3}
   - {fileID: 21300000, guid: 594b6afa4461c5a439d6aa5c0cb7dded, type: 3}
   - {fileID: 21300000, guid: f9e8cc92a20aefc42a94162dc10ef775, type: 3}
+  - {fileID: 21300000, guid: c2136ae57cff8754b9ae7bbf9f5db2f0, type: 3}
   PonytailSprites:
   - {fileID: 21300000, guid: 72e637e748ef174479c5c4434bfc5d6b, type: 3}
   - {fileID: 21300000, guid: b4fca9693606b4f4ca42d86f940c78f0, type: 3}
@@ -124,6 +131,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: df54ab198abf7a740b728586cb15e799, type: 3}
   - {fileID: 21300000, guid: cf95ad274a3949641a6d218d780b1901, type: 3}
   - {fileID: 21300000, guid: 0735b5505b3170b4c9b11b592c32b98c, type: 3}
+  - {fileID: 21300000, guid: b93d462cb6d4fd0459bd66734bbf991e, type: 3}
   LevelSprites:
   - {fileID: 21300000, guid: 0a3602f4c58a03c4f8a3b63257b5d82d, type: 3}
   - {fileID: 21300000, guid: 46b56763333b50a4ead9303de52d4c45, type: 3}

@@ -64,6 +64,11 @@ public class CharacterSkin : MonoBehaviour
         skeletonAnimation.Skeleton.A = 0f; // 完全透明
     }
 
+    public void HalfShowSkeleton()
+    {
+        skeletonAnimation.Skeleton.A = 0.3f; // 半透明
+    }
+
     public void ShowSkeleton()
     {
         skeletonAnimation.Skeleton.A = 1f; // 完全不透明

@@ -300,7 +300,6 @@ public class Enemy : MonoBehaviour
             }
 
 
-            //ToDo:削减敌人攻击力加成
             //根据玩家当前的等级赋予敌人生命值，攻击力等
 
             //CurrentWeaponPower = player.Level * Random.Range(10, 20);
@@ -322,6 +321,7 @@ public class Enemy : MonoBehaviour
 
 
 
+            //ToDo:削减敌人攻击力加成
             // ==== 难度系数 ==== 
             int difficulty = PlayerPrefs.GetInt("Difficulty", 0); // 0=简单,1=一般,2=困难
 
@@ -1060,10 +1060,12 @@ public class Enemy : MonoBehaviour
                             break;
 
                         case EnemyClass.Man:
-                        case EnemyClass.Demon:
-
-                            switch (Random.Range(1, 6))
+                            switch (Random.Range(0, 6))
                             {
+                                case 0:
+                                    cg_anim.Play("CG/CG_OnanismSide_1");
+                                    if (PlayerPrefs.GetInt("CG_OnanismSide_1") == 0) { PlayerPrefs.SetInt("CG_OnanismSide_1", 1); RoomGenerator.ShowInformationOfStage(0); }
+                                    break;
                                 case 1:
                                     cg_anim.Play("CG/CG_RapeSide_1");
                                     if (PlayerPrefs.GetInt("CG_RapeSide_1") == 0) { PlayerPrefs.SetInt("CG_RapeSide_1", 1); RoomGenerator.ShowInformationOfStage(0); }
@@ -1087,7 +1089,7 @@ public class Enemy : MonoBehaviour
                             }
 
                             break;
-
+                        case EnemyClass.Demon:
                         case EnemyClass.FleshArmor:
 
                             cg_anim.Play("CG/CG_FleshArmor_1");
