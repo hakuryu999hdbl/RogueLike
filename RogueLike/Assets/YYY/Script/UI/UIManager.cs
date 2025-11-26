@@ -9,6 +9,10 @@ using UnityEngine.Audio;
 using System;
 using System.IO;
 
+
+
+//using Steamworks;/////////////////////////////////////////////////【电脑控制/Steam】/////////////////////////////////////////////////
+
 public class UIManager : MonoBehaviour
 {
     [Header("关卡信息")]
@@ -4374,6 +4378,10 @@ public class UIManager : MonoBehaviour
         Application.OpenURL("https://ci-en.dlsite.com/creator/16247");
 
 
+        //改油管链接
+        //Application.OpenURL("https://www.youtube.com/watch?v=7GJzbKH4WjU");
+
+
         //钮按下后绿色选中也会过去
         HomePagecurrentIndex = 4;
         UpdateHomePage_Highlight();
@@ -5639,55 +5647,93 @@ public class UIManager : MonoBehaviour
     /// 成就端口
     /// </summary>
     #region
-
-    public void Achieventment_ACH_FIRST_MISSION() 
+    /////////////////////////////////////////////////【电脑控制/Steam】/////////////////////////////////////////////////
+    public void Achieventment_ACH_FIRST_MISSION()
     {
-        Debug.Log("成就弹窗：ACH_FIRST_MISSION");
-
-    }//【初めての潜入】第1章クリア
+        UnlockSteamAchievement("ACH_FIRST_MISSION");
+    } //【初めての潜入】第1章クリア
 
     public void Achieventment_ACH_BEAT_PRINCESS()
     {
-        Debug.Log("成就弹窗：ACH_BEAT_PRINCESS");
-
-    }//【王女との対峙】王女セリーネ撃破
+        UnlockSteamAchievement("ACH_BEAT_PRINCESS");
+    } //【王女との対峙】王女セリーネ撃破
 
     public void Achieventment_ACH_SEE_TRUTH()
     {
-        Debug.Log("成就弹窗：ACH_SEE_TRUTH");
-
-    }//【真実の目撃者】帝国の正体を知る
-
+        UnlockSteamAchievement("ACH_SEE_TRUTH");
+    } //【真実の目撃者】帝国の正体を知る
 
     public void Achieventment_ACH_MELEE_MASTER()
     {
-        Debug.Log("成就弹窗：ACH_MELEE_MASTER");
-
-    }//【近接戦の達人】一局内で近接攻撃で敵を10体撃破。
+        UnlockSteamAchievement("ACH_MELEE_MASTER");
+    } //【近接戦の達人】一局内で近接攻撃で敵を10体撃破。
 
     public void Achieventment_ACH_SHOOT_MASTER()
     {
-        Debug.Log("成就弹窗：ACH_SHOOT_MASTER");
-
-    }//【射撃術の達人】一局内で射撃攻撃で敵を10体撃破。
+        UnlockSteamAchievement("ACH_SHOOT_MASTER");
+    } //【射撃術の達人】一局内で射撃攻撃で敌を10体撃破。
 
     public void Achieventment_ACH_MAGIC_MASTER()
     {
-        Debug.Log("成就弹窗：ACH_MAGIC_MASTER");
-
-    }//【魔術行使の達人】一局内で魔法攻撃で敵を10体撃破。
+        UnlockSteamAchievement("ACH_MAGIC_MASTER");
+    } //【魔術行使の達人】一局内で魔法攻撃で敌を10体撃破。
 
     public void Achieventment_ACH_RESCUE_3()
     {
-        Debug.Log("成就弹窗：ACH_RESCUE_3");
-
-    }//【救出の連鎖】一局内で奴隷を3人以上解放。
+        UnlockSteamAchievement("ACH_RESCUE_3");
+    } //【救出の連鎖】一局内で奴隷を3人以上解放。
 
     public void Achieventment_ACH_UNLOCK_HIGHELF()
     {
-        Debug.Log("成就弹窗：ACH_UNLOCK_HIGHELF");
+        UnlockSteamAchievement("ACH_UNLOCK_HIGHELF");
+    } //【高等精霊の目覚め】高等精霊のキャラクターを解放。
 
-    }//【高等精霊の目覚め】高等精霊のキャラクターを解放。
+
+
+
+
+
+    // 本局里已经触发过的成就（防止自己 UI 重复弹）
+    private HashSet<string> _localUnlockedAchievements = new HashSet<string>();
+
+
+    private void UnlockSteamAchievement(string achievementID)
+    {
+        // 本地已经触发过了，就不要再弹 UI 了
+      //  if (_localUnlockedAchievements.Contains(achievementID))
+      //  {
+      //      Debug.Log($"成就 {achievementID} 已在本局触发过，直接忽略");
+      //      return;
+      //  }
+      //
+      //  _localUnlockedAchievements.Add(achievementID);
+      //
+      //  // 这里是你原来的“成就弹窗”逻辑
+      //  Debug.Log("成就弹窗：" + achievementID);
+      //  // TODO: 如果你有成就UI动画，在这里调用，例如：
+      //  // ShowAchievementPopup(achievementID);
+      //
+      //  // 提交给 Steam
+      //  if (SteamManager.Initialized)
+      //  {
+      //      bool success = SteamUserStats.SetAchievement(achievementID);
+      //      if (success)
+      //      {
+      //          SteamUserStats.StoreStats();   // 把成就保存到 Steam
+      //          Debug.Log("成功解锁 Steam 成就：" + achievementID);
+      //      }
+      //      else
+      //      {
+      //          Debug.LogError("Steam 成就解锁失败：" + achievementID);
+      //      }
+      //  }
+      //  else
+      //  {
+      //      Debug.LogWarning("Steam API 未初始化，只进行本地弹窗：" + achievementID);
+      //  }
+    }
+
+
 
     #endregion
 }
