@@ -1753,7 +1753,10 @@ public class Player : MonoBehaviour
         {
             if (!willCrit)
             {
-                AllLongRangeDamage /= 2;
+                //AllLongRangeDamage /= 2;
+
+                // 原来 240~260 → 现在约 96~104
+                AllLongRangeDamage = Mathf.RoundToInt(AllLongRangeDamage * 0.8f);
 
             }//如果不产生暴击，那么伤害需要减半
         }
@@ -1762,10 +1765,15 @@ public class Player : MonoBehaviour
         {
             if (!willCrit)
             {
-                AllLongRangeDamage /= 3;
+                //AllLongRangeDamage /= 3;
+
+                // 原来 240~260 → 现在约 72~78，更偏控制向
+                AllLongRangeDamage = Mathf.RoundToInt(AllLongRangeDamage * 0.6f);
 
             }//如果不产生暴击，那么伤害需要减半
         }
+
+       
 
         s.Init(AllLongRangeDamage, -SpellDamage - CurrentWeaponPower, willCrit, Save_attackPressTime, special, direction, Shooting.BulletOwnerType.Player);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
 
