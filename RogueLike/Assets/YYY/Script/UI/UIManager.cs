@@ -1015,6 +1015,8 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+
+
     /// <summary>
     /// 主菜单
     /// </summary>
@@ -1256,6 +1258,29 @@ public class UIManager : MonoBehaviour
     }
 
 
+    //Mode菜单(和三选一界面一样)增加了切换当前选中点击Play触发
+    public void ChangeModeSelect(int ModeNumber) 
+    {
+        ModePagecurrentIndex = ModeNumber;
+        UpdateModePage_Highlight();
+    }
+
+    public void ToSelectMode() 
+    {
+        switch (ModePagecurrentIndex)
+        {
+            case 0:
+                ToChapterPage();
+                break;
+            case 1:
+                ToOneToOneStage();
+                break;
+            case 2:
+                ToDungeonStage();
+                break;
+        }
+    }
+
 
     [SerializeField] private Button HairLeft, HairRight;
     [SerializeField] private Button EyesLeft, EyesRight;
@@ -1427,6 +1452,7 @@ public class UIManager : MonoBehaviour
         LanguageCavans.SetActive(false);
         CurrentChooseList = 3;
 
+        //钮按下后绿色选中也会过去
         HomePagecurrentIndex = 2;
         UpdateHomePage_Highlight();
     }
@@ -1490,6 +1516,10 @@ public class UIManager : MonoBehaviour
 
         //打开菜单的时候就预先把CG这个概念放进去
         UpdateHighlight_CG_End();
+
+        //钮按下后绿色选中也会过去
+        HomePagecurrentIndex = 1;
+        UpdateHomePage_Highlight();
     }
 
 
@@ -1498,6 +1528,11 @@ public class UIManager : MonoBehaviour
         ModeCavans.SetActive(true);
         ChapterCavans.SetActive(false);
         CurrentChooseList = 7;
+
+
+        //钮按下后绿色选中也会过去
+        HomePagecurrentIndex = 0;
+        UpdateHomePage_Highlight();
     }
 
     public void To_AVGScene()
@@ -1520,6 +1555,10 @@ public class UIManager : MonoBehaviour
     {
         CurrentChooseList = 12;
         ThanksCavans.SetActive(true);
+
+        //钮按下后绿色选中也会过去
+        HomePagecurrentIndex = 4;
+        UpdateHomePage_Highlight();
     }
 
 
@@ -1766,11 +1805,11 @@ public class UIManager : MonoBehaviour
 
     public void OnEyesLeft()
     {
-        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, -1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
+        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_eyesIndex, 1, 14, -1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
     }
     public void OnEyesRight()
     {
-        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_eyesIndex, 1, 13, +1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
+        if (IsLuna(player.currentSaveName) == false) { ChangeSkin(ref player.YYY_eyesIndex, 1, 14, +1); CreatNewcurrentIndex = 2; UpdateHighlight(); }
     }
 
     public void OnRaceLeft()
@@ -2461,6 +2500,11 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
+        Show_bestWave();//显示决斗场最高记录
+
+        Show_DungeonRecord();//显示地下城最高记录
+
+
 
         // 初始化音量
         SetBGMVolune(BGMVolume);
@@ -2495,10 +2539,7 @@ public class UIManager : MonoBehaviour
 
 
 
-        Show_bestWave();//显示决斗场最高记录
-
-        Show_DungeonRecord();//显示地下城最高记录
-
+     
         //隐藏buff
         ResetBuffs();
 
@@ -3284,7 +3325,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     #region
     public List<CGOptionUI> cg_End_Buttons = new List<CGOptionUI>();
-    int CG_End_currentIndex = 0;
+    public int CG_End_currentIndex = 0;
 
     void CG_End_UnclockStart()
     {
@@ -3330,7 +3371,7 @@ public class UIManager : MonoBehaviour
 
     }//切换当前选中
 
-    void UpdateHighlight_CG_End()
+    public void UpdateHighlight_CG_End()
     {
         for (int i = 0; i < cg_End_Buttons.Count; i++)
         {
@@ -3688,14 +3729,14 @@ public class UIManager : MonoBehaviour
                 // 当前菜单项内的上下切换
                 if (dir.y > 0.5f)
                 {
-                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex - 1, 0, 4);
+                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex - 1, 0, 3);
                     UpdateSettingPage_Highlight();
 
 
                 }
                 else if (dir.y < -0.5f)
                 {
-                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex + 1, 0, 4);
+                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex + 1, 0, 3);
                     UpdateSettingPage_Highlight();
 
 
@@ -4383,7 +4424,7 @@ public class UIManager : MonoBehaviour
 
 
         //钮按下后绿色选中也会过去
-        HomePagecurrentIndex = 4;
+        HomePagecurrentIndex = 5;
         UpdateHomePage_Highlight();
     }
 
@@ -4396,7 +4437,7 @@ public class UIManager : MonoBehaviour
 
 
         //钮按下后绿色选中也会过去
-        HomePagecurrentIndex = 5;
+        HomePagecurrentIndex = 6;
         UpdateHomePage_Highlight();
     }
     public void OpenURL_Steam()
@@ -4405,7 +4446,7 @@ public class UIManager : MonoBehaviour
         Application.OpenURL("https://store.steampowered.com/app/4086970/Crossdresser_Killer/");
 
         //钮按下后绿色选中也会过去
-        HomePagecurrentIndex = 6;
+        HomePagecurrentIndex = 7;
         UpdateHomePage_Highlight();
     }
 
@@ -4414,7 +4455,7 @@ public class UIManager : MonoBehaviour
         Application.OpenURL("https://discord.gg/bc49G5Xcq9");
 
         //钮按下后绿色选中也会过去
-        HomePagecurrentIndex = 7;
+        HomePagecurrentIndex = 8;
         UpdateHomePage_Highlight();
     }
 
@@ -4425,7 +4466,7 @@ public class UIManager : MonoBehaviour
         Application.OpenURL("https://x.com/Detective_ye");
 
         //钮按下后绿色选中也会过去
-        HomePagecurrentIndex = 8;
+        HomePagecurrentIndex = 9;
         UpdateHomePage_Highlight();
     }
 
