@@ -28,6 +28,10 @@ public class UIManager : MonoBehaviour
 
         //Debug.Log("目前存档里的语言" + PlayerPrefs.GetInt("language"));//0 日语 1中文 2繁中 3英语 4韩语
 
+
+        Debug.Log("目前存档里的BGM音量" + PlayerPrefs.GetFloat("BGMVolume"));
+        Debug.Log("目前存档里的SE音量" + PlayerPrefs.GetFloat("SEVolume"));
+
         //Debug.Log("目前存档里的钱币" + PlayerPrefs.GetInt("Money"));
 
 
@@ -110,9 +114,8 @@ public class UIManager : MonoBehaviour
         //Debug.Log("目前地下城连胜次数" + PlayerPrefs.GetInt("Dungeon_Streak"));
         //Debug.Log("目前地下城最高连胜记录" + PlayerPrefs.GetInt("Dungeon_BestStreak"));
 
-        Debug.Log("目前高等精灵是否解锁" + PlayerPrefs.GetInt("HighElf"));//0未解锁  1解锁
-        Debug.Log("目前高等魔族是否解锁" + PlayerPrefs.GetInt("HighDemon"));//0未解锁  1解锁
-
+        //Debug.Log("目前高等精灵是否解锁" + PlayerPrefs.GetInt("HighElf"));//0未解锁  1解锁
+        //Debug.Log("目前高等魔族是否解锁" + PlayerPrefs.GetInt("HighDemon"));//0未解锁  1解锁
 
         //地下城和角斗场模式解锁
         if (PlayerPrefs.GetInt("Chapter_Arena") == 0) { LockOfArena.SetActive(true); }
@@ -2364,8 +2367,8 @@ public class UIManager : MonoBehaviour
             {
                 //战斗中无法开始
 
-
-                if (GameFlowData.BulletCanThroughtWall == false && player.speed == 0)//你知道为什么要这里加这个吗，因为手机端，点开菜单按钮是可以绕开的
+                // && player.speed == 0//你知道为什么要这里加这个吗，因为手机端，点开菜单按钮是可以绕开的
+                if (GameFlowData.BulletCanThroughtWall == false)
                 {
                     if (!isPause)
                     {
@@ -2395,6 +2398,8 @@ public class UIManager : MonoBehaviour
                         CurrentChooseList = 2;
 
                         player.CheckDemonMode();//从魔族化变回
+
+                        isPause = true;
                     }
                     else
                     {
@@ -2435,9 +2440,13 @@ public class UIManager : MonoBehaviour
 
 
                         CurrentChooseList = -4;
+
+                        isPause = false;
                     }
 
-                    isPause = !isPause;
+                    //ToDo 【修改】这里是OpenClose
+
+                    //isPause = !isPause;
 
                     //isPause = false;
                 }
@@ -2500,6 +2509,11 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
+        //ToDo 【修改】再度强制去除BulletCanThroughtWall
+        GameFlowData.BulletCanThroughtWall = false;//每次场景刷新的时候这个清掉
+
+
+
         Show_bestWave();//显示决斗场最高记录
 
         Show_DungeonRecord();//显示地下城最高记录
@@ -2507,9 +2521,9 @@ public class UIManager : MonoBehaviour
 
 
         // 初始化音量
-        SetBGMVolune(BGMVolume);
-        SetSEVolune(SEVolume);
-
+        //SetBGMVolune(BGMVolume);
+        //SetSEVolune(SEVolume);
+        LoadVolumes();
 
 
         CGUnclockStart();//检测CG解锁
@@ -2985,19 +2999,6 @@ public class UIManager : MonoBehaviour
     public AudioMixer BGM_Mixer;
 
 
-
-    //--------音量
-    // public void SetVolune(float value)
-    // {
-    //     audioMixer.SetFloat("MainVolume", value);
-    //     SE_Bar.fillAmount = Mathf.InverseLerp(-80f, 0f, SEVolume);
-    // }
-    // public void SetBGMVolune(float value)
-    // {
-    //     BGM_Mixer.SetFloat("BGMVolume", value);
-    //     BGM_Bar.fillAmount = Mathf.InverseLerp(-80f, 0f, BGMVolume);
-    // }
-
     public Image BGM_Bar;
     public Image SE_Bar;
 
@@ -3007,46 +3008,42 @@ public class UIManager : MonoBehaviour
     private const float MinVolume = -80f;
     private const float MaxVolume = 0f;
 
-    //按键触发按钮
+    // PlayerPrefs Key
+    private const string KEY_BGM = "BGMVolume";
+    private const string KEY_SE = "SEVolume";
 
+    //=======================
+    //   读取保存的音量
+    //=======================
+    private void LoadVolumes()
+    {
+        BGMVolume = PlayerPrefs.GetFloat(KEY_BGM, -10f);  // 默认值你自己决定
+        SEVolume = PlayerPrefs.GetFloat(KEY_SE, -10f);
 
+        // 应用到Mixer + UI
+        SetBGMVolune(BGMVolume, save: false);
+        SetSEVolune(SEVolume, save: false);
+    }
 
-    // public void BGM_Up() 
-    // {
-    //     float NewBGMVolume = BGMVolume + 10f;
-    //     SetBGMVolune(NewBGMVolume);
-    //     BGMVolume = NewBGMVolume;
-    //     Debug.Log("拉高BGM");
-    // }
-    // public void BGM_Down()
-    // {
-    //     float NewBGMVolume = BGMVolume - 10f;
-    //     SetBGMVolune(NewBGMVolume);
-    //     BGMVolume = NewBGMVolume;
-    //     Debug.Log("降低BGM");
-    // }
-    //
-    // public void SE_Up() 
-    // {
-    //     float NewSEVolume = SEVolume + 10f;
-    //     SetVolune(NewSEVolume);
-    //     SEVolume = NewSEVolume;
-    //     Debug.Log("拉高SE");
-    // }
-    // public void SE_Down()
-    // {
-    //     float NewSEVolume = SEVolume - 10f;
-    //     SetVolune(NewSEVolume);
-    //     SEVolume = NewSEVolume;
-    //     Debug.Log("降低SE");
-    // }
+    //=======================
+    //   保存音量
+    //=======================
+    private void SaveVolumes()
+    {
+        PlayerPrefs.SetFloat(KEY_BGM, BGMVolume);
+        PlayerPrefs.SetFloat(KEY_SE, SEVolume);
+    }
+
 
     //-------- SE --------
-    public void SetSEVolune(float value)
+    public void SetSEVolune(float value, bool save = true)
     {
         SEVolume = Mathf.Clamp(value, MinVolume, MaxVolume);
+
         audioMixer.SetFloat("MainVolume", SEVolume);
         SE_Bar.fillAmount = Mathf.InverseLerp(MinVolume, MaxVolume, SEVolume);
+
+        if (save) SaveVolumes();
     }
 
     public void SE_Up()
@@ -3062,11 +3059,14 @@ public class UIManager : MonoBehaviour
     }
 
     //-------- BGM --------
-    public void SetBGMVolune(float value)
+    public void SetBGMVolune(float value, bool save = true)
     {
         BGMVolume = Mathf.Clamp(value, MinVolume, MaxVolume);
+
         BGM_Mixer.SetFloat("BGMVolume", BGMVolume);
         BGM_Bar.fillAmount = Mathf.InverseLerp(MinVolume, MaxVolume, BGMVolume);
+
+        if (save) SaveVolumes();
     }
 
     public void BGM_Up()
@@ -4473,9 +4473,9 @@ public class UIManager : MonoBehaviour
 
     public void OpenURL_DLsite_Fanza()
     {
-        Application.OpenURL("https://www.dlsite.com/maniax/announce/=/product_id/RJ01484541.html");
-        Application.OpenURL("https://www.dmm.co.jp/dc/doujin/-/detail/=/cid=d_678786/?utm_source=twitter&utm_medium=social_tpost&utm_campaign=start&utm_term=d_678786&utm_content=doujin");
-        Application.OpenURL("https://store.steampowered.com/app/4086970/Crossdresser_Killer/");
+        //Application.OpenURL("https://www.dlsite.com/maniax/announce/=/product_id/RJ01484541.html");
+        //Application.OpenURL("https://www.dmm.co.jp/dc/doujin/-/detail/=/cid=d_678786/?utm_source=twitter&utm_medium=social_tpost&utm_campaign=start&utm_term=d_678786&utm_content=doujin");
+        //Application.OpenURL("https://store.steampowered.com/app/4086970/Crossdresser_Killer/");
     }
     #endregion
 
@@ -5226,6 +5226,10 @@ public class UIManager : MonoBehaviour
     public List<GameObject> Boss_Dominus_Skill_In_Game_DialogueList;//皇帝多米纳斯技能刷出台词
     public List<GameObject> Boss_Dominus_Die_In_Game_DialogueList;//皇帝多米纳斯死亡刷出台词
 
+    public List<GameObject> Boss_SwordDancer_In_Game_DialogueList;//奴隶剑舞姬刷出台词
+    public List<GameObject> Boss_SwordDancer_Skill_In_Game_DialogueList;//奴隶剑舞姬技能刷出台词
+    public List<GameObject> Boss_SwordDancer_Die_In_Game_DialogueList;//奴隶剑舞姬死亡刷出台词
+
     private bool dialogueShowing = false;  // 是否有台词正在显示
     private GameObject currentDialogue = null; // 当前正在显示的台词
     private Coroutine dialogueRoutine = null;  // 当前协程引用
@@ -5278,6 +5282,10 @@ public class UIManager : MonoBehaviour
 
             case "Boss_Dominus_Skill": pool = Boss_Dominus_Skill_In_Game_DialogueList; break;
             case "Boss_Dominus_Die": pool = Boss_Dominus_Die_In_Game_DialogueList; break;
+
+            case "Boss_SwordDancer": pool = Boss_SwordDancer_In_Game_DialogueList; break;
+            case "Boss_SwordDancer_Skill": pool = Boss_SwordDancer_Skill_In_Game_DialogueList; break;
+            case "Boss_SwordDancer_Die": pool = Boss_SwordDancer_Die_In_Game_DialogueList; break;
         }
 
         if (pool == null || pool.Count == 0) return;

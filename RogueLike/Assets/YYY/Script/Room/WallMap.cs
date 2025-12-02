@@ -175,7 +175,10 @@ public class WallMap : MonoBehaviour
 
                     case 1:
                     case 2:
-                        SetEnemy(1);//角斗场刷男性敌人
+
+                        SetBoss(10);//角斗场刷Boss奴隶剑舞姬
+
+                        //SetEnemy(1);//角斗场刷男性敌人
                         break;
 
                     case 3:

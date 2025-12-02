@@ -293,6 +293,12 @@ public class Enemy : MonoBehaviour
 
 
                         break;
+
+                    case 10:
+
+                        BecomeBoss_SwordDancer();
+
+                        break;
                 }
 
 
@@ -437,6 +443,9 @@ public class Enemy : MonoBehaviour
                     break;
                 case 9:
                     UIManager.instance.ShowDialogue("Boss_CombatNun");
+                    break;
+                case 10:
+                    UIManager.instance.ShowDialogue("Boss_SwordDancer");
                     break;
             }
 
@@ -3219,6 +3228,10 @@ public class Enemy : MonoBehaviour
                 case 9:
                     UIManager.instance.ShowDialogue("Boss_CombatNun_Die");
                     break;
+
+                case 10:
+                    UIManager.instance.ShowDialogue("Boss_SwordDancer_Die");
+                    break;
             }
 
 
@@ -3565,7 +3578,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     #region
     [Header("Boss技能")]
-    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5皇太子   6皇帝    7黑魔导士   8典狱长  9首席战斗修女
+    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5皇太子   6皇帝    7黑魔导士   8典狱长  9首席战斗修女   10奴隶剑舞姬 
 
     public void BecomeBoss_Captain()
     {
@@ -4021,6 +4034,63 @@ public class Enemy : MonoBehaviour
 
     }//Boss 首席战斗修女  ＋1/2  ＋1/2  ＋1/2
 
+    public void BecomeBoss_SwordDancer() 
+    {
+        attackCooldown = 0.3f;//奴隶剑舞姬 快速攻击
+
+
+        YYY_headIndex = 2;
+        YYY_eyesIndex = 1;
+        YYY_bodyIndex = 14;
+        YYY_legsIndex = 14;
+
+        YYY_hatIndex = 14;//金冠
+
+        weaponIndex = 10;//古重剑
+
+        SetSkin();
+
+        Class = EnemyClass.Girl;
+
+        CurrentProfession = 0;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0:
+                Name.text = "奴隷剣舞姫";   // 日语
+                break;
+            case 1:
+                Name.text = "奴隶剑舞姬";   // 简体中文
+                break;
+            case 2:
+                Name.text = "奴隸劍舞姬";   // 繁体中文
+                break;
+            case 3:
+                Name.text = "Enslaved Sword Dancer";   // 英语
+                break;
+            case 4:
+                Name.text = "노예 검무무희";   // 韩语
+                break;
+        }
+
+        maxHealth *= 4;
+        currentHealth = maxHealth;
+        UpdateHealthBar(currentHealth, maxHealth);
+
+
+
+
+        //StartPressureField();//开始在自己脚下生气场
+
+        //剑舞
+        InvokeRepeating(nameof(BossSkill_SwordDance), 5f, 5f);
+
+    }//Boss  奴隶剑舞者
+
+
+
 
     #region 王女赛琳娜技能
     //Boss技能  瞬移近  瞬移远
@@ -4444,6 +4514,37 @@ public class Enemy : MonoBehaviour
 
     }//艾莉西亚产卵
     #endregion
+
+
+    #region  奴隶剑舞姬技能
+
+
+    public void BossSkill_SwordDance()
+    {
+        if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
+
+        //传送到玩家身边
+        GateEffect.SetActive(true);
+
+        RoomGenerator.ChangeTargetPlace(gameObject, -1);
+
+        //Invoke(nameof(BossSkill_CallDarkness), 2f);
+
+        OpenIndestructible();//期间无敌
+        Invoke(nameof(CloseIndestructible), 0.5f);
+
+
+        switch (BossNumber)
+        {
+            case 10:
+                UIManager.instance.ShowDialogue("Boss_SwordDancer_Skill");
+                break;
+        }
+    }
+
+    #endregion
+
+
     void OnDestroy()
     {
         // Boss死亡时停止召唤
