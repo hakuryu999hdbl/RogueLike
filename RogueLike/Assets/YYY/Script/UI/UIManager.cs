@@ -32,7 +32,11 @@ public class UIManager : MonoBehaviour
         Debug.Log("目前存档里的BGM音量" + PlayerPrefs.GetFloat("BGMVolume"));
         Debug.Log("目前存档里的SE音量" + PlayerPrefs.GetFloat("SEVolume"));
 
+        Debug.Log("目前存档里的屏幕设置" + PlayerPrefs.GetFloat("ScreenMode"));//0全屏  1窗口  2带边窗口
+
         //Debug.Log("目前存档里的钱币" + PlayerPrefs.GetInt("Money"));
+
+
 
 
         ChangeMoney(0, false);//更新钱
@@ -1262,13 +1266,13 @@ public class UIManager : MonoBehaviour
 
 
     //Mode菜单(和三选一界面一样)增加了切换当前选中点击Play触发
-    public void ChangeModeSelect(int ModeNumber) 
+    public void ChangeModeSelect(int ModeNumber)
     {
         ModePagecurrentIndex = ModeNumber;
         UpdateModePage_Highlight();
     }
 
-    public void ToSelectMode() 
+    public void ToSelectMode()
     {
         switch (ModePagecurrentIndex)
         {
@@ -1464,6 +1468,9 @@ public class UIManager : MonoBehaviour
     {
         LanguageCavans.SetActive(true);
         CurrentChooseList = 4;
+
+        SettingPagecurrentIndex = 2;
+        UpdateSettingPage_Highlight();
     }
     public void ToHomePage()
     {
@@ -1604,7 +1611,7 @@ public class UIManager : MonoBehaviour
             PlayerPrefs.SetInt("HighElf", 1);
             _RoomGenerator.ShowInformationOfStage(13);
             //Debug.Log("高等精灵可选");
-           
+
         }
 
 
@@ -1912,7 +1919,7 @@ public class UIManager : MonoBehaviour
             case 11: return (int)RaceOption.HighDemon;
             case 8: return (int)RaceOption.Oni;   // 鬼族
             case 5: return (int)RaceOption.Deer;  // 鹿族
-                
+
 
             // 兼容舊檔：6,7,9 以前的兔族耳，統一歸為黑兔
             default:
@@ -2553,7 +2560,7 @@ public class UIManager : MonoBehaviour
 
 
 
-     
+
         //隐藏buff
         ResetBuffs();
 
@@ -2576,6 +2583,10 @@ public class UIManager : MonoBehaviour
         UpdateDifficultyUI();
 
         CheckcoverPanel();//封面只显示一次
+
+
+        /////////////////////////////////////////////////【电脑控制/Steam】/////////////////////////////////////////////////
+        InitScreenMode();//读取窗口设置
 
 
     }//读取，显示存档
@@ -2960,6 +2971,11 @@ public class UIManager : MonoBehaviour
     {
         MakeSureDeleteCurrentSave_All.SetActive(true);
         CurrentChooseList = -2;//弹出确认删除存档框
+
+
+
+        SettingPagecurrentIndex = 4;
+        UpdateSettingPage_Highlight();
     }
 
     public void CancelDelete_All()
@@ -3705,6 +3721,10 @@ public class UIManager : MonoBehaviour
                             SE_Up();
                             break;
 
+                        case 3:
+                            ScreenMode_Right();
+                            break;
+
                     }
 
                 }
@@ -3722,6 +3742,9 @@ public class UIManager : MonoBehaviour
                             SE_Down();
                             break;
 
+                        case 3:
+                            ScreenMode_Left();
+                            break;
                     }
                 }
 
@@ -3729,14 +3752,14 @@ public class UIManager : MonoBehaviour
                 // 当前菜单项内的上下切换
                 if (dir.y > 0.5f)
                 {
-                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex - 1, 0, 3);
+                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex - 1, 0, 4);
                     UpdateSettingPage_Highlight();
 
 
                 }
                 else if (dir.y < -0.5f)
                 {
-                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex + 1, 0, 3);
+                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex + 1, 0, 4);
                     UpdateSettingPage_Highlight();
 
 
@@ -3906,7 +3929,7 @@ public class UIManager : MonoBehaviour
     private void OnConfirm(InputAction.CallbackContext ctx)
     {
         //按下任意键
-        if (coverPanel.activeSelf) 
+        if (coverPanel.activeSelf)
         {
             OnCoverClicked();
             return;
@@ -4074,7 +4097,7 @@ public class UIManager : MonoBehaviour
                     case 2:
                         Invoke("ToLanguagePage", 0.1f);//进入设置界面
                         break;
-                    case 3:
+                    case 4:
                         Invoke("TryDelete_All", 0.1f);//进入确认删除全部存档界面
                         break;
                 }
@@ -5749,40 +5772,339 @@ public class UIManager : MonoBehaviour
     private void UnlockSteamAchievement(string achievementID)
     {
         // 本地已经触发过了，就不要再弹 UI 了
-      //  if (_localUnlockedAchievements.Contains(achievementID))
-      //  {
-      //      Debug.Log($"成就 {achievementID} 已在本局触发过，直接忽略");
-      //      return;
-      //  }
-      //
-      //  _localUnlockedAchievements.Add(achievementID);
-      //
-      //  // 这里是你原来的“成就弹窗”逻辑
-      //  Debug.Log("成就弹窗：" + achievementID);
-      //  // TODO: 如果你有成就UI动画，在这里调用，例如：
-      //  // ShowAchievementPopup(achievementID);
-      //
-      //  // 提交给 Steam
-      //  if (SteamManager.Initialized)
-      //  {
-      //      bool success = SteamUserStats.SetAchievement(achievementID);
-      //      if (success)
-      //      {
-      //          SteamUserStats.StoreStats();   // 把成就保存到 Steam
-      //          Debug.Log("成功解锁 Steam 成就：" + achievementID);
-      //      }
-      //      else
-      //      {
-      //          Debug.LogError("Steam 成就解锁失败：" + achievementID);
-      //      }
-      //  }
-      //  else
-      //  {
-      //      Debug.LogWarning("Steam API 未初始化，只进行本地弹窗：" + achievementID);
-      //  }
+        //  if (_localUnlockedAchievements.Contains(achievementID))
+        //  {
+        //      Debug.Log($"成就 {achievementID} 已在本局触发过，直接忽略");
+        //      return;
+        //  }
+        //
+        //  _localUnlockedAchievements.Add(achievementID);
+        //
+        //  // 这里是你原来的“成就弹窗”逻辑
+        //  Debug.Log("成就弹窗：" + achievementID);
+        //  // TODO: 如果你有成就UI动画，在这里调用，例如：
+        //  // ShowAchievementPopup(achievementID);
+        //
+        //  // 提交给 Steam
+        //  if (SteamManager.Initialized)
+        //  {
+        //      bool success = SteamUserStats.SetAchievement(achievementID);
+        //      if (success)
+        //      {
+        //          SteamUserStats.StoreStats();   // 把成就保存到 Steam
+        //          Debug.Log("成功解锁 Steam 成就：" + achievementID);
+        //      }
+        //      else
+        //      {
+        //          Debug.LogError("Steam 成就解锁失败：" + achievementID);
+        //      }
+        //  }
+        //  else
+        //  {
+        //      Debug.LogWarning("Steam API 未初始化，只进行本地弹窗：" + achievementID);
+        //  }
     }
 
 
 
     #endregion
+
+    /// <summary>
+    /// Buff介绍按钮
+    /// </summary>
+    #region
+    [Header("Buff介绍按钮")]
+    public Text tooltipText;          // 或 TextMeshProUGUI
+    public GameObject canvasGroup;   // 控制显隐
+    public float showDuration = 2f;   // 显示时间
+
+    // 语言：0=JP, 1=CN, 2=TC, 3=EN, 4=KR
+    public int lang = 0;
+
+    private Coroutine showCoroutine;
+
+    public void ShowBuff(int buffIndex)
+    {
+        string desc = GetBuffDesc(buffIndex, lang);
+        tooltipText.text = desc;
+
+        if (showCoroutine != null)
+            StopCoroutine(showCoroutine);
+
+        showCoroutine = StartCoroutine(ShowRoutine());
+    }
+
+    private IEnumerator ShowRoutine()
+    {
+        canvasGroup.SetActive(true);
+        //canvasGroup.blocksRaycasts = false; // 不挡操作也行
+
+        yield return new WaitForSeconds(showDuration);
+
+        HideImmediate();
+    }
+
+    public void HideImmediate()
+    {
+        canvasGroup.SetActive(false);
+    }
+
+    //=====================
+    //  Buff 文本表
+    //=====================
+    private string GetBuffDesc(int buffIndex, int lang)
+    {
+        // buffIndex:
+        // 0=狩猎, 1=精准, 2=敏捷, 3=魔族化, 4=坚韧, 5=辟邪, 6=自然, 7=隐秘化
+
+        switch (lang)
+        {
+            case 0: // JP
+                return GetBuffDesc_JP(buffIndex);
+            case 1: // CN
+                return GetBuffDesc_CN(buffIndex);
+            case 2: // TC
+                return GetBuffDesc_TC(buffIndex);
+            case 3: // EN
+                return GetBuffDesc_EN(buffIndex);
+            case 4: // KR
+                return GetBuffDesc_KR(buffIndex);
+            default:
+                return GetBuffDesc_EN(buffIndex);
+        }
+    }
+
+    //========== JP ==========
+    private string GetBuffDesc_JP(int id)
+    {
+        switch (id)
+        {
+            case -1:
+                return $"<color=#FF8800>【近接補正】現在の近接ダメージ：×{ GameFlowData.Sword_Buff:0.0}</color>";
+            case -2:
+                return $"<color=#FF8800>【射撃補正】現在の射撃ダメージ：×{ GameFlowData.Pistol_Buff:0.0}</color>";
+            case -3:
+                return $"<color=#FF8800>【魔術補正】現在の魔法ダメージ：×{ GameFlowData.Staff_Buff:0.0}</color>";
+
+            case 0: return "<color=#FF8800>【狩猟】敵撃破時に追加経験値を得る可能性</color>";
+            case 1: return "<color=#FF8800>【精密】射撃武器で低HPの敵を即死させる可能性</color>";
+            case 2: return "<color=#FF8800>【敏捷】回避/ダッシュが体力を消費しない場合があり、少量回復する</color>";
+            case 3: return "<color=#FF8800>【魔族化】最大HP1/4、攻撃力の1/4を吸収回復</color>";
+            case 4: return "<color=#FF8800>【剛毅】ガードしていなくても一度だけ攻撃を完全無効化する可能性</color>";
+            case 5: return "<color=#FF8800>【辟邪】凍結・毒・火傷・麻痺などの状態異常を無効化</color>";
+            case 6: return "<color=#FF8800>【自然】回復時に追加でHPを多く回復する</color>";
+            case 7: return "<color=#FF8800>【隠秘化】体力を消費して半透明化し、一時的に敵の視線をそらす</color>";
+            default: return "";
+        }
+    }
+
+    //========== CN ==========
+    private string GetBuffDesc_CN(int id)
+    {
+        switch (id)
+        {
+            case -1:
+                return $"<color=#FF8800>【近战加成】当前近战伤害：×{GameFlowData.Sword_Buff:0.0}</color>";
+            case -2:
+                return $"<color=#FF8800>【射击加成】当前射击伤害：×{GameFlowData.Pistol_Buff:0.0}</color>";
+            case -3:
+                return $"<color=#FF8800>【法术加成】当前法术伤害：×{GameFlowData.Staff_Buff:0.0}</color>";
+
+            case 0: return "<color=#FF8800>【狩猎】在击败敌人后一定几率额外经验</color>";
+            case 1: return "<color=#FF8800>【精准】射击武器对低生命值敌人有几率一击必杀</color>";
+            case 2: return "<color=#FF8800>【敏捷】闪避/冲刺可能不消耗体力并恢复少量体力</color>";
+            case 3: return "<color=#FF8800>【魔族化】最大生命 25%，吸收攻击力 25% 生命值</color>";
+            case 4: return "<color=#FF8800>【坚韧】一定几率在未防御时完全免疫一次伤害</color>";
+            case 5: return "<color=#FF8800>【辟邪】不会被冻结、中毒、灼烧、麻痹等异常状态</color>";
+            case 6: return "<color=#FF8800>【自然】恢复生命时额外恢复部分生命值</color>";
+            case 7: return "<color=#FF8800>【隐秘化】消耗体力隐身，短时间转移敌人视线</color>";
+            default: return "";
+        }
+    }
+
+    //========== TC ==========
+    private string GetBuffDesc_TC(int id)
+    {
+        switch (id)
+        {
+            case -1:
+                return $"<color=#FF8800>【近戰加成】當前近戰傷害：×{GameFlowData.Sword_Buff:0.0}</color>";
+            case -2:
+                return $"<color=#FF8800>【射擊加成】當前射擊傷害：×{GameFlowData.Pistol_Buff:0.0}</color>";
+            case -3:
+                return $"<color=#FF8800>【法術加成】當前法術傷害：×{GameFlowData.Staff_Buff:0.0}</color>";
+
+            case 0: return "<color=#FF8800>【狩獵】擊敗敵人後有機率獲得額外經驗</color>";
+            case 1: return "<color=#FF8800>【精準】射擊武器對低生命值敵人有機率一擊必殺</color>";
+            case 2: return "<color=#FF8800>【敏捷】閃避/衝刺有機率不消耗體力並恢復少量體力</color>";
+            case 3: return "<color=#FF8800>【魔族化】最大生命值25%，攻擊吸血25%</color>";
+            case 4: return "<color=#FF8800>【堅韌】未防禦時有機率完全免疫一次傷害</color>";
+            case 5: return "<color=#FF8800>【辟邪】免疫凍結、中毒、灼燒、麻痺等異常</color>";
+            case 6: return "<color=#FF8800>【自然】生命恢復時額外回復</color>";
+            case 7: return "<color=#FF8800>【隱秘化】消耗體力進入隱身，短時間轉移敵人視線</color>";
+            default: return "";
+        }
+    }
+
+    //========== EN ==========
+    private string GetBuffDesc_EN(int id)
+    {
+        switch (id)
+        {
+            case -1:
+                return $"<color=#FF8800>[Melee Bonus] Current Melee Damage: ×{GameFlowData.Sword_Buff:0.0}</color>";
+            case -2:
+                return $"<color=#FF8800>[Ranged Bonus] Current Ranged Damage: ×{GameFlowData.Pistol_Buff:0.0}</color>";
+            case -3:
+                return $"<color=#FF8800>[Magic Bonus] Current Magic Damage: ×{GameFlowData.Staff_Buff:0.0}</color>";
+
+            case 0: return "<color=#FF8800>[Hunt] Chance for bonus EXP on kill</color>";
+            case 1: return "<color=#FF8800>[Precision] Ranged may insta-kill low HP enemies</color>";
+            case 2: return "<color=#FF8800>[Agility] Dodge/Dash may cost no stamina & restore some</color>";
+            case 3: return "<color=#FF8800>[Demon Form] Max HP 25%; absorb 25% damage as HP</color>";
+            case 4: return "<color=#FF8800>[Tenacity] May completely ignore one hit even without guarding</color>";
+            case 5: return "<color=#FF8800>[Ward] Immune to Freeze, Poison, Burn, Paralysis</color>";
+            case 6: return "<color=#FF8800>[Nature] Gain extra HP whenever healed</color>";
+            case 7: return "<color=#FF8800>[Veil] Consume stamina to become translucent and divert enemy attention briefly</color>";
+            default: return "";
+        }
+    }
+
+    //========== KR ==========
+    private string GetBuffDesc_KR(int id)
+    {
+        switch (id)
+        {
+            case -1:
+                return $"<color=#FF8800>[근접 보너스] 현재 근접 데미지: ×{GameFlowData.Sword_Buff:0.0}</color>";
+            case -2:
+                return $"<color=#FF8800>[사격 보너스] 현재 사격 데미지: ×{GameFlowData.Pistol_Buff:0.0}</color>";
+            case -3:
+                return $"<color=#FF8800>[마법 보너스] 현재 마법 데미지: ×{GameFlowData.Staff_Buff:0.0}</color>";
+
+            case 0: return "<color=#FF8800>[사냥] 처치 시 추가 경험치 획득 가능</color>";
+            case 1: return "<color=#FF8800>[정밀] 저HP 적을 사격으로 즉사시킬 수 있음</color>";
+            case 2: return "<color=#FF8800>[민첩] 회피/대시 시 스태미나가 들지 않고 조금 회복될 수 있음</color>";
+            case 3: return "<color=#FF8800>[마족화] 최대 HP 25%, 가한 피해의 25%를 흡혈</color>";
+            case 4: return "<color=#FF8800>[강인] 가드하지 않아도 한 번의 공격을 완전 무효화할 수 있음</color>";
+            case 5: return "<color=#FF8800>[벽사] 빙결·중독·화상·마비 등 상태 이상 면역</color>";
+            case 6: return "<color=#FF8800>[자연] 회복 시 추가 체력을 회복</color>";
+            case 7: return "<color=#FF8800>[은밀화] 체력을 소모하여 투명화, 잠시 적의 시선을 돌린다</color>";
+            default: return "";
+        }
+    }
+
+    #endregion
+
+
+    /// <summary>
+    /// 窗口化
+    /// </summary>
+    #region
+    [Header("窗口化")]
+    public int screenModeIndex = 0;  // 0=全屏, 1=窗口化, 2=无边框
+    public Text txt_ScreenMode;      // 显示文本
+
+    private const string KEY_SCREEN_MODE = "ScreenMode";
+
+    public void ToScreenSetting() 
+    {
+        SettingPagecurrentIndex =3;
+        UpdateSettingPage_Highlight();
+    }
+
+    public void InitScreenMode()
+    {
+        // 手机跳过，不读也不写
+        if (Application.isMobilePlatform)
+        {
+            txt_ScreenMode.text = "";
+            return;
+        }
+
+        // 读取保存的模式，默认 0（全屏）
+        screenModeIndex = PlayerPrefs.GetInt(KEY_SCREEN_MODE, 0);
+
+        ApplyScreenMode();
+        UpdateScreenModeText();
+    }
+
+    // 左箭头
+    public void ScreenMode_Left()
+    {
+        if (Application.isMobilePlatform)
+            return;
+
+        screenModeIndex--;
+        if (screenModeIndex < 0) screenModeIndex = 2;
+
+        ApplyScreenMode();
+        UpdateScreenModeText();
+
+        PlayerPrefs.SetInt(KEY_SCREEN_MODE, screenModeIndex);
+    }
+
+    // 右箭头
+    public void ScreenMode_Right()
+    {
+        if (Application.isMobilePlatform)
+            return;
+
+        screenModeIndex++;
+        if (screenModeIndex > 2) screenModeIndex = 0;
+
+        ApplyScreenMode();
+        UpdateScreenModeText();
+
+        PlayerPrefs.SetInt(KEY_SCREEN_MODE, screenModeIndex);
+    }
+
+    // 切换实际画面模式
+    private void ApplyScreenMode()
+    {
+        switch (screenModeIndex)
+        {
+            case 0:
+                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen; // 全屏
+                break;
+            case 1:
+                Screen.fullScreenMode = FullScreenMode.Windowed; // 窗口化
+                break;
+            case 2:
+                Screen.fullScreenMode = FullScreenMode.FullScreenWindow; // 无边框
+                break;
+        }
+    }
+
+    // 更新UI显示文本
+    private void UpdateScreenModeText()
+    {
+        int lang = PlayerPrefs.GetInt("language", 0);  // 0–4
+
+        txt_ScreenMode.text =
+            ScreenModeNames[lang, screenModeIndex];
+    }
+
+    // 语言：0=JP, 1=CN, 2=TC, 3=EN, 4=KR
+    private string[,] ScreenModeNames = new string[,]
+    {
+    // JP
+    { "全画面", "ウィンドウ", "ボーダーレス" },
+
+    // CN 简体
+    { "全屏模式", "窗口化", "无边框全屏" },
+
+    // TC 繁中
+    { "全螢幕", "視窗化", "無邊框全螢幕" },
+
+    // EN
+    { "Fullscreen", "Windowed", "Borderless" },
+
+    // KR
+    { "전체화면", "창 모드", "무테 전체화면" }
+    };
+
+    #endregion
+
+
 }

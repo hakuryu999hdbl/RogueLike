@@ -2521,6 +2521,19 @@ public class Enemy : MonoBehaviour
                     return;
                 }//黑魔导士传送房间随机位置
 
+                if (BossNumber == 10 && Random.Range(0, 2) == 0)
+                {
+                    OpenIndestructible();//获得0.5秒无敌
+                    Invoke(nameof(CloseIndestructible), 0.5f);
+                    //BossSkill_SwordDance();
+
+
+                    showPhantom();   // 出现幻影
+                    SwordSancerEvade();  // 位移
+
+                    return;
+                }//奴隶剑舞姬的闪避
+
                 if (currentHealth <= maxHealth / 4 && Class == EnemyClass.FleshArmor)
                 {
                     Class = EnemyClass.Man;
@@ -4080,7 +4093,7 @@ public class Enemy : MonoBehaviour
         UpdateHealthBar(currentHealth, maxHealth);
 
 
-
+        SpawnPhantom();//生成闪避幻影预设体
 
         //StartPressureField();//开始在自己脚下生气场
 
@@ -4521,7 +4534,7 @@ public class Enemy : MonoBehaviour
 
     public void BossSkill_SwordDance()
     {
-        if (currentHealth <= 0 || isRape || player.currentHealth <= 0) { return; }
+        if (currentHealth <= 0 || isRape || player.currentHealth <= 0 ||IsGrounded()) { return; }//在空中的时候不能进行传送
 
         //传送到玩家身边
         GateEffect.SetActive(true);
@@ -4530,8 +4543,8 @@ public class Enemy : MonoBehaviour
 
         //Invoke(nameof(BossSkill_CallDarkness), 2f);
 
-        OpenIndestructible();//期间无敌
-        Invoke(nameof(CloseIndestructible), 0.5f);
+       // OpenIndestructible();//期间无敌
+       // Invoke(nameof(CloseIndestructible), 0.5f);
 
 
         switch (BossNumber)
@@ -4540,6 +4553,79 @@ public class Enemy : MonoBehaviour
                 UIManager.instance.ShowDialogue("Boss_SwordDancer_Skill");
                 break;
         }
+
+        showPhantom();
+        SwordSancerEvade();
+    }
+
+
+    [Header("剑舞姬专用幻影")]
+    public GameObject phantomPrefab; // 拖入 Phantom.prefab
+
+    public SpriteRenderer GhostPhantom;//幻影
+    public Sprite Phantom, None;
+
+    void SpawnPhantom()
+    {
+
+        // 1. 生成一个幻影
+        GameObject g = Instantiate(phantomPrefab, transform.position, transform.rotation);
+
+        // 2. 获取幻影的 SpriteRenderer
+        GhostPhantom = g.GetComponent<SpriteRenderer>();
+
+
+        // 3. 幻影拉到自己下面
+        g.transform.SetParent(transform);
+
+    }
+
+    void showPhantom()
+    {
+        if (GhostPhantom)
+            GhostPhantom.sprite = Phantom;
+
+        Invoke(nameof(HidePhantom), 0.3f);
+    }
+
+
+    void HidePhantom()
+    {
+        if (GhostPhantom)
+            GhostPhantom.sprite = None;
+    }
+    void SwordSancerEvade()
+    {
+        StartCoroutine(EvadeCoroutine());
+    }
+    IEnumerator EvadeCoroutine()
+    {
+        float dir = Random.value > 0.5f ? 1f : -1f;
+        float distance = 1.2f;        // 移动距离
+        float duration = 0.12f;       // 持续时间（越小越快）
+        float timer = 0f;
+
+        Vector3 startPos = transform.position;
+        Vector3 targetPos = startPos + new Vector3(dir * distance, 0, 0);
+
+        // 可选：闪避期间锁住AI移动
+        if (aiPath != null)
+            aiPath.canMove = false;
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float t = timer / duration;
+            transform.position = Vector3.Lerp(startPos, targetPos, t);
+            yield return null;
+        }
+
+        // 结束后确保到达终点
+        transform.position = targetPos;
+
+        // 恢复 AI 移动
+        if (aiPath != null)
+            aiPath.canMove = true;
     }
 
     #endregion

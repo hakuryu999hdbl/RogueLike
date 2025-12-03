@@ -7232,12 +7232,15 @@ MonoBehaviour:
   BecomeFleshArmor: 0
   isCallEnemy: 0
   isDominusSummon: 0
-  dominusSummonBossList: 01000000080000000900000007000000
   pressureNodePrefab: {fileID: 4824349615525433210, guid: 956762a3c001d524080efa17caf3971d, type: 3}
   Darkness_Enemy: {fileID: 436003451295310718, guid: 55558a87e134c424d827b7d48911bc64, type: 3}
   isIndestructible: 0
   Invincible_Mark: {fileID: 3162436132767313087}
   Egg: {fileID: 1218856038072579282, guid: 29887c193968d634d9670ba971a6d1ad, type: 3}
+  phantomPrefab: {fileID: 1006473948335876596, guid: dc64b4923e94e4c419a08c2248aee67b, type: 3}
+  GhostPhantom: {fileID: 0}
+  Phantom: {fileID: 21300000, guid: 57f20bac2968f244087faf2237514d2f, type: 3}
+  None: {fileID: 21300000, guid: e7dbb2c157ef8fd4e9d86420c36a6ac7, type: 3}
   HeathBar: {fileID: 7140408174316037136}
 --- !u!50 &2929557566085313533
 Rigidbody2D:

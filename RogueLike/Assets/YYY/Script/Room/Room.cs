@@ -88,7 +88,7 @@ public class Room : MonoBehaviour
 
             default:
             case "Dungeon":
-                 BossNumber = Random.Range(1, 10);//随机Boss
+                 BossNumber = Random.Range(1, 11);//随机Boss
                  break;
 
             
