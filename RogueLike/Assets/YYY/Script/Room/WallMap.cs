@@ -418,7 +418,7 @@ public class WallMap : MonoBehaviour
         enemyToSpawn += GameFlowData.RoomLevel;
         Debug.Log("此房间敌人数量" + enemyToSpawn + "玩家进入房间数" + GameFlowData.RoomLevel);
 
-        if (enemyToSpawn > 4&&GameFlowData.nextScene!= "Arena") { enemyToSpawn = 4; }//在角斗场界面，敌人无上限
+        if (enemyToSpawn > 3&&GameFlowData.nextScene!= "Arena") { enemyToSpawn = 3; }//在角斗场界面，敌人无上限
 
 
         if (isBossRoom&& PlayerPrefs.GetInt("Difficulty")==0) { enemyToSpawn = 1; }//Boss关卡，敌人只能刷1个,简单难度下

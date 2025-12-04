@@ -131,7 +131,10 @@ public class Enemy : MonoBehaviour
                         //Class = EnemyClass.Demon;
 
 
-
+                        if (visionType == EnemyType.LongRangeEnemy&&tag != "Friend") 
+                        {
+                            attackCooldown = 1.5f;//远程类型敌人攻击冷却间隔更大
+                        }
 
 
                         if (Class == EnemyClass.Girl && visionType == EnemyType.LongRangeEnemy && Random.Range(0, 2) == 0)
@@ -1054,7 +1057,12 @@ public class Enemy : MonoBehaviour
                     {
                         case EnemyClass.Girl:
                         case EnemyClass.Succubus:
-                            switch (Random.Range(1, 3))
+
+
+                            int Girl_CG = Random.Range(1, 3);
+                            if (BossNumber == 10){ Girl_CG = 2; }
+
+                            switch (Girl_CG)
                             {
                                 case 1:
                                     cg_anim.Play("CG/CG_InsultSide_1");
@@ -1930,7 +1938,6 @@ public class Enemy : MonoBehaviour
 
 
     }//近战攻击发出的叫声
-
     #endregion
 
 
@@ -2514,9 +2521,12 @@ public class Enemy : MonoBehaviour
                 } //赛琳娜瞬移技能
                 if (BossNumber == 7 && Random.Range(0, 4) == 3)
                 {
-                    OpenIndestructible();//黑魔导士受伤1/3几率免疫伤害传送房间中央，并获得0.5秒无敌
+                    //OpenIndestructible();//黑魔导士受伤1/3几率免疫伤害传送房间中央，并获得0.5秒无敌
 
-                    BossSkill_ToDarknessPlace();
+                    showPhantom();   // 出现幻影
+                    SwordSancerEvade();  // 位移
+
+                    //BossSkill_ToDarknessPlace();
 
                     return;
                 }//黑魔导士传送房间随机位置
@@ -2705,7 +2715,7 @@ public class Enemy : MonoBehaviour
             HudText.HUD(amount);
 
             //伤害冷却
-            Invoke("HurtOver", 0.2f);
+            Invoke("HurtOver", 0.1f);
 
             isScreaming = true;
 
@@ -3270,16 +3280,18 @@ public class Enemy : MonoBehaviour
                     case 0:
                         //一般敌人
                         player.ChangeExperience((int)(100 * rewardMultiplier));
-                        UIManager.instance.ChangeMoney((int)(Random.Range(10, 30) * rewardMultiplier));
+                        UIManager.instance.ChangeMoney((int)(Random.Range(100, 300) * rewardMultiplier));//一般敌人
                         break;
 
                     case 1:
                     case 4:
                     case 5:
                     case 8:
+                    case 10:
                         //一般Boss
                         player.ChangeExperience((int)(500 * rewardMultiplier));
-                        UIManager.instance.ChangeMoney((int)(Random.Range(50, 150) * rewardMultiplier));
+                        UIManager.instance.ChangeMoney((int)(Random.Range(500, 1500) * rewardMultiplier)); //一般Boss
+                        player.StopMakeChild();//这些Boss停止攻击
                         break;
 
                     case 2:
@@ -3288,13 +3300,15 @@ public class Enemy : MonoBehaviour
                     case 9:
                         //特殊Boss
                         player.ChangeExperience((int)(1000 * rewardMultiplier));
-                        UIManager.instance.ChangeMoney((int)(Random.Range(100, 300) * rewardMultiplier));
+                        UIManager.instance.ChangeMoney((int)(Random.Range(1000, 3000) * rewardMultiplier));  //特殊Boss
+                        player.StopMakeChild();//这些Boss停止攻击
                         break;
 
                     case 6:
                         //最终Boss
                         player.ChangeExperience((int)(1500 * rewardMultiplier));
-                        UIManager.instance.ChangeMoney((int)(Random.Range(150, 450) * rewardMultiplier));
+                        UIManager.instance.ChangeMoney((int)(Random.Range(5000, 10000) * rewardMultiplier)); //最终Boss
+                        player.StopMakeChild();//这些Boss停止攻击
                         break;
                 }
 
@@ -3940,6 +3954,10 @@ public class Enemy : MonoBehaviour
         player.FollowDamage = 1;
         player.StartMakeChild();//开始在玩家脚下生触手
 
+
+        SpawnPhantom();//生成闪避幻影预设体
+
+
     }//Boss 黑魔法法师   1
 
     public void BecomeBoss_Warden()
@@ -4481,7 +4499,7 @@ public class Enemy : MonoBehaviour
         ShowMagicEffect();//显示魔法阵召唤
 
 
-        OpenIndestructible();//黑魔导士每隔10秒，传送到玩家身边,0.5秒后召唤暗影近战攻击，2秒后传送回房间中央，这2.5秒期间无敌
+        //OpenIndestructible();//黑魔导士每隔10秒，传送到玩家身边,0.5秒后召唤暗影近战攻击，2秒后传送回房间中央，这2.5秒期间无敌
     }
 
     //Boss技能  传送到暗影位置
@@ -4497,7 +4515,7 @@ public class Enemy : MonoBehaviour
         //transform.position = wallmap.transform.position;
 
 
-        Invoke(nameof(CloseIndestructible), 0.5f);
+        //Invoke(nameof(CloseIndestructible), 0.5f);
     }//暗影法师和王女赛琳娜通用了传送回去方法防止卡墙
 
 

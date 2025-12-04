@@ -56,11 +56,11 @@ public class Player : MonoBehaviour
 
 
 
-       
-       
-       
-       
-       
+
+
+
+
+
     }
 
 
@@ -135,14 +135,14 @@ public class Player : MonoBehaviour
         currentStrength = maxStrength;
         UIManager.instance.UpdateStrengthBar(currentStrength, maxStrength);
 
-        this.Level  = data.level;
+        this.Level = data.level;
         LevelText.text = Level.ToString();
         maxExperience = data.level * 1000;
         currentExperience = data.exp;
         UIManager.instance.UpdateExperienceBar(currentExperience, maxExperience);
 
         //涉及升级储存，所以保持正数，只有在需要攻击伤害的时候变成复数
-        MeleeDamage = data.meleeDamage; 
+        MeleeDamage = data.meleeDamage;
         ShootDamage = data.shootDamage;
         SpellDamage = data.spellDamage;
 
@@ -162,7 +162,7 @@ public class Player : MonoBehaviour
 
             SetStrikeTypeOfAttack();
         }
-        else 
+        else
         {
             //法师近战攻击力急剧缩减
             strike.Damage = -data.meleeDamage / 5;
@@ -170,7 +170,7 @@ public class Player : MonoBehaviour
             strike.TypeOfAttack = 0;//法师近战不能有属性
         }
 
-     
+
 
         //升级需求
         switch (data.level)
@@ -312,18 +312,18 @@ public class Player : MonoBehaviour
             // 没有的话，自动创建露娜角色
             SetLuna_Skin();
             RandomNewSave(true);
-       
+
         }
         else
         {
             // 已有露娜 → 正常随机创建
             SetRandomSkin();
             SaveCurrent(false);// 已有露娜 → 正常随机创建
-        }    
+        }
 
     }//新增皮肤临时随机
 
-    public void RandomNewSave(bool isLuna=false) //当玩家生成第一个角色默认Luna
+    public void RandomNewSave(bool isLuna = false) //当玩家生成第一个角色默认Luna
     {
         // 如果还没有命名，则生成
 
@@ -375,7 +375,7 @@ public class Player : MonoBehaviour
         data.shootDamage = Random.Range(50, 100);
         data.spellDamage = Random.Range(50, 100);
 
-        switch (CurrentProfession) 
+        switch (CurrentProfession)
         {
             case 0:
                 data.weaponAtk = 100;
@@ -394,9 +394,9 @@ public class Player : MonoBehaviour
                 break;
 
         }
-   
-      
-       
+
+
+
 
         SaveManager.Save(data);
 
@@ -421,7 +421,7 @@ public class Player : MonoBehaviour
         }
 
         // …把当前面板的各项 index/数值回填到 data…
-        if (overwriteStats) 
+        if (overwriteStats)
         {
             data.headIndex = this.YYY_headIndex;
             data.eyesIndex = this.YYY_eyesIndex;
@@ -446,7 +446,7 @@ public class Player : MonoBehaviour
             data.level = Level;
             data.exp = currentExperience;
 
-           
+
         }
 
         SaveManager.Save(data);
@@ -518,7 +518,7 @@ public class Player : MonoBehaviour
     }//清除皮肤
 
 
-    public void SetLuna_Skin() 
+    public void SetLuna_Skin()
     {
         //设置主角（指定皮肤与名字）
         this.YYY_headIndex = 11;
@@ -579,7 +579,7 @@ public class Player : MonoBehaviour
     {
 
         //移动中菜单锁显示
-        if (speed != 0||isDodging||isAttacking)
+        if (speed != 0 || isDodging || isAttacking)
         {
             UIManager.instance.LockOfMenu.SetActive(true);
 
@@ -627,21 +627,21 @@ public class Player : MonoBehaviour
 
 
 
-            //魔族化后生命值永远被控制于1/4左右
+            //魔族化后生命值永远被控制于1/2左右
             if (Class == PlayerClass.Succubus)
             {
-                
 
-                if(currentHealth>= maxStrength / 4)
+
+                if (currentHealth >= maxStrength / 2)
                 {
-                    currentHealth = maxStrength / 4;
+                    currentHealth = maxStrength / 2;
                     UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
                 }
 
 
             }
 
-           
+
         }
         else
         {
@@ -659,7 +659,7 @@ public class Player : MonoBehaviour
 
         //无敌标志
         if (isInvincible)
-        { 
+        {
             Invincible_Mark.SetActive(true);
             attackPressTime = 1f;//法师这类一定要蓄力才能攻击的角色，在闪避过后给与的奖励蓄力中一定要按下0.2秒后松手才能攻击
         }
@@ -676,7 +676,7 @@ public class Player : MonoBehaviour
             {
                 RestoreHealth(100);
 
-                BurnTimer = 0;         
+                BurnTimer = 0;
             }
         }
 
@@ -824,7 +824,7 @@ public class Player : MonoBehaviour
 
         CheckJump();
 
-        if (!canMove|| !IsGrounded())
+        if (!canMove || !IsGrounded())
         {
             input = Vector2.zero;
             moveSpeed = 0;//攻击期间永远不要出现【跑】动画
@@ -897,7 +897,7 @@ public class Player : MonoBehaviour
                 break;
         }
 
-        
+
         CheckWeapon();//武器（尤其是远程）更新
 
     }
@@ -1030,7 +1030,7 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    public void ForCGRandomEnemySkin() 
+    public void ForCGRandomEnemySkin()
     {
         Man_headIndex = Random.Range(1, 6);
         Man_bodyIndex = 2;
@@ -1080,8 +1080,8 @@ public class Player : MonoBehaviour
         ShootDamage = Random.Range(50, 100);
         SpellDamage = Random.Range(50, 100);
 
-        CurrentWeaponPower = Random.Range(50,120);
-        CurrentArmorDefence = Random.Range(15,40);
+        CurrentWeaponPower = Random.Range(50, 120);
+        CurrentArmorDefence = Random.Range(15, 40);
         CurrentStockingDefence = Random.Range(15, 40);
 
 
@@ -1106,7 +1106,7 @@ public class Player : MonoBehaviour
 
         YYY_headIndex = Random.Range(1, 13);  // 除去皇女
         YYY_eyesIndex = Random.Range(1, 14);  // 1~13
-        YYY_bodyIndex = Random.Range(10, 13);CurrentProfession = YYY_bodyIndex - 10;//剑士射手法师
+        YYY_bodyIndex = Random.Range(10, 13); CurrentProfession = YYY_bodyIndex - 10;//剑士射手法师
         YYY_legsIndex = Random.Range(10, 13);//剑士射手法师
 
         //int[] YYY_pool = { 1, 2, 3, 4, 10, 11, 12 };
@@ -1139,7 +1139,7 @@ public class Player : MonoBehaviour
 
 
         //weaponIndex = Random.Range(1, 11);
-        weaponIndex =1;//初始武器为匕首/轻弩/黄木短杖
+        weaponIndex = 1;//初始武器为匕首/轻弩/黄木短杖
 
         SetSkin();
     }
@@ -1254,7 +1254,7 @@ public class Player : MonoBehaviour
 
                 attackTriggered = true;
 
-               
+
             }
 
             attack_Range.SetActive(false);//关闭技能范围
@@ -1365,7 +1365,7 @@ public class Player : MonoBehaviour
 
     public void PlayNormalAttack()
     {
-        
+
 
         if (!isDie)
         {
@@ -1413,7 +1413,7 @@ public class Player : MonoBehaviour
 
 
                     CanShoot = false;
-                    Invoke("SetCanShoot", 0.3f);//似乎这是目前唯一
+                    Invoke(nameof(SetCanShoot), 0.3f);//似乎这是目前唯一
                 }
 
             }
@@ -1672,7 +1672,7 @@ public class Player : MonoBehaviour
         var go = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
         var s = go.GetComponent<Shooting>();
 
-       
+
 
         switch (CurrentWeapon)
         {
@@ -1691,7 +1691,7 @@ public class Player : MonoBehaviour
                 special = 5;//剧毒法球
                 break;
             case 203:
-           // case 210:
+                // case 210:
                 special = 3;//火焰法球
                 break;
             case 204:
@@ -1749,7 +1749,7 @@ public class Player : MonoBehaviour
         int AllLongRangeDamage = -ShootDamage - CurrentWeaponPower;
 
         //枪先天性伤害减半
-        if (special==0)
+        if (special == 0)
         {
             if (!willCrit)
             {
@@ -1761,7 +1761,7 @@ public class Player : MonoBehaviour
             }//如果不产生暴击，那么伤害需要减半
         }
         //弩虽然可以击退，但是伤害更低
-        if (special == 1) 
+        if (special == 1)
         {
             if (!willCrit)
             {
@@ -1773,10 +1773,68 @@ public class Player : MonoBehaviour
             }//如果不产生暴击，那么伤害需要减半
         }
 
-       
+
 
         s.Init(AllLongRangeDamage, -SpellDamage - CurrentWeaponPower, willCrit, Save_attackPressTime, special, direction, Shooting.BulletOwnerType.Player);//角色数值＋武器数值的基础伤害，暴击，蓄力时间，子弹类型，方位，子弹所有者
 
+        if (special == 0 || special == 1)
+        {
+            switch (CurrentWeapon)
+            {
+
+
+                case 102://重弩
+                case 104://火绳复合枪
+                case 106://火绳长枪
+
+                    //同时打出2发侧弹(但是是同时的，所以不会出现敌人)
+                    Vector3 leftDir = Quaternion.AngleAxis(+12, Vector3.forward) * direction;
+                    Vector3 rightDir = Quaternion.AngleAxis(-12, Vector3.forward) * direction;
+
+                    SpawnOneBullet(leftDir.normalized, AllLongRangeDamage, SpellDamage, willCrit);
+                    SpawnOneBullet(rightDir.normalized, AllLongRangeDamage, SpellDamage, willCrit);
+                    break;
+
+                case 103://复合弩
+                case 107: //遂发枪 
+
+
+                    //多打2发  冷却1秒
+                    StartCoroutine(DelaySpawn(direction, AllLongRangeDamage, false, 0.2f));
+                    StartCoroutine(DelaySpawn(direction, AllLongRangeDamage, false, 0.4f));
+                    break;
+
+                case 109: //火绳黄铜枪
+
+                    //多打3发  冷却1.8秒
+                    StartCoroutine(DelaySpawn(direction, AllLongRangeDamage, false, 0.2f));
+                    StartCoroutine(DelaySpawn(direction, AllLongRangeDamage, false, 0.4f));
+                    StartCoroutine(DelaySpawn(direction, AllLongRangeDamage, false, 0.6f));
+                    break;
+
+            }
+
+
+
+            if (willCrit) 
+            {
+                // 左右偏转
+                Vector3 leftDir = Quaternion.AngleAxis(+12, Vector3.forward) * direction;
+                Vector3 rightDir = Quaternion.AngleAxis(-12, Vector3.forward) * direction;
+
+                //SpawnOneBullet(leftDir.normalized, AllLongRangeDamage, SpellDamage, willCrit);
+                //SpawnOneBullet(rightDir.normalized, AllLongRangeDamage, SpellDamage, willCrit);
+
+                //这个侧击绝对不能打出暴击，不然又卡一下
+                StartCoroutine(DelaySpawn(leftDir.normalized, AllLongRangeDamage, false,0.2f));
+                StartCoroutine(DelaySpawn(rightDir.normalized, AllLongRangeDamage,false, 0.2f));
+
+            }
+
+        }//先做只要蓄力就能散射
+
+
+     
 
 
         // ---闪避无敌状态---
@@ -1788,12 +1846,97 @@ public class Player : MonoBehaviour
     }//射击子弹
 
 
+    //携程二发弹
+    IEnumerator DelaySpawn(Vector3 dir, int AllLongRangeDamage,bool willCrit, float DelayTime)
+    {
+        yield return new WaitForSeconds(DelayTime);
+
+        SpawnOneBullet(dir, AllLongRangeDamage, SpellDamage, willCrit);
+    }
+
+    // 生成一颗子弹的共通函数
+    private void SpawnOneBullet(Vector3 dir, int allLongRangeDamage, int spellDamage, bool willCrit)
+    {
+        var go = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        var s = go.GetComponent<Shooting>();
+
+        s.Init(
+            allLongRangeDamage,
+            spellDamage,
+            willCrit,
+            Save_attackPressTime,
+            special,
+            dir,
+            Shooting.BulletOwnerType.Player
+        );
+    }
+
 
 
     [Header("射击冷却")]
     public bool CanShoot = true;
 
     void SetCanShoot()
+    {
+        switch (CurrentWeapon) 
+        {
+            default:
+            case 210:
+            case 202:
+            case 208:
+            case 201:
+            case 207:
+            case 203:
+            case 204:
+            case 206:
+            case 205:
+            case 209:
+                SetCanShoot_2();//法杖类都是极快冷却
+                break;
+
+            case 101:
+                SetCanShoot_2();//轻弩
+                break;
+
+            case 102:
+                Invoke(nameof(SetCanShoot_2), 0.5f);//重弩
+                break;
+
+            case 103:
+                Invoke(nameof(SetCanShoot_2),1f);//复合弩
+                break;
+
+
+            case 104:
+                Invoke(nameof(SetCanShoot_2), 0.5f);//火绳复合枪
+                break;
+            case 105:
+                SetCanShoot_2();//火绳短枪
+                break;
+            case 106:
+                Invoke(nameof(SetCanShoot_2), 0.5f);//火绳长枪
+                break;
+            case 107:
+                Invoke(nameof(SetCanShoot_2), 1f);//遂发枪
+                break;
+
+            case 108:
+                SetCanShoot_2();//刺刀火枪
+                break;
+            case 109:
+                Invoke(nameof(SetCanShoot_2), 1.5f);//火绳黄铜枪
+                break;
+            case 110:
+                SetCanShoot_2();//镶银火枪
+                break;
+
+
+        }
+
+
+    }//根据不同的射击类武器来决定效果
+
+    void SetCanShoot_2()
     {
         CanShoot = true;
     }
@@ -1811,7 +1954,7 @@ public class Player : MonoBehaviour
     public int CurrentProfession;//0战士 1射手 2法师
     //0无武器
     //1匕首 2阔剑  3长柄双刃斧  4长枪   5长柄斧   6冻结剑   7黑铁刺剑  8熔岩剑  9引雷剑  10古重剑
-    //101轻弩   102重弩   103复合弩   104火绳复合枪  105火绳短枪   106火绳长枪   107燧发枪  108刺刀火枪  109火绳黄铜枪  109 110镶银火枪   
+    //101轻弩   102重弩   103复合弩   104火绳复合枪  105火绳短枪   106火绳长枪   107燧发枪  108刺刀火枪  109火绳黄铜枪   110镶银火枪   
     //201黄木短杖  202鹰身短杖   203红宝石短杖    204蓝宝石短杖   205黄玉短杖   206冰冻法杖  207紫水晶法杖  208翡翠法杖  209雷霆法杖  210古木法杖
 
     public void CheckWeapon()
@@ -1842,7 +1985,7 @@ public class Player : MonoBehaviour
                     ChangeMagicEffectColor(5);//剧毒魔法阵
                     break;
                 case 203:
-                //case 210:
+                    //case 210:
                     ChangeMagicEffectColor(2);//火焰魔法阵
                     break;
                 case 204:
@@ -1856,7 +1999,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        
+
 
     }
 
@@ -1867,7 +2010,7 @@ public class Player : MonoBehaviour
 
     public Animator MagicFormationAnim;//魔法阵
     public SpriteRenderer MagicFormation;//魔法阵样式
-    public Sprite Magic_Demon,Magic_Fire, Magic_Electricity, Magic_Ice, Magic_Poison, Magic_Wind;
+    public Sprite Magic_Demon, Magic_Fire, Magic_Electricity, Magic_Ice, Magic_Poison, Magic_Wind;
 
     public void ChangeMagicEffectColor(int ColorNumber)
     {
@@ -1931,7 +2074,7 @@ public class Player : MonoBehaviour
     public int CurrentStockingDefence;   // 丝袜防御值
 
 
-    public void PickupWeapon(int weaponID,int ChangeProfession)//0战士 1射手 2法师
+    public void PickupWeapon(int weaponID, int ChangeProfession)//0战士 1射手 2法师
     {
 
         weaponIndex = weaponID;
@@ -1995,7 +2138,7 @@ public class Player : MonoBehaviour
             {
                 frameEvents._Effect_falldown();// 播放落地音效等逻辑
                 Knockdown();
-               
+
             }
 
 
@@ -2122,7 +2265,7 @@ public class Player : MonoBehaviour
     private void TryStartHide()
     {
         // 体力不足
-        if (currentStrength<= 200)
+        if (currentStrength <= 200)
         {
             frameEvents._SE_Glass();
 
@@ -2143,7 +2286,7 @@ public class Player : MonoBehaviour
         if (currentFakeFriend != null) return;
         // 生成小跟班（诱饵）
         currentFakeFriend = Instantiate(FakeFriend, transform.position, Quaternion.identity);
-       
+
 
         Transform nearestEnemy = FindNearestEnemy();
         if (nearestEnemy != null)
@@ -2163,7 +2306,7 @@ public class Player : MonoBehaviour
     }
     public void EndHide()
     {
-       
+
         isHide = false;
         characterSkin.ShowSkeleton();
 
@@ -2226,14 +2369,14 @@ public class Player : MonoBehaviour
             {
                 if (canMove)
                 {
-                    if (dodgePressTime < 0.2f)
+                    if (dodgePressTime < 0.5f)//ToDo按下闪避半秒内松手都是闪避，此外才是种族技能
                     {
                         PlayDodge(); // 闪避
                     }
                     else
                     {
                         //魔族变身
-                        if (YYY_hatIndex == 11 || YYY_hatIndex == 12) 
+                        if (YYY_hatIndex == 11 || YYY_hatIndex == 12)
                         {
                             if (Class == PlayerClass.Succubus)
                             {
@@ -2284,9 +2427,9 @@ public class Player : MonoBehaviour
 
 
     }
-  
 
-    public void CheckDemonMode() 
+
+    public void CheckDemonMode()
     {
         if (Class == PlayerClass.Succubus)
         {
@@ -2305,7 +2448,7 @@ public class Player : MonoBehaviour
         {
             dodgePressTime += Time.deltaTime;
 
-            if (dodgePressTime > 0.2f)
+            if (dodgePressTime > 0.5f)
             {
                 //魔族变身法阵
                 if (YYY_hatIndex == 11 || YYY_hatIndex == 12 || YYY_hatIndex == 3)
@@ -2326,7 +2469,7 @@ public class Player : MonoBehaviour
 
                 Demon_Effect.SetActive(false);
             }
-        
+
         }
 
 
@@ -2357,7 +2500,7 @@ public class Player : MonoBehaviour
     void PlayDodge()
     {
         //当这些动画在播放的时候玩家不可以闪避(动画与可移动重合)
-        if (!canMove) 
+        if (!canMove)
         {
             return;//防止连续闪避
         }
@@ -2419,7 +2562,7 @@ public class Player : MonoBehaviour
 
             //anim.SetTrigger("Dodge");
 
-           
+
         }
         else
         {
@@ -2461,13 +2604,13 @@ public class Player : MonoBehaviour
 
         // 音效
         frameEvents._SE_Clothes();
-     
+
 
         //兔族一定几率不消耗体力
         if (YYY_hatIndex == 4 || YYY_hatIndex == 10)
         {
 
-            if (Random.Range(0,2)==0)
+            if (Random.Range(0, 2) == 0)
             {
                 //兔族天赋，不扣除体力
                 Speed_UpEffect.SetActive(true);
@@ -2479,7 +2622,7 @@ public class Player : MonoBehaviour
                 ChangeStrength(-100);
             }
         }
-        else 
+        else
         {
             //体力扣除
             ChangeStrength(-100);
@@ -2610,7 +2753,7 @@ public class Player : MonoBehaviour
     {
         Time.timeScale = 1f;//继续
 
-        
+
     }
 
 
@@ -2743,7 +2886,7 @@ public class Player : MonoBehaviour
             }
 
 
-            
+
         }
 
     }
@@ -2763,7 +2906,7 @@ public class Player : MonoBehaviour
         if (!isDie && currentHealth > 0 && !isInputBlocked && IsGrounded())
         {
 
-            if (speed == 0&&!isDodging && !isAttacking)//移动与按下闪避按下攻击键中无法打开
+            if (speed == 0 && !isDodging && !isAttacking)//移动与按下闪避按下攻击键中无法打开
             {
                 UIManager.instance.OpenCloseMenu();
                 AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
@@ -2775,7 +2918,7 @@ public class Player : MonoBehaviour
                 AudioManager.instance.AudioPlay(AudioManager.instance.SE_Glass);
             }
 
-           
+
             //isMenu = true;
         }
 
@@ -2980,8 +3123,8 @@ public class Player : MonoBehaviour
         if (!isScreaming && currentHealth > 0 && !isDie)//冷却不受击，死亡后不受击，倒地不受击，(所有攻击都无法canMove)攻击中不受击
         {
 
-            
-            
+
+
 
 
             if (isDodging)
@@ -3010,11 +3153,11 @@ public class Player : MonoBehaviour
                 {
                     // 计算体力百分比
                     float strengthPercent = (float)currentStrength / maxStrength;
-           
+
                     // 根据体力百分比决定防御几率（体力越高越容易防御）
                     // 比如体力满时为 100% 几率，体力最低时为 10%
                     float blockChance = Mathf.Lerp(0.1f, 1f, strengthPercent);
-           
+
                     if (Random.value < blockChance)
                     {
 
@@ -3027,7 +3170,7 @@ public class Player : MonoBehaviour
                             //充值1/2暴击
                             ChangeCritical(maxCritical / 2);
                         }
-                        else 
+                        else
                         {
                             if (Class == PlayerClass.Succubus || isMage)
                             {
@@ -3071,9 +3214,9 @@ public class Player : MonoBehaviour
 
 
 
-                   
-           
-           
+
+
+
                         switch (Random.Range(0, 3))
                         {
                             case 0:
@@ -3086,11 +3229,11 @@ public class Player : MonoBehaviour
                                 frameEvents._Attack_sword_clash4();
                                 break;
                         }
-           
-           
+
+
                         //显示伤害
                         HudText.HUD(0);//0会显示Miss
-           
+
                         //火花特效
                         Vector3 offset_2 = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
                         Vector3 spawnPosition_2 = transform.position + offset_2;
@@ -3105,14 +3248,14 @@ public class Player : MonoBehaviour
                         //Invoke(nameof(DefenseRecover), 0.3f);
 
 
-                       
+
 
                         return;
                     }
-           
+
                 }
-           
-           
+
+
                 //受伤时连击取消
                 if (currentHealth > 0)
                 {
@@ -3134,7 +3277,7 @@ public class Player : MonoBehaviour
                 amount += CurrentArmorDefence;
                 amount += CurrentStockingDefence;
 
-                if (amount>=0)
+                if (amount >= 0)
                 {
                     amount = 0;
                 }
@@ -3146,9 +3289,9 @@ public class Player : MonoBehaviour
 
 
             //[辟邪去除异常状态]
-            if (YYY_hatIndex==5) 
+            if (YYY_hatIndex == 5)
             {
-                if(TypeOfAttack==-1|| TypeOfAttack == 2|| TypeOfAttack == 3|| TypeOfAttack == 4|| TypeOfAttack == 5 || TypeOfAttack == 6)
+                if (TypeOfAttack == -1 || TypeOfAttack == 2 || TypeOfAttack == 3 || TypeOfAttack == 4 || TypeOfAttack == 5 || TypeOfAttack == 6)
                 {
                     TypeOfAttack = 0;
 
@@ -3180,7 +3323,7 @@ public class Player : MonoBehaviour
                     }
                     break;
                 case 3:
-                    if (Random.Range(0,3)==0) 
+                    if (Random.Range(0, 3) == 0)
                     {
                         Freeze(1);//冻结伤害
                     }
@@ -3191,12 +3334,12 @@ public class Player : MonoBehaviour
                         GameObject EffectPrefabs = Instantiate(IceEffect, spawnPosition_2, transform.rotation);
                         Destroy(EffectPrefabs, 0.5f);
                     }
-                   
+
                     break;
                 case 4:
                     if (Random.Range(0, 2) == 0)
                     {
-                        Burning(Random.Range(1, 8),false);//灼烧伤害
+                        Burning(Random.Range(1, 8), false);//灼烧伤害
                     }
                     else
                     {
@@ -3297,11 +3440,11 @@ public class Player : MonoBehaviour
 
             //击倒再站起
 
-            if (!isDie && currentHealth > 0&&currentCritical<=0)//蓄力期间不会被击倒击飞 
+            if (!isDie && currentHealth > 0 && currentCritical <= 0)//蓄力期间不会被击倒击飞 
             {
 
                 int DamageType = Random.Range(0, 5);
-                if (TypeOfAttack == 6){ DamageType = 1; }//必定刮飞
+                if (TypeOfAttack == 6) { DamageType = 1; }//必定刮飞
 
                 switch (DamageType) //五分之一被击倒  五分之一被击飞   五分之三只是伤血不触发动画（攻击不会被打断）
                 {
@@ -3358,19 +3501,19 @@ public class Player : MonoBehaviour
                 }
 
 
-                
+
             }
-           
+
         }
 
     }
 
-    void ArenaMode_ShowBestWave() 
+    void ArenaMode_ShowBestWave()
     {
         UIManager.instance._RoomGenerator.ShowInformationOfStage(10);
     }//如果是竞技场模式，死后一定显示最高波数
 
-    public void RestoreHealth(int amount) 
+    public void RestoreHealth(int amount)
     {
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
@@ -3378,14 +3521,14 @@ public class Player : MonoBehaviour
         //显示伤害
         HudText.HUD(amount);
 
-        if (YYY_hatIndex == 5|| YYY_hatIndex == 11)
+        if (YYY_hatIndex == 5 || YYY_hatIndex == 11)
         {
             Invoke(nameof(RestoreHealth_2), 1f);
         }
 
     }//回血专用路径
 
-    public void RestoreHealth_2() 
+    public void RestoreHealth_2()
     {
         currentHealth = Mathf.Clamp(currentHealth + 200, 0, maxHealth);
         UIManager.instance.UpdateHealthBar(currentHealth, maxHealth);
@@ -3422,7 +3565,7 @@ public class Player : MonoBehaviour
     }//击倒
 
 
-    public void Die() 
+    public void Die()
     {
 
         if (!isDie) //只触发一次
@@ -3461,7 +3604,7 @@ public class Player : MonoBehaviour
 
             isDie = true;
         }
-       
+
     }
 
 
@@ -3577,7 +3720,7 @@ public class Player : MonoBehaviour
 
             data.exp = 0;//存档里的当前经验值也要清零
             currentExperience = 0;
-            UIManager.instance.UpdateExperienceBar(currentExperience, maxExperience);      
+            UIManager.instance.UpdateExperienceBar(currentExperience, maxExperience);
 
             LevelUpEffect.SetActive(true);
 
@@ -3586,12 +3729,12 @@ public class Player : MonoBehaviour
 
             //随机升级一项数值并储存（但是当前武器的偏向会增大）
 
-            switch (Random.Range(0,5)) 
+            switch (Random.Range(0, 5))
             {
                 default:
                 case 0:
                     //升级奖励：增大最大体力值和生命值(回满状态)
-                    data.maxHP = maxHealth + Random.Range(50, 100);        
+                    data.maxHP = maxHealth + Random.Range(50, 100);
                     break;
                 case 1:
                     //升级奖励：增大近战伤害
@@ -3608,28 +3751,28 @@ public class Player : MonoBehaviour
             }
 
             //当前职业的固定增加
-            switch (CurrentProfession) 
+            switch (CurrentProfession)
             {
                 case 0:
-                    data.meleeDamage = MeleeDamage + 10;
+                    data.meleeDamage = MeleeDamage + 20;
                     break;
                 case 1:
-                    data.shootDamage = ShootDamage + 10;
+                    data.shootDamage = ShootDamage + 20;
                     break;
                 case 2:
-                    data.shootDamage = ShootDamage + 10;
+                    data.spellDamage = SpellDamage + 20;
                     break;
             }
 
 
             //升级后生命值回满
-           
+
 
             ApplySaveData(data);//升级将更新后的值重新带入
         }
 
 
-     
+
         data.exp = currentExperience;
         SaveManager.Save(data);
 
@@ -3638,7 +3781,7 @@ public class Player : MonoBehaviour
     }
 
     public GameObject Hunting_Effect;
-    public void HuntingExperience() 
+    public void HuntingExperience()
     {
         ChangeExperience(30);//额外经验
         Hunting_Effect.SetActive(true);
@@ -3651,7 +3794,7 @@ public class Player : MonoBehaviour
     /// 异常状态
     /// </summary>
     #region
- 
+
     public void Recover()//死亡，自我恢复，麻痹恢复调用
     {
 
@@ -3674,7 +3817,7 @@ public class Player : MonoBehaviour
 
         Invoke("ThunderDamager", Timer);
     }
-    void ThunderDamager() 
+    void ThunderDamager()
     {
         ChangeHealth(-Random.Range(100, 500), 2);
         ThunderEffect.SetActive(false);
@@ -3700,10 +3843,10 @@ public class Player : MonoBehaviour
     public bool isBurning = false;
     float BurnTimer;
 
-    public void Burning(int Timer,bool isPoison)
+    public void Burning(int Timer, bool isPoison)
     {
         if (!isPoison) { Burning_Effect.SetActive(true); }
-       
+
 
         isBurning = true;
 
@@ -3715,7 +3858,7 @@ public class Player : MonoBehaviour
 
     //————————————————————被触手缠住
 
-    public void StartStruggle(int Number) 
+    public void StartStruggle(int Number)
     {
         isRape = true;//这个是防止敌人上来直接Rape
         isInputBlocked = true;//切断玩家的方向攻击等输入
@@ -3736,7 +3879,7 @@ public class Player : MonoBehaviour
                 break;
         }
 
-      
+
     }
 
 
@@ -3769,7 +3912,7 @@ public class Player : MonoBehaviour
         //// 将蛋沿着 Z 轴方向上升一点
         Plant.transform.position += new Vector3(0, 0, -0.3f);
         Plant_Attack plant_Attack = Plant.GetComponent<Plant_Attack>();
-        switch (FollowDamage) 
+        switch (FollowDamage)
         {
             case 0:
                 plant_Attack.FollowDamage = 0;
@@ -3779,7 +3922,7 @@ public class Player : MonoBehaviour
                 break;
         }
 
-      
+
 
         //Destroy(Plant, 10f);//生下来的单不能太多
     }
@@ -3808,7 +3951,7 @@ public class Player : MonoBehaviour
         //ApplySaveData(data);//升级将更新后的值重新带入
         SaveManager.Save(data);
     }
-    public void ServiceCount() 
+    public void ServiceCount()
     {
 
         PlayerSaveData data = SaveManager.Load(currentSaveName);
@@ -3827,7 +3970,7 @@ public class Player : MonoBehaviour
 
     public void CheckCombatAchievements()
     {
-        if (meleeKills >= 10) 
+        if (meleeKills >= 10)
         { UIManager.instance.Achieventment_ACH_MELEE_MASTER(); }
 
         if (shootKills >= 10)

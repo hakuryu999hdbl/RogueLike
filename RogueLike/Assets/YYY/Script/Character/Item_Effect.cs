@@ -47,7 +47,7 @@ public class Item_Effect : MonoBehaviour
                         AudioManager.instance.AudioPlay(AudioManager.instance.Effect_zipper);
                         break;
                     case 2:
-                        UIManager.instance.ChangeMoney(Random.Range(50, 100));
+                        UIManager.instance.ChangeMoney(Random.Range(50, 100));//路上零钱
                         break;
                 }
 

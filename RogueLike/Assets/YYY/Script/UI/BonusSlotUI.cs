@@ -429,7 +429,7 @@ public class BonusSlotUI : MonoBehaviour
         switch (type)
         {
             case BonusType.Gold:
-                UIManager.instance.ChangeMoney(value);
+                UIManager.instance.ChangeMoney(value*3);//三选一界面给与金币
                 break;
             case BonusType.Exp:
                 UIManager.instance.player.ChangeExperience(value);//三选一界面给与经验

@@ -2008,11 +2008,11 @@ public class UIManager : MonoBehaviour
 "<color=#FF8800>【敏捷】回避/ダッシュが体力を消費しない場合があり、少量回復する</color>",
 
 "深淵の混血。<color=#ADD8E6>体力</color>と<color=#ADD8E6>魔法</color>に優れ、魔族化が可能。\n"+
-"<color=#FF8800>【魔族化】最大HP1/4、攻撃力の1/4を吸収回復</color>",
+"<color=#FF8800>【魔族化】最大HP1/2、攻撃力の1/4を吸収回復</color>",
 
 "純血の上位魔族。<color=#ADD8E6>魔法</color>に特化し、強力な儀式を操る。\n"+
 "<color=#FF8800>【狩猟】敵撃破時に追加経験値を得る可能性</color>\n"+
-"<color=#FF8800>【魔族化】最大HP1/4、攻撃力の1/4を吸収回復</color>\n"+
+"<color=#FF8800>【魔族化】最大HP1/2、攻撃力の1/4を吸収回復</color>\n"+
 "<color=#FF8800>【自然】回復時に追加でHPを多く回復する</color>",
 
 "魔族の傍系で地底旧都の血を引く。男鬼族は屈強で醜く、女鬼族は希少で異様に美しい。<color=#ADD8E6>近接火力</color>に優れる。\n"+
@@ -2043,11 +2043,11 @@ public class UIManager : MonoBehaviour
 "<color=#FF8800>【敏捷】闪避/冲刺可能不消耗体力并恢复少量体力</color>",
 
 "深渊的混血，擅长<color=#ADD8E6>生命值</color>和<color=#ADD8E6>法术</color>，可进入魔族化。\n"+
-"<color=#FF8800>【魔族化】最大生命 25%，吸收攻击力 25% 生命值</color>",
+"<color=#FF8800>【魔族化】最大生命 50%，吸收攻击力 25% 生命值</color>",
 
 "纯血上位魔族，擅长<color=#ADD8E6>法术</color>，能操控强力仪式。\n"+
 "<color=#FF8800>【狩猎】击败敌人后有额外经验概率</color>\n"+
-"<color=#FF8800>【魔族化】最大生命 25%，吸收攻击力 25% 生命值</color>\n"+
+"<color=#FF8800>【魔族化】最大生命 50%，吸收攻击力 25% 生命值</color>\n"+
 "<color=#FF8800>【自然】恢复生命时额外恢复部分生命值</color>",
 
 "魔族的旁系，来源于地底旧都。男性鬼族强壮丑陋，女性鬼族稀少却异常貌美，擅长<color=#ADD8E6>近战</color>。\n"+
@@ -2078,11 +2078,11 @@ public class UIManager : MonoBehaviour
 "<color=#FF8800>【敏捷】閃避/衝刺可能不消耗體力並恢復體力</color>",
 
 "來自深淵的混血種族，擅長<color=#ADD8E6>生命值</color>與<color=#ADD8E6>魔法</color>。\n"+
-"<color=#FF8800>【魔族化】最大生命值25%，攻擊吸血25%</color>",
+"<color=#FF8800>【魔族化】最大生命值50%，攻擊吸血25%</color>",
 
 "純血上位魔族，魔法能力極強。\n"+
 "<color=#FF8800>【狩獵】擊敗敵人可獲得額外經驗</color>\n"+
-"<color=#FF8800>【魔族化】HP25%，吸收攻擊力25%</color>\n"+
+"<color=#FF8800>【魔族化】HP50%，吸收攻擊力25%</color>\n"+
 "<color=#FF8800>【自然】生命恢復時額外回復</color>",
 
 "魔族旁系，來自地底舊都。男性鬼族粗暴，女性鬼族稀有且妖豔，擅長<color=#ADD8E6>近戰</color>。\n"+
@@ -2113,11 +2113,11 @@ public class UIManager : MonoBehaviour
 "<color=#FF8800>[Agility] Dodge/Dash may cost no stamina & restore some</color>",
 
 "Abyssal hybrids with high <color=#ADD8E6>HP</color> & <color=#ADD8E6>Magic</color>.\n"+
-"<color=#FF8800>[Demon Form] Max HP 25%; absorb 25% damage as HP</color>",
+"<color=#FF8800>[Demon Form] Max HP 50%; absorb 25% damage as HP</color>",
 
 "Pure-blood upper demons specialized in <color=#ADD8E6>Magic</color>.\n"+
 "<color=#FF8800>[Hunt] Bonus EXP on kill</color>\n"+
-"<color=#FF8800>[Demon Form] Max HP 25%, absorb 25%</color>\n"+
+"<color=#FF8800>[Demon Form] Max HP 50%, absorb 25%</color>\n"+
 "<color=#FF8800>[Nature] Gain extra HP whenever healed</color>",
 
 "Offshoots of demons from an underground old capital. Males are strong & rough, females are rare and beautiful. Strong <color=#ADD8E6>Melee</color>.\n"+
@@ -2148,11 +2148,11 @@ public class UIManager : MonoBehaviour
 "<color=#FF8800>[민첩] 회피/대시 시 스태미나 미소모 및 회복</color>",
 
 "심연의 혼혈. <color=#ADD8E6>체력</color>과 <color=#ADD8E6>마법</color>이 뛰어나며 마족화 가능.\n"+
-"<color=#FF8800>[마족화] HP25%, 공격력25% 흡혈</color>",
+"<color=#FF8800>[마족화] HP25%, 공격력50% 흡혈</color>",
 
 "순혈 상위 마족. <color=#ADD8E6>마법</color>에 특화됨.\n"+
 "<color=#FF8800>[사냥] 처치 시 추가 경험치</color>\n"+
-"<color=#FF8800>[마족화] HP25%, 흡혈25%</color>\n"+
+"<color=#FF8800>[마족화] HP25%, 흡혈50%</color>\n"+
 "<color=#FF8800>[자연] 회복 시 추가 HP 회복</color>",
 
 "마족의 방계로 지하 옛도시 출신. 남성은 거칠고 강하며 여성은 드물고 아름답다. 뛰어난 <color=#ADD8E6>근접전</color> 능력을 보유.\n"+
@@ -5889,7 +5889,7 @@ public class UIManager : MonoBehaviour
             case 0: return "<color=#FF8800>【狩猟】敵撃破時に追加経験値を得る可能性</color>";
             case 1: return "<color=#FF8800>【精密】射撃武器で低HPの敵を即死させる可能性</color>";
             case 2: return "<color=#FF8800>【敏捷】回避/ダッシュが体力を消費しない場合があり、少量回復する</color>";
-            case 3: return "<color=#FF8800>【魔族化】最大HP1/4、攻撃力の1/4を吸収回復</color>";
+            case 3: return "<color=#FF8800>【魔族化】最大HP1/2、攻撃力の1/4を吸収回復</color>";
             case 4: return "<color=#FF8800>【剛毅】ガードしていなくても一度だけ攻撃を完全無効化する可能性</color>";
             case 5: return "<color=#FF8800>【辟邪】凍結・毒・火傷・麻痺などの状態異常を無効化</color>";
             case 6: return "<color=#FF8800>【自然】回復時に追加でHPを多く回復する</color>";
@@ -5913,7 +5913,7 @@ public class UIManager : MonoBehaviour
             case 0: return "<color=#FF8800>【狩猎】在击败敌人后一定几率额外经验</color>";
             case 1: return "<color=#FF8800>【精准】射击武器对低生命值敌人有几率一击必杀</color>";
             case 2: return "<color=#FF8800>【敏捷】闪避/冲刺可能不消耗体力并恢复少量体力</color>";
-            case 3: return "<color=#FF8800>【魔族化】最大生命 25%，吸收攻击力 25% 生命值</color>";
+            case 3: return "<color=#FF8800>【魔族化】最大生命 50%，吸收攻击力 25% 生命值</color>";
             case 4: return "<color=#FF8800>【坚韧】一定几率在未防御时完全免疫一次伤害</color>";
             case 5: return "<color=#FF8800>【辟邪】不会被冻结、中毒、灼烧、麻痹等异常状态</color>";
             case 6: return "<color=#FF8800>【自然】恢复生命时额外恢复部分生命值</color>";
@@ -5937,7 +5937,7 @@ public class UIManager : MonoBehaviour
             case 0: return "<color=#FF8800>【狩獵】擊敗敵人後有機率獲得額外經驗</color>";
             case 1: return "<color=#FF8800>【精準】射擊武器對低生命值敵人有機率一擊必殺</color>";
             case 2: return "<color=#FF8800>【敏捷】閃避/衝刺有機率不消耗體力並恢復少量體力</color>";
-            case 3: return "<color=#FF8800>【魔族化】最大生命值25%，攻擊吸血25%</color>";
+            case 3: return "<color=#FF8800>【魔族化】最大生命值50%，攻擊吸血25%</color>";
             case 4: return "<color=#FF8800>【堅韌】未防禦時有機率完全免疫一次傷害</color>";
             case 5: return "<color=#FF8800>【辟邪】免疫凍結、中毒、灼燒、麻痺等異常</color>";
             case 6: return "<color=#FF8800>【自然】生命恢復時額外回復</color>";
@@ -5961,7 +5961,7 @@ public class UIManager : MonoBehaviour
             case 0: return "<color=#FF8800>[Hunt] Chance for bonus EXP on kill</color>";
             case 1: return "<color=#FF8800>[Precision] Ranged may insta-kill low HP enemies</color>";
             case 2: return "<color=#FF8800>[Agility] Dodge/Dash may cost no stamina & restore some</color>";
-            case 3: return "<color=#FF8800>[Demon Form] Max HP 25%; absorb 25% damage as HP</color>";
+            case 3: return "<color=#FF8800>[Demon Form] Max HP 50%; absorb 25% damage as HP</color>";
             case 4: return "<color=#FF8800>[Tenacity] May completely ignore one hit even without guarding</color>";
             case 5: return "<color=#FF8800>[Ward] Immune to Freeze, Poison, Burn, Paralysis</color>";
             case 6: return "<color=#FF8800>[Nature] Gain extra HP whenever healed</color>";
@@ -5985,7 +5985,7 @@ public class UIManager : MonoBehaviour
             case 0: return "<color=#FF8800>[사냥] 처치 시 추가 경험치 획득 가능</color>";
             case 1: return "<color=#FF8800>[정밀] 저HP 적을 사격으로 즉사시킬 수 있음</color>";
             case 2: return "<color=#FF8800>[민첩] 회피/대시 시 스태미나가 들지 않고 조금 회복될 수 있음</color>";
-            case 3: return "<color=#FF8800>[마족화] 최대 HP 25%, 가한 피해의 25%를 흡혈</color>";
+            case 3: return "<color=#FF8800>[마족화] 최대 HP 50%, 가한 피해의 25%를 흡혈</color>";
             case 4: return "<color=#FF8800>[강인] 가드하지 않아도 한 번의 공격을 완전 무효화할 수 있음</color>";
             case 5: return "<color=#FF8800>[벽사] 빙결·중독·화상·마비 등 상태 이상 면역</color>";
             case 6: return "<color=#FF8800>[자연] 회복 시 추가 체력을 회복</color>";

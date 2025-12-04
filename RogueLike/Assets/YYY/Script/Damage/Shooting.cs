@@ -251,6 +251,23 @@ public class Shooting : MonoBehaviour
                     case 3:
                     case 6:
                     case -1:
+
+                        //风法术永远不会触发暴击（改为单纯的增加伤害，但是没有别的暴击那么高，因为本身就已经同时攻击多个敌人了）
+                        if (specialBullet == 6)
+                        {
+                            if (isCritial)
+                            {
+                                PrefabsDamage *= 2;
+
+                            }//风法术的暴击不显示，但是就是2倍伤害
+
+                            isCritial = false;
+
+
+
+                        } //风能贯穿,所以每次都触发一下暴击卡一下会非常的难受
+
+
                         GameObject EffectPrefabs = Instantiate(CurrentBulletEffect, rayTarget.transform.position, transform.rotation);
                         var s = EffectPrefabs.transform.Find("Attack_Collider").GetComponent<Spell>();
                         s.DamageToEnemy = true;
