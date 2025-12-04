@@ -740,7 +740,6 @@ public class Player : MonoBehaviour
     {
 
 
-
         //这个是拉杆控制，最优先，如果手柄没有输入，再检测手柄键盘等
         inputX = Joystick.Horizontal;
         inputY = Joystick.Vertical;
@@ -759,6 +758,51 @@ public class Player : MonoBehaviour
 
 
         }
+
+        /////////////////////////////////////////////////【电脑控制/Steam】/////////////////////////////////////////////////
+        // 统一先声明
+        //Vector2 input = Vector2.zero;
+        //
+        //if (GameFlowData.ForceKeyboardMode)
+        //{
+        //    // 强制键盘模式：只认 WASD
+        //    if (Keyboard.current != null)
+        //    {
+        //        float kx = 0f;
+        //        float ky = 0f;
+        //
+        //        if (Keyboard.current.wKey.isPressed) ky += 1;
+        //        if (Keyboard.current.sKey.isPressed) ky -= 1;
+        //        if (Keyboard.current.dKey.isPressed) kx += 1;
+        //        if (Keyboard.current.aKey.isPressed) kx -= 1;
+        //
+        //        Vector2 keyboardInput = new Vector2(kx, ky);
+        //        if (keyboardInput != Vector2.zero)
+        //        {
+        //            input = keyboardInput.normalized;
+        //        }
+        //        else
+        //        {
+        //            input = Vector2.zero; // 没按键就不动
+        //        }
+        //
+        //        Debug.Log("Set");
+        //    }
+        //}
+        //else
+        //{
+        //
+        //    // 正常模式：继续用 InputAction 的 Move（键盘+手柄混合）
+        //    input = moveAction.action.ReadValue<Vector2>();
+        //}
+
+
+
+        //inputX = input.x;
+        //inputY = input.y;
+
+
+
 
 
 

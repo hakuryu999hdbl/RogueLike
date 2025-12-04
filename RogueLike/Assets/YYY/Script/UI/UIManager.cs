@@ -33,6 +33,7 @@ public class UIManager : MonoBehaviour
         Debug.Log("目前存档里的SE音量" + PlayerPrefs.GetFloat("SEVolume"));
 
         Debug.Log("目前存档里的屏幕设置" + PlayerPrefs.GetFloat("ScreenMode"));//0全屏  1窗口  2带边窗口
+        Debug.Log("目前存档里的强制键盘模式储存" + PlayerPrefs.GetInt("ForceKeyboardUI"));//0关上 1开启
 
         //Debug.Log("目前存档里的钱币" + PlayerPrefs.GetInt("Money"));
 
@@ -2520,6 +2521,7 @@ public class UIManager : MonoBehaviour
         GameFlowData.BulletCanThroughtWall = false;//每次场景刷新的时候这个清掉
 
 
+        ReadForceKeyboardMode();//显示是否是强制键盘模式
 
         Show_bestWave();//显示决斗场最高记录
 
@@ -2586,7 +2588,7 @@ public class UIManager : MonoBehaviour
 
 
         /////////////////////////////////////////////////【电脑控制/Steam】/////////////////////////////////////////////////
-        InitScreenMode();//读取窗口设置
+        //InitScreenMode();//读取窗口设置
 
 
     }//读取，显示存档
@@ -3544,7 +3546,33 @@ public class UIManager : MonoBehaviour
 
         if (player.isInputBlocked && !isInputing)
         {
-            Vector2 dir = ctx.ReadValue<Vector2>();
+            // 1. 先读原始输入（可能来自手柄 / 键盘 / Steam Input）
+            Vector2 raw = ctx.ReadValue<Vector2>();
+            Vector2 dir = raw;  // 最终使用的方向，先默认等于 raw
+
+            // 2. 如果进入“强制键盘模式”，则切断所有手柄输入，只读 WASD
+            if (GameFlowData.ForceKeyboardMode)
+            {
+                float kx = 0f;
+                float ky = 0f;
+
+                if (Keyboard.current != null)
+                {
+                    if (Keyboard.current.wKey.isPressed) ky += 1;
+                    if (Keyboard.current.sKey.isPressed) ky -= 1;
+                    if (Keyboard.current.dKey.isPressed) kx += 1;
+                    if (Keyboard.current.aKey.isPressed) kx -= 1;
+                }
+
+                Vector2 keyboardInput = new Vector2(kx, ky);
+
+                if (keyboardInput != Vector2.zero)
+                    dir = keyboardInput.normalized;
+                else
+                    dir = Vector2.zero;  // 强制模式下，没有按键就不动
+            }
+
+
 
             //局内商店
             if (CurrentChooseList == -8)
@@ -6106,5 +6134,54 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// 强制键盘模式
+    /// </summary>
+    #region
+    public Image OnOffImage;
+    public Sprite Red, Grey;
 
+    public void ReadForceKeyboardMode() 
+    {
+        // 读取存档
+        float savedValue = PlayerPrefs.GetInt("ForceKeyboardUI", 0); // 默认值 0＝关闭
+
+        //Debug.Log("目前存档里的强制键盘模式储存: " + savedValue);
+
+        // 将存档值写回到全局状态
+        GameFlowData.ForceKeyboardMode = (savedValue == 1);
+        RefreshForceKeyboardUI();
+    }
+
+    public void ChangeForceKeyboardMode()
+    {
+        GameFlowData.ForceKeyboardMode = !GameFlowData.ForceKeyboardMode;
+        RefreshForceKeyboardUI();
+
+        // 存档：0 = 关闭, 1 = 开启
+        PlayerPrefs.SetInt("ForceKeyboardUI", GameFlowData.ForceKeyboardMode ? 1 : 0);
+    }
+    private void RefreshForceKeyboardUI()
+    {
+        if (GameFlowData.ForceKeyboardMode)
+        {
+            OnOffImage.sprite = Red;
+        }
+        else
+        {
+            OnOffImage.sprite = Grey;
+        }
+    }
+    private void Update()
+    {
+#if !UNITY_ANDROID && !UNITY_IOS
+        if (Keyboard.current != null && Keyboard.current.f1Key.wasPressedThisFrame)
+        {
+            ChangeForceKeyboardMode();
+            Debug.Log("ForceKeyboardMode = " + GameFlowData.ForceKeyboardMode);
+        }
+#endif
+    }
+
+    #endregion
 }

@@ -51,6 +51,7 @@ public class GameFlowData : MonoBehaviour
     //【Arena】进入角斗场模式  
     //【Dungeon】进入地下城模式  
 
+    public static bool ForceKeyboardMode = false;//切断了多端输入中的奇怪输入，然后强制键盘输入
 
     public static bool BulletCanThroughtWall = false;//子弹和法术是否可以穿过墙壁
 
