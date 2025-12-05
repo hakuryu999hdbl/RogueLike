@@ -3525,8 +3525,21 @@ public class UIManager : MonoBehaviour
     //处于打字的时候不能上下移动
     public bool isInputing = false;
 
+
+
+
+    #region   UIManager的强制键盘输入
+
     private void OnMove(InputAction.CallbackContext ctx)
     {
+
+
+        if (GameFlowData.ForceKeyboardMode)
+        {
+            return;
+        }
+
+
 
         #region 冷却时间
         if (Time.time - lastInputTime2 < inputCooldown2)
@@ -3929,6 +3942,442 @@ public class UIManager : MonoBehaviour
         }
 
     }
+
+    private void Update()
+    {
+        Press_F1();
+
+        if (!GameFlowData.ForceKeyboardMode)
+        {
+            return;
+        }
+
+
+        // 只有在玩家输入被 block（在菜单里）且当前不在别的输入动画中时，才处理菜单移动
+        if (!player.isInputBlocked || isInputing)
+            return;
+
+        // 冷却时间
+        if (Time.time - lastInputTime2 < inputCooldown2)
+            return;
+
+        // 封面图存在时，按任意键先关掉封面
+        if (coverPanel.activeSelf)
+        {
+            if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+            {
+                OnCoverClicked();
+            }
+            return;
+        }
+
+        Vector2 dir = Vector2.zero;
+
+#if UNITY_STANDALONE || UNITY_EDITOR
+        // —— PC：直接轮询键盘 WASD —— 
+        if (Keyboard.current != null)
+        {
+            float kx = 0f;
+            float ky = 0f;
+
+            if (Keyboard.current.wKey.isPressed) ky += 1;
+            if (Keyboard.current.sKey.isPressed) ky -= 1;
+            if (Keyboard.current.dKey.isPressed) kx += 1;
+            if (Keyboard.current.aKey.isPressed) kx -= 1;
+
+            dir = new Vector2(kx, ky).normalized;
+        }
+#else
+    // —— 如果以后要支持手柄 / 其它平台，可以在这里加 Gamepad.current 的读取 —— 
+    // var gamepad = Gamepad.current;
+    // ...
+#endif
+
+        if (dir != Vector2.zero)
+        {
+            lastInputTime2 = Time.time; // 只有真有方向输入时才刷新冷却
+            HandleMenuMove(dir);
+        }
+    }
+
+    private void HandleMenuMove(Vector2 dir)
+    {
+
+        //  #region 冷却时间
+        //  if (Time.time - lastInputTime2 < inputCooldown2)
+        //      return;
+        //
+        //  lastInputTime2 = Time.time;
+        //  #endregion
+        //
+        //按下任意键
+        if (coverPanel.activeSelf)
+        {
+            OnCoverClicked();
+            return;
+        }
+
+
+
+        //局内商店
+        if (CurrentChooseList == -8)
+        {
+
+            // 当前菜单项内的上下切换
+            if (dir.y > 0.5f)
+            {
+
+                MoveSelection_Shop(-1);            // y>0 往上 -> 索引减
+            }
+            else if (dir.y < -0.5f)
+            {
+
+                MoveSelection_Shop(+1);            // y<0 往下 -> 索引加
+            }
+        }
+
+        //三选一界面
+        if (CurrentChooseList == -5)
+        {
+
+            // 当前菜单项内的左右切换
+            if (dir.x > 0.5f)
+            {
+                MoveSelection_Bonus(1);
+
+            }
+            else if (dir.x < -0.5f)
+            {
+                MoveSelection_Bonus(-1);
+
+            }
+        }
+
+
+        //主菜单界面
+        if (CurrentChooseList == 0)
+        {
+            // 当前菜单项内的上下切换
+            if (dir.y > 0.5f)
+            {
+                HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex - 1, 0, 9);
+                UpdateHomePage_Highlight();
+
+
+            }
+            else if (dir.y < -0.5f)
+            {
+                HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex + 1, 0, 9);
+                UpdateHomePage_Highlight();
+
+
+            }
+
+            // 当前菜单项内的左右切换
+            if (dir.x > 0.5f)
+            {
+                HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex - 4, 0, 8);
+                UpdateHomePage_Highlight();
+            }
+            else if (dir.x < -0.5f)
+            {
+                HomePagecurrentIndex = Mathf.Clamp(HomePagecurrentIndex + 4, 0, 8);
+                UpdateHomePage_Highlight();
+            }
+        }
+
+        //存档界面
+        if (CurrentChooseList == 2)
+        {
+            // 当前菜单项内的左右切换
+            if (dir.x > 0.5f)
+            {
+                UpdateCurrentSelection(currentIndex + 1);
+            }
+            else if (dir.x < -0.5f)
+            {
+                UpdateCurrentSelection(currentIndex - 1);
+            }
+
+
+            // 当前菜单项内的上下切换
+            if (dir.y > 0.5f)
+            {
+
+                if (currentIndex - 5 < 0)
+                {
+                    UpdateCurrentSelection(0);
+                }
+                else
+                {
+                    UpdateCurrentSelection(currentIndex - 5);
+                }
+
+                if (ScrollUp_Button.activeSelf) { ScrollUp(); }
+
+            }
+            else if (dir.y < -0.5f)
+            {
+
+                if (currentIndex + 5 > saveSlots.Count)
+                {
+                    UpdateCurrentSelection(saveSlots.Count);
+                }
+                else
+                {
+                    UpdateCurrentSelection(currentIndex + 5);
+                }
+                if (currentIndex >= 6 && ScrollDown_Button.activeSelf) { ScrollDown(); }
+
+            }
+
+        }
+
+        //捏人界面
+        if (CurrentChooseList == 1)
+        {
+            // 当前菜单项内的左右切换
+            if (dir.x > 0.5f)
+            {
+                switch (CreatNewcurrentIndex)
+                {
+                    case 1: HairRight.onClick.Invoke(); break;
+                    case 2: EyesRight.onClick.Invoke(); break;
+                    case 3: RaceRight.onClick.Invoke(); break;
+                    case 4: ClassRight.onClick.Invoke(); break;
+                }
+            }
+            else if (dir.x < -0.5f)
+            {
+                switch (CreatNewcurrentIndex)
+                {
+                    case 1: HairLeft.onClick.Invoke(); break;
+                    case 2: EyesLeft.onClick.Invoke(); break;
+                    case 3: RaceLeft.onClick.Invoke(); break;
+                    case 4: ClassLeft.onClick.Invoke(); break;
+                }
+            }
+
+
+
+            // 当前菜单项内的上下切换
+            if (dir.y > 0.5f)
+            {
+                CreatNewcurrentIndex = Mathf.Clamp(CreatNewcurrentIndex - 1, 0, 5);
+                UpdateHighlight();
+
+
+            }
+            else if (dir.y < -0.5f)
+            {
+                CreatNewcurrentIndex = Mathf.Clamp(CreatNewcurrentIndex + 1, 0, 5);
+                UpdateHighlight();
+
+
+            }
+
+        }
+
+        //设置界面
+        if (CurrentChooseList == 3)
+        {
+
+            // 当前菜单项内的左右切换
+            if (dir.x > 0.5f)
+            {
+                switch (SettingPagecurrentIndex)
+                {
+                    case 0:
+                        BGM_Up();
+                        break;
+                    case 1:
+                        SE_Up();
+                        break;
+
+                    case 3:
+                        ScreenMode_Right();
+                        break;
+
+                }
+
+            }
+            else if (dir.x < -0.5f)
+            {
+
+                switch (SettingPagecurrentIndex)
+                {
+
+
+                    case 0:
+                        BGM_Down();
+                        break;
+                    case 1:
+                        SE_Down();
+                        break;
+
+                    case 3:
+                        ScreenMode_Left();
+                        break;
+                }
+            }
+
+
+            // 当前菜单项内的上下切换
+            if (dir.y > 0.5f)
+            {
+                SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex - 1, 0, 4);
+                UpdateSettingPage_Highlight();
+
+
+            }
+            else if (dir.y < -0.5f)
+            {
+                SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex + 1, 0, 4);
+                UpdateSettingPage_Highlight();
+
+
+            }
+        }
+
+        //语言界面
+        if (CurrentChooseList == 4)
+        {
+            // 当前菜单项内的上下切换
+            if (dir.y > 0.5f)
+            {
+                LanguagePagecurrentIndex = Mathf.Clamp(LanguagePagecurrentIndex - 1, 0, 4);
+                UpdateLanguagePage_Highlight();
+
+
+            }
+            else if (dir.y < -0.5f)
+            {
+                LanguagePagecurrentIndex = Mathf.Clamp(LanguagePagecurrentIndex + 1, 0, 4);
+                UpdateLanguagePage_Highlight();
+
+
+            }
+        }
+
+        //CG界面
+        if (CurrentChooseList == 5)
+        {
+            // 当前菜单项内的上下切换
+            if (dir.y > 0.5f)
+            {
+                MoveSelection(-1);
+
+            }
+            else if (dir.y < -0.5f)
+            {
+
+                MoveSelection(1);
+            }
+
+            // 当前菜单项内的左右切换
+            if (dir.x > 0.5f)
+            {
+                MoveSelection(9);
+
+
+            }
+            else if (dir.x < -0.5f)
+            {
+                MoveSelection(-9);
+
+            }
+        }
+
+        //游戏模式界面
+        if (CurrentChooseList == 7)
+        {
+            // 当前菜单项内的左右切换
+            if (dir.x > 0.5f)
+            {
+                ModePagecurrentIndex = Mathf.Clamp(ModePagecurrentIndex + 1, 0, 2);
+                UpdateModePage_Highlight();
+
+
+            }
+            else if (dir.x < -0.5f)
+            {
+                ModePagecurrentIndex = Mathf.Clamp(ModePagecurrentIndex - 1, 0, 2);
+                UpdateModePage_Highlight();
+
+
+            }
+
+
+            // 当前菜单项内的上下切换
+            if (dir.y > 0.5f)
+            {
+
+                NextDifficulty();
+            }
+            else if (dir.y < -0.5f)
+            {
+
+                PrevDifficulty();
+            }
+        }
+
+        //Chapter界面
+        if (CurrentChooseList == 8)
+        {
+            // 当前菜单项内的上下切换
+            if (dir.y > 0.5f)
+            {
+                MoveSelection_2(-1);
+
+            }
+            else if (dir.y < -0.5f)
+            {
+
+                MoveSelection_2(1);
+            }
+
+            // 当前菜单项内的左右切换
+            if (dir.x > 0.5f)
+            {
+                MoveSelection_2(7);
+
+
+            }
+            else if (dir.x < -0.5f)
+            {
+                MoveSelection_2(-7);
+
+            }
+        }
+
+        AudioManager.instance.AudioPlay(AudioManager.instance.Attack_pai1);
+
+        //CG结局调教所界面
+        if (CurrentChooseList == 11)
+        {
+            // 当前菜单项内的上下切换
+            if (dir.y > 0.5f)
+            {
+                MoveSelection_3(-1);
+
+            }
+            else if (dir.y < -0.5f)
+            {
+
+                MoveSelection_3(1);
+            }
+
+
+        }
+    }
+
+
+
+
+    #endregion
+
+
+
 
 
     public GameObject HideGameObjectWhenChangeName;
@@ -6172,15 +6621,15 @@ public class UIManager : MonoBehaviour
             OnOffImage.sprite = Grey;
         }
     }
-    private void Update()
+    private void Press_F1()
     {
-#if !UNITY_ANDROID && !UNITY_IOS
+
         if (Keyboard.current != null && Keyboard.current.f1Key.wasPressedThisFrame)
         {
             ChangeForceKeyboardMode();
             Debug.Log("ForceKeyboardMode = " + GameFlowData.ForceKeyboardMode);
         }
-#endif
+
     }
 
     #endregion

@@ -675,7 +675,7 @@ public class Player : MonoBehaviour
             if (BurnTimer >= 0.2f)
             {
                 RestoreHealth(100);
-
+                ChangeStrength(100);
                 BurnTimer = 0;
             }
         }
