@@ -2656,7 +2656,7 @@ public class UIManager : MonoBehaviour
 
 
         #region  人数上限锁
-        int maxSaves = 15; // 最大可创建奴隶数
+        int maxSaves = 12; // 最大可创建奴隶数
         // 判断数量上限
         if (saveCount >= maxSaves)
         {
@@ -2897,7 +2897,7 @@ public class UIManager : MonoBehaviour
     public RectTransform saveContainer; // Save_All
 
 
-    private int itemsPerRow = 5;//一行5个
+    private int itemsPerRow = 4;//一行4个
     private int rowsVisible = 2; //可见2行
     private int totalItems => saveContainer.childCount;//目前的存档数
 
@@ -2932,11 +2932,11 @@ public class UIManager : MonoBehaviour
         if (currentRow < totalRows - rowsVisible) { ScrollDown_Button.SetActive(true); }
         else { ScrollDown_Button.SetActive(false); }
 
-        if (saveSlotParent.childCount <= 10)
+        if (saveSlotParent.childCount <= 8)
         {
             ScrollDown_Button.SetActive(false);
             //Debug.Log("目前需要几行显示所有存档[!!!!]" + totalRows);
-        }//存档数小于等于10也不能下翻
+        }//存档数小于等于8也不能下翻
 
     }//更新按钮
 
@@ -3564,26 +3564,26 @@ public class UIManager : MonoBehaviour
             Vector2 dir = raw;  // 最终使用的方向，先默认等于 raw
 
             // 2. 如果进入“强制键盘模式”，则切断所有手柄输入，只读 WASD
-            if (GameFlowData.ForceKeyboardMode)
-            {
-                float kx = 0f;
-                float ky = 0f;
-
-                if (Keyboard.current != null)
-                {
-                    if (Keyboard.current.wKey.isPressed) ky += 1;
-                    if (Keyboard.current.sKey.isPressed) ky -= 1;
-                    if (Keyboard.current.dKey.isPressed) kx += 1;
-                    if (Keyboard.current.aKey.isPressed) kx -= 1;
-                }
-
-                Vector2 keyboardInput = new Vector2(kx, ky);
-
-                if (keyboardInput != Vector2.zero)
-                    dir = keyboardInput.normalized;
-                else
-                    dir = Vector2.zero;  // 强制模式下，没有按键就不动
-            }
+            //if (GameFlowData.ForceKeyboardMode)
+            //{
+            //    float kx = 0f;
+            //    float ky = 0f;
+            //
+            //    if (Keyboard.current != null)
+            //    {
+            //        if (Keyboard.current.wKey.isPressed) ky += 1;
+            //        if (Keyboard.current.sKey.isPressed) ky -= 1;
+            //        if (Keyboard.current.dKey.isPressed) kx += 1;
+            //        if (Keyboard.current.aKey.isPressed) kx -= 1;
+            //    }
+            //
+            //    Vector2 keyboardInput = new Vector2(kx, ky);
+            //
+            //    if (keyboardInput != Vector2.zero)
+            //        dir = keyboardInput.normalized;
+            //    else
+            //        dir = Vector2.zero;  // 强制模式下，没有按键就不动
+            //}
 
 
 
@@ -3672,13 +3672,13 @@ public class UIManager : MonoBehaviour
                 if (dir.y > 0.5f)
                 {
 
-                    if (currentIndex - 5 < 0)
+                    if (currentIndex - 4 < 0)
                     {
                         UpdateCurrentSelection(0);
                     }
                     else
                     {
-                        UpdateCurrentSelection(currentIndex - 5);
+                        UpdateCurrentSelection(currentIndex - 4);
                     }
 
                     if (ScrollUp_Button.activeSelf) { ScrollUp(); }
@@ -3687,15 +3687,15 @@ public class UIManager : MonoBehaviour
                 else if (dir.y < -0.5f)
                 {
 
-                    if (currentIndex + 5 > saveSlots.Count)
+                    if (currentIndex + 4 > saveSlots.Count)
                     {
                         UpdateCurrentSelection(saveSlots.Count);
                     }
                     else
                     {
-                        UpdateCurrentSelection(currentIndex + 5);
+                        UpdateCurrentSelection(currentIndex + 4);
                     }
-                    if (currentIndex >= 6 && ScrollDown_Button.activeSelf) { ScrollDown(); }
+                    if (currentIndex >= 5 && ScrollDown_Button.activeSelf) { ScrollDown(); }
 
                 }
 
@@ -4104,13 +4104,13 @@ public class UIManager : MonoBehaviour
             if (dir.y > 0.5f)
             {
 
-                if (currentIndex - 5 < 0)
+                if (currentIndex - 4 < 0)
                 {
                     UpdateCurrentSelection(0);
                 }
                 else
                 {
-                    UpdateCurrentSelection(currentIndex - 5);
+                    UpdateCurrentSelection(currentIndex - 4);
                 }
 
                 if (ScrollUp_Button.activeSelf) { ScrollUp(); }
@@ -4119,15 +4119,15 @@ public class UIManager : MonoBehaviour
             else if (dir.y < -0.5f)
             {
 
-                if (currentIndex + 5 > saveSlots.Count)
+                if (currentIndex + 4 > saveSlots.Count)
                 {
                     UpdateCurrentSelection(saveSlots.Count);
                 }
                 else
                 {
-                    UpdateCurrentSelection(currentIndex + 5);
+                    UpdateCurrentSelection(currentIndex + 4);
                 }
-                if (currentIndex >= 6 && ScrollDown_Button.activeSelf) { ScrollDown(); }
+                if (currentIndex >= 5 && ScrollDown_Button.activeSelf) { ScrollDown(); }
 
             }
 
