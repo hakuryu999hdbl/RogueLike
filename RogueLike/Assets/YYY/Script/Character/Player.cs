@@ -893,6 +893,9 @@ public class Player : MonoBehaviour
 
             moveSpeed = 0;
 
+            // ★ 新增：强制停住刚体，彻底禁止滑动
+            rbody.velocity = Vector2.zero;
+
         }//只要处于切断输入中，永远切掉输入正面朝向
         else
         {

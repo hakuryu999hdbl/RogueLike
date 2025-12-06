@@ -6,37 +6,37 @@ public static class ItemLocalization
     {
         switch (type)
         {
-            // ======= 剑系 =======
+            // ======= 剑系（近战武器） =======
             case ShopItemData.ItemType.Sword:
                 switch (id)
                 {
                     case 1: return Lang(language, "ダガー", "匕首", "匕首", "Dagger", "단검");
-                    case 2: return Lang(language, "ブロードソード", "阔剑", "闊劍", "Broadsword", "브로드소드");
-                    case 3: return Lang(language, "ツインアックス", "双刃斧", "雙刃斧", "Twin Axe", "양날도끼");
-                    case 4: return Lang(language, "スピア", "长枪", "長槍", "Spear", "창");
-                    case 5: return Lang(language, "ハルバード", "长柄斧", "長柄斧", "Halberd", "할버드");
-                    case 6: return Lang(language, "アイスブレード", "冻结剑", "凍結劍", "Ice Blade", "빙결검");
-                    case 7: return Lang(language, "アイアンレイピア", "黑铁刺剑", "黑鐵刺劍", "Iron Rapier", "흑철 레이피어");
-                    case 8: return Lang(language, "ラーヴァソード", "熔岩剑", "熔岩劍", "Lava Sword", "용암검");
-                    case 9: return Lang(language, "ストームブレード", "引雷剑", "引雷劍", "Storm Blade", "뇌격검");
-                    case 10: return Lang(language, "エンシェントグレートソード", "古重剑", "古重劍", "Ancient Greatsword", "고대 대검");
+                    case 2: return Lang(language, "ブロードソード", "阔剑", "闊劍", "Broad Sword", "브로드소드");
+                    case 3: return Lang(language, "長柄両刃斧", "长柄双刃斧", "長柄雙刃斧", "Double Axe", "장병 도끼");
+                    case 4: return Lang(language, "長槍", "长枪", "長槍", "Spear", "장창");
+                    case 5: return Lang(language, "長柄斧", "长柄斧", "長柄斧", "Poleaxe", "폴액스");
+                    case 6: return Lang(language, "氷結の剣", "冻结剑", "凍結劍", "Frost Sword", "동결의 검");
+                    case 7: return Lang(language, "黒鉄の刺剣", "黑铁刺剑", "黑鐵刺劍", "Black Iron Rapier", "흑철 레이피어");
+                    case 8: return Lang(language, "溶岩の剣", "熔岩剑", "熔岩劍", "Lava Blade", "용암검");
+                    case 9: return Lang(language, "雷を引く剣", "引雷剑", "引雷劍", "Thunderblade", "번개를 부르는 검");
+                    case 10: return Lang(language, "古代の大剣", "古重剑", "古重劍", "Ancient Greatsword", "고대 대검");
                 }
                 break;
 
-            // ======= 枪系 =======
+            // ======= 枪系（射击武器） =======
             case ShopItemData.ItemType.Pistol:
                 switch (id)
                 {
-                    case 1: return Lang(language, "ライトクロスボウ", "轻弩", "輕弩", "Light Crossbow", "경노");
-                    case 2: return Lang(language, "ヘビークロスボウ", "重弩", "重弩", "Heavy Crossbow", "중노");
-                    case 3: return Lang(language, "コンパウンドクロスボウ", "复合弩", "複合弩", "Compound Crossbow", "복합노");
+                    case 1: return Lang(language, "軽弩", "轻弩", "輕弩", "Light Crossbow", "경궁");
+                    case 2: return Lang(language, "重弩", "重弩", "重弩", "Heavy Crossbow", "중궁");
+                    case 3: return Lang(language, "複合弩", "复合弩", "複合弩", "Compound Bow", "복합궁");
                     case 4: return Lang(language, "火縄複合銃", "火绳复合枪", "火繩複合槍", "Matchlock Rifle", "화승총");
-                    case 5: return Lang(language, "短火縄銃", "火绳短枪", "火繩短槍", "Short Matchlock", "단소총");
-                    case 6: return Lang(language, "長火縄銃", "火绳长枪", "火繩長槍", "Long Matchlock", "장화승총");
-                    case 7: return Lang(language, "フリントロック", "燧发枪", "燧發槍", "Flintlock", "부싯돌총");
-                    case 8: return Lang(language, "バヨネットライフル", "刺刀火枪", "刺刀火槍", "Bayonet Rifle", "총검");
-                    case 9: return Lang(language, "ブラスマスケット", "黄铜火枪", "黃銅火槍", "Brass Musket", "황동 머스킷");
-                    case 10: return Lang(language, "シルバーマスケット", "镶银火枪", "鑲銀火槍", "Silver Musket", "은 장식 머스킷");
+                    case 5: return Lang(language, "火縄短銃", "火绳短枪", "火繩短槍", "Short Matchlock", "단화승총");
+                    case 6: return Lang(language, "火縄長銃", "火绳长枪", "火繩長槍", "Long Matchlock", "장화승총");
+                    case 7: return Lang(language, "フリントロック銃", "燧发枪", "燧發槍", "Flintlock", "화승총");
+                    case 8: return Lang(language, "バヨネット銃", "刺刀火枪", "刺刀火槍", "Bayonet Musket", "총검총");
+                    case 9: return Lang(language, "火縄黄銅銃", "火绳黄铜枪", "火繩黃銅槍", "Brass Matchlock", "황동 화승총");
+                    case 10: return Lang(language, "銀象嵌銃", "镶银火枪", "鑲銀火槍", "Silver-Inlaid Musket", "은장총");
                 }
                 break;
 
@@ -44,16 +44,16 @@ public static class ItemLocalization
             case ShopItemData.ItemType.Staff:
                 switch (id)
                 {
-                    case 1: return Lang(language, "エルムワンド", "黄木短杖", "黃木短杖", "Elm Wand", "황목 단봉");
-                    case 2: return Lang(language, "ハーピーワンド", "鹰身短杖", "鷹身短杖", "Harpie Wand", "하피 단봉");
-                    case 3: return Lang(language, "ルビーワンド", "红宝石短杖", "紅寶石短杖", "Ruby Wand", "루비 완드");
-                    case 4: return Lang(language, "サファイアワンド", "蓝宝石短杖", "藍寶石短杖", "Sapphire Wand", "사파이어 완드");
-                    case 5: return Lang(language, "トパーズワンド", "黄玉短杖", "黃玉短杖", "Topaz Wand", "토파즈 완드");
-                    case 6: return Lang(language, "フロストスタッフ", "冰冻法杖", "冰凍法杖", "Frost Staff", "빙결 지팡이");
-                    case 7: return Lang(language, "アメジストスタッフ", "紫水晶法杖", "紫水晶法杖", "Amethyst Staff", "자수정 스태프");
-                    case 8: return Lang(language, "ジェイドスタッフ", "翡翠法杖", "翡翠法杖", "Jade Staff", "비취 스태프");
-                    case 9: return Lang(language, "サンダースタッフ", "雷霆法杖", "雷霆法杖", "Thunder Staff", "뇌정 스태프");
-                    case 10: return Lang(language, "エンシェントスタッフ", "古木法杖", "古木法杖", "Ancient Staff", "고목 스태프");
+                    case 1: return Lang(language, "黄木の杖", "黄木短杖", "黃木短杖", "Yellowwood Wand", "황목 지팡이");
+                    case 2: return Lang(language, "ハーピーの杖", "鹰身短杖", "鷹身短杖", "Harpy Wand", "하피 지팡이");
+                    case 3: return Lang(language, "ルビーの杖", "红宝石短杖", "紅寶石短杖", "Ruby Wand", "루비 지팡이");
+                    case 4: return Lang(language, "サファイアの杖", "蓝宝石短杖", "藍寶石短杖", "Sapphire Wand", "사파이어 지팡이");
+                    case 5: return Lang(language, "トパーズの杖", "黄玉短杖", "黃玉短杖", "Topaz Wand", "토파즈 지팡이");
+                    case 6: return Lang(language, "氷の杖", "冰冻法杖", "冰凍法杖", "Frost Wand", "얼음 지팡이");
+                    case 7: return Lang(language, "アメジストの杖", "紫水晶法杖", "紫水晶法杖", "Amethyst Wand", "자수정 지팡이");
+                    case 8: return Lang(language, "エメラルドの杖", "翡翠法杖", "翡翠法杖", "Emerald Wand", "에메랄드 지팡이");
+                    case 9: return Lang(language, "雷の杖", "雷霆法杖", "雷霆法杖", "Thunder Wand", "천둥 지팡이");
+                    case 10: return Lang(language, "古代の杖", "古木法杖", "古木法杖", "Ancient Wand", "고대 지팡이");
                 }
                 break;
 
@@ -61,20 +61,20 @@ public static class ItemLocalization
             case ShopItemData.ItemType.Clothes:
                 switch (id)
                 {
-                    case 10: return Lang(language, "女性用アーマー", "女式盔甲", "女式盔甲", "Women's Armor", "여성용 갑옷");
-                    case 11: return Lang(language, "盗賊の軽装", "盗贼便服", "盜賊便服", "Rogue Outfit", "도적 복장");
-                    case 12: return Lang(language, "魔導士団制服", "魔导士团制服", "魔導士團制服", "Mage Order Uniform", "마도기사단 제복");
-                    case 2: return Lang(language, "暗殺マント", "刺客斗篷", "刺客斗篷", "Assassin Cloak", "암살자 망토");
-                    case 3: return Lang(language, "公会スカート", "公会套裙", "公會套裙", "Guild Skirt", "길드 치마");
-                    case 4: return Lang(language, "軽装弩兵服", "轻装弩手服", "輕裝弩手服", "Arbalist Outfit", "석궁병 복장");
-                    case 5: return Lang(language, "緋紅のドレス", "绯红礼裙", "緋紅禮裙", "Crimson Dress", "진홍색 드레스");
-                    case 6: return Lang(language, "ゴシックドレス", "哥特长裙", "哥特長裙", "Gothic Dress", "고딕 드레스");
-                    case 7: return Lang(language, "シスター服", "修女服", "修女服", "Nun Habit", "수녀복");
-                    // ★ 新追加 4 件衣服
-                    case 8: return Lang(language, "白魔導礼装", "白魔仪礼服", "白魔儀禮服", "White Mage", "백마도 의례복");
-                    case 9: return Lang(language, "傭兵服", "女佣兵服", "女傭兵服", "Merc Wear", "여용병 복장");
-                    case 13: return Lang(language, "メイドスカート", "女仆短裙", "女僕短裙", "Maid Skirt", "메이드 스커트");
-                    case 14: return Lang(language, "金飾り白ランジェリー", "金饰白内衣", "金飾白內衣", "Gold Lingerie", "금장 흰 란제리");
+                    // SaveSlotUI 中 index = 1,2,3,... 的映射
+                    case 10: return Lang(language, "女性用鎧", "女式盔甲", "女式鎧甲", "Women's Armor", "여성용 갑옷");          // 1
+                    case 11: return Lang(language, "盗賊の軽装", "盗贼便服", "盜賊便服", "Rogue Outfit", "도적 복장");            // 2
+                    case 12: return Lang(language, "魔導士団制服", "魔导士团制服", "魔導士團制服", "Mage Order Uniform", "마도사단 제복");        // 3
+                    case 2: return Lang(language, "暗殺マント", "刺客斗篷", "刺客斗篷", "Assassin Cloak", "암살 망토");            // 4
+                    case 3: return Lang(language, "ギルドスーツ", "公会套裙", "公會套裙", "Guild Dress", "길드 드레스");          // 6
+                    case 4: return Lang(language, "クロスボウ服", "轻装弩手服", "輕裝弩手服", "Crossbow Outfit", "석궁 복장");            // 7
+                    case 5: return Lang(language, "紅の礼装", "绯红礼裙", "緋紅禮裙", "Crimson Dress", "진홍색 드레스");        // 8
+                    case 6: return Lang(language, "ゴシックドレス", "哥特长裙", "哥德長裙", "Gothic Dress", "고딕 드레스");          // 9
+                    case 7: return Lang(language, "シスター服", "修女服", "修女服", "Nun Outfit", "수녀복");               // 10
+                    case 8: return Lang(language, "白魔導礼装", "白魔仪礼服", "白魔儀禮服", "White Mage Robe", "백마도 의례복");        // 11
+                    case 9: return Lang(language, "女傭兵の服", "女佣兵服", "女傭兵服", "Merc Wear", "여용병 복장");          // 12
+                    case 13: return Lang(language, "メイドスカート", "女仆短裙", "女僕短裙", "Maid Skirt", "메이드 미니스커트");    // 13
+                    case 14: return Lang(language, "金飾りの白ランジェリー", "金饰白内衣", "金飾白內衣", "Gold Lingerie", "금장 흰색 란제리");     // 14
                 }
                 break;
 
@@ -82,20 +82,19 @@ public static class ItemLocalization
             case ShopItemData.ItemType.Stockings:
                 switch (id)
                 {
-                    case 10: return Lang(language, "ストッキングレッグガード", "丝袜腿甲", "絲襪腿甲", "Leg Guard Stockings", "스타킹 레그아머");
-                    case 11: return Lang(language, "黒のロングブーツ", "黑色长袜靴", "黑色長襪靴", "Black Long Boots", "검은 장부츠");
-                    case 12: return Lang(language, "レースガーター", "蕾丝吊带袜", "蕾絲吊帶襪", "Lace Stockings", "레이스 스타킹");
-                    case 2: return Lang(language, "ニーハイブーツ", "过膝袜短靴", "過膝襪短靴", "Knee-high Boots", "니하이 부츠");
-                    case 3: return Lang(language, "ロングブーツ", "长袜靴", "長襪靴", "Long Boots", "롱부츠");
-                    case 4: return Lang(language, "薄黒ストッキング", "薄黑长袜", "薄黑長襪", "Sheer Black Stockings", "얇은 검은 스타킹");
-                    case 5: return Lang(language, "黒いハイヒール", "黑色高跟鞋", "黑色高跟鞋", "Black Heels", "검은 하이힐");
-                    case 6: return Lang(language, "黒のショートブーツ", "黑色短靴", "黑色短靴", "Short Boots", "단부츠");
-                    case 7: return Lang(language, "白いニーハイソックス", "白丝过膝袜", "白絲過膝襪", "White Thigh-highs", "하얀 니삭스");
-                    // ★ 新追加 4 双丝袜
-                    case 8: return Lang(language, "オレンジ足掛けソックス", "橘色脚踩袜", "橘色腳踩襪", "Orange Stirrup", "오렌지 스타럽");
-                    case 9: return Lang(language, "黒足掛けソックス", "黑色脚踩袜", "黑色腳踩襪", "Black Stirrup", "검은 스타럽");
-                    case 13: return Lang(language, "黒ネットストッキング", "黑网袜", "黑網襪", "Fishnets", "망사 스타킹");
-                    case 14: return Lang(language, "白足掛けソックス", "白色脚踩袜", "白色腳踩襪", "White Stirrup", "하얀 스타럽");
+                    case 10: return Lang(language, "ストッキング腿鎧", "丝袜腿甲", "絲襪腿甲", "Leg Armor", "스타킹 레그 아머");     // 1
+                    case 11: return Lang(language, "ソックスブーツ", "黑色长袜靴", "黑色長襪靴", "Long Boots", "롱삭스 부츠");         // 2
+                    case 12: return Lang(language, "ガーターソックス", "蕾丝吊带袜", "蕾絲吊帶襪", "Garter Stockings", "가터 스타킹");         // 3
+                    case 2: return Lang(language, "ニーブーツ", "过膝袜短靴", "過膝襪短靴", "Knee Boots", "하이부츠");             // 4
+                    case 3: return Lang(language, "ロングソックスブーツ", "长袜靴", "長襪靴", "Sock Boots", "삭스 부츠");           // 6
+                    case 4: return Lang(language, "薄黒ストッキング", "薄黑长袜", "薄黑長襪", "Thin Black Stockings", "얇은 검정 스타킹");     // 7
+                    case 5: return Lang(language, "黒ヒール", "黑色高跟鞋", "黑色高跟鞋", "Black Heels", "검은 하이힐");         // 8
+                    case 6: return Lang(language, "黒ブーツ", "黑色短靴", "黑色短靴", "Short Boots", "짧은 부츠");           // 9
+                    case 7: return Lang(language, "白ニーソ", "白丝过膝袜", "白絲過膝襪", "White Thigh-highs", "하얀 니삭스");           // 10
+                    case 8: return Lang(language, "オレンジ足掛けソックス", "橘色脚踩袜", "橘色腳踩襪", "Orange Stirrup Socks", "오렌지 발걸이 양말");   // 11
+                    case 9: return Lang(language, "黒足掛けソックス", "黑色脚踩袜", "黑色腳踩襪", "Black Stirrup Socks", "검은 발걸이 양말");     // 12
+                    case 13: return Lang(language, "黒ネットストッキング", "黑网袜", "黑網襪", "Black Fishnets", "검은 망사 스타킹");     // 13
+                    case 14: return Lang(language, "白足掛けソックス", "白色脚踩袜", "白色腳踩襪", "White Stirrup Socks", "하얀 발걸이 양말");     // 14
                 }
                 break;
 
@@ -569,4 +568,155 @@ public static class ItemLocalization
             default: return jp;
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+    #region     三选一界面菜单
+
+
+    // ★ 武器升级描述（剑 / 弩 / 法杖）
+    public static string GetWeaponPickupDesc(
+        ShopItemData.ItemType type,
+        int itemId,
+        int currentPower,
+        int addPower)
+    {
+        int language = PlayerPrefs.GetInt("language", 0);
+
+        // 原始名字、说明
+        string rawName = GetName(type, itemId, language);
+        string rawDesc = GetDescription(type, itemId, language);
+
+        // 高亮颜色
+        string coloredName = $"<color=#80FFFF>{rawName}</color>";
+        string coloredDesc = string.IsNullOrEmpty(rawDesc)
+            ? ""
+            : $"\n<color=#80FFFF>{rawDesc}</color>";
+
+        switch (type)
+        {
+            case ShopItemData.ItemType.Sword:
+                return Lang(language,
+                    // JP
+                    $"傍らの武器棚から「{coloredName}」を見つけた……\n" +
+                    $"現在の武器攻撃力 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"攻撃力上昇 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    // ZH-CN
+                    $"你从一旁的武器架子上找到了一把「{coloredName}」……\n" +
+                    $"目前你的武器攻击力 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"攻击力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    // ZH-TW
+                    $"你從一旁的武器架子上找到了一把「{coloredName}」……\n" +
+                    $"目前你的武器攻擊力 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"攻擊力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    // EN
+                    $"You found “{coloredName}” on a nearby rack…\n" +
+                    $"Current Weapon Power <color=#ADD8E6>{currentPower}</color> → " +
+                    $"Attack <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    // KR
+                    $"옆의 무기 선반에서 「{coloredName}」를 발견했다…\n" +
+                    $"현재 무기 공격력 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"공격력 상승 <color=#80FFFF>+{addPower}</color>{coloredDesc}"
+                );
+
+            case ShopItemData.ItemType.Pistol:
+                return Lang(language,
+                    $"箱の中から「{coloredName}」を見つけた……\n" +
+                    $"現在の武器攻撃力 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"攻撃力上昇 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"你从箱子里找到了一把「{coloredName}」……\n" +
+                    $"目前你的武器攻击力 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"攻击力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"你從箱子裡找到了一把「{coloredName}」……\n" +
+                    $"目前你的武器攻擊力 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"攻擊力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"You found “{coloredName}” in a chest…\n" +
+                    $"Current Weapon Power <color=#ADD8E6>{currentPower}</color> → " +
+                    $"Attack <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"상자 속에서 「{coloredName}」를 발견했다…\n" +
+                    $"현재 무기 공격력 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"공격력 상승 <color=#80FFFF>+{addPower}</color>{coloredDesc}"
+                );
+
+            case ShopItemData.ItemType.Staff:
+                return Lang(language,
+                    $"戦いの中、倒れた魔法使いが「{coloredName}」を託した……\n" +
+                    $"現在の武器攻撃力 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"攻撃力上昇 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"战斗中一名女法师在死前将「{coloredName}」交给了你……\n" +
+                    $"目前你的武器攻击力 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"攻击力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"戰鬥中一名女法師在死前將「{coloredName}」交給了你……\n" +
+                    $"目前你的武器攻擊力 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"攻擊力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"In battle, a dying sorceress gave you “{coloredName}”…\n" +
+                    $"Current Weapon Power <color=#ADD8E6>{currentPower}</color> → " +
+                    $"Attack <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"전투 중 죽어가던 여마법사가 「{coloredName}」를 건네주었다…\n" +
+                    $"현재 무기 공격력 <color=#ADD8E6>{currentPower}</color> → " +
+                    $"공격력 상승 <color=#80FFFF>+{addPower}</color>{coloredDesc}"
+                );
+        }
+
+        return "";
+    }
+
+    // ★ 衣服 / 丝袜升级描述
+    public static string GetArmorPickupDesc(
+        ShopItemData.ItemType type,   // Clothes 或 Stockings
+        int itemId,
+        int currentDef,
+        int addDef)
+    {
+        int language = PlayerPrefs.GetInt("language", 0);
+
+        string rawName = GetName(type, itemId, language);
+        string rawDesc = GetDescription(type, itemId, language);
+
+        string coloredName = $"<color=#80FFFF>{rawName}</color>";
+        string coloredDesc = string.IsNullOrEmpty(rawDesc)
+            ? ""
+            : $"\n<color=#80FFFF>{rawDesc}</color>";
+
+        if (type == ShopItemData.ItemType.Clothes)
+        {
+            return Lang(language,
+                $"敵の服「{coloredName}」を剥ぎ取り着替えた……\n" +
+                $"現在の衣服防御力 <color=#ADD8E6>{currentDef}</color> → 防御力上昇 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"你剥下敌人身上的「{coloredName}」并且换上了……\n" +
+                $"目前你的衣服防御力 <color=#ADD8E6>{currentDef}</color> → 衣服防御力上升 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"你剝下敵人身上的「{coloredName}」並且換上了……\n" +
+                $"目前你的衣服防禦力 <color=#ADD8E6>{currentDef}</color> → 衣服防禦力上升 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"You stripped the enemy’s “{coloredName}” and put it on…\n" +
+                $"Current Cloth Defense <color=#ADD8E6>{currentDef}</color> → Defense <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"적의 옷 「{coloredName}」을 벗겨 입었다…\n" +
+                $"현재 옷 방어력 <color=#ADD8E6>{currentDef}</color> → 방어력 상승 <color=#80FFFF>+{addDef}</color>{coloredDesc}"
+            );
+        }
+        else // Stockings
+        {
+            return Lang(language,
+                $"敵のストッキング「{coloredName}」を剥ぎ取り履き替えた……\n" +
+                $"現在のストッキング防御力 <color=#ADD8E6>{currentDef}</color> → 防御力上昇 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"你剥下敌人身上的「{coloredName}」并且换上了……\n" +
+                $"目前你的丝袜防御力 <color=#ADD8E6>{currentDef}</color> → 丝袜防御力上升 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"你剝下敵人身上的「{coloredName}」並且換上了……\n" +
+                $"目前你的絲襪防禦力 <color=#ADD8E6>{currentDef}</color> → 絲襪防禦力上升 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"You stripped the enemy’s “{coloredName}” stockings and wore them…\n" +
+                $"Current Stocking Defense <color=#ADD8E6>{currentDef}</color> → Defense <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"적의 스타킹 「{coloredName}」을 벗겨 신었다…\n" +
+                $"현재 스타킹 방어력 <color=#ADD8E6>{currentDef}</color> → 방어력 상승 <color=#80FFFF>+{addDef}</color>{coloredDesc}"
+            );
+        }
+    }
+
+    #endregion
 }

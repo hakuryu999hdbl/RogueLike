@@ -101,160 +101,263 @@ public class BonusSlotUI : MonoBehaviour
                 }
                 break;
 
+
+
+
+
+
+
+
             case BonusType.WeaponUpgrade_Sword:
-                switch (PlayerPrefs.GetInt("language"))
                 {
-                    case 0: // 日语
-                        description = "傍らの武器棚から剣を見つけた……\n現在の武器攻撃力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 攻撃力上昇 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 1: // 简体
-                        description = "你从一旁的武器架子上找到了一把剑……\n目前你的武器攻击力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 攻击力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 2: // 繁体
-                        description = "你從一旁的武器架子上找到了一把劍……\n目前你的武器攻擊力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 攻擊力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 3: // 英语
-                        description = "You found a sword on a nearby rack…\nCurrent Weapon Power <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → Attack <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 4: // 韩语
-                        description = "옆의 무기 선반에서 검을 발견했다…\n현재 무기 공격력 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 공격력 상승 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
+                    int current = UIManager.instance.player.CurrentWeaponPower;
+                    int add = WeaponPower;
+                    int weaponIndex = WeaponIndex;
+
+                    description = ItemLocalization.GetWeaponPickupDesc(
+                        ShopItemData.ItemType.Sword,
+                        weaponIndex,
+                        current,
+                        add);
+                    break;
                 }
-                break;
 
             case BonusType.WeaponUpgrade_Pistol:
-                switch (PlayerPrefs.GetInt("language"))
                 {
-                    case 0: // 日语
-                        description = "箱の中から銃を見つけた……\n現在の武器攻撃力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 攻撃力上昇 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 1: // 简体
-                        description = "你从箱子里找到一把枪……\n目前你的武器攻击力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 攻击力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 2: // 繁体
-                        description = "你從箱子裡找到一把槍……\n目前你的武器攻擊力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 攻擊力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 3: // 英语
-                        description = "You found a pistol in a chest…\nCurrent Weapon Power <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → Attack <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 4: // 韩语
-                        description = "상자 속에서 권총을 발견했다…\n현재 무기 공격력 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 공격력 상승 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
+                    int current = UIManager.instance.player.CurrentWeaponPower;
+                    int add = WeaponPower;
+                    int weaponIndex = WeaponIndex;
+
+                    description = ItemLocalization.GetWeaponPickupDesc(
+                        ShopItemData.ItemType.Pistol,
+                        weaponIndex,
+                        current,
+                        add);
+                    break;
                 }
-                break;
 
             case BonusType.WeaponUpgrade_Staff:
-                switch (PlayerPrefs.GetInt("language"))
                 {
-                    case 0: // 日语
-                        description = "戦いの中、倒れた魔法使いが杖を託した……\n現在の武器攻撃力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 攻撃力上昇 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 1: // 简体
-                        description = "战斗中一名女法师在死前将法杖给了你……\n目前你的武器攻击力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 攻击力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 2: // 繁体
-                        description = "戰鬥中一名女法師在死前將法杖給了你……\n目前你的武器攻擊力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 攻擊力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 3: // 英语
-                        description = "In battle, a dying sorceress gave you her staff…\nCurrent Weapon Power <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → Attack <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
-                    case 4: // 韩语
-                        description = "전투 중 죽어가던 여마법사가 지팡이를 건네주었다…\n현재 무기 공격력 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentWeaponPower
-                                      + "</color> → 공격력 상승 <color=#80FFFF>+" + WeaponPower + "</color>";
-                        break;
+                    int current = UIManager.instance.player.CurrentWeaponPower;
+                    int add = WeaponPower;
+                    int weaponIndex = WeaponIndex;
+
+                    description = ItemLocalization.GetWeaponPickupDesc(
+                        ShopItemData.ItemType.Staff,
+                        weaponIndex,
+                        current,
+                        add);
+                    break;
                 }
-                break;
 
             case BonusType.ClothesUpgrade:
-                switch (PlayerPrefs.GetInt("language"))
                 {
-                    case 0: // 日语
-                        description = "敵の服を剥ぎ取り着替えた……\n現在の衣服防御力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentArmorDefence
-                                      + "</color> → 防御力上昇 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
-                        break;
-                    case 1: // 简体
-                        description = "你剥下敌人身上的衣服并且换上了……\n目前你的衣服防御力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentArmorDefence
-                                      + "</color> → 衣服防御力上升 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
-                        break;
-                    case 2: // 繁体
-                        description = "你剝下敵人身上的衣服並且換上了……\n目前你的衣服防禦力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentArmorDefence
-                                      + "</color> → 衣服防禦力上升 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
-                        break;
-                    case 3: // 英语
-                        description = "You stripped the enemy’s clothes and put them on…\nCurrent Cloth Defense <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentArmorDefence
-                                      + "</color> → Defense <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
-                        break;
-                    case 4: // 韩语
-                        description = "적의 옷을 벗겨 입었다…\n현재 옷 방어력 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentArmorDefence
-                                      + "</color> → 방어력 상승 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
-                        break;
+                    int current = UIManager.instance.player.CurrentArmorDefence;
+                    int add = ClothesStockingDefence;
+                    int idx = ClothesStockingIndex;
+
+                    description = ItemLocalization.GetArmorPickupDesc(
+                        ShopItemData.ItemType.Clothes,
+                        idx,
+                        current,
+                        add);
+                    break;
                 }
-                break;
 
             case BonusType.StockingUpgrade:
-                switch (PlayerPrefs.GetInt("language"))
                 {
-                    case 0: // 日语
-                        description = "敵のストッキングを剥ぎ取り履き替えた……\n現在のストッキング防御力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentStockingDefence
-                                      + "</color> → 防御力上昇 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
-                        break;
-                    case 1: // 简体
-                        description = "你剥下敌人身上的丝袜并且换上了……\n目前你的丝袜防御力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentStockingDefence
-                                      + "</color> → 丝袜防御力上升 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
-                        break;
-                    case 2: // 繁体
-                        description = "你剝下敵人身上的絲襪並且換上了……\n目前你的絲襪防禦力 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentStockingDefence
-                                      + "</color> → 絲襪防禦力上升 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
-                        break;
-                    case 3: // 英语
-                        description = "You stripped the enemy’s stockings and wore them…\nCurrent Stocking Defense <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentStockingDefence
-                                      + "</color> → Defense <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
-                        break;
-                    case 4: // 韩语
-                        description = "적의 스타킹을 벗겨 신었다…\n현재 스타킹 방어력 <color=#ADD8E6>"
-                                      + UIManager.instance.player.CurrentStockingDefence
-                                      + "</color> → 방어력 상승 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
-                        break;
+                    int current = UIManager.instance.player.CurrentStockingDefence;
+                    int add = ClothesStockingDefence;
+                    int idx = ClothesStockingIndex;
+
+                    description = ItemLocalization.GetArmorPickupDesc(
+                        ShopItemData.ItemType.Stockings,
+                        idx,
+                        current,
+                        add);
+                    break;
                 }
-                break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //case BonusType.WeaponUpgrade_Sword:
+            //    switch (PlayerPrefs.GetInt("language"))
+            //    {
+            //        case 0: // 日语
+            //            description = "傍らの武器棚から剣を見つけた……\n現在の武器攻撃力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 攻撃力上昇 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 1: // 简体
+            //            description = "你从一旁的武器架子上找到了一把剑……\n目前你的武器攻击力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 攻击力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 2: // 繁体
+            //            description = "你從一旁的武器架子上找到了一把劍……\n目前你的武器攻擊力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 攻擊力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 3: // 英语
+            //            description = "You found a sword on a nearby rack…\nCurrent Weapon Power <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → Attack <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 4: // 韩语
+            //            description = "옆의 무기 선반에서 검을 발견했다…\n현재 무기 공격력 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 공격력 상승 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //    }
+            //    break;
+            //
+            //case BonusType.WeaponUpgrade_Pistol:
+            //    switch (PlayerPrefs.GetInt("language"))
+            //    {
+            //        case 0: // 日语
+            //            description = "箱の中から銃を見つけた……\n現在の武器攻撃力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 攻撃力上昇 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 1: // 简体
+            //            description = "你从箱子里找到一把枪……\n目前你的武器攻击力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 攻击力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 2: // 繁体
+            //            description = "你從箱子裡找到一把槍……\n目前你的武器攻擊力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 攻擊力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 3: // 英语
+            //            description = "You found a pistol in a chest…\nCurrent Weapon Power <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → Attack <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 4: // 韩语
+            //            description = "상자 속에서 권총을 발견했다…\n현재 무기 공격력 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 공격력 상승 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //    }
+            //    break;
+            //
+            //case BonusType.WeaponUpgrade_Staff:
+            //    switch (PlayerPrefs.GetInt("language"))
+            //    {
+            //        case 0: // 日语
+            //            description = "戦いの中、倒れた魔法使いが杖を託した……\n現在の武器攻撃力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 攻撃力上昇 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 1: // 简体
+            //            description = "战斗中一名女法师在死前将法杖给了你……\n目前你的武器攻击力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 攻击力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 2: // 繁体
+            //            description = "戰鬥中一名女法師在死前將法杖給了你……\n目前你的武器攻擊力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 攻擊力上升 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 3: // 英语
+            //            description = "In battle, a dying sorceress gave you her staff…\nCurrent Weapon Power <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → Attack <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //        case 4: // 韩语
+            //            description = "전투 중 죽어가던 여마법사가 지팡이를 건네주었다…\n현재 무기 공격력 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentWeaponPower
+            //                          + "</color> → 공격력 상승 <color=#80FFFF>+" + WeaponPower + "</color>";
+            //            break;
+            //    }
+            //    break;
+            //
+            //case BonusType.ClothesUpgrade:
+            //    switch (PlayerPrefs.GetInt("language"))
+            //    {
+            //        case 0: // 日语
+            //            description = "敵の服を剥ぎ取り着替えた……\n現在の衣服防御力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentArmorDefence
+            //                          + "</color> → 防御力上昇 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
+            //            break;
+            //        case 1: // 简体
+            //            description = "你剥下敌人身上的衣服并且换上了……\n目前你的衣服防御力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentArmorDefence
+            //                          + "</color> → 衣服防御力上升 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
+            //            break;
+            //        case 2: // 繁体
+            //            description = "你剝下敵人身上的衣服並且換上了……\n目前你的衣服防禦力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentArmorDefence
+            //                          + "</color> → 衣服防禦力上升 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
+            //            break;
+            //        case 3: // 英语
+            //            description = "You stripped the enemy’s clothes and put them on…\nCurrent Cloth Defense <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentArmorDefence
+            //                          + "</color> → Defense <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
+            //            break;
+            //        case 4: // 韩语
+            //            description = "적의 옷을 벗겨 입었다…\n현재 옷 방어력 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentArmorDefence
+            //                          + "</color> → 방어력 상승 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
+            //            break;
+            //    }
+            //    break;
+            //
+            //case BonusType.StockingUpgrade:
+            //    switch (PlayerPrefs.GetInt("language"))
+            //    {
+            //        case 0: // 日语
+            //            description = "敵のストッキングを剥ぎ取り履き替えた……\n現在のストッキング防御力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentStockingDefence
+            //                          + "</color> → 防御力上昇 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
+            //            break;
+            //        case 1: // 简体
+            //            description = "你剥下敌人身上的丝袜并且换上了……\n目前你的丝袜防御力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentStockingDefence
+            //                          + "</color> → 丝袜防御力上升 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
+            //            break;
+            //        case 2: // 繁体
+            //            description = "你剝下敵人身上的絲襪並且換上了……\n目前你的絲襪防禦力 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentStockingDefence
+            //                          + "</color> → 絲襪防禦力上升 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
+            //            break;
+            //        case 3: // 英语
+            //            description = "You stripped the enemy’s stockings and wore them…\nCurrent Stocking Defense <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentStockingDefence
+            //                          + "</color> → Defense <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
+            //            break;
+            //        case 4: // 韩语
+            //            description = "적의 스타킹을 벗겨 신었다…\n현재 스타킹 방어력 <color=#ADD8E6>"
+            //                          + UIManager.instance.player.CurrentStockingDefence
+            //                          + "</color> → 방어력 상승 <color=#80FFFF>+" + ClothesStockingDefence + "</color>";
+            //            break;
+            //    }
+            //    break;
 
             case BonusType.NewSlave:
                 switch (PlayerPrefs.GetInt("language"))
@@ -544,7 +647,6 @@ public class BonusSlotUI : MonoBehaviour
 
 
 
-
                 UIManager.instance.player.YYY_legsIndex = ClothesStockingIndex; UIManager.instance.player.SetSkin();
                 int StockingDef = UIManager.instance.player.CurrentStockingDefence;
                 StockingDef += ClothesStockingDefence;
@@ -617,4 +719,9 @@ public class BonusSlotUI : MonoBehaviour
         UIManager.instance.HideBonusCavans();
 
     }//按下领取按钮触发
+
+
+
+
+
 }
