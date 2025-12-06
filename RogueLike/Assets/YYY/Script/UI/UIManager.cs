@@ -1310,6 +1310,9 @@ public class UIManager : MonoBehaviour
             //钮按下后绿色选中也会过去
             HomePagecurrentIndex = 1;
             UpdateHomePage_Highlight();
+
+            //Zoom恢复
+            ReSetZoom();
         }
         else
         {
@@ -2494,6 +2497,10 @@ public class UIManager : MonoBehaviour
 
         ShowSaveCavans.SetActive(false);
         MainCamera.SetInteger("View", 1);
+
+
+        ZoomOut(); //预先设置状态
+
     }
 
 
@@ -3191,7 +3198,110 @@ public class UIManager : MonoBehaviour
         //currentSelectedSlot.Choose();
         //currentSelectedSlot.CurrentArmorDefence.text = currentSelectedSlot.Data.serviceCount.ToString();
         //currentSelectedSlot.SetInfo(currentSelectedSlot.Data, skinParts);
+
+
+
+
     }
+
+    int Zoom = 0;//0缩小 1放大
+    public GameObject plus, mins;
+    public void ChangeZoom()
+    {
+        if (Zoom == 0)
+        {
+            Invoke(nameof(ZoomIn), 0.2f);
+        }
+        else
+        {
+            ZoomOut();
+        }
+    }
+
+
+    public void ZoomIn()
+    {
+        // 1. 获取当前动画 clip 名
+        string clipName = "";
+        var infos = player.anim.GetCurrentAnimatorClipInfo(0);
+
+        if (infos.Length > 0 && infos[0].clip != null)
+        {
+            clipName = infos[0].clip.name;
+            Debug.Log("Current CG Clip: " + clipName);
+        }
+
+        // 2. 定义三类判断
+        bool needLow =
+            clipName.Contains("CG_InsultSide_1") ||
+            clipName.Contains("CG_InsultSide_2") ||
+            clipName.Contains("CG_FistingFront_1") ||
+            clipName.Contains("CG_AssaultFront_1") ||
+            clipName.Contains("CG_AssaultFront_2") ||
+            clipName.Contains("CG_AssaultFront_3") ||
+            clipName.Contains("CG_AssaultFront_4") ||
+            clipName.Contains("CG/CG_TentacleHermitCrabFront_1") ||
+            clipName.Contains("CG/CG_HangDown_4");
+
+        bool needLeft =
+            clipName.Contains("CG_Pillory_Side") ||
+            clipName.Contains("CG_FeraSide_1") ||
+            clipName.Contains("CG_FeraSide_2") ||
+            clipName.Contains("CG_AssaultSide_1") ||
+            clipName.Contains("CG_AssaultSide_2") ||
+            clipName.Contains("CG_AssaultSide_3") ||
+            clipName.Contains("CG_AssaultSide_4");
+
+        // 3. 决定播放哪种 Camera 动画
+        if (needLeft)
+        {
+            MainCamera.Play("View_CG_Left");
+        }
+        else if (needLow)
+        {
+            MainCamera.Play("View_CG_Low");
+        }
+        else
+        {
+            MainCamera.Play("View_CG_Middle");
+        }
+
+
+        player.frameEvents._Effect_camera();
+
+        mins.SetActive(true);
+        plus.SetActive(false);
+
+        Zoom = 1;
+
+    }//CG鉴赏界面拉大
+
+
+    public void ZoomOut()
+    {
+        MainCamera.Play("View_CG");
+        player.frameEvents._Effect_camera();
+
+        mins.SetActive(false);
+        plus.SetActive(true);
+
+        Zoom = 0;
+
+    }//CG鉴赏界面缩小
+
+
+    void ReSetZoom()
+    {
+        MainCamera.SetInteger("View", 0);
+
+        mins.SetActive(true);
+        plus.SetActive(false);
+
+        Zoom = 1;
+
+    }//离开CG界面重置状态
+
+
 
     #endregion
 
@@ -3441,6 +3551,7 @@ public class UIManager : MonoBehaviour
     }
 
     public List<GameObject> IntroduceOfCG = new List<GameObject>();
+
 
     #endregion
 
@@ -4594,6 +4705,8 @@ public class UIManager : MonoBehaviour
                 cgButtons[CGcurrentIndex].PlayCG();
             }
 
+          
+
             //游戏模式选择界面
             if (CurrentChooseList == 7)
             {
@@ -4780,6 +4893,12 @@ public class UIManager : MonoBehaviour
         {
             OnCoverClicked();
             return;
+        }
+
+        //CG鉴赏 放大缩小
+        if (CurrentChooseList == 6)
+        {
+            Invoke(nameof(ChangeZoom), 0.2f);
         }
 
 
@@ -6484,9 +6603,9 @@ public class UIManager : MonoBehaviour
 
     private const string KEY_SCREEN_MODE = "ScreenMode";
 
-    public void ToScreenSetting() 
+    public void ToScreenSetting()
     {
-        SettingPagecurrentIndex =3;
+        SettingPagecurrentIndex = 3;
         UpdateSettingPage_Highlight();
     }
 
@@ -6590,7 +6709,7 @@ public class UIManager : MonoBehaviour
     public Image OnOffImage;
     public Sprite Red, Grey;
 
-    public void ReadForceKeyboardMode() 
+    public void ReadForceKeyboardMode()
     {
         // 读取存档
         float savedValue = PlayerPrefs.GetInt("ForceKeyboardUI", 0); // 默认值 0＝关闭
