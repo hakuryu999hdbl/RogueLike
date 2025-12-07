@@ -783,6 +783,9 @@ public class DialogSystem : MonoBehaviour
     public void Playlist_Voice()
     {
 
+        if (PlayerPrefs.GetInt("BossVoice") == 0){ return; }//Boss语音关闭的情况下
+
+
         if (animation_number == 101|| animation_number == 102 || animation_number == 105 || animation_number == 107 || animation_number == 108)
         {
             // 1) 选择「当前台词列表」

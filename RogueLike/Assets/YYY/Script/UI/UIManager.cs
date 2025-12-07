@@ -32,6 +32,8 @@ public class UIManager : MonoBehaviour
         Debug.Log("目前存档里的BGM音量" + PlayerPrefs.GetFloat("BGMVolume"));
         Debug.Log("目前存档里的SE音量" + PlayerPrefs.GetFloat("SEVolume"));
 
+        Debug.Log("目前存档里的Boss语音" + PlayerPrefs.GetInt("BossVoice"));// 0=Off, 1=On
+
         Debug.Log("目前存档里的屏幕设置" + PlayerPrefs.GetFloat("ScreenMode"));//0全屏  1窗口  2带边窗口
         Debug.Log("目前存档里的强制键盘模式储存" + PlayerPrefs.GetInt("ForceKeyboardUI"));//0关上 1开启
 
@@ -2539,9 +2541,12 @@ public class UIManager : MonoBehaviour
 
 
         // 初始化音量
-        //SetBGMVolune(BGMVolume);
-        //SetSEVolune(SEVolume);
         LoadVolumes();
+
+        // 读取Boss语音（默认关闭 Off）
+        value = PlayerPrefs.GetInt(KEY, 0);
+        UpdateLabel();//读取Boss语音
+
 
 
         CGUnclockStart();//检测CG解锁
@@ -2866,7 +2871,6 @@ public class UIManager : MonoBehaviour
     [Header("删除存档")]
     public GameObject MakeSureDeleteCurrentSave;
 
-
     public void DeleteCurrentSelection()
     {
         // if (saveSlots.Count == 0) return;
@@ -3023,7 +3027,7 @@ public class UIManager : MonoBehaviour
         // 2) 更新按钮文字
         if (lockAppearanceButtonText != null)
         {
-            lockAppearanceButtonText.text =GetLocalizedLockText(newLocked);
+            lockAppearanceButtonText.text = GetLocalizedLockText(newLocked);
         }
 
         // 3) 内存里的数据同步一下
@@ -3048,11 +3052,15 @@ public class UIManager : MonoBehaviour
 
 
 
+
+
+
+
     #endregion
 
 
     /// <summary>
-    /// 语言设置，声音设置
+    /// 语言设置，声音设置,Boss语音设置
     /// </summary>
     #region
     [Header("删除全存档")]
@@ -3101,6 +3109,7 @@ public class UIManager : MonoBehaviour
 
         ReLoadScene();
     }
+    [Header("声音设置")]
 
     public AudioMixer audioMixer;
     public AudioMixer BGM_Mixer;
@@ -3187,6 +3196,64 @@ public class UIManager : MonoBehaviour
         SetBGMVolune(BGMVolume - 10f);
         Debug.Log("降低 BGM 音量：" + BGMVolume);
     }
+
+
+
+    //////////////////Boss语音设置////////////////////////
+    [Header("Boss语音")]
+    public AudioMixer bossMixer;        // 拖你的总Mixer进来
+    private const string MIXER_PARAM = "BossVolume"; // 和 Exposed 参数名一致
+
+    public Text label;   // 绑定显示文字
+    private const string KEY = "BossVoice"; // 0=Off, 1=On
+    private int value = 0;
+    public void ToSetBossVoice()
+    {
+        value = (value == 0) ? 1 : 0;
+
+        PlayerPrefs.SetInt(KEY, value);
+
+
+
+       
+        UpdateLabel();
+    }
+
+    private void UpdateLabel()
+    {
+
+
+        int lang = PlayerPrefs.GetInt("language", 0);
+        bool on = (value == 1);
+
+        string text = "";
+
+        switch (lang)
+        {
+            case 0: text = "Boss ボイス：" + (on ? "オン" : "オフ"); break;
+            case 1: text = "Boss语音：" + (on ? "开" : "关"); break;
+            case 2: text = "Boss語音：" + (on ? "開" : "關"); break;
+            case 3: text = "Boss Voice: " + (on ? "On" : "Off"); break;
+            case 4: text = "보스 보이스: " + (on ? "켬" : "끔"); break;
+        }
+
+        if (label != null) label.text = text;
+
+
+        ApplyMixerVolume();
+    }
+
+    private void ApplyMixerVolume()
+    {
+        if (bossMixer == null) return;
+
+        // 一般 -80f 基本就是静音，0f 是原始音量
+        float vol = (value == 1) ? 0f : -80f;
+        bossMixer.SetFloat(MIXER_PARAM, vol);
+    }
+
+
+
 
     #endregion
 
@@ -3986,14 +4053,14 @@ public class UIManager : MonoBehaviour
                 // 当前菜单项内的上下切换
                 if (dir.y > 0.5f)
                 {
-                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex - 1, 0, 4);
+                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex - 1, 0, 5);
                     UpdateSettingPage_Highlight();
 
 
                 }
                 else if (dir.y < -0.5f)
                 {
-                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex + 1, 0, 4);
+                    SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex + 1, 0, 5);
                     UpdateSettingPage_Highlight();
 
 
@@ -4418,14 +4485,14 @@ public class UIManager : MonoBehaviour
             // 当前菜单项内的上下切换
             if (dir.y > 0.5f)
             {
-                SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex - 1, 0, 4);
+                SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex - 1, 0, 5);
                 UpdateSettingPage_Highlight();
 
 
             }
             else if (dir.y < -0.5f)
             {
-                SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex + 1, 0, 4);
+                SettingPagecurrentIndex = Mathf.Clamp(SettingPagecurrentIndex + 1, 0, 5);
                 UpdateSettingPage_Highlight();
 
 
@@ -4767,7 +4834,10 @@ public class UIManager : MonoBehaviour
                     case 2:
                         Invoke("ToLanguagePage", 0.1f);//进入设置界面
                         break;
-                    case 4:
+                    case 3:
+                        Invoke(nameof(ToSetBossVoice), 0.1f);//切换是否显示Boss语音
+                        break;
+                    case 5:
                         Invoke("TryDelete_All", 0.1f);//进入确认删除全部存档界面
                         break;
                 }
@@ -4787,7 +4857,7 @@ public class UIManager : MonoBehaviour
                 cgButtons[CGcurrentIndex].PlayCG();
             }
 
-          
+
 
             //游戏模式选择界面
             if (CurrentChooseList == 7)
@@ -5086,7 +5156,7 @@ public class UIManager : MonoBehaviour
         //    AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
         //}
 
-        if (CurrentChooseList == 2&&GameFlowData.nextScene!="CG")//拷问所界面不用这个
+        if (CurrentChooseList == 2 && GameFlowData.nextScene != "CG")//拷问所界面不用这个
         {
 
             //锁定外貌
@@ -5847,7 +5917,7 @@ public class UIManager : MonoBehaviour
                     player.SetSkin(); // 只有没锁定时换衣服
                 }
                 player.CurrentArmorDefence += data.value;
-                player.SaveCurrent();              
+                player.SaveCurrent();
                 break;
 
             case ShopItemData.ItemType.Stockings:

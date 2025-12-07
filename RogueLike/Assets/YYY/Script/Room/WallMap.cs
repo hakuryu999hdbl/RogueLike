@@ -458,7 +458,8 @@ public class WallMap : MonoBehaviour
                         break;
                 }
 
-                //enemyScript.wallmap = this;//告诉自己生成的Enemy出生WallMap
+                enemyScript.wallmap = this;//告诉自己生成的Enemy出生WallMap★★ 这里也要绑 ★★
+
                 EnemyCount++; // 每生成一个就记一次
             }
 
@@ -535,6 +536,8 @@ public class WallMap : MonoBehaviour
 
         enemyScript.BossNumber = BossNumber;
 
+        // ★★ 这里也要绑 ★★
+        enemyScript.wallmap = this;
     }
 
 

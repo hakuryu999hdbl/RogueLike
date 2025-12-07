@@ -70,6 +70,7 @@ public class Enemy : MonoBehaviour
                         //小怪中暂时不出现Demon(不知道为什么会对多米纳斯召唤物产生影响)
                         //if (Class == EnemyClass.Demon){ Class = EnemyClass.Man; }
 
+                        if (Class == EnemyClass.RBQ&&GameFlowData.nextScene=="Arena") { Class = EnemyClass.Tentacle_HermitCrab; }//不知道这个产卵会造成多大影响，暂时排除RBQ在角斗场
 
                         if (BecomeSoldier_Man)
                         {
