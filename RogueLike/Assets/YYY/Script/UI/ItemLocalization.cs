@@ -191,76 +191,90 @@ public static class ItemLocalization
             case ShopItemData.ItemType.Pistol:
                 switch (id)
                 {
-                    case 1:
+                    case 1: // 轻弩：1发/0.3秒冷却
                         return Lang(language,
-                    "軽く扱いやすい弩。初心者にも人気。",
-                    "轻便易操控的轻弩，射速极高。",
-                    "輕便易操控的輕弩，射速極高。",
-                    "A light crossbow easy to handle, favored by beginners.",
-                    "가볍고 다루기 쉬운 경노. 초보자에게 인기가 높다.");
-                    case 2:
+                        // JP
+                        "軽く扱いやすい弩。初心者にも人気。\n【性能】1発ずつ発射／約0.3秒ごとに再発射できる。",
+                        // ZH-CN
+                        "轻便易操控的轻弩，射速极高。\n【机制】单发射击／冷却约0.3秒。",
+                        // ZH-TW
+                        "輕便易操控的輕弩，射速極高。\n【機制】單發射擊／冷卻約0.3秒。",
+                        // EN
+                        "A light crossbow easy to handle, favored by beginners.\n[Stats] Fires single shots with about 0.3s cooldown.",
+                        // KR
+                        "가볍고 다루기 쉬운 경노. 초보자에게 인기가 높다.\n[성능] 단발 사격 / 약 0.3초마다 재발사 가능.");
+
+                    case 2: // 重弩：3发散射/0.8秒冷却
                         return Lang(language,
-                    "重弩。威力は絶大だが装填が遅い。",
-                    "威力巨大的重弩，换箭速度较慢。",
-                    "威力巨大的重弩，換箭速度較慢。",
-                    "A heavy crossbow that trades speed for power.",
-                    "강력하지만 장전이 느린 중노.");
-                    case 3:
+                        "重弩。威力は絶大だが装填が遅い。\n【性能】3発の散弾を一度に放つ／冷却は約0.8秒。",
+                        "威力巨大的重弩，换箭速度较慢。\n【机制】三发散射／冷却约0.8秒。",
+                        "威力巨大的重弩，換箭速度較慢。\n【機制】三發散射／冷卻約0.8秒。",
+                        "A heavy crossbow that trades speed for power.\n[Stats] Fires 3-way spread shots with ~0.8s cooldown.",
+                        "강력하지만 장전이 느린 중노.\n[성능] 3발 산탄을 동시에 발사 / 재사용 대기시간 약 0.8초.");
+
+                    case 3: // 复合弩：3发连射/1.5秒冷却
                         return Lang(language,
-                    "複合構造の弩。射程と精度が高い。",
-                    "复合机械结构，使射程与精度兼得。",
-                    "複合機械結構，使射程與精度兼得。",
-                    "A compound crossbow balancing power and accuracy.",
-                    "복합 구조의 석궁. 사거리와 정확도가 높다.");
-                    case 4:
+                        "複合構造の弩。射程と精度が高い。\n【性能】3連射で矢を放つ／冷却は約1.5秒。",
+                        "复合机械结构，使射程与精度兼得。\n【机制】三连发射击／冷却约1.5秒。",
+                        "複合機械結構，使射程與精度兼得。\n【機制】三連發射擊／冷卻約1.5秒。",
+                        "A compound crossbow balancing power and accuracy.\n[Stats] Fires 3-round bursts with ~1.5s cooldown.",
+                        "복합 구조의 석궁. 사거리와 정확도가 높다.\n[성능] 3연사로 발사 / 재사용 대기시간 약 1.5초.");
+
+                    case 4: // 火绳复合枪：3发散射/0.8秒冷却
                         return Lang(language,
-                    "火薬と弩を組み合わせた奇妙な銃。",
-                    "融合弩与火绳的奇异武器，火光耀眼。",
-                    "融合弩與火繩的奇異武器，火光耀眼。",
-                    "A hybrid matchlock crossbow that spits both bolts and fire.",
-                    "화약과 석궁이 결합된 기묘한 무기.");
-                    case 5:
+                        "火薬と弩を組み合わせた奇妙な銃。\n【性能】3発の散弾を一度に放つ／冷却は約0.8秒。",
+                        "融合弩与火绳的奇异武器，火光耀眼。\n【机制】三发散射／冷却约0.8秒。",
+                        "融合弩與火繩的奇異武器，火光耀眼。\n【機制】三發散射／冷卻約0.8秒。",
+                        "A hybrid matchlock crossbow that spits both bolts and fire.\n[Stats] Fires 3-way spread shots with ~0.8s cooldown.",
+                        "화약과 석궁이 결합된 기묘한 무기.\n[성능] 3발 산탄을 동시에 발사 / 재사용 대기시간 약 0.8초.");
+
+                    case 5: // 火绳短枪：1发/0.3秒冷却
                         return Lang(language,
-                    "短い火縄銃。携帯しやすいが射程は短い。",
-                    "短管火绳枪，轻便灵巧但射程有限。",
-                    "短管火繩槍，輕便靈巧但射程有限。",
-                    "A compact matchlock, easy to carry but limited in range.",
-                    "가볍지만 사거리가 짧은 단소총.");
-                    case 6:
+                        "短い火縄銃。携帯しやすいが射程は短い。\n【性能】1発ずつ素早く撃てる／冷却は約0.3秒。",
+                        "短管火绳枪，轻便灵巧但射程有限。\n【机制】单发快速射击／冷却约0.3秒。",
+                        "短管火繩槍，輕便靈巧但射程有限。\n【機制】單發快速射擊／冷卻約0.3秒。",
+                        "A compact matchlock, easy to carry but limited in range.\n[Stats] Fires single fast shots with ~0.3s cooldown.",
+                        "가볍지만 사거리가 짧은 단소총.\n[성능] 단발 고속 사격 / 재사용 대기시간 약 0.3초.");
+
+                    case 6: // 火绳长枪：3发散射/0.8秒冷却
                         return Lang(language,
-                    "長火縄銃。貫通力と精度に優れる。",
-                    "长火绳枪，精准而强力。",
-                    "長火繩槍，精準而強力。",
-                    "A long matchlock rifle known for precision and power.",
-                    "긴 화승총. 관통력과 명중률이 뛰어나다.");
-                    case 7:
+                        "長火縄銃。貫通力と精度に優れる。\n【性能】3発の散弾を一度に放つ／冷却は約0.8秒。",
+                        "长火绳枪，精准而强力。\n【机制】三发散射／冷却约0.8秒。",
+                        "長火繩槍，精準而強力。\n【機制】三發散射／冷卻約0.8秒。",
+                        "A long matchlock rifle known for precision and power.\n[Stats] Fires 3-way spread shots with ~0.8s cooldown.",
+                        "긴 화승총. 관통력과 명중률이 뛰어나다.\n[성능] 3발 산탄 동시 발사 / 재사용 대기시간 약 0.8초.");
+
+                    case 7: // 燧发枪：3发连射/1.5秒冷却
                         return Lang(language,
-                    "近代的な燧発銃。信頼性が高い。",
-                    "近代燧发枪，火光闪烁间夺人性命。",
-                    "近代燧發槍，火光閃爍間奪人性命。",
-                    "A flintlock pistol with high reliability.",
-                    "근대식 부싯돌총. 신뢰성이 높다.");
-                    case 8:
+                        "近代的な燧発銃。信頼性が高い。\n【性能】3連射で弾丸を叩き込む／冷却は約1.5秒。",
+                        "近代燧发枪，火光闪烁间夺人性命。\n【机制】三连发射击／冷却约1.5秒。",
+                        "近代燧發槍，火光閃爍間奪人性命。\n【機制】三連發射擊／冷卻約1.5秒。",
+                        "A flintlock pistol with high reliability.\n[Stats] Fires 3-round bursts with ~1.5s cooldown.",
+                        "근대식 부싯돌총. 신뢰성이 높다.\n[성능] 3연속 사격 / 재사용 대기시간 약 1.5초.");
+
+                    case 8: // 刺刀火枪：1发/0.3秒冷却
                         return Lang(language,
-                    "銃剣付きの火器。突撃にも対応。",
-                    "带刺刀的火枪，可射可刺。",
-                    "帶刺刀的火槍，可射可刺。",
-                    "A bayonet rifle for both shooting and stabbing.",
-                    "총검이 달린 화기. 사격과 찌르기 모두 가능.");
-                    case 9:
+                        "銃剣付きの火器。突撃にも対応。\n【性能】単発射撃／冷却約0.3秒。接近戦でも心強い。",
+                        "带刺刀的火枪，可射可刺。\n【机制】单发射击／冷却约0.3秒。",
+                        "帶刺刀的火槍，可射可刺。\n【機制】單發射擊／冷卻約0.3秒。",
+                        "A bayonet rifle for both shooting and stabbing.\n[Stats] Fires single shots with ~0.3s cooldown.",
+                        "총검이 달린 화기. 사격과 찌르기 모두 가능.\n[성능] 단발 사격 / 재사용 대기시간 약 0.3초.");
+
+                    case 9: // 火绳黄铜枪：3发连射/1.5秒冷却
                         return Lang(language,
-                    "黄銅で装飾された銃。見た目は豪華。",
-                    "黄铜制成的火枪，华丽又厚重。",
-                    "黃銅製成的火槍，華麗又厚重。",
-                    "A brass musket, elegant yet powerful.",
-                    "황동으로 장식된 머스킷. 우아하면서도 강력하다.");
-                    case 10:
+                        "黄銅で装飾された銃。見た目は豪華。\n【性能】3連射で弾幕を張る／冷却は約1.5秒。",
+                        "黄铜制成的火枪，华丽又厚重。\n【机制】三连发射击／冷却约1.5秒。",
+                        "黃銅製成的火槍，華麗又厚重。\n【機制】三連發射擊／冷卻約1.5秒。",
+                        "A brass musket, elegant yet powerful.\n[Stats] Fires 3-round bursts with ~1.5s cooldown.",
+                        "황동으로 장식된 머스킷. 우아하면서도 강력하다.\n[성능] 3연발 사격 / 재사용 대기시간 약 1.5초.");
+
+                    case 10: // 镶银火枪：1发/0.3秒冷却
                         return Lang(language,
-                   "銀で飾られた銃。儀礼用だが実戦でも使える。",
-                   "镶银装饰的火枪，外观与威力并存。",
-                   "鑲銀裝飾的火槍，外觀與威力並存。",
-                   "A silver-inlaid musket, as beautiful as it is deadly.",
-                   "은으로 장식된 머스킷. 아름답고 치명적이다.");
+                       "銀で飾られた銃。儀礼用だが実戦でも使える。\n【性能】1発ずつ素早く撃てる／冷却は約0.3秒。",
+                       "镶银装饰的火枪，外观与威力并存。\n【机制】单发快速射击／冷却约0.3秒。",
+                       "鑲銀裝飾的火槍，外觀與威力並存。\n【機制】單發快速射擊／冷卻約0.3秒。",
+                       "A silver-inlaid musket, as beautiful as it is deadly.\n[Stats] Fires single fast shots with ~0.3s cooldown.",
+                       "은으로 장식된 머스킷. 아름답고 치명적이다.\n[성능] 단발 고속 사격 / 재사용 대기시간 약 0.3초.");
                 }
                 break;
 
@@ -580,26 +594,35 @@ public static class ItemLocalization
 
 
     #region     三选一界面菜单
-
-
-    // ★ 武器升级描述（剑 / 弩 / 法杖）
     public static string GetWeaponPickupDesc(
-        ShopItemData.ItemType type,
-        int itemId,
-        int currentPower,
-        int addPower)
+     ShopItemData.ItemType type,
+     int itemId,
+     int currentPower,
+     int addPower,
+     bool isAppearanceLocked)
     {
         int language = PlayerPrefs.GetInt("language", 0);
 
-        // 原始名字、说明
+        // 原始名字 + 说明
         string rawName = GetName(type, itemId, language);
         string rawDesc = GetDescription(type, itemId, language);
 
-        // 高亮颜色
+        // 高亮名字
         string coloredName = $"<color=#80FFFF>{rawName}</color>";
-        string coloredDesc = string.IsNullOrEmpty(rawDesc)
-            ? ""
-            : $"\n<color=#80FFFF>{rawDesc}</color>";
+
+        // ★ 如果没锁外观：显示道具说明
+        // ★ 如果锁外观：不显示说明，改成红字提示
+        string tail;
+        if (isAppearanceLocked)
+        {
+            tail = "\n" + GetAppearanceLockHint(language);
+        }
+        else
+        {
+            tail = string.IsNullOrEmpty(rawDesc)
+                ? ""
+                : $"\n<color=#80FFFF>{rawDesc}</color>";
+        }
 
         switch (type)
         {
@@ -608,73 +631,76 @@ public static class ItemLocalization
                     // JP
                     $"傍らの武器棚から「{coloredName}」を見つけた……\n" +
                     $"現在の武器攻撃力 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"攻撃力上昇 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"攻撃力上昇 <color=#80FFFF>+{addPower}</color>{tail}",
                     // ZH-CN
                     $"你从一旁的武器架子上找到了一把「{coloredName}」……\n" +
                     $"目前你的武器攻击力 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"攻击力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"攻击力上升 <color=#80FFFF>+{addPower}</color>{tail}",
                     // ZH-TW
                     $"你從一旁的武器架子上找到了一把「{coloredName}」……\n" +
                     $"目前你的武器攻擊力 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"攻擊力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"攻擊力上升 <color=#80FFFF>+{addPower}</color>{tail}",
                     // EN
                     $"You found “{coloredName}” on a nearby rack…\n" +
                     $"Current Weapon Power <color=#ADD8E6>{currentPower}</color> → " +
-                    $"Attack <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"Attack <color=#80FFFF>+{addPower}</color>{tail}",
                     // KR
                     $"옆의 무기 선반에서 「{coloredName}」를 발견했다…\n" +
                     $"현재 무기 공격력 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"공격력 상승 <color=#80FFFF>+{addPower}</color>{coloredDesc}"
+                    $"공격력 상승 <color=#80FFFF>+{addPower}</color>{tail}"
                 );
 
             case ShopItemData.ItemType.Pistol:
                 return Lang(language,
                     $"箱の中から「{coloredName}」を見つけた……\n" +
                     $"現在の武器攻撃力 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"攻撃力上昇 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"攻撃力上昇 <color=#80FFFF>+{addPower}</color>{tail}",
                     $"你从箱子里找到了一把「{coloredName}」……\n" +
                     $"目前你的武器攻击力 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"攻击力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"攻击力上升 <color=#80FFFF>+{addPower}</color>{tail}",
                     $"你從箱子裡找到了一把「{coloredName}」……\n" +
                     $"目前你的武器攻擊力 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"攻擊力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"攻擊力上升 <color=#80FFFF>+{addPower}</color>{tail}",
                     $"You found “{coloredName}” in a chest…\n" +
                     $"Current Weapon Power <color=#ADD8E6>{currentPower}</color> → " +
-                    $"Attack <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"Attack <color=#80FFFF>+{addPower}</color>{tail}",
                     $"상자 속에서 「{coloredName}」를 발견했다…\n" +
                     $"현재 무기 공격력 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"공격력 상승 <color=#80FFFF>+{addPower}</color>{coloredDesc}"
+                    $"공격력 상승 <color=#80FFFF>+{addPower}</color>{tail}"
                 );
 
             case ShopItemData.ItemType.Staff:
                 return Lang(language,
                     $"戦いの中、倒れた魔法使いが「{coloredName}」を託した……\n" +
                     $"現在の武器攻撃力 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"攻撃力上昇 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"攻撃力上昇 <color=#80FFFF>+{addPower}</color>{tail}",
                     $"战斗中一名女法师在死前将「{coloredName}」交给了你……\n" +
                     $"目前你的武器攻击力 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"攻击力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"攻击力上升 <color=#80FFFF>+{addPower}</color>{tail}",
                     $"戰鬥中一名女法師在死前將「{coloredName}」交給了你……\n" +
                     $"目前你的武器攻擊力 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"攻擊力上升 <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"攻擊力上升 <color=#80FFFF>+{addPower}</color>{tail}",
                     $"In battle, a dying sorceress gave you “{coloredName}”…\n" +
                     $"Current Weapon Power <color=#ADD8E6>{currentPower}</color> → " +
-                    $"Attack <color=#80FFFF>+{addPower}</color>{coloredDesc}",
+                    $"Attack <color=#80FFFF>+{addPower}</color>{tail}",
                     $"전투 중 죽어가던 여마법사가 「{coloredName}」를 건네주었다…\n" +
                     $"현재 무기 공격력 <color=#ADD8E6>{currentPower}</color> → " +
-                    $"공격력 상승 <color=#80FFFF>+{addPower}</color>{coloredDesc}"
+                    $"공격력 상승 <color=#80FFFF>+{addPower}</color>{tail}"
                 );
         }
 
         return "";
     }
 
-    // ★ 衣服 / 丝袜升级描述
+
+
+
     public static string GetArmorPickupDesc(
-        ShopItemData.ItemType type,   // Clothes 或 Stockings
-        int itemId,
-        int currentDef,
-        int addDef)
+    ShopItemData.ItemType type,
+    int itemId,
+    int currentDef,
+    int addDef,
+    bool isAppearanceLocked)
     {
         int language = PlayerPrefs.GetInt("language", 0);
 
@@ -682,41 +708,71 @@ public static class ItemLocalization
         string rawDesc = GetDescription(type, itemId, language);
 
         string coloredName = $"<color=#80FFFF>{rawName}</color>";
-        string coloredDesc = string.IsNullOrEmpty(rawDesc)
-            ? ""
-            : $"\n<color=#80FFFF>{rawDesc}</color>";
+
+        string tail;
+        if (isAppearanceLocked)
+        {
+            tail = "\n" + GetAppearanceLockHint(language);
+        }
+        else
+        {
+            tail = string.IsNullOrEmpty(rawDesc)
+                ? ""
+                : $"\n<color=#80FFFF>{rawDesc}</color>";
+        }
 
         if (type == ShopItemData.ItemType.Clothes)
         {
             return Lang(language,
                 $"敵の服「{coloredName}」を剥ぎ取り着替えた……\n" +
-                $"現在の衣服防御力 <color=#ADD8E6>{currentDef}</color> → 防御力上昇 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"現在の衣服防御力 <color=#ADD8E6>{currentDef}</color> → 防御力上昇 <color=#80FFFF>+{addDef}</color>{tail}",
                 $"你剥下敌人身上的「{coloredName}」并且换上了……\n" +
-                $"目前你的衣服防御力 <color=#ADD8E6>{currentDef}</color> → 衣服防御力上升 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"目前你的衣服防御力 <color=#ADD8E6>{currentDef}</color> → 衣服防御力上升 <color=#80FFFF>+{addDef}</color>{tail}",
                 $"你剝下敵人身上的「{coloredName}」並且換上了……\n" +
-                $"目前你的衣服防禦力 <color=#ADD8E6>{currentDef}</color> → 衣服防禦力上升 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"目前你的衣服防禦力 <color=#ADD8E6>{currentDef}</color> → 衣服防禦力上升 <color=#80FFFF>+{addDef}</color>{tail}",
                 $"You stripped the enemy’s “{coloredName}” and put it on…\n" +
-                $"Current Cloth Defense <color=#ADD8E6>{currentDef}</color> → Defense <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"Current Cloth Defense <color=#ADD8E6>{currentDef}</color> → Defense <color=#80FFFF>+{addDef}</color>{tail}",
                 $"적의 옷 「{coloredName}」을 벗겨 입었다…\n" +
-                $"현재 옷 방어력 <color=#ADD8E6>{currentDef}</color> → 방어력 상승 <color=#80FFFF>+{addDef}</color>{coloredDesc}"
+                $"현재 옷 방어력 <color=#ADD8E6>{currentDef}</color> → 방어력 상승 <color=#80FFFF>+{addDef}</color>{tail}"
             );
         }
         else // Stockings
         {
             return Lang(language,
                 $"敵のストッキング「{coloredName}」を剥ぎ取り履き替えた……\n" +
-                $"現在のストッキング防御力 <color=#ADD8E6>{currentDef}</color> → 防御力上昇 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"現在のストッキング防御力 <color=#ADD8E6>{currentDef}</color> → 防御力上昇 <color=#80FFFF>+{addDef}</color>{tail}",
                 $"你剥下敌人身上的「{coloredName}」并且换上了……\n" +
-                $"目前你的丝袜防御力 <color=#ADD8E6>{currentDef}</color> → 丝袜防御力上升 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"目前你的丝袜防御力 <color=#ADD8E6>{currentDef}</color> → 丝袜防御力上升 <color=#80FFFF>+{addDef}</color>{tail}",
                 $"你剝下敵人身上的「{coloredName}」並且換上了……\n" +
-                $"目前你的絲襪防禦力 <color=#ADD8E6>{currentDef}</color> → 絲襪防禦力上升 <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"目前你的絲襪防禦力 <color=#ADD8E6>{currentDef}</color> → 絲襪防禦力上升 <color=#80FFFF>+{addDef}</color>{tail}",
                 $"You stripped the enemy’s “{coloredName}” stockings and wore them…\n" +
-                $"Current Stocking Defense <color=#ADD8E6>{currentDef}</color> → Defense <color=#80FFFF>+{addDef}</color>{coloredDesc}",
+                $"Current Stocking Defense <color=#ADD8E6>{currentDef}</color> → Defense <color=#80FFFF>+{addDef}</color>{tail}",
                 $"적의 스타킹 「{coloredName}」을 벗겨 신었다…\n" +
-                $"현재 스타킹 방어력 <color=#ADD8E6>{currentDef}</color> → 방어력 상승 <color=#80FFFF>+{addDef}</color>{coloredDesc}"
+                $"현재 스타킹 방어력 <color=#ADD8E6>{currentDef}</color> → 방어력 상승 <color=#80FFFF>+{addDef}</color>{tail}"
             );
         }
     }
 
+
+
+
+    // 外观锁定提示（红字）
+    public static string GetAppearanceLockHint(int language)
+    {
+        switch (language)
+        {
+            case 0: // JP
+                return "<color=#FF4444>外観ロック中のため、ステータスのみ上昇し、見た目は変わりません。</color>";
+            case 1: // ZH-CN
+                return "<color=#FF4444>当前外观已锁定，只提升数值，不更换外观。</color>";
+            case 2: // ZH-TW
+                return "<color=#FF4444>目前外觀已鎖定，只提升數值，不更換外觀。</color>";
+            case 3: // EN
+                return "<color=#FF4444>Appearance is locked: stats only, look will not change.</color>";
+            case 4: // KR
+                return "<color=#FF4444>외형 잠금 상태입니다. 능력치만 증가하고 모습은 변하지 않습니다.</color>";
+        }
+        return "<color=#FF4444>Appearance locked.</color>";
+    }
     #endregion
 }

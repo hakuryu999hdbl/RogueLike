@@ -76,6 +76,9 @@ public class Player : MonoBehaviour
 
     public List<GameObject> RaceBuff = new List<GameObject>();//种族天赋小图标
 
+    [Header("外观是否锁定")]
+    public bool lockAppearance = false;
+
     public void ApplySaveData(PlayerSaveData data, bool preserveHealth = false, float prevHealthRatio = -1f)
     {
         // 应用皮肤信息
@@ -91,6 +94,10 @@ public class Player : MonoBehaviour
 
         // 根据这些数据设置皮肤
         SetSkin(); // 你已有的方法（或自己写个用这些 Index 设置皮肤的方法）
+
+
+        // ★ 新增：读取锁定状态
+        this.lockAppearance = data.lockAppearance;
 
 
         //数值赋予
@@ -446,8 +453,10 @@ public class Player : MonoBehaviour
             data.level = Level;
             data.exp = currentExperience;
 
-
         }
+
+
+      
 
         SaveManager.Save(data);
         currentSaveName = data.characterName; // 以防上面发生了 _2/_3
@@ -1844,20 +1853,13 @@ public class Player : MonoBehaviour
 
                 case 103://复合弩
                 case 107: //遂发枪 
-
+                case 109: //火绳黄铜枪
 
                     //多打2发  冷却1秒
                     StartCoroutine(DelaySpawn(direction, AllLongRangeDamage, false, 0.2f));
                     StartCoroutine(DelaySpawn(direction, AllLongRangeDamage, false, 0.4f));
                     break;
 
-                case 109: //火绳黄铜枪
-
-                    //多打3发  冷却1.8秒
-                    StartCoroutine(DelaySpawn(direction, AllLongRangeDamage, false, 0.2f));
-                    StartCoroutine(DelaySpawn(direction, AllLongRangeDamage, false, 0.4f));
-                    StartCoroutine(DelaySpawn(direction, AllLongRangeDamage, false, 0.6f));
-                    break;
 
             }
 
@@ -1971,7 +1973,7 @@ public class Player : MonoBehaviour
                 SetCanShoot_2();//刺刀火枪
                 break;
             case 109:
-                Invoke(nameof(SetCanShoot_2), 1.5f);//火绳黄铜枪
+                Invoke(nameof(SetCanShoot_2), 1f);//火绳黄铜枪
                 break;
             case 110:
                 SetCanShoot_2();//镶银火枪

@@ -114,11 +114,14 @@ public class BonusSlotUI : MonoBehaviour
                     int add = WeaponPower;
                     int weaponIndex = WeaponIndex;
 
+                    bool locked = UIManager.instance.player.lockAppearance;
+
                     description = ItemLocalization.GetWeaponPickupDesc(
                         ShopItemData.ItemType.Sword,
                         weaponIndex,
                         current,
-                        add);
+                        add,
+                        locked);
                     break;
                 }
 
@@ -128,11 +131,14 @@ public class BonusSlotUI : MonoBehaviour
                     int add = WeaponPower;
                     int weaponIndex = WeaponIndex;
 
+                    bool locked = UIManager.instance.player.lockAppearance;
+
                     description = ItemLocalization.GetWeaponPickupDesc(
                         ShopItemData.ItemType.Pistol,
                         weaponIndex,
                         current,
-                        add);
+                        add,
+                        locked);
                     break;
                 }
 
@@ -142,11 +148,14 @@ public class BonusSlotUI : MonoBehaviour
                     int add = WeaponPower;
                     int weaponIndex = WeaponIndex;
 
+                    bool locked = UIManager.instance.player.lockAppearance;
+
                     description = ItemLocalization.GetWeaponPickupDesc(
                         ShopItemData.ItemType.Staff,
                         weaponIndex,
                         current,
-                        add);
+                        add,
+                        locked);
                     break;
                 }
 
@@ -156,11 +165,14 @@ public class BonusSlotUI : MonoBehaviour
                     int add = ClothesStockingDefence;
                     int idx = ClothesStockingIndex;
 
+                    bool locked = UIManager.instance.player.lockAppearance;
+
                     description = ItemLocalization.GetArmorPickupDesc(
                         ShopItemData.ItemType.Clothes,
                         idx,
                         current,
-                        add);
+                        add,
+                        locked);
                     break;
                 }
 
@@ -170,11 +182,14 @@ public class BonusSlotUI : MonoBehaviour
                     int add = ClothesStockingDefence;
                     int idx = ClothesStockingIndex;
 
+                    bool locked = UIManager.instance.player.lockAppearance;
+
                     description = ItemLocalization.GetArmorPickupDesc(
                         ShopItemData.ItemType.Stockings,
                         idx,
                         current,
-                        add);
+                        add,
+                        locked);
                     break;
                 }
 
@@ -549,8 +564,10 @@ public class BonusSlotUI : MonoBehaviour
 
 
 
+                // 剑，剑士
+                if (UIManager.instance.player.lockAppearance==false) { UIManager.instance.player.PickupWeapon(WeaponIndex, 0); }
+
                 // 给玩家加属性
-                UIManager.instance.player.PickupWeapon(WeaponIndex, 0); // 剑，剑士
                 int WeaponAtk = UIManager.instance.player.CurrentWeaponPower;
                 WeaponAtk += WeaponPower;
                 UIManager.instance.player.CurrentWeaponPower = WeaponAtk;
@@ -573,8 +590,10 @@ public class BonusSlotUI : MonoBehaviour
                 float ratio2 = Mathf.Clamp01((float)UIManager.instance.player.currentHealth / Mathf.Max(1, UIManager.instance.player.maxHealth));
 
 
+                // 枪，射手
+                if (UIManager.instance.player.lockAppearance == false) { UIManager.instance.player.PickupWeapon(WeaponIndex, 1); } 
+
                 // 给玩家加属性
-                UIManager.instance.player.PickupWeapon(WeaponIndex, 1); // 枪，射手
                 int WeaponAtk2 = UIManager.instance.player.CurrentWeaponPower;
                 WeaponAtk2 += WeaponPower;
                 UIManager.instance.player.CurrentWeaponPower = WeaponAtk2;
@@ -599,8 +618,10 @@ public class BonusSlotUI : MonoBehaviour
 
 
 
+                //杖，法师
+                if (UIManager.instance.player.lockAppearance == false) { UIManager.instance.player.PickupWeapon(WeaponIndex, 2); }
+
                 // 给玩家加属性
-                UIManager.instance.player.PickupWeapon(WeaponIndex, 2); //杖，法师
                 int WeaponAtk3 = UIManager.instance.player.CurrentWeaponPower;
                 WeaponAtk3 += WeaponPower;
                 UIManager.instance.player.CurrentWeaponPower = WeaponAtk3;
@@ -622,8 +643,9 @@ public class BonusSlotUI : MonoBehaviour
                 // 先保存血量比例
                 float ratio4 = Mathf.Clamp01((float)UIManager.instance.player.currentHealth / Mathf.Max(1, UIManager.instance.player.maxHealth));
 
+                //换衣服
+                if (UIManager.instance.player.lockAppearance == false) { UIManager.instance.player.YYY_bodyIndex = ClothesStockingIndex; UIManager.instance.player.SetSkin(); }             
 
-                UIManager.instance.player.YYY_bodyIndex = ClothesStockingIndex; UIManager.instance.player.SetSkin();
                 int ArmorDef = UIManager.instance.player.CurrentArmorDefence;
                 ArmorDef += ClothesStockingDefence;
                 UIManager.instance.player.CurrentArmorDefence = ArmorDef;
@@ -646,8 +668,9 @@ public class BonusSlotUI : MonoBehaviour
                 float ratio5 = Mathf.Clamp01((float)UIManager.instance.player.currentHealth / Mathf.Max(1, UIManager.instance.player.maxHealth));
 
 
-
-                UIManager.instance.player.YYY_legsIndex = ClothesStockingIndex; UIManager.instance.player.SetSkin();
+                //换丝袜
+                if (UIManager.instance.player.lockAppearance == false) { UIManager.instance.player.YYY_legsIndex = ClothesStockingIndex; UIManager.instance.player.SetSkin(); }
+               
                 int StockingDef = UIManager.instance.player.CurrentStockingDefence;
                 StockingDef += ClothesStockingDefence;
                 UIManager.instance.player.CurrentStockingDefence = StockingDef;

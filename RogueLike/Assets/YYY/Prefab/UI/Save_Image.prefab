@@ -1079,6 +1079,9 @@ MonoBehaviour:
   Arrow: {fileID: 21300000, guid: 4db5a1a6ee7ba8c45a7d43c359709f82, type: 3}
   Staff: {fileID: 21300000, guid: 4aa7673219dcb8b4983f730d1a0eefbf, type: 3}
   None: {fileID: 21300000, guid: e7dbb2c157ef8fd4e9d86420c36a6ac7, type: 3}
+  WeaponOutline: {fileID: 4558407139389287766}
+  ClothesOutline: {fileID: 326120084180813430}
+  StockingOutline: {fileID: 3595747942056505156}
   targets:
   - {fileID: 7848364752798450954}
   - {fileID: 5864216414009757468}
@@ -1106,6 +1109,7 @@ MonoBehaviour:
     firstSavedDate: 
     serviceCount: 0
     defeatCount: 0
+    lockAppearance: 0
   highlightFrame: {fileID: 7004055314322624410}
   _Player: {fileID: 0}
   player: {fileID: 0}
@@ -1385,6 +1389,7 @@ GameObject:
   - component: {fileID: 4780143172367482279}
   - component: {fileID: 8293369551733391211}
   - component: {fileID: 4281522095909589670}
+  - component: {fileID: 3595747942056505156}
   m_Layer: 5
   m_Name: Weapon_Stocking
   m_TagString: Untagged
@@ -1451,6 +1456,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3595747942056505156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2848526845113873168}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &3514613289603432737
 GameObject:
   m_ObjectHideFlags: 0
@@ -1630,6 +1650,7 @@ GameObject:
   - component: {fileID: 6514446921886115695}
   - component: {fileID: 5755457192547256760}
   - component: {fileID: 5479352581417551637}
+  - component: {fileID: 4558407139389287766}
   m_Layer: 5
   m_Name: Weapon_Sword
   m_TagString: Untagged
@@ -1696,6 +1717,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4558407139389287766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3914989815629200378}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &4055974927314741556
 GameObject:
   m_ObjectHideFlags: 0
@@ -1857,6 +1893,7 @@ GameObject:
   - component: {fileID: 6742862640965370808}
   - component: {fileID: 8269222141662565942}
   - component: {fileID: 354665109420668591}
+  - component: {fileID: 326120084180813430}
   m_Layer: 5
   m_Name: Weapon_Clothes
   m_TagString: Untagged
@@ -1923,6 +1960,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &326120084180813430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4544646070325569671}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &4778762207403377770
 GameObject:
   m_ObjectHideFlags: 0

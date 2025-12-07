@@ -48,10 +48,37 @@ public class SaveSlotUI : MonoBehaviour
     public Image Weapon_Icon,Clothes_Icon,Stocking_Icon;
     public Sprite Sword, Arrow, Staff; public Sprite None;//用于不表示
 
+    // 这三个是在三个图标上的 Outline 组件
+    public Outline WeaponOutline;
+    public Outline ClothesOutline;
+    public Outline StockingOutline;
+
+    //只读三图标改色
+    public bool IsAppearanceLocked { get; private set; }
+    public void ApplyAppearanceLock(bool locked)
+    {
+        IsAppearanceLocked = locked;
+
+        // 颜色：白 = 未锁，红 = 锁定
+        Color unlockedColor = Color.white;
+        Color lockedColor = Color.red;
+
+        if (Weapon_Icon) Weapon_Icon.color = locked ? lockedColor : unlockedColor;
+        if (Clothes_Icon) Clothes_Icon.color = locked ? lockedColor : unlockedColor;
+        if (Stocking_Icon) Stocking_Icon.color = locked ? lockedColor : unlockedColor;
+
+        // Outline：未锁隐藏，锁定显示
+        if (WeaponOutline) WeaponOutline.enabled = locked;
+        if (ClothesOutline) ClothesOutline.enabled = locked;
+        if (StockingOutline) StockingOutline.enabled = locked;
+    }
+
+
+
     public List<GameObject> targets;
 
     [Header("存档数值本身")]
-    public PlayerSaveData Data;//大家需要通过UIManager找你
+    public PlayerSaveData Data { get; private set; }//大家需要通过UIManager找你
 
     [Header("高亮用UI")]
     public GameObject highlightFrame;
@@ -93,7 +120,8 @@ public class SaveSlotUI : MonoBehaviour
         Longhair.sprite = database.LonghairSprites[data.headIndex - 1];
         Ponytail.sprite = database.PonytailSprites[data.headIndex - 1];
 
-
+        // ★ 根据存档里的锁定状态刷新外观
+        ApplyAppearanceLock(Data.lockAppearance);
 
         LevelText.text = Data.level.ToString();
         UpdateExpBar(Data.exp, Data.level * 1000);

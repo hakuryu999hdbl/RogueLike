@@ -668,6 +668,8 @@ public class UIManager : MonoBehaviour
 
                 SavePageQuitButton.SetActive(true);//在存档界面退出按钮，只有CG界面可以显示
                 Invoke("PlayDungeonBGM", 1f);
+
+                lockAppearanceButton.SetActive(false);
                 break;
 
 
@@ -2579,7 +2581,7 @@ public class UIManager : MonoBehaviour
         if (DailyLogin.TryGrantForToday(perServiceReward, out int added, out int income))
         {
             if (income > 0)
-                ChangeMoney(income); // ★ 发钱一次
+                ChangeMoney(income); // ★ 发钱一次（每日接客）
         }
 
         // 3)（可选）如果当前在调教所界面，显示今日统计绿字
@@ -2685,7 +2687,7 @@ public class UIManager : MonoBehaviour
         if (currentMoney >= cost)
         {
             // 扣钱
-            ChangeMoney(-cost);
+            ChangeMoney(-cost);//生成角色
 
             // 创建新角色（原逻辑）
             #region   跳出捏人界面等
@@ -2821,8 +2823,45 @@ public class UIManager : MonoBehaviour
 
         currentSelectedSlot.DelayChoose();//高亮显示与展示当前角色绑定，一旦高亮选中，马上导入这个角色信息
 
-    }//切换选中当前角色
+        if (lockAppearanceButtonText != null)
+        {
+            lockAppearanceButtonText.text =
+                GetLocalizedLockText(currentSelectedSlot.IsAppearanceLocked);
+        }//如果这个角色外貌锁定/不锁，那么更改按钮描述
 
+
+    }//切换选中当前角色
+    private string GetLocalizedLockText(bool locked)
+    {
+        int lang = PlayerPrefs.GetInt("language", 0);
+
+        if (locked)
+        {
+            // 解锁外观（红字）
+            switch (lang)
+            {
+                case 0: return "<color=#FF4444>外観ロック解除</color>";
+                case 1: return "<color=#FF4444>解锁外观</color>";
+                case 2: return "<color=#FF4444>解除外觀鎖定</color>";
+                case 3: return "<color=#FF4444>Unlock Appearance</color>";
+                case 4: return "<color=#FF4444>외형 잠금 해제</color>";
+            }
+        }
+        else
+        {
+            // 锁定外观（白字）
+            switch (lang)
+            {
+                case 0: return "外観をロック";
+                case 1: return "锁定外观";
+                case 2: return "鎖定外觀";
+                case 3: return "Lock Appearance";
+                case 4: return "외형 잠금";
+            }
+        }
+
+        return "Lock"; // 兜底
+    }
 
     [Header("删除存档")]
     public GameObject MakeSureDeleteCurrentSave;
@@ -2836,7 +2875,7 @@ public class UIManager : MonoBehaviour
         // 先删除角色，再加钱（防止残留重复触发）
         currentSelectedSlot.DeleteCurrentSave();
         // 加钱（用你的 ChangeMoney；若不在同脚本，换成 UIManager.instance.ChangeMoney(...))
-        ChangeMoney(pendingDeletePrice);
+        ChangeMoney(pendingDeletePrice);//删除角色
 
         Invoke("CancelDelete", 0.1f);//目前暂时这么做，以防确定按太快直接跳到捏人界面
 
@@ -2964,6 +3003,49 @@ public class UIManager : MonoBehaviour
         UpdateScrollButtons();
 
     }
+
+
+    //////////////////////角色外貌锁定功能//////////////////////////////////
+
+    [Header("外观锁定按钮")]
+    public Text lockAppearanceButtonText;   // 按钮上的 Text
+    public GameObject lockAppearanceButton;//拷问所界面没必要出现这个
+    public GameObject Prompt_Lock;//拷问所界面没必要出现这个
+    public void OnClick_ToggleAppearanceLock()
+    {
+        if (currentSelectedSlot == null) return;
+
+        bool newLocked = !currentSelectedSlot.IsAppearanceLocked;
+
+        // 1) 改 UI 显示
+        currentSelectedSlot.ApplyAppearanceLock(newLocked);
+
+        // 2) 更新按钮文字
+        if (lockAppearanceButtonText != null)
+        {
+            lockAppearanceButtonText.text =GetLocalizedLockText(newLocked);
+        }
+
+        // 3) 内存里的数据同步一下
+        currentSelectedSlot.Data.lockAppearance = newLocked;
+
+        // Player 也知道这个状态（方便商店那边判断）
+        if (player != null)
+        {
+            player.lockAppearance = newLocked;
+        }
+
+        // 4) 直接改存档文件（不通过 Player.SaveCurrent）
+        //    用角色名当 key（你 SaveManager 本来就是这么干的）
+        string saveName = currentSelectedSlot.Data.characterName;
+        var data = SaveManager.Load(saveName);
+        if (data != null)
+        {
+            data.lockAppearance = newLocked;
+            SaveManager.Save(data);   // 只改了一个 bool，其余字段不动
+        }
+    }
+
 
 
     #endregion
@@ -5004,6 +5086,14 @@ public class UIManager : MonoBehaviour
         //    AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
         //}
 
+        if (CurrentChooseList == 2&&GameFlowData.nextScene!="CG")//拷问所界面不用这个
+        {
+
+            //锁定外貌
+            OnClick_ToggleAppearanceLock();
+
+            AudioManager.instance.AudioPlay(AudioManager.instance.Bullet_AK);
+        }
 
 
 
@@ -5552,7 +5642,35 @@ public class UIManager : MonoBehaviour
 
 
 
+    void UpdateShopDescription()
+    {
+        if (shopItemButtons.Count == 0 ||
+            shopCurrentIndex < 0 ||
+            shopCurrentIndex >= shopItemButtons.Count)
+        {
+            shopDescription.text = "";
+            return;
+        }
 
+        var data = shopItemButtons[shopCurrentIndex].data;
+        string desc = data.description;
+
+        bool isAppearanceItem =
+            data.type == ShopItemData.ItemType.Sword ||
+            data.type == ShopItemData.ItemType.Pistol ||
+            data.type == ShopItemData.ItemType.Staff ||
+            data.type == ShopItemData.ItemType.Clothes ||
+            data.type == ShopItemData.ItemType.Stockings;
+
+        if (player != null && player.lockAppearance && isAppearanceItem)
+        {
+            int lang = PlayerPrefs.GetInt("language", 0);
+            // ★ 用你刚才在 ItemLocalization 里写的红字提示
+            desc = ItemLocalization.GetAppearanceLockHint(lang);
+        }
+
+        shopDescription.text = desc;
+    }//更新锁定外貌提示
 
 
 
@@ -5575,7 +5693,14 @@ public class UIManager : MonoBehaviour
 
         shopCurrentIndex = idx;
         UpdateHighlight_Shop();
-        shopDescription.text = clicked.data.description;
+
+
+
+        // ✅ 统一走这里
+        UpdateShopDescription();
+
+
+
 
         // ✅ 让购买按钮亮起
         if (buyButton) buyButton.interactable = true;
@@ -5624,7 +5749,9 @@ public class UIManager : MonoBehaviour
         {
             shopCurrentIndex = 0;
             UpdateHighlight_Shop();
-            shopDescription.text = shopItemButtons[shopCurrentIndex].data.description;
+
+            // ✅ 统一走这里
+            UpdateShopDescription();
         }
         else
         {
@@ -5653,7 +5780,8 @@ public class UIManager : MonoBehaviour
 
         // 更新高亮与说明
         UpdateHighlight_Shop();
-        shopDescription.text = shopItemButtons[shopCurrentIndex].data.description;
+        // ✅ 改成统一函数
+        UpdateShopDescription();
     }
 
     void UpdateHighlight_Shop()
@@ -5681,40 +5809,55 @@ public class UIManager : MonoBehaviour
         }
 
         // 扣钱
-        ChangeMoney(-data.price);
+        ChangeMoney(-data.price);//商店购买
 
         switch (data.type)
         {
             case ShopItemData.ItemType.Sword:
-                player.PickupWeapon(data.index, 0);
+                if (!player.lockAppearance)
+                {
+                    player.PickupWeapon(data.index, 0);
+                }
                 player.CurrentWeaponPower += data.value;
                 player.SaveCurrent();
                 break;
 
             case ShopItemData.ItemType.Pistol:
-                player.PickupWeapon(data.index, 1);
+                if (!player.lockAppearance)
+                {
+                    player.PickupWeapon(data.index, 1);
+                }
                 player.CurrentWeaponPower += data.value;
                 player.SaveCurrent();
                 break;
 
             case ShopItemData.ItemType.Staff:
-                player.PickupWeapon(data.index, 2);
+                if (!player.lockAppearance)
+                {
+                    player.PickupWeapon(data.index, 2);
+                }
                 player.CurrentWeaponPower += data.value;
                 player.SaveCurrent();
                 break;
 
             case ShopItemData.ItemType.Clothes:
-                player.YYY_bodyIndex = data.index;
+                if (!player.lockAppearance)
+                {
+                    player.YYY_bodyIndex = data.index;
+                    player.SetSkin(); // 只有没锁定时换衣服
+                }
                 player.CurrentArmorDefence += data.value;
-                player.SaveCurrent();
-                player.SetSkin();//衣服需要更换
+                player.SaveCurrent();              
                 break;
 
             case ShopItemData.ItemType.Stockings:
-                player.YYY_legsIndex = data.index;
+                if (!player.lockAppearance)
+                {
+                    player.YYY_legsIndex = data.index;
+                    player.SetSkin();// 只有没锁定时换丝袜
+                }
                 player.CurrentStockingDefence += data.value;
                 player.SaveCurrent();
-                player.SetSkin();//衣服需要更换
                 break;
 
             case ShopItemData.ItemType.Slave:
@@ -6034,7 +6177,7 @@ public class UIManager : MonoBehaviour
     }
 
     // 配置：每次接客的收益（你也可以从配置表/难度读取）
-    [SerializeField] int perServiceReward = 30;
+    [SerializeField] int perServiceReward = 300;
 
     // 如果你只在“调教所界面（GameFlowData.nextScene == CG）”显示绿字：
     // 拖引用两个 Text（绿色样式）

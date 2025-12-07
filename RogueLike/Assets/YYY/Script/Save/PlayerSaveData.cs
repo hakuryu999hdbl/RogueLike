@@ -40,4 +40,8 @@ public class PlayerSaveData
 
     public int serviceCount;        // 接客次数
     public int defeatCount;         // 战败次数
+
+
+    // ★ 新增：外观锁定（默认 false）
+    public bool lockAppearance;
 }

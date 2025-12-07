@@ -52,8 +52,8 @@ public class Spell : MonoBehaviour
             buffMult = GameFlowData.Staff_Buff;
         appliedDamage *= buffMult; // 💥 应用整数倍率
 
-
-        appliedDamage *= 2;//ToDo法术伤害的大幅增强
+        if (!isStayDamage) { appliedDamage *= 2; }
+        //ToDo非持续性的法术伤害的大幅增强
 
 
 

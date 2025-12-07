@@ -4018,7 +4018,7 @@ public class Enemy : MonoBehaviour
     int CombatNunLife = 2;//先法师 再射手 最后近战  血越打越厚
     public void BecomeBoss_CombatNun()
     {
-        attackCooldown = 0.3f;//首席战斗修女 快速攻击
+        attackCooldown = 0.8f;//首席战斗修女 慢速攻击吧
 
 
         YYY_headIndex = 4;
