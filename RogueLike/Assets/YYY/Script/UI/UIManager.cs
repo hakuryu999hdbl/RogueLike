@@ -26,6 +26,36 @@ public class UIManager : MonoBehaviour
 
         Debug.Log("目前的NextScene" + GameFlowData.nextScene);
 
+
+
+        #region  BOKIBOKI默认繁中
+        // 是否已经初始化过语言？
+        int inited = PlayerPrefs.GetInt("HasInitLang", 0);
+
+        if (inited == 0)
+        {
+            int lang = PlayerPrefs.GetInt("language", 0);
+            Debug.Log("【首次启动检测】当前存档语言 = " + lang);
+
+            // 如果是默认值 0（日语），改为繁体中文（2）
+            if (lang == 0)
+            {
+                PlayerPrefs.SetInt("language", 2);
+
+                Debug.Log("语言已自动切换为繁体中文（2）");
+            }
+
+            // 标记为已初始化，下次不再触发
+            PlayerPrefs.SetInt("HasInitLang", 1);
+        }
+        else
+        {
+            Debug.Log("语言初始化已执行过，不再触发");
+        }
+
+        #endregion
+
+
         //Debug.Log("目前存档里的语言" + PlayerPrefs.GetInt("language"));//0 日语 1中文 2繁中 3英语 4韩语
 
 
@@ -672,6 +702,7 @@ public class UIManager : MonoBehaviour
                 Invoke("PlayDungeonBGM", 1f);
 
                 lockAppearanceButton.SetActive(false);
+                Prompt_Lock.SetActive(false);
                 break;
 
 
@@ -4022,7 +4053,7 @@ public class UIManager : MonoBehaviour
                             SE_Up();
                             break;
 
-                        case 3:
+                        case 4:
                             ScreenMode_Right();
                             break;
 
@@ -4043,7 +4074,7 @@ public class UIManager : MonoBehaviour
                             SE_Down();
                             break;
 
-                        case 3:
+                        case 4:
                             ScreenMode_Left();
                             break;
                     }
@@ -4454,7 +4485,7 @@ public class UIManager : MonoBehaviour
                         SE_Up();
                         break;
 
-                    case 3:
+                    case 4:
                         ScreenMode_Right();
                         break;
 
@@ -4475,7 +4506,7 @@ public class UIManager : MonoBehaviour
                         SE_Down();
                         break;
 
-                    case 3:
+                    case 4:
                         ScreenMode_Left();
                         break;
                 }
