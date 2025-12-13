@@ -28,32 +28,32 @@ public class UIManager : MonoBehaviour
 
 
 
-        #region  BOKIBOKI默认繁中
-        // 是否已经初始化过语言？
-        int inited = PlayerPrefs.GetInt("HasInitLang", 0);
-
-        if (inited == 0)
-        {
-            int lang = PlayerPrefs.GetInt("language", 0);
-            Debug.Log("【首次启动检测】当前存档语言 = " + lang);
-
-            // 如果是默认值 0（日语），改为繁体中文（2）
-            if (lang == 0)
-            {
-                PlayerPrefs.SetInt("language", 2);
-
-                Debug.Log("语言已自动切换为繁体中文（2）");
-            }
-
-            // 标记为已初始化，下次不再触发
-            PlayerPrefs.SetInt("HasInitLang", 1);
-        }
-        else
-        {
-            Debug.Log("语言初始化已执行过，不再触发");
-        }
-
-        #endregion
+       // #region  BOKIBOKI默认繁中
+       // // 是否已经初始化过语言？
+       // int inited = PlayerPrefs.GetInt("HasInitLang", 0);
+       //
+       // if (inited == 0)
+       // {
+       //     int lang = PlayerPrefs.GetInt("language", 0);
+       //     Debug.Log("【首次启动检测】当前存档语言 = " + lang);
+       //
+       //     // 如果是默认值 0（日语），改为繁体中文（2）
+       //     if (lang == 0)
+       //     {
+       //         PlayerPrefs.SetInt("language", 2);
+       //
+       //         Debug.Log("语言已自动切换为繁体中文（2）");
+       //     }
+       //
+       //     // 标记为已初始化，下次不再触发
+       //     PlayerPrefs.SetInt("HasInitLang", 1);
+       // }
+       // else
+       // {
+       //     Debug.Log("语言初始化已执行过，不再触发");
+       // }
+       //
+       // #endregion
 
 
         //Debug.Log("目前存档里的语言" + PlayerPrefs.GetInt("language"));//0 日语 1中文 2繁中 3英语 4韩语
@@ -3617,6 +3617,9 @@ public class UIManager : MonoBehaviour
             case "Chapter_13":
                 dialogSystem.animation_number = 1013;
                 break;
+            case "Chapter_14":
+                dialogSystem.animation_number = 1014;
+                break;
         }
 
 
@@ -5427,13 +5430,14 @@ public class UIManager : MonoBehaviour
         }
 
         // 提高这两个选项的出现率
-        if (weights.Length > 9) weights[9] = 3f; // 奴隶市场 ×3几率
+        if (weights.Length > 9) weights[9] = 9f; // 奴隶市场 ×9几率
         if (weights.Length > 10) weights[10] = 3f; // 回血 ×3几率
 
         // 去掉已经抽中的项
         foreach (int idx in usedIndex)
         {
-            weights[idx] = 0f;
+            if (idx >= 0 && idx < weights.Length)//防止炸ArrayIndexOutOfRange
+                weights[idx] = 0f;
         }
 
         // 计算总权重

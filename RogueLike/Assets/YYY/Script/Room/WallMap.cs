@@ -340,6 +340,19 @@ public class WallMap : MonoBehaviour
             // 显示“第X波敌人”
             _RoomGenerator.ShowInformationOfStage(9);
 
+
+            if (PlayerPrefs.GetInt("Chapter_14")==0&& currentWave>=10) 
+            {
+                PlayerPrefs.SetInt("Chapter_14", 1);
+                // 显示“新的结局已经解锁”
+                _RoomGenerator.ShowInformationOfStage(14);
+
+                //新增成就
+            }
+
+
+
+
             // 延迟锁门
             Invoke(nameof(LockRoom), 2f);
         }

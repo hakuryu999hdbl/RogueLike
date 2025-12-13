@@ -1659,6 +1659,8 @@ public class Enemy : MonoBehaviour
             if (attackTimer >= attackCooldown)
             {
 
+                InvokeRepeating(nameof(FlashWarning), 0f, 0.1f);//即将攻击的警告起点（近战远程通用这个）
+
                 switch (visionType)
                 {
 
@@ -1718,16 +1720,34 @@ public class Enemy : MonoBehaviour
 
     bool MageAttackType = false;
 
+
+    // 敌人
+    private static readonly Color ENEMY_COLOR_A = Color.white;
+    private static readonly Color ENEMY_COLOR_B = Color.black;
+
+    // 队友（偏冷、偏低饱和，避免和毒/治疗绿混）
+    private static readonly Color FRIEND_COLOR_A = new Color(0.55f, 0.85f, 0.65f, 1f); // 浅绿
+    private static readonly Color FRIEND_COLOR_B = new Color(0.35f, 0.65f, 0.45f, 1f); // 深绿
     void FlashWarning()
     {
-        if (AttackRangeImage.color == Color.white)
+        if (tag == "Friend")
         {
-            AttackRangeImage.color = Color.black;
+            // 队友：浅绿 ↔ 深绿
+            if (AttackRangeImage.color == FRIEND_COLOR_A)
+                AttackRangeImage.color = FRIEND_COLOR_B;
+            else
+                AttackRangeImage.color = FRIEND_COLOR_A;
         }
-        else
+        else 
         {
-            AttackRangeImage.color = Color.white;
+            // 敌人：黑 ↔ 白
+            if (AttackRangeImage.color == ENEMY_COLOR_A)
+                AttackRangeImage.color = ENEMY_COLOR_B;
+            else
+                AttackRangeImage.color = ENEMY_COLOR_A;
         }
+
+           
     } //技能范围作为攻击警告黑白黑白一闪一闪
 
 
@@ -1738,7 +1758,7 @@ public class Enemy : MonoBehaviour
     {
         //if (IsInvoking(nameof(Attack_Cancel))) return;//防止多个 Attack_Cancel() 同时排队
 
-        InvokeRepeating(nameof(FlashWarning), 0f, 0.1f);
+        //InvokeRepeating(nameof(FlashWarning), 0f, 0.1f);//即将攻击的警告起点
 
 
         //队友使用玩家的攻击动画

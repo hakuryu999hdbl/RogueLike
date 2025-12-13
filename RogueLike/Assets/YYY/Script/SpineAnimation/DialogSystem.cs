@@ -34,7 +34,7 @@ public class DialogSystem : MonoBehaviour
                   Story_11, Story_12, Story_13, Story_14, Story_15, Story_16, Story_17, Story_18, Story_19, Story_20, 
                   Story_21, Story_22, Story_23, Story_24, Story_25, Story_26, Story_27, Story_28,
                   Story_29, Story_30, Story_31, Story_32, Story_33, Story_34,
-                  Story_35, Story_36, Story_37;
+                  Story_35, Story_36, Story_37, Story_38, Story_39, Story_40;
 
 
     private void OnEnable()
@@ -95,6 +95,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(1011, Resources.Load<TextAsset>("TXT_Japanese/J_Story_11"));
                 textAssets.Add(1012, Resources.Load<TextAsset>("TXT_Japanese/J_Story_12"));
                 textAssets.Add(1013, Resources.Load<TextAsset>("TXT_Japanese/J_Story_13"));
+                textAssets.Add(1014, Resources.Load<TextAsset>("TXT_Japanese/J_Story_14"));
                 break;
 
 
@@ -122,6 +123,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(1011, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_11"));
                 textAssets.Add(1012, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_12"));
                 textAssets.Add(1013, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_13"));
+                textAssets.Add(1014, Resources.Load<TextAsset>("TXT_Simplified_Chinese/C1_Story_14"));
                 break;
 
 
@@ -148,6 +150,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(1011, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_11"));
                 textAssets.Add(1012, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_12"));
                 textAssets.Add(1013, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_13"));
+                textAssets.Add(1014, Resources.Load<TextAsset>("TXT_Traditional_Chinese/C2_Story_14"));
                 break;
 
 
@@ -175,6 +178,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(1011, Resources.Load<TextAsset>("TXT_English/E_Story_11"));
                 textAssets.Add(1012, Resources.Load<TextAsset>("TXT_English/E_Story_12"));
                 textAssets.Add(1013, Resources.Load<TextAsset>("TXT_English/E_Story_13"));
+                textAssets.Add(1014, Resources.Load<TextAsset>("TXT_English/E_Story_14"));
                 break;
 
 
@@ -203,6 +207,7 @@ public class DialogSystem : MonoBehaviour
                 textAssets.Add(1011, Resources.Load<TextAsset>("TXT_Korean/K_Story_11"));
                 textAssets.Add(1012, Resources.Load<TextAsset>("TXT_Korean/K_Story_12"));
                 textAssets.Add(1013, Resources.Load<TextAsset>("TXT_Korean/K_Story_13"));
+                textAssets.Add(1014, Resources.Load<TextAsset>("TXT_Korean/K_Story_14"));
                 break;
 
         }
@@ -742,7 +747,21 @@ public class DialogSystem : MonoBehaviour
                 text.color = Color.white;
                 index++;
                 break;
-
+            case "Story_38":
+                BG_Image.sprite = Story_38;
+                text.color = Color.white;
+                index++;
+                break;
+            case "Story_39":
+                BG_Image.sprite = Story_39;
+                text.color = Color.white;
+                index++;
+                break;
+            case "Story_40":
+                BG_Image.sprite = Story_40;
+                text.color = Color.white;
+                index++;
+                break;
 
                 #endregion
         }
@@ -882,6 +901,7 @@ public class DialogSystem : MonoBehaviour
                GameFlowData.nextScene = "Story_12";
                break;
           case 1013:
+          case 1014:
             case 101:
             case 102:
             case 103:

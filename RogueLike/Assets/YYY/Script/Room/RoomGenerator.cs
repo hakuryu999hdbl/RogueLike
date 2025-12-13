@@ -186,7 +186,7 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-
+       
 
     }
 
@@ -935,8 +935,9 @@ public class RoomGenerator : MonoBehaviour
     public GameObject Stage_Information;
     public Text _Stage_Information;
 
+    public Text _Arena_Information;//角斗场的第X波持续显示
 
-    public void ShowInformationOfStage(int Information)//-3已达最大奴隶数量！ -2金币不够  -1敌人增援   0新的CG解锁    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单  9第X波   10角斗场最高记录    11地下城当高纪录    12地下城当前记录终结，最高纪录   13新的可选种族解锁
+    public void ShowInformationOfStage(int Information)//-3已达最大奴隶数量！ -2金币不够  -1敌人增援   0新的CG解锁    1敌人出现（锁门）   2敌人消灭（开门    3请先创建人物    4关卡尚未解锁     5战斗中无法打开菜单    6移动中无法打开菜单  7新的游戏模式解锁  8此模式下无法打开菜单  9第X波   10角斗场最高记录    11地下城当高纪录    12地下城当前记录终结，最高纪录   13新的可选种族解锁   14新的结局已解锁
     {
         switch (Information) 
         {
@@ -1203,22 +1204,32 @@ public class RoomGenerator : MonoBehaviour
                 break;
 
             case 9: // 第X波敌人
+
+                //如果是角斗场模式，这个当前第X波持续显示
+                _Arena_Information.gameObject.SetActive(true);
+
+
                 switch (PlayerPrefs.GetInt("language"))
                 {
                     case 0: // 日语
                         _Stage_Information.text = "第" + (GameFlowData.RoomLevel + 1) + "波の敵";
+                        _Arena_Information.text = "第" + (GameFlowData.RoomLevel + 1) + "波の敵";
                         break;
                     case 1: // 简体中文
                         _Stage_Information.text = "第" + (GameFlowData.RoomLevel + 1) + "波敌人";
+                        _Arena_Information.text = "第" + (GameFlowData.RoomLevel + 1) + "波敌人";
                         break;
                     case 2: // 繁体中文
                         _Stage_Information.text = "第" + (GameFlowData.RoomLevel + 1) + "波敵人";
+                        _Arena_Information.text = "第" + (GameFlowData.RoomLevel + 1) + "波敵人";
                         break;
                     case 3: // 英语
                         _Stage_Information.text = "Wave " + (GameFlowData.RoomLevel + 1);
+                        _Arena_Information.text = "Wave " + (GameFlowData.RoomLevel + 1);
                         break;
                     case 4: // 韩语
                         _Stage_Information.text = (GameFlowData.RoomLevel + 1) + "번째 웨이브";
+                        _Arena_Information.text = (GameFlowData.RoomLevel + 1) + "번째 웨이브";
                         break;
                 }
                 break;
@@ -1325,6 +1336,26 @@ public class RoomGenerator : MonoBehaviour
                 }
                 break;
 
+            case 14: //新的结局已解锁
+                    switch (PlayerPrefs.GetInt("language"))
+                {
+                    case 0: // 日语
+                        _Stage_Information.text = "新たなエンディングが解放されました";
+                        break;
+                    case 1: // 简体中文
+                        _Stage_Information.text = "新的结局已解锁";
+                        break;
+                    case 2: // 繁体中文
+                        _Stage_Information.text = "新的結局已解鎖";
+                        break;
+                    case 3: // 英语
+                        _Stage_Information.text = "A new ending has been unlocked";
+                        break;
+                    case 4: // 韩语
+                        _Stage_Information.text = "새로운 엔딩이 해금되었습니다";
+                        break;
+                }
+                break;
         }
 
 
