@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour
                         //小怪中暂时不出现Demon(不知道为什么会对多米纳斯召唤物产生影响)
                         //if (Class == EnemyClass.Demon){ Class = EnemyClass.Man; }
 
-                        if (Class == EnemyClass.RBQ&&GameFlowData.nextScene=="Arena") { Class = EnemyClass.Tentacle_HermitCrab; }//不知道这个产卵会造成多大影响，暂时排除RBQ在角斗场
+                        if (Class == EnemyClass.RBQ&&GameFlowData.nextScene!= "Story_08") { Class = EnemyClass.Tentacle_HermitCrab; }//不知道这个产卵会造成多大影响，除了第八关之外全部排除RBQ
 
                         if (BecomeSoldier_Man)
                         {
@@ -301,6 +301,12 @@ public class Enemy : MonoBehaviour
                     case 10:
 
                         BecomeBoss_SwordDancer();
+
+                        break;
+
+                    case 11:
+
+                        BecomeBoss_Dif();
 
                         break;
                 }
@@ -1061,7 +1067,7 @@ public class Enemy : MonoBehaviour
 
 
                             int Girl_CG = Random.Range(1, 3);
-                            if (BossNumber == 10){ Girl_CG = 2; }
+                            if (BossNumber == 10|| BossNumber == 11) { Girl_CG = 2; }//脚踩袜角色不能触发虐阳CG
 
                             switch (Girl_CG)
                             {
@@ -2552,6 +2558,21 @@ public class Enemy : MonoBehaviour
                     return;
                 }//黑魔导士传送房间随机位置
 
+
+                if (BossNumber == 11 && Random.Range(0, 2) == 0)
+                {
+                    OpenIndestructible();//获得0.5秒无敌
+                    Invoke(nameof(CloseIndestructible), 0.5f);
+                    //BossSkill_SwordDance();
+
+
+                    showPhantom();   // 出现幻影
+                    SwordSancerEvade();  // 位移
+
+                    return;
+                }//蒂芙的闪避
+
+
                 if (BossNumber == 10 && Random.Range(0, 2) == 0)
                 {
                     OpenIndestructible();//获得0.5秒无敌
@@ -3357,6 +3378,22 @@ public class Enemy : MonoBehaviour
                 player.CheckCombatAchievements();
 
 
+
+
+                //击败特定Boss解锁对应的服装和丝袜
+                if (PlayerPrefs.GetInt("Clothes_14") == 0 && BossNumber==10)//奴隶剑舞姬
+                {
+                    RoomGenerator.ShowInformationOfStage(15);
+                    PlayerPrefs.SetInt("Clothes_14", 1);
+                }
+                //击败特定Boss解锁对应的服装和丝袜
+                if (PlayerPrefs.GetInt("Clothes_9") == 0 && BossNumber == 11)//蒂芙
+                {
+                    RoomGenerator.ShowInformationOfStage(15);
+                    PlayerPrefs.SetInt("Clothes_9", 1);
+                }
+
+
             }
 
             DieBonue = true;
@@ -3626,7 +3663,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     #region
     [Header("Boss技能")]
-    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5皇太子   6皇帝    7黑魔导士   8典狱长  9首席战斗修女   10奴隶剑舞姬 
+    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5皇太子   6皇帝    7黑魔导士   8典狱长  9首席战斗修女   10奴隶剑舞姬   11蒂芙
 
     public void BecomeBoss_Captain()
     {
@@ -4140,6 +4177,41 @@ public class Enemy : MonoBehaviour
         InvokeRepeating(nameof(BossSkill_SwordDance), 5f, 5f);
 
     }//Boss  奴隶剑舞者
+
+    public void BecomeBoss_Dif() 
+    {
+        attackCooldown = 0.3f;//蒂芙 快速攻击
+
+        YYY_headIndex = 14;
+        YYY_eyesIndex = 14;
+        YYY_bodyIndex = 9;
+        YYY_legsIndex = 9;
+
+        YYY_hatIndex = 9;//蒂芙头饰
+
+        weaponIndex = 6;//冰冻剑
+
+        SetSkin();
+
+        Class = EnemyClass.Girl;
+
+        CurrentProfession = 0;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+        Name.text = "Dif";
+
+        maxHealth *= 4;
+        currentHealth = maxHealth;
+        UpdateHealthBar(currentHealth, maxHealth);
+
+
+        SpawnPhantom();//生成闪避幻影预设体
+
+        //剑舞
+        InvokeRepeating(nameof(BossSkill_SwordDance), 5f, 5f);
+
+    }//Boss  蒂芙
 
 
 

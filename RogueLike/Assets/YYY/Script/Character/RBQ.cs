@@ -16,7 +16,7 @@ public class RBQ : MonoBehaviour
 
     [Header("基础数值")]
     public Animator anim;//接入Spine动画机
-    private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle", "RBQ_Torture_CutDown","RBQ_Torture_EggBirth", "RBQ_Punish_Cage_Left_2" };
+    private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle", "RBQ_Torture_CutDown", "RBQ_Torture_EggBirth", "RBQ_Punish_Cage_Left_2" };
 
     public int RBQState = 0;//0单人拘束 1双人拷问中  2尸体  3肉货
     bool isCreateEnemy = false;//是否产生过敌人
@@ -54,8 +54,8 @@ public class RBQ : MonoBehaviour
 
 
                 if (GameFlowData.nextScene == "Story_01" || GameFlowData.nextScene == "Story_02")
-                { 
-                    CurrentRapeType = Random.Range(1, 5); 
+                {
+                    CurrentRapeType = Random.Range(1, 5);
 
                 }//暂时先这样
                 else if (GameFlowData.nextScene == "Story_04" || GameFlowData.nextScene == "Story_06")
@@ -68,7 +68,7 @@ public class RBQ : MonoBehaviour
                     {
                         CurrentRapeType = Random.Range(1, 5);
                     }
-                    
+
                 }
                 else
                 {
@@ -115,7 +115,7 @@ public class RBQ : MonoBehaviour
                     }
                 }
 
-                if ( CurrentRapeType == 1)
+                if (CurrentRapeType == 1)
                 {
                     if (inputX == 0 && inputY == 1)
                     {
@@ -613,12 +613,12 @@ public class RBQ : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f); // 延迟 0.1 秒后赋值
 
-         enemy.SaveCurrentSkin(
-             YYY_headIndex, YYY_eyesIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
-             Man_headIndex, Man_bodyIndex, Man_hatIndex,
-             Girl_headIndex, Girl_eyesIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
-             weaponIndex
-         );
+        enemy.SaveCurrentSkin(
+            YYY_headIndex, YYY_eyesIndex, YYY_bodyIndex, YYY_legsIndex, YYY_hatIndex,
+            Man_headIndex, Man_bodyIndex, Man_hatIndex,
+            Girl_headIndex, Girl_eyesIndex, Girl_bodyIndex, Girl_legsIndex, Girl_hatIndex,
+            weaponIndex
+        );
 
 
     }//这个是产生奴隶同伴
@@ -694,13 +694,41 @@ public class RBQ : MonoBehaviour
                 YYY_headIndex = Random.Range(1, 13);  // 除去皇女
                 YYY_eyesIndex = Random.Range(1, 14);  // 1~13
 
-                //目前已有的中挑选，//ToDo: 商店新增商品这里添加随机即可
-                int[] validIndexes = { 2, 3, 4, 5, 6, 7, 10, 11, 12 };
-                YYY_bodyIndex = validIndexes[Random.Range(0, validIndexes.Length)];
-                YYY_legsIndex = validIndexes[Random.Range(0, validIndexes.Length)];
 
-                int[] YYY_pool = { 1, 2, 3, 4, 10, 11, 12 };
-                YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族 南方兔族 魔族 大魔族
+                #region    //目前已有的中挑选，//ToDo: 商店新增商品这里添加随机即可
+
+                // 基础可随机衣服 / 腿饰
+                List<int> validIndexes = new List<int>()
+{
+    2, 3, 4, 5, 6, 7, 10, 11, 12
+};
+
+                // 读取解锁状态（int：0 未解锁，1 已解锁）
+                int unlock8 = PlayerPrefs.GetInt("Clothes_8", 0);   // 白魔仪礼服 / 橘色脚踩袜
+                int unlock9 = PlayerPrefs.GetInt("Clothes_9", 0);   // 女佣兵服 / 黑色脚踩袜
+                int unlock13 = PlayerPrefs.GetInt("Clothes_13", 0);  // 女仆短裙 / 黑网袜
+                int unlock14 = PlayerPrefs.GetInt("Clothes_14", 0);  // 金饰白内衣 / 白色脚踩袜
+
+                Debug.Log("白魔仪礼服/橘色脚踩袜 是否解锁: " + unlock8);
+                Debug.Log("女佣兵服/黑色脚踩袜 是否解锁: " + unlock9);
+                Debug.Log("女仆短裙/黑网袜 是否解锁: " + unlock13);
+                Debug.Log("金饰白内衣/白色脚踩袜 是否解锁: " + unlock14);
+
+                // 解锁后加入随机池
+                if (unlock8 == 1) validIndexes.Add(8);
+                if (unlock9 == 1) validIndexes.Add(9);
+                if (unlock13 == 1) validIndexes.Add(13);
+                if (unlock14 == 1) validIndexes.Add(14);
+
+                // 随机选择
+                YYY_bodyIndex = validIndexes[Random.Range(0, validIndexes.Count)];
+                YYY_legsIndex = validIndexes[Random.Range(0, validIndexes.Count)];
+
+                #endregion
+
+
+                int[] YYY_pool = { 1, 2, 3, 4, 7,8,10, 11, 12 };
+                YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族  鬼族  鹿族  南方兔族 魔族 大魔族
                 break;
 
 
@@ -865,7 +893,7 @@ public class RBQ : MonoBehaviour
         //clothes.icon = database.ClothesSprites[clothes.index - 1];
 
         clothes.displayName = ItemLocalization.GetName(ShopItemData.ItemType.Clothes, clothes.index, lang);
-        clothes.description = ItemLocalization.GetDescription(ShopItemData.ItemType.Clothes,clothes.index, lang);
+        clothes.description = ItemLocalization.GetDescription(ShopItemData.ItemType.Clothes, clothes.index, lang);
         shopItems.Add(clothes);
 
 

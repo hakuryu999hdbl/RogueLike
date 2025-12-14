@@ -62264,6 +62264,9 @@ MonoBehaviour:
   Story_38: {fileID: 21300000, guid: 9e82c49db85bf1a4283668b9fcda9e19, type: 3}
   Story_39: {fileID: 21300000, guid: 2dfc2642705fb1a49a5988871d0e8c54, type: 3}
   Story_40: {fileID: 21300000, guid: fd37c3872b76a3d41a286d1cc662a2d4, type: 3}
+  Story_41: {fileID: 21300000, guid: 19f966ad5c91e444f8c0b00be473ae41, type: 3}
+  Story_42: {fileID: 21300000, guid: 55fa9717768d4734394c81693f8b9862, type: 3}
+  Story_43: {fileID: 21300000, guid: 0e758b5519319c946a750efec5e769e1, type: 3}
   voiceSource: {fileID: 1011113003}
   Playlist: []
   Playlist_CG_AVG_01:
@@ -97900,7 +97903,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ver.1.0.3
+  m_Text: Ver.1.1.0
 --- !u!222 &1991218265
 CanvasRenderer:
   m_ObjectHideFlags: 0

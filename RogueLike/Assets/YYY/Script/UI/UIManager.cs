@@ -67,6 +67,15 @@ public class UIManager : MonoBehaviour
         Debug.Log("目前存档里的屏幕设置" + PlayerPrefs.GetFloat("ScreenMode"));//0全屏  1窗口  2带边窗口
         Debug.Log("目前存档里的强制键盘模式储存" + PlayerPrefs.GetInt("ForceKeyboardUI"));//0关上 1开启
 
+
+
+        Debug.Log("目前存档里的白魔仪礼服/橘色脚踩袜是否解锁" + PlayerPrefs.GetInt("Clothes_8"));//0未解锁  1解锁
+        Debug.Log("目前存档里的女佣兵服/黑色脚踩袜是否解锁" + PlayerPrefs.GetInt("Clothes_9"));//0未解锁  1解锁
+        //Debug.Log("目前存档里的女仆短裙/黑网袜是否解锁" + PlayerPrefs.GetInt("Clothes_13"));//0未解锁  1解锁
+        Debug.Log("目前存档里的金饰白内衣/白色脚踩袜是否解锁" + PlayerPrefs.GetInt("Clothes_14"));//0未解锁  1解锁
+
+
+
         //Debug.Log("目前存档里的钱币" + PlayerPrefs.GetInt("Money"));
 
 
@@ -897,82 +906,82 @@ public class UIManager : MonoBehaviour
     #region
 
     //ToDo :强制锁定地下城和角斗场 还有 除去1，2关之外的关卡, 还有除去 自慰1/被刺伤强奸CG  其他CG锁死
-    public void LockStage()
-    {
-
-        //PlayerPrefs.SetInt("CG_OnanismFront_1", 1);//目前保持第一个CG永远在
-        PlayerPrefs.SetInt("CG_OnanismSide_1", 0);
-
-        //PlayerPrefs.SetInt("CG_InsultSide_1", 0);
-        //PlayerPrefs.SetInt("CG_GagSide_1", 0);
-        //PlayerPrefs.SetInt("CG_FistingFront_1", 0);
-
-        //PlayerPrefs.SetInt("CG_RapeFront_1", 0);
-        //PlayerPrefs.SetInt("CG_RapeSide_1", 0);
-        //PlayerPrefs.SetInt("CG_AssaultFront_1", 0);
-        //PlayerPrefs.SetInt("CG_AssaultSide_1", 0);
-
-        PlayerPrefs.SetInt("CG_TentacleBagFront_1", 0);
-        PlayerPrefs.SetInt("CG_TentacleBugSide_1", 0);
-
-        PlayerPrefs.SetInt("CG_TentacleFront_1", 0);
-
-        PlayerPrefs.SetInt("CG_TentacleHermitCrabFront_1", 0);
-        PlayerPrefs.SetInt("CG_TentacleHermitCrabSide_1", 0);
-
-        PlayerPrefs.SetInt("CG_FleshArmor_1", 0);
-
-        PlayerPrefs.SetInt("CG_TentacleMonsterFront_1", 0);
-        PlayerPrefs.SetInt("CG_MonsterSide_1", 0);
-
-        PlayerPrefs.SetInt("CG_TentacleWallFront_1", 0);
-        PlayerPrefs.SetInt("CG_TentacleWallSide_1", 0);
-
-
-
-        PlayerPrefs.SetInt("CG_Hogtie_1", 0);
-
-        PlayerPrefs.SetInt("CG_HangSide_4", 0);
-        PlayerPrefs.SetInt("CG_HangSide_1", 0);
-        PlayerPrefs.SetInt("CG_HangFront_1", 0);
-
-        PlayerPrefs.SetInt("CG_HangDown_4", 0);
-        PlayerPrefs.SetInt("CG_HangDown_1", 0);
-
-        PlayerPrefs.SetInt("CG_FeraSide_1", 0);
-        PlayerPrefs.SetInt("CG_Pillory_Side_1", 0);
-
-
-        //PlayerPrefs.SetInt("CG", 1);//日常调教界面时常可进
-        //PlayerPrefs.SetInt("CG_AVG_01", 1);//cg解锁
-        PlayerPrefs.SetInt("CG_AVG_02", 0);//cg解锁
-        PlayerPrefs.SetInt("CG_AVG_03", 0);//cg解锁
-        //PlayerPrefs.SetInt("CG_AVG_04", 1);//cg解锁
-        PlayerPrefs.SetInt("CG_AVG_05", 0);//cg解锁
-        PlayerPrefs.SetInt("CG_AVG_06", 0);//cg解锁
-        PlayerPrefs.SetInt("CG_AVG_07", 0);//cg解锁
-        PlayerPrefs.SetInt("CG_AVG_08", 0);//cg解锁
-
-
-        //PlayerPrefs.SetInt("Chapter_01", 1);//目前保持第一章永远在
-        //PlayerPrefs.SetInt("Chapter_02", 1);
-        //PlayerPrefs.SetInt("Chapter_03", 1);
-        //PlayerPrefs.SetInt("Chapter_04", 1);//第四章的AVG变成感谢试玩
-        PlayerPrefs.SetInt("Chapter_05", 0);
-        PlayerPrefs.SetInt("Chapter_06", 0);
-        PlayerPrefs.SetInt("Chapter_07", 0);
-        PlayerPrefs.SetInt("Chapter_08", 0);
-        PlayerPrefs.SetInt("Chapter_09", 0);
-        PlayerPrefs.SetInt("Chapter_10", 0);
-        PlayerPrefs.SetInt("Chapter_11", 0);
-        PlayerPrefs.SetInt("Chapter_12", 0);
-        PlayerPrefs.SetInt("Chapter_13", 0);
-
-        PlayerPrefs.SetInt("Chapter_Arena", 0);
-        PlayerPrefs.SetInt("Chapter_Dungeon", 0);
-
-
-    }
+    //public void LockStage()
+    //{
+    //
+    //    //PlayerPrefs.SetInt("CG_OnanismFront_1", 1);//目前保持第一个CG永远在
+    //    PlayerPrefs.SetInt("CG_OnanismSide_1", 0);
+    //
+    //    //PlayerPrefs.SetInt("CG_InsultSide_1", 0);
+    //    //PlayerPrefs.SetInt("CG_GagSide_1", 0);
+    //    //PlayerPrefs.SetInt("CG_FistingFront_1", 0);
+    //
+    //    //PlayerPrefs.SetInt("CG_RapeFront_1", 0);
+    //    //PlayerPrefs.SetInt("CG_RapeSide_1", 0);
+    //    //PlayerPrefs.SetInt("CG_AssaultFront_1", 0);
+    //    //PlayerPrefs.SetInt("CG_AssaultSide_1", 0);
+    //
+    //    PlayerPrefs.SetInt("CG_TentacleBagFront_1", 0);
+    //    PlayerPrefs.SetInt("CG_TentacleBugSide_1", 0);
+    //
+    //    PlayerPrefs.SetInt("CG_TentacleFront_1", 0);
+    //
+    //    PlayerPrefs.SetInt("CG_TentacleHermitCrabFront_1", 0);
+    //    PlayerPrefs.SetInt("CG_TentacleHermitCrabSide_1", 0);
+    //
+    //    PlayerPrefs.SetInt("CG_FleshArmor_1", 0);
+    //
+    //    PlayerPrefs.SetInt("CG_TentacleMonsterFront_1", 0);
+    //    PlayerPrefs.SetInt("CG_MonsterSide_1", 0);
+    //
+    //    PlayerPrefs.SetInt("CG_TentacleWallFront_1", 0);
+    //    PlayerPrefs.SetInt("CG_TentacleWallSide_1", 0);
+    //
+    //
+    //
+    //    PlayerPrefs.SetInt("CG_Hogtie_1", 0);
+    //
+    //    PlayerPrefs.SetInt("CG_HangSide_4", 0);
+    //    PlayerPrefs.SetInt("CG_HangSide_1", 0);
+    //    PlayerPrefs.SetInt("CG_HangFront_1", 0);
+    //
+    //    PlayerPrefs.SetInt("CG_HangDown_4", 0);
+    //    PlayerPrefs.SetInt("CG_HangDown_1", 0);
+    //
+    //    PlayerPrefs.SetInt("CG_FeraSide_1", 0);
+    //    PlayerPrefs.SetInt("CG_Pillory_Side_1", 0);
+    //
+    //
+    //    //PlayerPrefs.SetInt("CG", 1);//日常调教界面时常可进
+    //    //PlayerPrefs.SetInt("CG_AVG_01", 1);//cg解锁
+    //    PlayerPrefs.SetInt("CG_AVG_02", 0);//cg解锁
+    //    PlayerPrefs.SetInt("CG_AVG_03", 0);//cg解锁
+    //    //PlayerPrefs.SetInt("CG_AVG_04", 1);//cg解锁
+    //    PlayerPrefs.SetInt("CG_AVG_05", 0);//cg解锁
+    //    PlayerPrefs.SetInt("CG_AVG_06", 0);//cg解锁
+    //    PlayerPrefs.SetInt("CG_AVG_07", 0);//cg解锁
+    //    PlayerPrefs.SetInt("CG_AVG_08", 0);//cg解锁
+    //
+    //
+    //    //PlayerPrefs.SetInt("Chapter_01", 1);//目前保持第一章永远在
+    //    //PlayerPrefs.SetInt("Chapter_02", 1);
+    //    //PlayerPrefs.SetInt("Chapter_03", 1);
+    //    //PlayerPrefs.SetInt("Chapter_04", 1);//第四章的AVG变成感谢试玩
+    //    PlayerPrefs.SetInt("Chapter_05", 0);
+    //    PlayerPrefs.SetInt("Chapter_06", 0);
+    //    PlayerPrefs.SetInt("Chapter_07", 0);
+    //    PlayerPrefs.SetInt("Chapter_08", 0);
+    //    PlayerPrefs.SetInt("Chapter_09", 0);
+    //    PlayerPrefs.SetInt("Chapter_10", 0);
+    //    PlayerPrefs.SetInt("Chapter_11", 0);
+    //    PlayerPrefs.SetInt("Chapter_12", 0);
+    //    PlayerPrefs.SetInt("Chapter_13", 0);
+    //
+    //    PlayerPrefs.SetInt("Chapter_Arena", 0);
+    //    PlayerPrefs.SetInt("Chapter_Dungeon", 0);
+    //
+    //
+    //}
 
     public void SetCheatButton(int ReLoad)//0刷新场景  1不刷（通关后打开）
     {
@@ -6605,7 +6614,10 @@ public class UIManager : MonoBehaviour
     } //【高等精霊の目覚め】高等精霊のキャラクターを解放。
 
 
-
+    public void Achieventment_ACH_TRUE_END_ARENA10()
+    {
+        UnlockSteamAchievement("ACH_TRUE_END_ARENA10");
+    } //【真の結末】アリーナで10波を耐え抜く。
 
 
 

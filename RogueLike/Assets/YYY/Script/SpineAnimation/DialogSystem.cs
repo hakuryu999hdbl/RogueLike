@@ -34,7 +34,8 @@ public class DialogSystem : MonoBehaviour
                   Story_11, Story_12, Story_13, Story_14, Story_15, Story_16, Story_17, Story_18, Story_19, Story_20, 
                   Story_21, Story_22, Story_23, Story_24, Story_25, Story_26, Story_27, Story_28,
                   Story_29, Story_30, Story_31, Story_32, Story_33, Story_34,
-                  Story_35, Story_36, Story_37, Story_38, Story_39, Story_40;
+                  Story_35, Story_36, Story_37, Story_38, Story_39, Story_40,
+                  Story_41, Story_42, Story_43;
 
 
     private void OnEnable()
@@ -762,6 +763,21 @@ public class DialogSystem : MonoBehaviour
                 text.color = Color.white;
                 index++;
                 break;
+            case "Story_41":
+                BG_Image.sprite = Story_41;
+                text.color = Color.white;
+                index++;
+                break;
+            case "Story_42":
+                BG_Image.sprite = Story_42;
+                text.color = Color.white;
+                index++;
+                break;
+            case "Story_43":
+                BG_Image.sprite = Story_43;
+                text.color = Color.white;
+                index++;
+                break;
 
                 #endregion
         }
@@ -873,8 +889,6 @@ public class DialogSystem : MonoBehaviour
                 break;
            case 1004:
                 GameFlowData.nextScene = "Story_04";
-                //ToDo :试玩版锁
-                //GameFlowData.nextScene = "";//返回主菜单(试玩版结束)
                 break;
            case 1005:
                GameFlowData.nextScene = "Story_05";

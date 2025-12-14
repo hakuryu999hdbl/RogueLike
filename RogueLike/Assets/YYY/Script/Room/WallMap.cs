@@ -176,42 +176,44 @@ public class WallMap : MonoBehaviour
                     case 1:
                         SetBoss(10);//角斗场刷Boss奴隶剑舞姬
                         break;
-                    case 2:                      
-                        SetEnemy(1);//角斗场刷男性敌人
+                    case 2:
+                        SetEnemy(1);//角斗场刷男性敌人               
                         break;
                     case 3:
-                        SetBoss(1);//角斗场刷Boss守卫队长
+                        SetEnemy(1);//角斗场刷男性敌人       
                         break;
 
                     case 4:
-                        SetEnemy(3);//角斗场刷女性敌人
+                        SetBoss(1);//角斗场刷Boss守卫队长                      
                         break;
                     case 5:
-                        SetBoss(9);//角斗场刷Boss首席战斗修女
+                        SetEnemy(3);//角斗场刷女性敌人                     
                         break;
 
                     case 6:
-                        SetEnemy(2);//角斗场刷触手敌人
+                        SetBoss(9);//角斗场刷Boss首席战斗修女                       
                         break;
 
                     case 7:
-                        SetBoss(8);//角斗场刷Boss典狱长
+                        SetEnemy(2);//角斗场刷触手敌人                  
                         break;
 
-                    //case 8:
-                    //    SetBoss(2);//角斗场刷Boss王女
-                    //    break;
+                    case 8:
+                        SetBoss(8);//角斗场刷Boss典狱长
+                        //SetBoss(2);//角斗场刷Boss王女
+                        break;
                     //
                     //case 9:
                     //    SetBoss(5);//角斗场刷Boss皇太子
                     //    break;
                     //
-                    //case 10:
-                    //    SetBoss(6);//角斗场刷Boss皇帝
-                    //    break;
+                    case 10:
+                        //SetBoss(6);//角斗场刷Boss皇帝
+                        SetBoss(11);//角斗场刷Boss蒂芙    
+                        break;
 
                     default:
-                        SetEnemy();//角斗场全类型敌人
+                        SetEnemy();//角斗场全类型敌人       
                         break;
                 }
             }
@@ -348,6 +350,7 @@ public class WallMap : MonoBehaviour
                 _RoomGenerator.ShowInformationOfStage(14);
 
                 //新增成就
+                UIManager.instance.Achieventment_ACH_TRUE_END_ARENA10();
             }
 
 
@@ -432,7 +435,7 @@ public class WallMap : MonoBehaviour
         Debug.Log("此房间敌人数量" + enemyToSpawn + "玩家进入房间数" + GameFlowData.RoomLevel);
 
         if (enemyToSpawn > 3&&GameFlowData.nextScene!= "Arena") { enemyToSpawn = 3; }//在角斗场界面，敌人无上限
-
+        if (enemyToSpawn > 2&&GameFlowData.nextScene != "Arena" && PlayerPrefs.GetInt("Difficulty") == 0) { enemyToSpawn = 2; }//简单模式下最多只有两个敌人
 
         if (isBossRoom&& PlayerPrefs.GetInt("Difficulty")==0) { enemyToSpawn = 1; }//Boss关卡，敌人只能刷1个,简单难度下
 
