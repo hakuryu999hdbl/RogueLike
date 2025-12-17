@@ -1185,13 +1185,29 @@ public class Player : MonoBehaviour
         //Girl_hatIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];
 
 
-        Girl_headIndex = Random.Range(1, 5);  //黑发主要
-        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = 7;//惩戒修女
-        int[] Girl_pool = { 2, 4, 5, 6, 7, 11, 12 };
-        Girl_legsIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];//和修女服搭配的丝袜
-        Girl_hatIndex = 7;//惩戒修女头巾
+        switch (Random.Range(0, 2))
+        {
+            default:
+            case 0:
+                //女仆关卡
+                Girl_headIndex = Random.Range(1, 13);  // 除去皇女
+                Girl_eyesIndex = Random.Range(1, 15);  // 1~13
+                Girl_bodyIndex = 13;//女仆装
+                int[] Girl_pool3 = { 2, 4, 5, 6, 7, 11, 12, 13 };
+                Girl_legsIndex = Girl_pool3[UnityEngine.Random.Range(0, Girl_pool3.Length)];//和女仆装服搭配的丝袜
+                Girl_hatIndex = 13;//女仆帽
+                break;
+            case 1:
+                //惩戒修女关卡
+                Girl_headIndex = Random.Range(1, 5);  //黑发主要
+                Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+                Girl_bodyIndex = 7;//惩戒修女
+                int[] Girl_pool = { 2, 4, 5, 6, 7, 11, 12 };
+                Girl_legsIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];//和修女服搭配的丝袜
+                Girl_hatIndex = 7;//惩戒修女头巾
 
+                break;
+        }
 
 
         //weaponIndex = Random.Range(1, 11);

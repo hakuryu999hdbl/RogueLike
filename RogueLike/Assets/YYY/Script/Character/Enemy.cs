@@ -71,6 +71,9 @@ public class Enemy : MonoBehaviour
                         //if (Class == EnemyClass.Demon){ Class = EnemyClass.Man; }
 
                         if (Class == EnemyClass.RBQ&&GameFlowData.nextScene!= "Story_08") { Class = EnemyClass.Tentacle_HermitCrab; }//不知道这个产卵会造成多大影响，除了第八关之外全部排除RBQ
+                        if (Class == EnemyClass.Succubus && GameFlowData.nextScene == "Story_12") { Class = EnemyClass.Girl; }//多米纳斯Boss战中不出现魅魔
+
+
 
                         if (BecomeSoldier_Man)
                         {
@@ -309,6 +312,19 @@ public class Enemy : MonoBehaviour
                         BecomeBoss_Dif();
 
                         break;
+
+                    case 12:
+
+                        BecomeBoss_Sin();
+
+                        break;
+
+                    case 13:
+
+                        BecomeBoss_Maid();
+                        // 每隔 5 秒执行一次 Boss技能 召集女仆
+                        InvokeRepeating(nameof(BossSkill_CallSoldier_Girl), 5f, 5f);
+                        break;
                 }
 
 
@@ -455,6 +471,7 @@ public class Enemy : MonoBehaviour
                     UIManager.instance.ShowDialogue("Boss_CombatNun");
                     break;
                 case 10:
+                case 13:
                     UIManager.instance.ShowDialogue("Boss_SwordDancer");
                     break;
             }
@@ -1521,6 +1538,15 @@ public class Enemy : MonoBehaviour
         switch (GameFlowData.nextScene)
         {
             case "Story_04":
+                //女仆关卡
+                YYY_headIndex = Random.Range(1, 13);  // 除去皇女
+                YYY_eyesIndex = Random.Range(1, 15);  // 1~13
+                YYY_bodyIndex = 13;//女仆装
+                int[] YYY_pool3 = { 2, 4, 5, 6, 7, 11, 12, 13 };
+                YYY_legsIndex = YYY_pool3[UnityEngine.Random.Range(0, YYY_pool3.Length)];//和女仆装服搭配的丝袜
+                YYY_hatIndex = 13;//女仆帽
+                break;
+
             case "Story_06":
             case "Story_07":
 
@@ -2559,32 +2585,26 @@ public class Enemy : MonoBehaviour
                 }//黑魔导士传送房间随机位置
 
 
-                if (BossNumber == 11 && Random.Range(0, 2) == 0)
+                if (BossNumber == 10 || BossNumber == 11 || BossNumber == 12)
                 {
-                    OpenIndestructible();//获得0.5秒无敌
-                    Invoke(nameof(CloseIndestructible), 0.5f);
-                    //BossSkill_SwordDance();
+
+                    if (Random.Range(0, 3) == 1) 
+                    {
+                        OpenIndestructible();//获得0.5秒无敌
+                        Invoke(nameof(CloseIndestructible), 0.5f);
+                        //BossSkill_SwordDance();
 
 
-                    showPhantom();   // 出现幻影
-                    SwordSancerEvade();  // 位移
+                        showPhantom();   // 出现幻影
+                        SwordSancerEvade();  // 位移
 
-                    return;
-                }//蒂芙的闪避
+                        return;
+                    }               
+                   
 
-
-                if (BossNumber == 10 && Random.Range(0, 2) == 0)
-                {
-                    OpenIndestructible();//获得0.5秒无敌
-                    Invoke(nameof(CloseIndestructible), 0.5f);
-                    //BossSkill_SwordDance();
+                }//奴隶剑舞姬  蒂芙 Sin  的闪避
 
 
-                    showPhantom();   // 出现幻影
-                    SwordSancerEvade();  // 位移
-
-                    return;
-                }//奴隶剑舞姬的闪避
 
                 if (currentHealth <= maxHealth / 4 && Class == EnemyClass.FleshArmor)
                 {
@@ -3295,6 +3315,7 @@ public class Enemy : MonoBehaviour
                     break;
 
                 case 10:
+                case 13:
                     UIManager.instance.ShowDialogue("Boss_SwordDancer_Die");
                     break;
             }
@@ -3330,6 +3351,9 @@ public class Enemy : MonoBehaviour
                     case 5:
                     case 8:
                     case 10:
+                    case 11:
+                    case 12:
+                    case 13:
                         //一般Boss
                         player.ChangeExperience((int)(500 * rewardMultiplier));
                         UIManager.instance.ChangeMoney((int)(Random.Range(500, 1500) * rewardMultiplier)); //一般Boss
@@ -3663,7 +3687,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     #region
     [Header("Boss技能")]
-    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5皇太子   6皇帝    7黑魔导士   8典狱长  9首席战斗修女   10奴隶剑舞姬   11蒂芙
+    public int BossNumber = 0;//1守卫队长  2皇女  3魔族化皇女  4宰相   5皇太子   6皇帝    7黑魔导士   8典狱长  9首席战斗修女   10奴隶剑舞姬   11蒂芙   12 Sin    13女仆长
 
     public void BecomeBoss_Captain()
     {
@@ -4071,6 +4095,8 @@ public class Enemy : MonoBehaviour
         maxHealth *= 4;
         currentHealth = maxHealth;
         UpdateHealthBar(currentHealth, maxHealth);
+
+
     }//Boss典狱长  4
 
     int CombatNunLife = 2;//先法师 再射手 最后近战  血越打越厚
@@ -4164,7 +4190,7 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        maxHealth *= 4;
+        maxHealth *= 3;
         currentHealth = maxHealth;
         UpdateHealthBar(currentHealth, maxHealth);
 
@@ -4201,7 +4227,7 @@ public class Enemy : MonoBehaviour
 
         Name.text = "Dif";
 
-        maxHealth *= 4;
+        maxHealth *= 2;
         currentHealth = maxHealth;
         UpdateHealthBar(currentHealth, maxHealth);
 
@@ -4212,6 +4238,94 @@ public class Enemy : MonoBehaviour
         InvokeRepeating(nameof(BossSkill_SwordDance), 5f, 5f);
 
     }//Boss  蒂芙
+
+
+    public void BecomeBoss_Sin()
+    {
+        attackCooldown = 0.3f;//Sin 快速攻击
+
+        YYY_headIndex = 10;
+        YYY_eyesIndex = 12;
+        YYY_bodyIndex = 8;
+        YYY_legsIndex = 8;
+
+        YYY_hatIndex = 8;//Sin头饰
+
+        weaponIndex = 8;//火焰剑
+
+        SetSkin();
+
+        Class = EnemyClass.Succubus;
+
+        CurrentProfession = 0;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+        Name.text = "Sin";
+
+        maxHealth *= 2;
+        currentHealth = maxHealth;
+        UpdateHealthBar(currentHealth, maxHealth);
+
+
+        SpawnPhantom();//生成闪避幻影预设体
+
+        //剑舞
+        InvokeRepeating(nameof(BossSkill_SwordDance), 5f, 5f);
+
+    }//Boss  Sin
+
+    public void BecomeBoss_Maid()
+    {
+        attackCooldown = 0.3f;//女仆长 快速攻击
+
+        YYY_headIndex = 7;
+        YYY_eyesIndex = 4;
+        YYY_bodyIndex = 13;
+        YYY_legsIndex = 13;
+
+        YYY_hatIndex = 13;//女仆帽
+
+        weaponIndex = 1;//匕首
+
+        SetSkin();
+
+        Class = EnemyClass.Girl;
+
+        CurrentProfession = 0;
+        ChangeType(CurrentProfession);//把CurrentProfession绑进去
+        SetAttackRange();
+
+        switch (PlayerPrefs.GetInt("language"))
+        {
+            case 0: // 日语
+                Name.text = "メイド長";
+                break;
+            case 1: // 简体中文
+                Name.text = "女仆长";
+                break;
+            case 2: // 繁体中文
+                Name.text = "女僕長";
+                break;
+            case 3: // 英语
+                Name.text = "Head Maid";
+                break;
+            case 4: // 韩语
+                Name.text = "메이드장";
+                break;
+        }
+
+        maxHealth *= 4;
+        currentHealth = maxHealth;
+        UpdateHealthBar(currentHealth, maxHealth);
+
+
+        //SpawnPhantom();//生成闪避幻影预设体
+        //
+        ////剑舞
+        //InvokeRepeating(nameof(BossSkill_SwordDance), 5f, 5f);
+
+    }//Boss 女仆长
 
 
 
@@ -4362,6 +4476,9 @@ public class Enemy : MonoBehaviour
         {
             case 9:
                 UIManager.instance.ShowDialogue("Boss_CombatNun_Skill");
+                break;
+            case 13:
+                UIManager.instance.ShowDialogue("Boss_SwordDancer_Skill");
                 break;
         }
 

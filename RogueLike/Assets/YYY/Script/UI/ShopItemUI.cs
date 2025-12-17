@@ -28,12 +28,12 @@ public class ShopItemUI : MonoBehaviour
                 case ShopItemData.ItemType.Sword:
                 case ShopItemData.ItemType.Pistol:
                 case ShopItemData.ItemType.Staff:
-                    prefix = "ATK +";
+                    prefix = "ATK+";
                     break;
 
                 case ShopItemData.ItemType.Clothes:
                 case ShopItemData.ItemType.Stockings:
-                    prefix = "DEF +";
+                    prefix = "DEF+";
                     break;
 
                 case ShopItemData.ItemType.Slave:

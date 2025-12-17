@@ -120931,13 +120931,6 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 1
-  - time: 27.4667
-    functionName: _Effect_camera
-    data: SpineEvent
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 1
   - time: 27.5333
     functionName: _SE_HighHeels_Walk_1
     data: SpineEvent
@@ -120947,13 +120940,6 @@ AnimationClip:
     messageOptions: 1
   - time: 27.9
     functionName: _SE_Clothes
-    data: SpineEvent
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 1
-  - time: 28.4667
-    functionName: _Effect_camera
     data: SpineEvent
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

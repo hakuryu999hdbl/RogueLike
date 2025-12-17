@@ -100,7 +100,7 @@ public class Room : MonoBehaviour
             //Boss房 黑魔导士
 
             case "Story_04":
-                BossNumber = 7;//黑魔导士
+                BossNumber = 13;//女仆长
                 break;
 
             //Boss房 王女赛琳娜

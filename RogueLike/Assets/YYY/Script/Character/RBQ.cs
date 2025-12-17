@@ -677,6 +677,14 @@ public class RBQ : MonoBehaviour
         switch (GameFlowData.nextScene)
         {
             case "Story_04":
+                //女仆关卡
+                YYY_headIndex = Random.Range(1, 13);  // 除去皇女
+                YYY_eyesIndex = Random.Range(1, 15);  // 1~13
+                YYY_bodyIndex = 13;//女仆装
+                int[] YYY_pool3 = { 2, 4, 5, 6, 7, 11, 12, 13 };
+                YYY_legsIndex = YYY_pool3[UnityEngine.Random.Range(0, YYY_pool3.Length)];//和女仆装服搭配的丝袜
+                YYY_hatIndex = 13;//女仆帽
+                break;
             case "Story_06":
             case "Story_07":
 
@@ -700,24 +708,24 @@ public class RBQ : MonoBehaviour
                 // 基础可随机衣服 / 腿饰
                 List<int> validIndexes = new List<int>()
 {
-    2, 3, 4, 5, 6, 7, 10, 11, 12
+    2, 3, 4, 5, 6, 7, 10, 11, 12, 13
 };
 
                 // 读取解锁状态（int：0 未解锁，1 已解锁）
                 int unlock8 = PlayerPrefs.GetInt("Clothes_8", 0);   // 白魔仪礼服 / 橘色脚踩袜
                 int unlock9 = PlayerPrefs.GetInt("Clothes_9", 0);   // 女佣兵服 / 黑色脚踩袜
-                int unlock13 = PlayerPrefs.GetInt("Clothes_13", 0);  // 女仆短裙 / 黑网袜
+                //int unlock13 = PlayerPrefs.GetInt("Clothes_13", 0);  // 女仆短裙 / 黑网袜
                 int unlock14 = PlayerPrefs.GetInt("Clothes_14", 0);  // 金饰白内衣 / 白色脚踩袜
 
                 Debug.Log("白魔仪礼服/橘色脚踩袜 是否解锁: " + unlock8);
                 Debug.Log("女佣兵服/黑色脚踩袜 是否解锁: " + unlock9);
-                Debug.Log("女仆短裙/黑网袜 是否解锁: " + unlock13);
+                //Debug.Log("女仆短裙/黑网袜 是否解锁: " + unlock13);
                 Debug.Log("金饰白内衣/白色脚踩袜 是否解锁: " + unlock14);
 
                 // 解锁后加入随机池
                 if (unlock8 == 1) validIndexes.Add(8);
                 if (unlock9 == 1) validIndexes.Add(9);
-                if (unlock13 == 1) validIndexes.Add(13);
+                //if (unlock13 == 1) validIndexes.Add(13);
                 if (unlock14 == 1) validIndexes.Add(14);
 
                 // 随机选择
@@ -749,12 +757,32 @@ public class RBQ : MonoBehaviour
         //Girl_hatIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];
 
 
-        Girl_headIndex = Random.Range(1, 5);  //黑发主要
-        Girl_eyesIndex = Random.Range(1, 14);  // 1~13
-        Girl_bodyIndex = 7;//惩戒修女
-        int[] Girl_pool = { 2, 4, 5, 6, 7, 11, 12 };
-        Girl_legsIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];//和修女服搭配的丝袜
-        Girl_hatIndex = 7;//惩戒修女头巾
+
+        switch (Random.Range(0,2))
+        {
+            default:
+            case 0:
+                //女仆关卡
+                Girl_headIndex = Random.Range(1, 13);  // 除去皇女
+                Girl_eyesIndex = Random.Range(1, 15);  // 1~13
+                Girl_bodyIndex = 13;//女仆装
+                int[] Girl_pool3 = { 2, 4, 5, 6, 7, 11, 12, 13 };
+                Girl_legsIndex = Girl_pool3[UnityEngine.Random.Range(0, Girl_pool3.Length)];//和女仆装服搭配的丝袜
+                Girl_hatIndex = 13;//女仆帽
+                break;
+            case 1:
+                //惩戒修女关卡
+                Girl_headIndex = Random.Range(1, 5);  //黑发主要
+                Girl_eyesIndex = Random.Range(1, 14);  // 1~13
+                Girl_bodyIndex = 7;//惩戒修女
+                int[] Girl_pool = { 2, 4, 5, 6, 7, 11, 12 };
+                Girl_legsIndex = Girl_pool[UnityEngine.Random.Range(0, Girl_pool.Length)];//和修女服搭配的丝袜
+                Girl_hatIndex = 7;//惩戒修女头巾
+
+                break;
+        }
+
+
 
 
         weaponIndex = Random.Range(1, 11);
