@@ -88,8 +88,9 @@ public class Room : MonoBehaviour
 
             default:
             case "Dungeon":
-                 BossNumber = Random.Range(1, 10);//随机Boss   （频繁闪避的剑舞姬不能呆在小房间）
-                 break;
+                int[] bossPool = { 1, 5, 8, 9, 13 };
+                BossNumber = bossPool[Random.Range(0, bossPool.Length)];//随机Boss   （频繁闪避的剑舞姬不能呆在小房间/塞莉西亚，黑魔导士，多米纳斯，赛琳娜都不行）
+                break;
 
             
             case "Story_01":

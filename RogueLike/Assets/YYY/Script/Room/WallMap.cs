@@ -177,12 +177,11 @@ public class WallMap : MonoBehaviour
                         SetBoss(10);//角斗场刷Boss奴隶剑舞姬
                         break;
                     case 2:
-                        //SetEnemy(1);//角斗场刷男性敌人
                         SetBoss(12);//角斗场刷Boss Sin
                         break;
                     case 3:
-                        //SetEnemy(1);//角斗场刷男性敌人
-                        SetBoss(13);//角斗场刷Boss 女仆长
+                        SetEnemy(1);//角斗场刷男性敌人
+                        //SetBoss(13);//角斗场刷Boss 女仆长
                         break;
 
                     case 4:

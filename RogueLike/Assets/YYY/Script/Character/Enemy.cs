@@ -1268,6 +1268,82 @@ public class Enemy : MonoBehaviour
 
     #endregion
 
+
+
+
+    /// <summary>
+    /// 队友的捕获与被捕获
+    /// </summary>
+    #region
+    //private string[] tortureAnimations = { "RBQ_Torture_Impale", "RBQ_Torture_Strangle", "RBQ_Torture_CutDown", "RBQ_Torture_EggBirth", "RBQ_Punish_Cage_Left_2" };
+
+    private void SpawnFriendDefeatRBQ()
+    {
+    
+        // 1) 缓存队友当前皮肤（因为马上要Destroy自己）
+        int yHead = YYY_headIndex;
+        int yEyes = YYY_eyesIndex;
+        int yBody = YYY_bodyIndex;
+        int yLegs = YYY_legsIndex;
+        int yHat = YYY_hatIndex;
+    
+        // 你ShowCurrentAll需要其它部位的话就按你项目传：
+        int mHead = Man_headIndex;
+        int mBody = Man_bodyIndex;
+        int mHat = Man_hatIndex;
+    
+        int gHead = YYY_headIndex;
+        int gEyes = YYY_eyesIndex;
+        int gBody = YYY_bodyIndex;
+        int gLegs = YYY_legsIndex;
+        int gHat = YYY_hatIndex;
+    
+        int weapon = weaponIndex;
+    
+        // 2) 生成RBQ演出体
+        GameObject rbq = Instantiate(capturePrefab, transform.position, Quaternion.identity);
+        rbq.transform.position += new Vector3(0, 0, -0.135f);
+    
+        // 3) 套皮肤
+        var rbqSkin = rbq.GetComponent<CharacterSkin>();
+        if (rbqSkin != null)
+        {
+            rbqSkin.ShowCurrentAll(
+                yHead, yEyes, yBody, yLegs, yHat,
+                mHead, mBody, mHat,
+                gHead, gEyes, gBody, gLegs, gHat,
+                weapon
+            );
+        }
+    
+        // 4) 播动画
+        var rbqAnim = rbq.GetComponent<Animator>();
+
+        //尸体
+        //int rand = Random.Range(0, tortureAnimations.Length);
+        //rbqAnim.Play(tortureAnimations[rand]);
+        rbqAnim.Play("RBQ_Torture_Strangle");
+       
+
+        rbqAnim.SetFloat("InputX", inputX);
+        rbqAnim.SetFloat("InputY", inputY);
+
+        // 5) 自毁
+        //Destroy(rbq, 10f);
+
+        Invoke(nameof(FriendDie), 0.1f);
+    
+    
+    }
+    
+    void FriendDie() 
+    {
+        Destroy(AllOfThis);
+    }
+
+    #endregion
+
+
     /// <summary>
     /// 持械状态/类型敌人
     /// </summary>
@@ -2021,7 +2097,19 @@ public class Enemy : MonoBehaviour
         switch (CurrentWeapon)
         {
             case 210:
-                special = -1;//暗黑法球
+
+                //敌人除了黑魔导士之外都不会黑魔法
+
+                if (tag == "Enemy" && BossNumber == 0)
+                {
+                    special = 3;//火焰法球
+                }
+                else
+                {
+                    special = -1;//暗黑法球
+                }
+
+               
                 break;
 
             case 202:
@@ -2161,7 +2249,17 @@ public class Enemy : MonoBehaviour
             switch (CurrentWeapon)
             {
                 case 210:
-                    ChangeMagicEffectColor(1);//魔族魔法阵
+
+                    //敌人除了黑魔导士之外都不会黑魔法
+
+                    if (tag=="Enemy"&&BossNumber==0)
+                    {
+                        ChangeMagicEffectColor(2);//火焰魔法阵
+                    }
+                    else
+                    {
+                        ChangeMagicEffectColor(1);//魔族魔法阵
+                    }           
                     break;
 
 
@@ -2504,7 +2602,7 @@ public class Enemy : MonoBehaviour
     public void ChangeHealth(int amount, int TypeOfAttack)//【攻击方式 -1暗黑  0无  1剑击特效  2闪电特效  3冻结  4灼烧  5毒物  6击飞
     {
 
-        if (!isScreaming && !isRape && IsGrounded())//冷却中与捕获中不会被伤到,在空中也不会被伤到
+        if (!isScreaming && !isRape )//冷却中与捕获中不会被伤到
         {
 
 
@@ -2971,51 +3069,58 @@ public class Enemy : MonoBehaviour
                 }//这两种不会被击飞，但是被击中会停止移动
 
 
-                if (DamageType == 0)
+                if (IsGrounded()) // ✅ 关键：只在落地时才允许击倒/击飞
                 {
-                    Knockdown();//普通攻击随机击倒
+                    if (DamageType == 0)
+                    {
+                        Knockdown();//普通攻击随机击倒
+                    }
+                    else
+                    {
+
+                        //击飞
+                        if (StopX < 0)
+                            Knockback(forceX: -3f);
+                        else if (StopX > 0)
+                            Knockback(forceX: 3f);
+                        else if (StopY < 0)
+                            Knockback(forceX: 0, forceY: -3f);
+                        else if (StopY > 0)
+                            Knockback(forceX: 0, forceY: 3f);
+
+
+
+
+                        //PlayJump();
+
+                        //受伤动画
+                        anim.Play(GetAnimPrefix() + "Default_Hurt");
+                        Invoke("ReSetAttack", 0.5f);//防止动画回不去
+
+
+                        //一定几率打掉衣服丝袜（暂时别）
+                        //if (Random.Range(0, 3) == 0)
+                        //{
+                        //    CurrentArmorDefence = 0;
+                        //    YYY_bodyIndex = 1; SetSkin();
+                        //    //SaveCurrent();
+                        //
+                        //    frameEvents._Effect_tear1();
+                        //}
+                        //if (Random.Range(0, 3) == 0)
+                        //{
+                        //    CurrentStockingDefence = 0;
+                        //    YYY_legsIndex = 1; SetSkin();
+                        //    //SaveCurrent();
+                        //
+                        //    frameEvents._Effect_tear1();
+                        //}
+                    }
                 }
-                else
-                {
-
-                    //击飞
-                    if (StopX < 0)
-                        Knockback(forceX: -3f);
-                    else if (StopX > 0)
-                        Knockback(forceX: 3f);
-                    else if (StopY < 0)
-                        Knockback(forceX: 0, forceY: -3f);
-                    else if (StopY > 0)
-                        Knockback(forceX: 0, forceY: 3f);
 
 
 
-
-                    //PlayJump();
-
-                    //受伤动画
-                    anim.Play(GetAnimPrefix() + "Default_Hurt");
-                    Invoke("ReSetAttack", 0.5f);//防止动画回不去
-
-
-                    //一定几率打掉衣服丝袜（暂时别）
-                    //if (Random.Range(0, 3) == 0)
-                    //{
-                    //    CurrentArmorDefence = 0;
-                    //    YYY_bodyIndex = 1; SetSkin();
-                    //    //SaveCurrent();
-                    //
-                    //    frameEvents._Effect_tear1();
-                    //}
-                    //if (Random.Range(0, 3) == 0)
-                    //{
-                    //    CurrentStockingDefence = 0;
-                    //    YYY_legsIndex = 1; SetSkin();
-                    //    //SaveCurrent();
-                    //
-                    //    frameEvents._Effect_tear1();
-                    //}
-                }
+                
             }
 
         }
@@ -3438,6 +3543,19 @@ public class Enemy : MonoBehaviour
     {
         if (!OneTimeRebirth)
         {
+
+            // ✅ 队友：血量归零立刻消失 + 生成RBQ演出
+            if (tag == "Friend"&&GameFlowData.nextScene=="Arena")
+            {
+                SpawnFriendDefeatRBQ();
+           
+                return;
+            }
+
+
+
+
+
             Destroy(AllOfThis);
 
 
