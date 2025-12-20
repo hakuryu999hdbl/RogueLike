@@ -36,6 +36,7 @@ public class Spell : MonoBehaviour
         if (isCritial)
         {
             appliedDamage *= 3; //暴击三倍伤害
+
         }
         else
         {
@@ -55,15 +56,8 @@ public class Spell : MonoBehaviour
 
         if (!isStayDamage)
         {
-            if (TypeOfAttack == 3)
-            {
-                appliedDamage = Mathf.RoundToInt(appliedDamage * 2.2f);//唯独冰系倍率提高
-            }
-            else
-            {
-                appliedDamage = Mathf.RoundToInt(appliedDamage * 1.8f);//风，毒，火，雷，暗 倍率削减
-            }
-            
+          
+            appliedDamage = Mathf.RoundToInt(appliedDamage * 1.8f);//风，毒，火，雷，暗 倍率削减
         }
         //ToDo非持续性的法术伤害的大幅增强
 

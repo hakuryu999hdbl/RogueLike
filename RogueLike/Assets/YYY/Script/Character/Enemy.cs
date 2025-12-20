@@ -3521,7 +3521,12 @@ public class Enemy : MonoBehaviour
                     RoomGenerator.ShowInformationOfStage(15);
                     PlayerPrefs.SetInt("Clothes_9", 1);
                 }
-
+                //击败特定Boss解锁对应的服装和丝袜
+                if (PlayerPrefs.GetInt("Clothes_8") == 0 && BossNumber == 12)//Sin
+                {
+                    RoomGenerator.ShowInformationOfStage(15);
+                    PlayerPrefs.SetInt("Clothes_8", 1);
+                }
 
             }
 
@@ -3545,7 +3550,7 @@ public class Enemy : MonoBehaviour
         {
 
             // ✅ 队友：血量归零立刻消失 + 生成RBQ演出
-            if (tag == "Friend"&&GameFlowData.nextScene=="Arena")
+            if (tag == "Friend")//&&GameFlowData.nextScene=="Arena"
             {
                 SpawnFriendDefeatRBQ();
            

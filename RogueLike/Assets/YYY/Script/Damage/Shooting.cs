@@ -236,6 +236,14 @@ public class Shooting : MonoBehaviour
                             buffMult = GameFlowData.Pistol_Buff;
                         appliedDamage *= buffMult; // 💥 应用整数倍率
 
+                        if (TypeOfAttack == 3)
+                        {
+                            appliedDamage = Mathf.RoundToInt(appliedDamage * 4f);//唯独冰系倍率提高
+
+                        }
+
+
+
 
                         other.GetComponent<Enemy>()?.ChangeHealth(appliedDamage, TypeOfAttack);
                         other.GetComponent<Plant_Tentacle>()?.ChangeHealth(appliedDamage, TypeOfAttack);
