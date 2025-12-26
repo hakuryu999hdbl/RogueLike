@@ -2882,49 +2882,55 @@ public class Enemy : MonoBehaviour
             //受伤尖叫
             Scream();
 
-            //血
-            #region
-            switch (Random.Range(0, 3))
+            //在空中不会产生血迹，只有在地上才行
+            if (IsGrounded()) 
             {
-                case 0:
-                    frameEvents._Attack_blood1();
-                    break;
-                case 1:
-                    frameEvents._Attack_blood2();
-                    break;
-                case 2:
-                    frameEvents._Attack_blood3();
-                    break;
+                #region
+                switch (Random.Range(0, 3))
+                {
+                    case 0:
+                        frameEvents._Attack_blood1();
+                        break;
+                    case 1:
+                        frameEvents._Attack_blood2();
+                        break;
+                    case 2:
+                        frameEvents._Attack_blood3();
+                        break;
 
+                }
+                //血特效
+                Vector3 offset = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
+                Vector3 spawnPosition = transform.position + offset;
+                GameObject effectPrefabs = Instantiate(BloodEffect, spawnPosition, transform.rotation);
+                Destroy(effectPrefabs, 2f);
+
+
+
+                // 从预设中随机挑一个
+                GameObject[] bloodPrefabs = { Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3 };
+                int index = Random.Range(0, bloodPrefabs.Length);
+                GameObject blood = Instantiate(
+                    bloodPrefabs[index],
+                    transform.position,
+                    Quaternion.Euler(0, 0, Random.Range(0, 360))
+                );
+
+                // 向 Z 方向下沉一点，避免和角色重合
+                Vector3 pos = blood.transform.position;
+                pos.z -= 0.1f;
+                blood.transform.position = pos;
+
+                // 可选：缩放或微调位置
+                // blood.transform.localScale *= Random.Range(0.8f, 1.2f);
+
+                // 自动销毁血迹
+                Destroy(blood, Random.Range(4f, 5f));
+                #endregion
             }
-            //血特效
-            Vector3 offset = new Vector3(0, 0, 2); // 这里的1表示沿Z轴上升的距离，可以根据需要调整
-            Vector3 spawnPosition = transform.position + offset;
-            GameObject effectPrefabs = Instantiate(BloodEffect, spawnPosition, transform.rotation);
-            Destroy(effectPrefabs, 2f);
 
 
 
-            // 从预设中随机挑一个
-            GameObject[] bloodPrefabs = { Floor_Blood_0, Floor_Blood_1, Floor_Blood_2, Floor_Blood_3 };
-            int index = Random.Range(0, bloodPrefabs.Length);
-            GameObject blood = Instantiate(
-                bloodPrefabs[index],
-                transform.position,
-                Quaternion.Euler(0, 0, Random.Range(0, 360))
-            );
-
-            // 向 Z 方向下沉一点，避免和角色重合
-            Vector3 pos = blood.transform.position;
-            pos.z -= 0.1f;
-            blood.transform.position = pos;
-
-            // 可选：缩放或微调位置
-            // blood.transform.localScale *= Random.Range(0.8f, 1.2f);
-
-            // 自动销毁血迹
-            Destroy(blood, Random.Range(4f, 5f));
-            #endregion
 
             if (currentHealth <= 0)
             {
@@ -3379,7 +3385,8 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
-
+        // ✅ 空中死亡：瞬间拉回地面
+        ForceToGround();
 
         isDie = true;
         anim.Play(GetAnimPrefix() + "Default_Die_2");//防止倒下又起来,搞了第二死亡
@@ -3540,6 +3547,28 @@ public class Enemy : MonoBehaviour
     }//死亡
 
     bool DieBonue = false;//死亡触发金币只能一次
+
+    private void ForceToGround()
+    {
+        // 如果已经在地上就不用管
+        if (IsGrounded()) return;
+
+        // 1) 清空空中高度与速度
+        zHeight = 0f;
+        zVelocity = 0f;
+
+        // 2) 停止击飞水平位移（可选，但通常更干净）
+        knockbackX = 0f;
+        knockbackY = 0f;
+
+        // 3) 把Z坐标拉回地面（你原本用 groundZ - zHeight）
+        Vector3 pos = transform.position;
+        pos.z = groundZ;   // 或 pos.z = 0f，看你场景地面Z基准
+        transform.position = pos;
+
+        // 4) 同步状态，避免下一帧被当作“刚落地”触发 Knockdown 音效
+        wasInAir = false;
+    }//死亡的时候强制拉到地面
 
     [Header("全部自身存在与出生点WallMap")]
     public GameObject AllOfThis;
