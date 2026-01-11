@@ -735,7 +735,7 @@ public class RBQ : MonoBehaviour
                 #endregion
 
 
-                int[] YYY_pool = { 1, 2, 3, 4, 7,8,10, 11, 12 };
+                int[]  YYY_pool = { 1, 2, 3, 4, 7,8,10, 11, 12 };
                 YYY_hatIndex = YYY_pool[UnityEngine.Random.Range(0, YYY_pool.Length)];//人类 精灵 高等精灵 北方兔族  鬼族  鹿族  南方兔族 魔族 大魔族
                 break;
 

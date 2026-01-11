@@ -889,6 +889,7 @@ public class DialogSystem : MonoBehaviour
                 break;
            case 1004:
                 GameFlowData.nextScene = "Story_04";
+                //GameFlowData.nextScene = "";//返回主菜单
                 break;
            case 1005:
                GameFlowData.nextScene = "Story_05";

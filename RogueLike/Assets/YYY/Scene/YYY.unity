@@ -3202,6 +3202,12 @@ MonoBehaviour:
   bulletSpawnPoint: {fileID: 65564742}
   nearbyEnemies: []
   CanShoot: 1
+  atk_ShortLocalPos: {x: 0, y: 0.5, z: -0.1}
+  atk_ShortLocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  atk_NormalLocalPos: {x: 0, y: 0.8, z: -0.1}
+  atk_NormalLocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  atk_PolearmLocalPos: {x: 0, y: 1.3, z: -0.1}
+  atk_PolearmLocalScale: {x: 0.2, y: 1, z: 0.5}
   CurrentWeapon: 0
   CurrentProfession: 0
   ExitEffect: {fileID: 1879320141703733576}
@@ -19021,7 +19027,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &383355724
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19504,7 +19510,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &389814644
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21333,7 +21339,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.12, y: 5.12}
+    oldSize: {x: 5.12, y: 3}
     newSize: {x: 5.12, y: 5.12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -21348,7 +21354,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 450081045}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -21384,7 +21390,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 78291f855943e7246a09a24e7513eb87, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d7a50ea6968344347b2d9cd778e93a89, type: 3}
   m_Color: {r: 0, g: 0.91298866, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -41335,7 +41341,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 904417485}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -52597,7 +52603,7 @@ MonoBehaviour:
     m_LineSpacing: 2
   m_Text: "Dimension   Mystia   GuanLe   Ina_Miyo   OTL_OTL   \u711A\u685C   Shymidnightfox  
     Raffine   MaszaKZ   Ed_boy   Thekill   \u590F\u5361   Menze   \u3056\u3056\u3059\u305A\u3081\u3000\u3000\u3000LLL\u3000\u3000\u3000leather
-    lancet   3bdallah q8   chickenking4958   ssdf\r\n"
+    lancet   3bdallah q8   chickenking4958   ssdf   375   danmt200293\r\n"
 --- !u!222 &1112346650
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -81553,7 +81559,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1654553338
 RectTransform:
   m_ObjectHideFlags: 0
@@ -94793,7 +94799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   J: "\u30B9\u30AD\u30C3\u30D7"
   C_1: "\u8DF3\u8FC7"
-  C_2: "\u8DF3\u8FC7"
+  C_2: "\u8DF3\u904E"
   E: Skip
   K: "\uAC74\uB108\uB6F0\uAE30"
   isTyped: 0
@@ -97903,7 +97909,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ver.1.1.1
+  m_Text: Ver.1.1.2
 --- !u!222 &1991218265
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -103219,7 +103225,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3881087803549984437, guid: ec536a7718376554185e4a856d5ae230, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3881087803549984439, guid: ec536a7718376554185e4a856d5ae230, type: 3}
       propertyPath: handleRange

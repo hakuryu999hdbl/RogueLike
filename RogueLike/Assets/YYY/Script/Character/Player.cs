@@ -1650,6 +1650,21 @@ public class Player : MonoBehaviour
         }
     }//近战攻击发出的叫声
 
+
+    public void ForceCancelCharge()
+    {
+        isAttacking = false;
+        attackTriggered = false;
+        attackPressTime = 0f;
+        Save_attackPressTime = 0f;
+
+        if (attack_Range != null) attack_Range.SetActive(false);
+        HideMagicEffect(); // 你现在是“无论什么职业只要松手就隐藏”，这里也该隐藏
+
+        // 如果你希望同时中断连击状态（可选）
+        // ResetCombo();
+    }//强制中断蓄力状态
+
     #endregion
 
 
@@ -2014,6 +2029,53 @@ public class Player : MonoBehaviour
     /// 武器系统
     /// </summary>
     #region
+
+    [Header("Attack Collider Preset 长柄武器和普通武器的攻击范围切换")]
+    // 短
+    public Vector3 atk_ShortLocalPos = new Vector3(0f, 0.5f, -0.1f);
+    public Vector3 atk_ShortLocalScale = new Vector3(0.3f, 0.3f, 0.3f);
+
+    // 普通
+    public Vector3 atk_NormalLocalPos = new Vector3(0f, 0.8f, -0.1f);
+    public Vector3 atk_NormalLocalScale = new Vector3(0.5f, 0.5f, 0.5f);
+
+    // 长柄
+    public Vector3 atk_PolearmLocalPos = new Vector3(0f, 1.3f, -0.1f);
+    public Vector3 atk_PolearmLocalScale = new Vector3(0.2f, 1f, 0.5f);
+
+    enum AttackRangeType
+    {
+        Short,
+        Normal,
+        Polearm
+    }
+
+    private void ApplyAttackColliderPreset(AttackRangeType type)
+    {
+        if (attack_Collider == null) return;
+
+        Transform t = attack_Collider.transform;
+
+        switch (type)
+        {
+            case AttackRangeType.Short:
+                t.localPosition = atk_ShortLocalPos;
+                t.localScale = atk_ShortLocalScale;
+                break;
+
+            case AttackRangeType.Polearm:
+                t.localPosition = atk_PolearmLocalPos;
+                t.localScale = atk_PolearmLocalScale;
+                break;
+
+            default:
+                t.localPosition = atk_NormalLocalPos;
+                t.localScale = atk_NormalLocalScale;
+                break;
+        }
+    }
+
+
     [Header("武器系统")]
     public int CurrentWeapon;
     public int CurrentProfession;//0战士 1射手 2法师
@@ -2065,7 +2127,42 @@ public class Player : MonoBehaviour
         }
 
 
+        // ===== Attack Collider Range Decide =====
+        AttackRangeType rangeType = AttackRangeType.Normal;
 
+        // ① 战士近战
+        if (visionType == PlayerType.ShortRangePlayer)
+        {
+            // 长柄武器
+            if (weaponIndex == 3 || weaponIndex == 4 || weaponIndex == 5)
+            {
+                rangeType = AttackRangeType.Polearm;
+            }
+            // 匕首
+            else if (weaponIndex == 1)
+            {
+                rangeType = AttackRangeType.Short;
+            }
+        }
+
+        // ② 法师（拿杖敲）
+        if (isMage)
+        {
+            // 短杖 → 短攻击范围
+            if (CurrentWeapon == 201 || CurrentWeapon == 202 ||
+                CurrentWeapon == 203 || CurrentWeapon == 204 ||
+                CurrentWeapon == 205)
+            {
+                rangeType = AttackRangeType.Short;
+            }
+            else
+            {
+                rangeType = AttackRangeType.Normal;
+            }
+        }
+
+        // 应用
+        ApplyAttackColliderPreset(rangeType);
     }
 
     public GameObject ExitEffect;//施法粒子特效（出现消失）

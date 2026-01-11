@@ -28,32 +28,32 @@ public class UIManager : MonoBehaviour
 
 
 
-       // #region  BOKIBOKI默认繁中
-       // // 是否已经初始化过语言？
-       // int inited = PlayerPrefs.GetInt("HasInitLang", 0);
-       //
-       // if (inited == 0)
-       // {
-       //     int lang = PlayerPrefs.GetInt("language", 0);
-       //     Debug.Log("【首次启动检测】当前存档语言 = " + lang);
-       //
-       //     // 如果是默认值 0（日语），改为繁体中文（2）
-       //     if (lang == 0)
-       //     {
-       //         PlayerPrefs.SetInt("language", 2);
-       //
-       //         Debug.Log("语言已自动切换为繁体中文（2）");
-       //     }
-       //
-       //     // 标记为已初始化，下次不再触发
-       //     PlayerPrefs.SetInt("HasInitLang", 1);
-       // }
-       // else
-       // {
-       //     Debug.Log("语言初始化已执行过，不再触发");
-       // }
-       //
-       // #endregion
+        #region  BOKIBOKI默认繁中
+        // 是否已经初始化过语言？
+        int inited = PlayerPrefs.GetInt("HasInitLang", 0);
+       
+        if (inited == 0)
+        {
+            int lang = PlayerPrefs.GetInt("language", 0);
+            Debug.Log("【首次启动检测】当前存档语言 = " + lang);
+       
+            // 如果是默认值 0（日语），改为繁体中文（2）
+            if (lang == 0)
+            {
+                PlayerPrefs.SetInt("language", 2);
+       
+                Debug.Log("语言已自动切换为繁体中文（2）");
+            }
+       
+            // 标记为已初始化，下次不再触发
+            PlayerPrefs.SetInt("HasInitLang", 1);
+        }
+        else
+        {
+            Debug.Log("语言初始化已执行过，不再触发");
+        }
+       
+        #endregion
 
 
         //Debug.Log("目前存档里的语言" + PlayerPrefs.GetInt("language"));//0 日语 1中文 2繁中 3英语 4韩语
@@ -2122,7 +2122,7 @@ public class UIManager : MonoBehaviour
 "大量的兔族，敏捷但生命值低，擅長<color=#ADD8E6>射擊</color>與<color=#ADD8E6>近戰</color>。\n"+
 "<color=#FF8800>【敏捷】閃避/衝刺有機率不消耗體力並恢復少量體力</color>",
 
-"草原鹿族溫順敏捷，擅長<color=#ADD8E6>魔法</color>與<color=#ADD8E6>射擊</color>。\n"+
+"兔族溫順敏捷，擅長<color=#ADD8E6>魔法</color>與<color=#ADD8E6>射擊</color>。\n"+
 "<color=#FF8800>【敏捷】閃避/衝刺可能不消耗體力並恢復體力</color>",
 
 "來自深淵的混血種族，擅長<color=#ADD8E6>生命值</color>與<color=#ADD8E6>魔法</color>。\n"+
@@ -2454,6 +2454,8 @@ public class UIManager : MonoBehaviour
 
                         player.CheckDemonMode();//从魔族化变回
 
+                       
+
                         isPause = true;
                     }
                     else
@@ -2498,6 +2500,10 @@ public class UIManager : MonoBehaviour
 
                         isPause = false;
                     }
+
+
+                    //因为玩家的朝向是变成强制朝下，所以这个攻击方向也强制朝下
+                    player.attack.transform.rotation = Quaternion.Euler(0, 0, 180); // 下
 
                     //ToDo 【修改】这里是OpenClose
 
@@ -5363,6 +5369,10 @@ public class UIManager : MonoBehaviour
     {
 
         CurrentChooseList = -5;
+
+        // ✅ 三选一弹出时：强制取消蓄力显示与状态
+        player.ForceCancelCharge();
+
         player.isInputBlocked = true;//切断玩家的方向攻击等输入
 
         //Time.timeScale = 0f;//三选一界面延迟暂停，防止位移导致问题
@@ -6681,6 +6691,9 @@ public class UIManager : MonoBehaviour
 
     public void ShowBuff(int buffIndex)
     {
+        lang = PlayerPrefs.GetInt("language");//技能按键能呈现对应语言显示
+
+
         string desc = GetBuffDesc(buffIndex, lang);
         tooltipText.text = desc;
 
